@@ -1,0 +1,32 @@
+name: Railway Auto Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: railway-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          npx -y @railway/cli up --ci --detach \
+            --project fc87660b-2446-49d8-84c8-09c9bd180333 \
+            --environment c7367646-d32c-46d6-90d9-db3bdbc0c060 \
+            --service 73f562d6-6573-4f15-a386-f35e83cc85fd
