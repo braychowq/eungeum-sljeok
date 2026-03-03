@@ -1,0 +1,64 @@
+:root {
+  color-scheme: light;
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(120deg, #f4f7ff, #f9fbff 40%, #eef2ff);
+  color: #111827;
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.card {
+  width: min(720px, 100%);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 12px 40px rgba(17, 24, 39, 0.08);
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.status {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.ok,
+.error {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.ok {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
