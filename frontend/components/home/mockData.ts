@@ -46,37 +46,37 @@ export const communityPosts: CommunityPost[] = [
     id: 'qna-1',
     category: 'qna',
     title: '[Q&A] 은선 납땜 자국 줄이는 방법?',
-    href: '#'
+    href: '/community/post/qna-1'
   },
   {
     id: 'qna-2',
     category: 'qna',
     title: '[Q&A] 도금 후 변색 방지 체크리스트',
-    href: '#'
+    href: '/community/post/qna-2'
   },
   {
     id: 'share-1',
     category: 'share',
     title: '[공유] 초보 제작자 체크리스트 템플릿',
-    href: '#'
+    href: '/community/post/share-1'
   },
   {
     id: 'share-2',
     category: 'share',
     title: '[공유] 도금소 비교 후기 요약',
-    href: '#'
+    href: '/community/post/share-2'
   },
   {
     id: 'free-1',
     category: 'free',
     title: '[아무말] 오늘 작업하다가 제일 웃겼던 순간',
-    href: '#'
+    href: '/community/post/free-1'
   },
   {
     id: 'free-2',
     category: 'free',
     title: '[아무말] 작업실에서 듣는 플레이리스트 추천',
-    href: '#'
+    href: '/community/post/free-2'
   }
 ];
 

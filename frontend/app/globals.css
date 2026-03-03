@@ -1,6 +1,7 @@
 :root {
   color-scheme: light;
   font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-logo: "소미체", "Somi", "Apple SD Gothic Neo", "Noto Sans KR", cursive;
   --bg-page: #ededed;
   --bg-canvas: #ffffff;
   --text-primary: #191919;
@@ -15,6 +16,12 @@
   --space-4: 24px;
   --space-5: 32px;
   --space-6: 48px;
+}
+
+@font-face {
+  font-family: "소미체";
+  src: local("소미체"), local("Somi");
+  font-display: swap;
 }
 
 html,

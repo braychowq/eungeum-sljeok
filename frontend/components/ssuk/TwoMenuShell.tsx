@@ -9,6 +9,7 @@ type TwoMenuShellProps = {
   subtitle: string;
   ctaLabel: string;
   ctaHref: string;
+  hideHero?: boolean;
   children: React.ReactNode;
 };
 
@@ -23,6 +24,7 @@ export default function TwoMenuShell({
   subtitle,
   ctaLabel,
   ctaHref,
+  hideHero = false,
   children
 }: TwoMenuShellProps) {
   const eyebrow = activeMenu === 'community' ? 'COMMUNITY VIEW' : 'MARKET VIEW';
@@ -32,7 +34,7 @@ export default function TwoMenuShell({
       <div className={styles.container}>
         <header className={styles.topNav}>
           <Link href="/" className={styles.logo}>
-            silver-ly
+            은금슬쩍
           </Link>
 
           <nav className={styles.mainMenu} aria-label="대메뉴">
@@ -54,14 +56,16 @@ export default function TwoMenuShell({
           </button>
         </header>
 
-        <section className={styles.heroBox}>
-          <p className={styles.eyebrow}>{eyebrow}</p>
-          <h1 className={styles.pageTitle}>{title}</h1>
-          <p className={styles.pageSubtitle}>{subtitle}</p>
-          <Link href={ctaHref} className={styles.ctaButton}>
-            {ctaLabel}
-          </Link>
-        </section>
+        {!hideHero ? (
+          <section className={styles.heroBox}>
+            <p className={styles.eyebrow}>{eyebrow}</p>
+            <h1 className={styles.pageTitle}>{title}</h1>
+            <p className={styles.pageSubtitle}>{subtitle}</p>
+            <Link href={ctaHref} className={styles.ctaButton}>
+              {ctaLabel}
+            </Link>
+          </section>
+        ) : null}
 
         <div className={styles.content}>{children}</div>
 

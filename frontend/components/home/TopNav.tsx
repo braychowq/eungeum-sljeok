@@ -18,7 +18,7 @@ export default function TopNav({ items }: TopNavProps) {
   return (
     <header className={styles.header}>
       <Link className={styles.logo} href="/">
-        silver-ly
+        은금슬쩍
       </Link>
 
       <nav className={styles.nav} aria-label="메인 네비게이션">

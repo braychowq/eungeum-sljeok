@@ -40,7 +40,7 @@ export default async function SsukRedesignPreviewPage({ searchParams }: PreviewP
       <div className={styles.canvas}>
         <header className={styles.topNav}>
           <a href="/" className={styles.logo}>
-            silver-ly
+            은금슬쩍
           </a>
           <nav className={styles.mainMenu} aria-label="미리보기 메뉴">
             <Link
