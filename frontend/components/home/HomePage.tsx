@@ -1,6 +1,8 @@
 import BannerCarousel from './BannerCarousel';
 import CommunitySection from './CommunitySection';
 import HorizontalCardSlider from './HorizontalCardSlider';
+import MobileBottomSheet from '../common/MobileBottomSheet';
+import SiteFooter from '../common/SiteFooter';
 import {
   bannerItems,
   communityPosts,
@@ -36,7 +38,11 @@ export default function HomePage() {
         />
 
         <InfoLibrarySection entries={libraryEntries} />
+
+        <SiteFooter />
       </div>
+
+      <MobileBottomSheet />
     </main>
   );
 }

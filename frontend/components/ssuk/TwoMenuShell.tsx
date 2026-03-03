@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import MobileBottomSheet from '../common/MobileBottomSheet';
+import SiteFooter from '../common/SiteFooter';
 import styles from './TwoMenuShell.module.css';
 
 type TwoMenuShellProps = {
@@ -13,11 +15,6 @@ type TwoMenuShellProps = {
 const mainMenus = [
   { id: 'community', label: '슬쩍 커뮤니티', href: '/community' },
   { id: 'market', label: '슬쩍 마켓', href: '/market' }
-] as const;
-
-const mobileMenus = [
-  { id: 'community', label: '커뮤니티', href: '/community' },
-  { id: 'market', label: '마켓', href: '/market' }
 ] as const;
 
 export default function TwoMenuShell({
@@ -67,21 +64,11 @@ export default function TwoMenuShell({
         </section>
 
         <div className={styles.content}>{children}</div>
+
+        <SiteFooter />
       </div>
 
-      <nav className={styles.mobileBottomNav} aria-label="하단 메뉴">
-        {mobileMenus.map((menu) => (
-          <Link
-            key={menu.id}
-            href={menu.href}
-            className={`${styles.mobileBottomLink} ${
-              activeMenu === menu.id ? styles.mobileBottomLinkActive : ''
-            }`}
-          >
-            {menu.label}
-          </Link>
-        ))}
-      </nav>
+      <MobileBottomSheet activeMenu={activeMenu} />
     </main>
   );
 }

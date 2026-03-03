@@ -1,0 +1,55 @@
+.footer {
+  margin-top: 8px;
+  border-top: 1px solid #ededed;
+  padding: 18px 20px 24px;
+  color: #616161;
+}
+
+.brandRow {
+  margin-top: 0;
+  padding-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandRow strong {
+  color: #1f1f1f;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.companyInfo {
+  margin: 12px 0 0;
+  color: #8e8e8e;
+  font-style: normal;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.companyInfo p {
+  margin: 2px 0;
+}
+
+.copyright {
+  margin: 11px 0 0;
+  color: #969696;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+@media (max-width: 960px) {
+  .footer {
+    padding: 16px 14px 22px;
+  }
+
+  .brandRow {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .brandRow strong {
+    font-size: 18px;
+  }
+}

@@ -8,17 +8,20 @@ type CommunitySectionProps = {
   posts: CommunityPost[];
 };
 
-const tabs: Array<{ id: CommunityCategory; label: string }> = [
+type HomeCommunityTab = 'all' | CommunityCategory;
+
+const tabs: Array<{ id: HomeCommunityTab; label: string }> = [
+  { id: 'all', label: '전체' },
   { id: 'qna', label: 'Q&A' },
   { id: 'share', label: '공유' },
   { id: 'free', label: '아무말' }
 ];
 
 export default function CommunitySection({ posts }: CommunitySectionProps) {
-  const [activeTab, setActiveTab] = useState<CommunityCategory>('qna');
+  const [activeTab, setActiveTab] = useState<HomeCommunityTab>('all');
 
   const filteredPosts = useMemo(
-    () => posts.filter((post) => post.category === activeTab),
+    () => (activeTab === 'all' ? posts : posts.filter((post) => post.category === activeTab)),
     [posts, activeTab]
   );
 
