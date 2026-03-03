@@ -1,0 +1,11 @@
+*
+!.dockerignore
+!Dockerfile
+!start-unified.sh
+!railway.toml
+!backend/**
+!frontend/**
+backend/target
+frontend/.next
+frontend/node_modules
+frontend/.artifacts

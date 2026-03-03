@@ -1,0 +1,282 @@
+.page {
+  min-height: 100vh;
+  background: #ededed;
+  padding: 20px 14px 40px;
+}
+
+.canvas {
+  width: min(600px, 100%);
+  margin: 0 auto;
+  background: #ffffff;
+  min-height: calc(100vh - 40px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+}
+
+.topNav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid #f3f3f3;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+}
+
+.logo {
+  text-decoration: none;
+  color: #191919;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.mainMenu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.mainMenuLink {
+  text-decoration: none;
+  color: #5d5d5d;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.mainMenuLinkActive {
+  color: #e97502;
+  background: #fdf2e7;
+}
+
+.hero {
+  padding: 24px 20px 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  color: #8b8b8b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 8px 0 0;
+  color: #191919;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.heroDescription {
+  margin: 10px 0 0;
+  color: #5d5d5d;
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 44ch;
+}
+
+.primaryCta {
+  display: inline-flex;
+  margin-top: 14px;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #191919;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.section {
+  margin-top: 48px;
+  padding: 0 20px;
+}
+
+.section h2 {
+  margin: 0;
+  color: #191919;
+  font-size: 24px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.sectionMeta {
+  margin: 8px 0 0;
+  color: #6c6c6c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.chipRow {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid #efefef;
+  color: #4b4b4b;
+  font-size: 12px;
+  font-weight: 600;
+  background: #ffffff;
+}
+
+.chipActive {
+  border-color: #e97502;
+  color: #e97502;
+  background: #fff6ed;
+}
+
+.postList {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.postCard {
+  display: block;
+  text-decoration: none;
+  border: 1px solid #f2f2f2;
+  border-radius: 12px;
+  padding: 14px;
+  color: #191919;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.postCard:hover {
+  border-color: #e7e7e7;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.postCard strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.postCard span {
+  display: block;
+  margin-top: 5px;
+  color: #6c6c6c;
+  font-size: 12px;
+}
+
+.marketGrid {
+  list-style: none;
+  margin: 14px 0 36px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.marketCard {
+  display: block;
+  text-decoration: none;
+  color: #191919;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #f2f2f2;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.marketCard:hover {
+  border-color: #e7e7e7;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.marketCard img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.marketCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+}
+
+.marketCardBody strong {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.marketCardBody span {
+  width: fit-content;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e97502;
+  background: #fff6ed;
+  padding: 4px 8px;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .canvas {
+    max-width: 100%;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+
+  .topNav {
+    padding: 12px 14px 10px;
+  }
+
+  .hero {
+    padding: 20px 14px 0;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .heroDescription {
+    font-size: 13px;
+  }
+
+  .section {
+    margin-top: 40px;
+    padding: 0 14px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  .postCard {
+    padding: 12px;
+  }
+
+  .marketGrid {
+    grid-template-columns: 1fr;
+    margin-bottom: 28px;
+  }
+}

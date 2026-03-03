@@ -1,7 +1,10 @@
-node_modules
-.next
-npm-debug.log
-Dockerfile
 .git
 .gitignore
+.next
+node_modules
+out
+npm-debug.log
+*.log
+Dockerfile
 README.md
+.artifacts

@@ -1,20 +1,9 @@
 services:
-  backend:
+  app:
     build:
-      context: ./backend
-    environment:
-      PORT: 8080
-    ports:
-      - "8080:8080"
-
-  frontend:
-    build:
-      context: ./frontend
+      context: .
     environment:
       PORT: 3000
-      BACKEND_URL: http://backend:8080
-      NEXT_PUBLIC_API_BASE_URL: http://backend:8080
-    depends_on:
-      - backend
+      BACKEND_PORT: 8081
     ports:
       - "3000:3000"

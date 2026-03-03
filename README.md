@@ -1,66 +1,41 @@
-# eungeum-sljeok monorepo starter
+# eungeum-sljeok monorepo (single-app deploy)
 
-Railway 단일 레포에서 FE/BE를 분리 배포하기 위한 기본 구조입니다.
+하나의 Railway 서비스에서 Next.js(frontend) + Spring Boot(backend)를 함께 실행하는 구조입니다.
 
 ## Stack
 - Frontend: Next.js 16 + React 19 + TypeScript
 - Backend: Spring Boot 4.0.x (Java 21)
-- Container: Docker (서비스별 Dockerfile)
+- Deploy: Single Docker image (root `Dockerfile`)
 
 ## Folder structure
 
 ```text
 .
-├─ frontend/
-│  ├─ app/
-│  ├─ Dockerfile
-│  └─ railway.toml
 ├─ backend/
-│  ├─ src/
-│  ├─ Dockerfile
-│  └─ railway.toml
+├─ frontend/
+├─ Dockerfile
+├─ railway.toml
+├─ start-unified.sh
 └─ docker-compose.yml
 ```
 
-## Local run
+## Runtime architecture
+- 컨테이너 내부에서 backend는 `8081` 포트로 실행됩니다.
+- frontend(Next standalone)는 Railway `PORT`(기본 `3000`)로 실행됩니다.
+- frontend의 `/api/*`는 내부 `http://127.0.0.1:8081/api/*`로 rewrite 됩니다.
 
-### Docker compose run
+## Local run
 
 ```bash
 docker compose up --build
 ```
 
-`docker compose`가 없는 환경이면:
+- App: `http://localhost:3000/community`
+- Health: `http://localhost:3000/api/health` (backend로 프록시됨)
 
-```bash
-docker-compose up --build
-```
+## Railway deploy (single service)
+- 이 레포를 Railway에 연결하고 서비스 1개만 생성합니다.
+- Root Directory는 `/`(기본값) 사용.
+- root `railway.toml` + root `Dockerfile`이 자동 사용됩니다.
 
-- Frontend: `http://localhost:3000`
-- Backend health: `http://localhost:8080/api/health`
-
-## Railway deploy (single repo, two services)
-
-1. Railway에서 이 레포를 연결합니다.
-2. `backend` 서비스 생성:
-   - Root Directory: `backend`
-   - Dockerfile: `backend/Dockerfile` 또는 root를 backend로 잡으면 `Dockerfile`
-3. `frontend` 서비스 생성:
-   - Root Directory: `frontend`
-   - Dockerfile: `frontend/Dockerfile` 또는 root를 frontend로 잡으면 `Dockerfile`
-4. `frontend` 환경변수 설정:
-   - `BACKEND_URL=https://<backend-service-domain>`
-   - `NEXT_PUBLIC_API_BASE_URL=https://<backend-service-domain>`
-5. `backend`는 Railway가 제공하는 `PORT` 환경변수를 자동 사용합니다.
-
-## API
-- `GET /api/health`
-  - sample response
-
-```json
-{
-  "status": "UP",
-  "service": "backend",
-  "timestamp": "2026-03-03T00:00:00Z"
-}
-```
+상세 절차는 [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)를 참고하세요.
