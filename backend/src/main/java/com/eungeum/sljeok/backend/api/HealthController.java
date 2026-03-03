@@ -1,4 +1,4 @@
-package com.eungeun.sljeok.backend.api;
+package com.eungeum.sljeok.backend.api;
 
 import java.time.Instant;
 import java.util.Map;

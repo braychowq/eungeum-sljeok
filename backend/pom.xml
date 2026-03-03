@@ -8,11 +8,11 @@
 		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.eungeun</groupId>
+	<groupId>com.eungeum</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>backend</name>
-	<description>eungeun-sljeok backend</description>
+	<description>eungeum-sljeok backend</description>
 	<url/>
 	<licenses>
 		<license/>

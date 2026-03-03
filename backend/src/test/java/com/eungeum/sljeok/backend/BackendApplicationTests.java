@@ -1,4 +1,4 @@
-package com.eungeun.sljeok.backend;
+package com.eungeum.sljeok.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

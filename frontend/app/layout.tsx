@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'eungeun-sljeok Frontend',
+  title: 'eungeum-sljeok Frontend',
   description: 'Railway monorepo frontend'
 };
 

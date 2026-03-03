@@ -1,4 +1,4 @@
-# eungeun-sljeok monorepo starter
+# eungeum-sljeok monorepo starter
 
 Railway 단일 레포에서 FE/BE를 분리 배포하기 위한 기본 구조입니다.
 

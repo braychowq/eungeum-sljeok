@@ -1,4 +1,4 @@
-package com.eungeun.sljeok.backend;
+package com.eungeum.sljeok.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
