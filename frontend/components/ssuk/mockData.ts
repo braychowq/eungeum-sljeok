@@ -119,7 +119,7 @@ export const marketCards: Array<{
     id: 'studio-1',
     tab: 'studio',
     title: '휴대 작업실 A',
-    href: '#',
+    href: '/market/studio/studio-1',
     imageUrl:
       'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80'
   },
@@ -127,7 +127,7 @@ export const marketCards: Array<{
     id: 'studio-2',
     tab: 'studio',
     title: '성수 공동공방 B',
-    href: '#',
+    href: '/market/studio/studio-2',
     imageUrl:
       'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?auto=format&fit=crop&w=900&q=80'
   },
@@ -135,7 +135,7 @@ export const marketCards: Array<{
     id: 'studio-3',
     tab: 'studio',
     title: '강남 스튜디오 C',
-    href: '#',
+    href: '/market/studio/studio-1',
     imageUrl:
       'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
   },
@@ -143,7 +143,7 @@ export const marketCards: Array<{
     id: 'studio-4',
     tab: 'studio',
     title: '실버 링 완성품',
-    href: '#',
+    href: '/market/studio/studio-2',
     imageUrl:
       'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?auto=format&fit=crop&w=900&q=80'
   },

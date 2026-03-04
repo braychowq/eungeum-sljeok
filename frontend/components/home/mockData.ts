@@ -15,29 +15,29 @@ export const bannerItems: BannerItem[] = [
   {
     id: 'banner-1',
     title: '메인 배너 1',
-    subtitle: '배너 이미지를 클릭하면 링크 이동',
+    subtitle: '핸드메이드 실버 링 큐레이션',
     href: '#community',
     imageUrl:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80',
-    imageAlt: '설산과 호수가 보이는 풍경 배너 이미지'
+      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1800&q=85',
+    imageAlt: '실버 링과 골드 링이 진열된 주얼리 배너 이미지'
   },
   {
     id: 'banner-2',
     title: '메인 배너 2',
-    subtitle: '배너 이미지를 클릭하면 링크 이동',
+    subtitle: '텍스처 디테일이 살아있는 주얼리 컷',
     href: '#studio',
     imageUrl:
-      'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1600&q=80',
-    imageAlt: '숲과 강이 이어지는 풍경 배너 이미지'
+      'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?auto=format&fit=crop&w=1800&q=85',
+    imageAlt: '은 반지와 펜던트가 놓인 클로즈업 주얼리 배너 이미지'
   },
   {
     id: 'banner-3',
     title: '메인 배너 3',
-    subtitle: '배너 이미지를 클릭하면 링크 이동',
+    subtitle: '원석 포인트 액세서리 셀렉션',
     href: '#market',
     imageUrl:
-      'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1600&q=80',
-    imageAlt: '계곡과 산 능선이 보이는 풍경 배너 이미지'
+      'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=85',
+    imageAlt: '원석 비즈와 메탈 소재가 어우러진 주얼리 배너 이미지'
   }
 ];
 

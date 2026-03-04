@@ -1,0 +1,387 @@
+.page {
+  padding: 0 var(--space-3) 10px;
+}
+
+.headerSection,
+.gallerySection,
+.infoSection,
+.descriptionSection,
+.equipmentSection,
+.commentSection,
+.backSection {
+  margin-top: 38px;
+}
+
+.headerSection {
+  margin-top: var(--space-6);
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.titleRow h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.statusText {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding-bottom: 2px;
+  border-bottom: 2px solid currentColor;
+  white-space: nowrap;
+}
+
+.open {
+  color: #212121;
+}
+
+.closed {
+  color: #8a8a8a;
+}
+
+.metaRow {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+}
+
+.metaRow span {
+  color: #6f6f6f;
+  font-size: 12px;
+}
+
+.mainImageFrame {
+  border: 1px solid #ededed;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #fafafa;
+  touch-action: pan-y;
+}
+
+.mainImageFrame img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.imageControls {
+  border-top: 1px solid #efefef;
+  min-height: 42px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.imageControls span {
+  color: #777;
+  font-size: 12px;
+}
+
+.thumbnailRow {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.thumbnailRow button {
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.thumbnailRow img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.thumbnailActive {
+  border-color: #cfcfcf !important;
+}
+
+.infoGrid {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.infoGrid > div {
+  border: 1px solid #efefef;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: #fff;
+}
+
+.infoGrid dt {
+  margin: 0;
+  color: #818181;
+  font-size: 11px;
+}
+
+.infoGrid dd {
+  margin: 6px 0 0;
+  color: #313131;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.infoGrid a {
+  color: #313131;
+}
+
+.priceBlock {
+  display: grid;
+  gap: 8px;
+}
+
+.unitRow {
+  display: flex;
+  gap: 6px;
+}
+
+.unitButton,
+.unitButtonActive {
+  min-height: 28px;
+  border-radius: 999px;
+  padding: 0 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.unitButton {
+  border: 1px solid #ececec;
+  background: #fff;
+  color: #5e5e5e;
+}
+
+.unitButtonActive {
+  border: 1px solid #d7d7d7;
+  background: #f8f8f8;
+  color: #1f1f1f;
+  font-weight: 700;
+}
+
+.priceBlock strong {
+  color: var(--text-primary);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+.descriptionSection h2,
+.equipmentSection h2,
+.commentSection h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.descriptionBody {
+  margin-top: 12px;
+  display: grid;
+  gap: 9px;
+}
+
+.descriptionBody p {
+  margin: 0;
+  color: #3e3e3e;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.equipmentSection ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.equipmentSection li {
+  border: 1px solid #efefef;
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  color: #353535;
+  font-size: 13px;
+  background: #fff;
+}
+
+.commentHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.commentHeader span {
+  color: #888;
+  font-size: 12px;
+}
+
+.commentInputBox {
+  margin-top: 12px;
+  border: 1px solid #ededed;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: #fff;
+}
+
+.authorModeRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.authorModeRow label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #4b4b4b;
+  font-size: 12px;
+}
+
+.commentInputBox input {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.commentEditorRow {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.commentEditorRow textarea {
+  width: 100%;
+  min-height: 90px;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  padding: 10px;
+  resize: vertical;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.commentEditorRow button {
+  justify-self: end;
+  min-width: 68px;
+  min-height: 36px;
+  border: 1px solid #1f1f1f;
+  border-radius: 10px;
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.commentList {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.commentList li {
+  border: 1px solid #efefef;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: #fff;
+}
+
+.commentList div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.commentList strong {
+  color: #222;
+  font-size: 12px;
+}
+
+.commentList span {
+  color: #8a8a8a;
+  font-size: 11px;
+}
+
+.commentList p {
+  margin: 7px 0 0;
+  color: #3a3a3a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.backSection {
+  margin-bottom: 8px;
+}
+
+.backSection a {
+  color: #4a4a4a;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 0 14px 12px;
+  }
+
+  .headerSection,
+  .gallerySection,
+  .infoSection,
+  .descriptionSection,
+  .equipmentSection,
+  .commentSection,
+  .backSection {
+    margin-top: 34px;
+  }
+
+  .titleRow h1 {
+    font-size: 25px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .thumbnailRow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .descriptionSection h2,
+  .equipmentSection h2,
+  .commentSection h2 {
+    font-size: 19px;
+  }
+}
