@@ -29,6 +29,7 @@ export default function HomePage() {
           id="studio"
           title="슬쩍 공방 쉐어하기"
           cards={studioCards}
+          headerHref="/market?tab=studio"
         />
 
         <HorizontalCardSlider

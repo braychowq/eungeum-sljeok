@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { LibraryEntry } from './types';
 import styles from './InfoLibrarySection.module.css';
 
@@ -9,7 +10,11 @@ export default function InfoLibrarySection({ entries }: InfoLibrarySectionProps)
   return (
     <section id="library" className={styles.section} aria-label="정보 창고">
       <div className={styles.headerRow}>
-        <h3>슬쩍 정보 공유하기</h3>
+        <h3 className={styles.heading}>
+          <Link href="/community?tab=share" className={styles.headerLink}>
+            <span className={styles.headerTitle}>슬쩍 정보 공유하기</span>
+          </Link>
+        </h3>
       </div>
 
       <ul className={styles.list}>

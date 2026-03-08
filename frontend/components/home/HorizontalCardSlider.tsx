@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRef } from 'react';
 import { SliderCard } from './types';
 import styles from './HorizontalCardSlider.module.css';
@@ -8,12 +9,14 @@ type HorizontalCardSliderProps = {
   id: string;
   title: string;
   cards: SliderCard[];
+  headerHref?: string;
 };
 
 export default function HorizontalCardSlider({
   id,
   title,
-  cards
+  cards,
+  headerHref
 }: HorizontalCardSliderProps) {
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +32,15 @@ export default function HorizontalCardSlider({
   return (
     <section id={id} className={styles.section} aria-label={title}>
       <div className={styles.headerRow}>
-        <h3>{title}</h3>
+        <h3 className={styles.heading}>
+          {headerHref ? (
+            <Link href={headerHref} className={styles.headerLink}>
+              <span className={styles.headerTitle}>{title}</span>
+            </Link>
+          ) : (
+            <span className={styles.headerTitle}>{title}</span>
+          )}
+        </h3>
         <div className={styles.actions}>
           <button type="button" onClick={() => slideBy('prev')} aria-label={`${title} 이전`}>
             {'<'}

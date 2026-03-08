@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { CommunityCategory, CommunityPost } from './types';
 import styles from './CommunitySection.module.css';
@@ -28,7 +29,11 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
   return (
     <section id="community" className={styles.section} aria-label="커뮤니티">
       <div className={styles.headerRow}>
-        <h3>슬쩍 얘기하기</h3>
+        <h3 className={styles.heading}>
+          <Link href="/community" className={styles.headerLink}>
+            <span className={styles.headerTitle}>슬쩍 얘기하기</span>
+          </Link>
+        </h3>
       </div>
 
       <div className={styles.tabRow} role="tablist" aria-label="커뮤니티 카테고리">

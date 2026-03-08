@@ -8,15 +8,41 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 0;
 }
 
-.headerRow h3 {
+.heading {
   margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.headerLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.headerTitle {
   color: var(--text-primary);
   font-size: 24px;
   line-height: 1.3;
   letter-spacing: -0.02em;
+}
+
+.headerLink:hover .headerTitle {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.headerLink:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
 }
 
 .actions {
@@ -106,7 +132,7 @@
     padding: 0 14px;
   }
 
-  .headerRow h3 {
+  .headerTitle {
     font-size: 22px;
   }
 
