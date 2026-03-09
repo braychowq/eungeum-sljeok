@@ -1,5 +1,14 @@
 export type CommunityTabId = 'qna' | 'share' | 'free';
 export type MarketTabId = 'studio' | 'jewelry';
+export type CommunityHighlightKind = 'notice' | 'popular';
+
+export type CommunityHighlightPost = {
+  id: string;
+  title: string;
+  meta: string;
+  href: string;
+  kind: CommunityHighlightKind;
+};
 
 export const communityTabs: Array<{ id: CommunityTabId; label: string }> = [
   { id: 'qna', label: 'Q&A' },
@@ -102,6 +111,47 @@ export const communityPosts: Record<
     }
   ]
 };
+
+export const communityNotices: CommunityHighlightPost[] = [
+  {
+    id: 'notice-1',
+    title: '[공지] 커뮤니티 이용 가이드 (필독)',
+    meta: '운영팀 · 2시간 전',
+    href: '/community/post/qna-1',
+    kind: 'notice'
+  },
+  {
+    id: 'notice-2',
+    title: '[공지] 거래/홍보 관련 게시 원칙 안내',
+    meta: '운영팀 · 1일 전',
+    href: '/community/post/share-1',
+    kind: 'notice'
+  }
+];
+
+export const communityPopular: CommunityHighlightPost[] = [
+  {
+    id: 'popular-1',
+    title: '[인기] 은선 납땜 자국 줄이는 방법?',
+    meta: '댓글 12 · 좋아요 32',
+    href: '/community/post/qna-1',
+    kind: 'popular'
+  },
+  {
+    id: 'popular-2',
+    title: '[인기] 종로 부자재 거래처 정리본',
+    meta: '댓글 6 · 저장 28',
+    href: '/community/post/share-1',
+    kind: 'popular'
+  },
+  {
+    id: 'popular-3',
+    title: '[인기] 오늘 폴리싱 6개 끝냈다',
+    meta: '댓글 14 · 좋아요 41',
+    href: '/community/post/free-1',
+    kind: 'popular'
+  }
+];
 
 export const marketTabs: Array<{ id: MarketTabId; label: string }> = [
   { id: 'studio', label: '공방 쉐어하기' },
