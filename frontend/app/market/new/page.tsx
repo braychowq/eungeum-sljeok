@@ -34,7 +34,7 @@ export default function MarketNewPage() {
       <section style={boxStyle}>
         <h1 style={{ margin: 0, fontSize: '24px' }}>판매 등록 페이지</h1>
         <p style={{ margin: '8px 0 0', color: '#666', fontSize: '14px' }}>
-          슬쩍 마켓 판매 등록 화면 자리입니다.
+          공방 쉐어 등록 화면 자리입니다.
         </p>
         <Link href="/market" style={linkStyle}>
           마켓으로 돌아가기

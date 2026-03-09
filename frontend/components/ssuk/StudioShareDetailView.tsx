@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { type StudioTrustBadge } from './mockData';
 import TwoMenuShell from './TwoMenuShell';
+import { useHorizontalRail } from './useHorizontalRail';
 import styles from './StudioShareDetailView.module.css';
 
 type StudioShareDetailViewProps = {
@@ -11,44 +13,101 @@ type StudioShareDetailViewProps = {
 
 type ShareStatus = 'open' | 'closed';
 type PriceUnit = 'day' | 'week' | 'month';
-type CommentAuthorMode = 'nickname' | 'anonymous';
 
-type StudioShareDetail = {
-  id: string;
-  name: string;
-  author: string;
-  status: ShareStatus;
-  createdAt: string;
-  address: string;
-  email: string;
-  areaPyeong: number;
-  description: string[];
-  equipments: string[];
-  images: string[];
-  priceByUnit: Record<PriceUnit, number>;
-};
-
-type StudioComment = {
+type StudioInquiryPreview = {
   id: string;
   author: string;
   createdAt: string;
   text: string;
 };
 
+type StudioShareDetail = {
+  id: string;
+  name: string;
+  status: ShareStatus;
+  createdAt: string;
+  ownerName: string;
+  address: string;
+  locationLabel: string;
+  email: string;
+  areaPyeong: number;
+  capacityLabel: string;
+  minUnit: 'hour' | 'day' | 'week';
+  nextAvailableDate: string;
+  responseLabel: string;
+  refundPolicyLabel: string;
+  contractPolicyLabel: string;
+  trustBadges: StudioTrustBadge[];
+  description: string[];
+  equipments: string[];
+  images: string[];
+  priceByUnit: Record<PriceUnit, number>;
+  reviewScore: number;
+  reviewCount: number;
+  inquiryCount: number;
+  recentInquiries: StudioInquiryPreview[];
+};
+
+type StudioEventName =
+  | 'studio_detail_view'
+  | 'studio_contact_click'
+  | 'studio_save_click'
+  | 'studio_owner_cta_click';
+
+type RailButtonsProps = {
+  label: string;
+  canScrollPrev: boolean;
+  canScrollNext: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+};
+
+const trustBadgeLabel: Record<StudioTrustBadge, string> = {
+  verified: '검증됨',
+  policy: '정책확인',
+  fast_response: '응답빠름'
+};
+
+const trustBadgeClass: Record<StudioTrustBadge, string> = {
+  verified: styles.badgeVerified,
+  policy: styles.badgePolicy,
+  fast_response: styles.badgeFast
+};
+
+const unitLabelMap: Record<PriceUnit, string> = {
+  day: '일',
+  week: '주',
+  month: '월'
+};
+
+const minUnitLabelMap: Record<StudioShareDetail['minUnit'], string> = {
+  hour: '시간',
+  day: '일',
+  week: '주'
+};
+
 const studioDetails: Record<string, StudioShareDetail> = {
   'studio-1': {
     id: 'studio-1',
     name: '휴대 작업실 A',
-    author: '실버메이커',
     status: 'open',
     createdAt: '2026-03-04',
+    ownerName: '실버메이커',
     address: '서울시 성동구 연무장길 17, 3층',
+    locationLabel: '성수',
     email: 'studio.share.a@naver.com',
     areaPyeong: 18,
+    capacityLabel: '최대 4인',
+    minUnit: 'day',
+    nextAvailableDate: '2026-03-09',
+    responseLabel: '평균 1시간 이내',
+    refundPolicyLabel: '이용 48시간 전 100% 환불',
+    contractPolicyLabel: '표준 쉐어 계약서 확인 완료',
+    trustBadges: ['verified', 'policy', 'fast_response'],
     description: [
       '성수동 메인 골목에서 도보 5분 거리의 소형 공방입니다.',
-      '기본 작업대 3석이 있고, 소규모 클래스/개인 작업 모두 가능합니다.',
-      '환기 설비와 세척 공간이 분리되어 있어 금속 작업에 적합합니다.'
+      '기본 작업대 3석과 소규모 클래스 운영 동선을 분리해 작업 집중도가 높습니다.',
+      '환기 설비와 세척 공간이 분리되어 금속 작업에 적합합니다.'
     ],
     equipments: ['작업대 3석', '토치 2대', '집진기 1대', '초음파 세척기', '폴리싱 모터'],
     images: [
@@ -61,21 +120,46 @@ const studioDetails: Record<string, StudioShareDetail> = {
       day: 55000,
       week: 290000,
       month: 980000
-    }
+    },
+    reviewScore: 4.8,
+    reviewCount: 37,
+    inquiryCount: 112,
+    recentInquiries: [
+      {
+        id: 'studio-1-inquiry-1',
+        author: '실버온',
+        createdAt: '18분 전',
+        text: '평일 저녁 7시 이후 입실 가능한지 문의드렸습니다.'
+      },
+      {
+        id: 'studio-1-inquiry-2',
+        author: '하루공방',
+        createdAt: '52분 전',
+        text: '주 단위 이용 시 장비 교육 포함 여부를 확인하고 싶습니다.'
+      }
+    ]
   },
   'studio-2': {
     id: 'studio-2',
     name: '성수 공동공방 B',
-    author: '공방운영자 B',
     status: 'closed',
     createdAt: '2026-03-02',
+    ownerName: '공방운영자 B',
     address: '서울시 성동구 아차산로 12, 2층',
+    locationLabel: '성수',
     email: 'share.studio.b@gmail.com',
     areaPyeong: 24,
+    capacityLabel: '최대 6인',
+    minUnit: 'day',
+    nextAvailableDate: '2026-03-12',
+    responseLabel: '평균 3시간 이내',
+    refundPolicyLabel: '이용 72시간 전 100% 환불',
+    contractPolicyLabel: '표준 쉐어 계약서 확인 완료',
+    trustBadges: ['verified', 'policy'],
     description: [
       '공유 작업석 중심으로 운영되는 공동 공방입니다.',
-      '주요 장비가 넓게 분산되어 있어 동시 작업 5인까지 수용 가능합니다.',
-      '현재는 마감 상태지만 댓글 문의는 열려 있습니다.'
+      '주요 장비가 넓게 분산되어 동시 작업 6인까지 수용 가능합니다.',
+      '현재는 마감 상태이며 문의 시 대기 요청으로 접수됩니다.'
     ],
     equipments: ['작업대 5석', '왁스 카빙 세트', '소형 레이저 각인기', '도금기', '초음파 세척기'],
     images: [
@@ -87,54 +171,137 @@ const studioDetails: Record<string, StudioShareDetail> = {
       day: 60000,
       week: 320000,
       month: 1120000
-    }
+    },
+    reviewScore: 4.6,
+    reviewCount: 21,
+    inquiryCount: 84,
+    recentInquiries: [
+      {
+        id: 'studio-2-inquiry-1',
+        author: '익명',
+        createdAt: '33분 전',
+        text: '마감 상태인데 다음 가능일 알림 신청 가능한가요?'
+      },
+      {
+        id: 'studio-2-inquiry-2',
+        author: '페어링랩',
+        createdAt: '1시간 전',
+        text: '월 단위 이용 시 보증금 조건 문의드립니다.'
+      }
+    ]
   }
 };
 
 const defaultStudio = studioDetails['studio-1'];
 
-const initialComments: StudioComment[] = [
-  {
-    id: 'comment-1',
-    author: 'silveron',
-    createdAt: '12분 전',
-    text: '주차 가능한가요? 평일 저녁 사용도 가능한지 궁금합니다.'
-  },
-  {
-    id: 'comment-2',
-    author: '익명',
-    createdAt: '4분 전',
-    text: '마감 상태여도 대기 신청이 가능한지 알고 싶어요.'
-  }
-];
-
-const unitLabelMap: Record<PriceUnit, string> = {
-  day: '일',
-  week: '주',
-  month: '월'
-};
-
 function formatKrw(value: number) {
   return new Intl.NumberFormat('ko-KR').format(value);
+}
+
+function formatDate(dateText: string) {
+  const [year, month, day] = dateText.split('-');
+  return `${year}.${month}.${day}`;
+}
+
+function emitStudioEvent(eventName: StudioEventName, payload: Record<string, unknown>) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const detail = { eventName, ...payload };
+  window.dispatchEvent(new CustomEvent('ssuk-market-analytics', { detail }));
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.info('[ssuk-market-analytics]', detail);
+  }
+}
+
+function RailButtons({
+  label,
+  canScrollPrev,
+  canScrollNext,
+  onPrev,
+  onNext
+}: RailButtonsProps) {
+  return (
+    <div className={styles.railActions} aria-label={`${label} 이동`}>
+      <button
+        type="button"
+        className={styles.railButton}
+        onClick={onPrev}
+        disabled={!canScrollPrev}
+        aria-label={`${label} 이전`}
+      >
+        &lt;
+      </button>
+      <button
+        type="button"
+        className={styles.railButton}
+        onClick={onNext}
+        disabled={!canScrollNext}
+        aria-label={`${label} 다음`}
+      >
+        &gt;
+      </button>
+    </div>
+  );
 }
 
 export default function StudioShareDetailView({ studioId }: StudioShareDetailViewProps) {
   const studio = studioDetails[studioId] ?? defaultStudio;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedUnit, setSelectedUnit] = useState<PriceUnit>('day');
-  const [comments, setComments] = useState<StudioComment[]>(initialComments);
-  const [authorMode, setAuthorMode] = useState<CommentAuthorMode>('nickname');
-  const [nickname, setNickname] = useState('');
-  const [commentText, setCommentText] = useState('');
+  const [saved, setSaved] = useState(false);
   const swipeStartXRef = useRef<number | null>(null);
   const swipeCurrentXRef = useRef<number | null>(null);
+
+  const statusLabel = studio.status === 'open' ? '쉐어중' : '마감';
+  const primaryCtaLabel = studio.status === 'open' ? '즉시 문의' : '대기 요청';
+  const trustItems = [
+    { key: 'verified', label: '본인 인증', value: '운영자 인증 완료' },
+    { key: 'policy', label: '계약 정책', value: studio.contractPolicyLabel },
+    { key: 'refund', label: '환불 정책', value: studio.refundPolicyLabel },
+    { key: 'response', label: '응답 속도', value: studio.responseLabel }
+  ];
 
   const priceText = useMemo(
     () => `₩${formatKrw(studio.priceByUnit[selectedUnit])} / ${unitLabelMap[selectedUnit]}`,
     [selectedUnit, studio.priceByUnit]
   );
 
-  const statusLabel = studio.status === 'open' ? '쉐어중' : '마감';
+  const inquiryHref = useMemo(() => {
+    const subject = `[공방쉐어 문의] ${studio.name}`;
+    const body = `${studio.name} (${studio.locationLabel}) 문의드립니다.`;
+
+    return `mailto:${studio.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }, [studio.email, studio.locationLabel, studio.name]);
+
+  const thumbnailRail = useHorizontalRail<HTMLUListElement>(`${studio.id}-${studio.images.length}`);
+  const infoRail = useHorizontalRail<HTMLDListElement>(`${studio.id}-${selectedUnit}`);
+  const trustRail = useHorizontalRail<HTMLUListElement>(`${studio.id}-trust`);
+  const equipmentRail = useHorizontalRail<HTMLUListElement>(`${studio.id}-equipment`);
+  const statsRail = useHorizontalRail<HTMLDivElement>(`${studio.id}-stats`);
+  const inquiryRail = useHorizontalRail<HTMLUListElement>(`${studio.id}-inquiry`);
+
+  useEffect(() => {
+    emitStudioEvent('studio_detail_view', { studioId: studio.id });
+  }, [studio.id]);
+
+  useEffect(() => {
+    const railNode = thumbnailRail.railRef.current;
+
+    if (!railNode) {
+      return;
+    }
+
+    const activeItem = railNode.children[currentImageIndex] as HTMLElement | undefined;
+
+    activeItem?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest'
+    });
+  }, [currentImageIndex, thumbnailRail.railRef]);
 
   const goToNextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % studio.images.length);
@@ -153,6 +320,7 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
     if (swipeStartXRef.current === null) {
       return;
     }
+
     swipeCurrentXRef.current = clientX;
   };
 
@@ -176,50 +344,41 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
     swipeCurrentXRef.current = null;
   };
 
-  const onSubmitComment = () => {
-    const trimmed = commentText.trim();
-    if (!trimmed) {
-      return;
-    }
-
-    const resolvedAuthor =
-      authorMode === 'anonymous' ? '익명' : nickname.trim().length > 0 ? nickname.trim() : '닉네임';
-
-    const nextComment: StudioComment = {
-      id: `comment-${Date.now()}`,
-      author: resolvedAuthor,
-      createdAt: '방금 전',
-      text: trimmed
-    };
-
-    setComments((prev) => [nextComment, ...prev]);
-    setCommentText('');
-  };
-
   return (
     <TwoMenuShell
       activeMenu="market"
       title="공방 쉐어 상세"
-      subtitle="공간 정보를 확인하고 댓글로 자유롭게 문의할 수 있어요."
+      subtitle="공간 정보를 빠르게 확인하고 문의할 수 있어요."
       ctaLabel="← 목록으로"
-      ctaHref="/market?tab=studio"
+      ctaHref="/market"
       hideHero
     >
       <article className={styles.page} aria-label="공방 쉐어 상세">
-        <section className={styles.headerSection} aria-label="상단 핵심 정보">
+        <section className={styles.headerSection} aria-label="공방 상태 및 핵심 정보">
           <div className={styles.titleRow}>
-            <h1>{studio.name}</h1>
-            <span className={`${styles.statusText} ${studio.status === 'open' ? styles.open : styles.closed}`}>
+            <div className={styles.titleBlock}>
+              <h1>{studio.name}</h1>
+              <p>
+                {studio.locationLabel} · 등록일 {formatDate(studio.createdAt)} · 운영자 {studio.ownerName}
+              </p>
+            </div>
+            <span
+              className={`${styles.statusBadge} ${studio.status === 'open' ? styles.statusOpen : styles.statusClosed}`}
+            >
               {statusLabel}
             </span>
           </div>
-          <div className={styles.metaRow}>
-            <span>작성자 {studio.author}</span>
-            <span>등록일 {studio.createdAt}</span>
+
+          <div className={styles.trustBadgeRow}>
+            {studio.trustBadges.map((badge) => (
+              <span key={`${studio.id}-${badge}`} className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}>
+                {trustBadgeLabel[badge]}
+              </span>
+            ))}
           </div>
         </section>
 
-        <section className={styles.gallerySection} aria-label="공방 이미지">
+        <section className={styles.gallerySection} aria-label="공방 이미지 갤러리">
           <div
             className={styles.mainImageFrame}
             onTouchStart={(event) => onSwipeStart(event.touches[0].clientX)}
@@ -229,6 +388,7 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
               if (event.pointerType === 'mouse' && event.button !== 0) {
                 return;
               }
+
               event.currentTarget.setPointerCapture(event.pointerId);
               onSwipeStart(event.clientX);
             }}
@@ -238,17 +398,28 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
           >
             <img
               src={studio.images[currentImageIndex]}
-              alt={`${studio.name} 사진 ${currentImageIndex + 1}`}
+              alt={`${studio.name} 공간 사진 ${currentImageIndex + 1}`}
               loading="eager"
             />
-            <div className={styles.imageControls} aria-live="polite">
-              <span>
-                {currentImageIndex + 1} / {studio.images.length}
-              </span>
-              <span>좌우로 밀어 넘기기</span>
+            <div className={styles.imageControls}>
+              <div className={styles.imageMeta}>
+                <strong>
+                  {currentImageIndex + 1} / {studio.images.length}
+                </strong>
+                <span>좌우 이동 버튼과 썸네일로 다른 공간 컷을 확인하세요.</span>
+              </div>
+              <div className={styles.imageNavButtons}>
+                <button type="button" onClick={goToPrevImage} aria-label="이전 이미지">
+                  &lt;
+                </button>
+                <button type="button" onClick={goToNextImage} aria-label="다음 이미지">
+                  &gt;
+                </button>
+              </div>
             </div>
           </div>
-          <ul className={styles.thumbnailRow}>
+
+          <ul ref={thumbnailRail.railRef} className={`${styles.thumbnailRow} ${styles.railTrack}`}>
             {studio.images.map((image, index) => (
               <li key={`${studio.id}-${index}`}>
                 <button
@@ -264,23 +435,27 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
           </ul>
         </section>
 
-        <section className={styles.infoSection} aria-label="공방 주요 정보">
-          <div className={styles.infoGrid}>
-            <div>
-              <dt>주소(위치)</dt>
+        <section className={styles.infoSection} aria-label="핵심 정보">
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>핵심 정보</h2>
+            <RailButtons
+              label="핵심 정보"
+              canScrollPrev={infoRail.canScrollPrev}
+              canScrollNext={infoRail.canScrollNext}
+              onPrev={infoRail.scrollPrev}
+              onNext={infoRail.scrollNext}
+            />
+          </div>
+          <dl ref={infoRail.railRef} className={`${styles.infoGrid} ${styles.railTrack}`}>
+            <div className={styles.infoCard}>
+              <dt>지역</dt>
+              <dd>{studio.locationLabel}</dd>
+            </div>
+            <div className={styles.infoCard}>
+              <dt>주소</dt>
               <dd>{studio.address}</dd>
             </div>
-            <div>
-              <dt>연락처(email)</dt>
-              <dd>
-                <a href={`mailto:${studio.email}`}>{studio.email}</a>
-              </dd>
-            </div>
-            <div>
-              <dt>평수</dt>
-              <dd>{studio.areaPyeong}평</dd>
-            </div>
-            <div>
+            <div className={styles.infoCard}>
               <dt>가격</dt>
               <dd>
                 <div className={styles.priceBlock}>
@@ -302,11 +477,54 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
                 </div>
               </dd>
             </div>
+            <div className={styles.infoCard}>
+              <dt>다음 가능일</dt>
+              <dd>{formatDate(studio.nextAvailableDate)}</dd>
+            </div>
+            <div className={styles.infoCard}>
+              <dt>수용 인원</dt>
+              <dd>{studio.capacityLabel}</dd>
+            </div>
+            <div className={styles.infoCard}>
+              <dt>최소 이용 단위</dt>
+              <dd>{minUnitLabelMap[studio.minUnit]} 단위</dd>
+            </div>
+            <div className={styles.infoCard}>
+              <dt>공간 규모</dt>
+              <dd>{studio.areaPyeong}평</dd>
+            </div>
+            <div className={styles.infoCard}>
+              <dt>문의 메일</dt>
+              <dd>
+                <a href={`mailto:${studio.email}`}>{studio.email}</a>
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section className={styles.trustSection} aria-label="신뢰 및 정책 정보">
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>신뢰 정보</h2>
+            <RailButtons
+              label="신뢰 정보"
+              canScrollPrev={trustRail.canScrollPrev}
+              canScrollNext={trustRail.canScrollNext}
+              onPrev={trustRail.scrollPrev}
+              onNext={trustRail.scrollNext}
+            />
           </div>
+          <ul ref={trustRail.railRef} className={`${styles.trustList} ${styles.railTrack}`}>
+            {trustItems.map((item) => (
+              <li key={item.key} className={styles.trustItem}>
+                <span className={styles.trustKey}>{item.label}</span>
+                <span className={styles.trustValue}>{item.value}</span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className={styles.descriptionSection} aria-label="공간 설명">
-          <h2>공간 설명</h2>
+          <h2 className={styles.sectionTitle}>공간 설명</h2>
           <div className={styles.descriptionBody}>
             {studio.description.map((line) => (
               <p key={line}>{line}</p>
@@ -314,80 +532,126 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
           </div>
         </section>
 
-        <section className={styles.equipmentSection} aria-label="보유 장비">
-          <h2>보유 장비</h2>
-          <ul>
+        <section className={styles.equipmentSection} aria-label="장비 및 시설">
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>장비 및 시설</h2>
+            <RailButtons
+              label="장비 및 시설"
+              canScrollPrev={equipmentRail.canScrollPrev}
+              canScrollNext={equipmentRail.canScrollNext}
+              onPrev={equipmentRail.scrollPrev}
+              onNext={equipmentRail.scrollNext}
+            />
+          </div>
+          <ul ref={equipmentRail.railRef} className={`${styles.equipmentList} ${styles.railTrack}`}>
             {studio.equipments.map((equipment) => (
-              <li key={equipment}>{equipment}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className={styles.commentSection} aria-label="댓글">
-          <div className={styles.commentHeader}>
-            <h2>댓글 {comments.length}</h2>
-            <span>마감 상태에서도 댓글 작성이 가능합니다.</span>
-          </div>
-          <div className={styles.commentInputBox}>
-            <div className={styles.authorModeRow}>
-              <label>
-                <input
-                  type="radio"
-                  name="authorMode"
-                  value="nickname"
-                  checked={authorMode === 'nickname'}
-                  onChange={() => setAuthorMode('nickname')}
-                />
-                닉네임
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="authorMode"
-                  value="anonymous"
-                  checked={authorMode === 'anonymous'}
-                  onChange={() => setAuthorMode('anonymous')}
-                />
-                익명
-              </label>
-            </div>
-
-            {authorMode === 'nickname' ? (
-              <input
-                type="text"
-                placeholder="닉네임을 입력해 주세요."
-                value={nickname}
-                onChange={(event) => setNickname(event.target.value)}
-              />
-            ) : null}
-
-            <div className={styles.commentEditorRow}>
-              <textarea
-                placeholder="댓글을 입력해 주세요."
-                value={commentText}
-                onChange={(event) => setCommentText(event.target.value)}
-              />
-              <button type="button" onClick={onSubmitComment}>
-                등록
-              </button>
-            </div>
-          </div>
-
-          <ul className={styles.commentList}>
-            {comments.map((comment) => (
-              <li key={comment.id}>
-                <div>
-                  <strong>{comment.author}</strong>
-                  <span>{comment.createdAt}</span>
-                </div>
-                <p>{comment.text}</p>
+              <li key={equipment} className={styles.equipmentItem}>
+                {equipment}
               </li>
             ))}
           </ul>
         </section>
 
+        <section className={styles.socialSection} aria-label="리뷰 및 문의 요약">
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>리뷰/문의 요약</h2>
+          </div>
+
+          <div className={styles.socialBlock}>
+            <div className={styles.subsectionHeader}>
+              <p className={styles.subsectionLabel}>요약 지표</p>
+              <RailButtons
+                label="요약 지표"
+                canScrollPrev={statsRail.canScrollPrev}
+                canScrollNext={statsRail.canScrollNext}
+                onPrev={statsRail.scrollPrev}
+                onNext={statsRail.scrollNext}
+              />
+            </div>
+            <div ref={statsRail.railRef} className={`${styles.socialStats} ${styles.railTrack}`}>
+              <article className={styles.statCard}>
+                <strong>{studio.reviewScore.toFixed(1)}</strong>
+                <span>평점</span>
+              </article>
+              <article className={styles.statCard}>
+                <strong>{studio.reviewCount}</strong>
+                <span>리뷰 수</span>
+              </article>
+              <article className={styles.statCard}>
+                <strong>{studio.inquiryCount}</strong>
+                <span>문의 수</span>
+              </article>
+            </div>
+          </div>
+
+          <div className={styles.socialBlock}>
+            <div className={styles.subsectionHeader}>
+              <p className={styles.subsectionLabel}>최근 문의</p>
+              <RailButtons
+                label="최근 문의"
+                canScrollPrev={inquiryRail.canScrollPrev}
+                canScrollNext={inquiryRail.canScrollNext}
+                onPrev={inquiryRail.scrollPrev}
+                onNext={inquiryRail.scrollNext}
+              />
+            </div>
+            <ul ref={inquiryRail.railRef} className={`${styles.inquiryList} ${styles.railTrack}`}>
+              {studio.recentInquiries.map((inquiry) => (
+                <li key={inquiry.id} className={styles.inquiryItem}>
+                  <div>
+                    <strong>{inquiry.author}</strong>
+                    <span>{inquiry.createdAt}</span>
+                  </div>
+                  <p>{inquiry.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <div className={styles.stickyBar}>
+          <div className={styles.stickyInner}>
+            <a
+              href={inquiryHref}
+              className={styles.primaryCta}
+              onClick={() => {
+                emitStudioEvent('studio_contact_click', {
+                  studioId: studio.id,
+                  sourceSection: 'detail_sticky',
+                  status: studio.status
+                });
+              }}
+            >
+              {primaryCtaLabel}
+            </a>
+            <button
+              type="button"
+              className={`${styles.secondaryCta} ${saved ? styles.secondaryCtaActive : ''}`}
+              onClick={() => {
+                const nextSaved = !saved;
+                setSaved(nextSaved);
+                emitStudioEvent('studio_save_click', {
+                  studioId: studio.id,
+                  saved: nextSaved
+                });
+              }}
+            >
+              {saved ? '저장됨' : '저장'}
+            </button>
+          </div>
+          <Link
+            href="/market/new"
+            className={styles.ownerLink}
+            onClick={() => {
+              emitStudioEvent('studio_owner_cta_click', { from: 'detail' });
+            }}
+          >
+            내 공방 쉐어 등록하기
+          </Link>
+        </div>
+
         <section className={styles.backSection} aria-label="뒤로가기">
-          <Link href="/market?tab=studio">공방 쉐어 목록으로 돌아가기</Link>
+          <Link href="/market">공방 쉐어 목록으로 돌아가기</Link>
         </section>
       </article>
     </TwoMenuShell>

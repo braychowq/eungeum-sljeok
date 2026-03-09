@@ -17,7 +17,7 @@ type TwoMenuShellProps = {
 
 const mainMenus = [
   { id: 'community', label: '슬쩍 커뮤니티', href: '/community' },
-  { id: 'market', label: '슬쩍 마켓', href: '/market' }
+  { id: 'market', label: '공방 쉐어', href: '/market' }
 ] as const;
 
 export default function TwoMenuShell({

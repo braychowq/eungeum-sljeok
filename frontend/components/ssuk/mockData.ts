@@ -1,5 +1,62 @@
 export type CommunityTabId = 'qna' | 'share' | 'free';
 export type MarketTabId = 'studio' | 'jewelry';
+export type StudioTrustBadge = 'verified' | 'policy' | 'fast_response';
+export type MarketFilterRegion = 'all' | 'seongsu' | 'hongdae' | 'gangnam' | 'euljiro';
+export type MarketFilterBudget = 'all' | 'under_6' | 'between_6_10' | 'over_10';
+export type MarketFilterDate = 'all' | 'today' | 'tomorrow' | 'within_week';
+export type MarketSort = 'recommended' | 'popular' | 'latest' | 'price_low';
+
+export type StudioAvailability = {
+  nextAvailableDate: string;
+  minUnit: 'hour' | 'day' | 'week';
+};
+
+export type StudioListingCard = {
+  id: string;
+  tab: MarketTabId;
+  title: string;
+  href: string;
+  imageUrl: string;
+  locationLabel: string;
+  priceLabel: string;
+  availabilityLabel: string;
+  trustBadges: StudioTrustBadge[];
+  isBookable: boolean;
+  capacityLabel: string;
+  createdAt: string;
+  popularityScore: number;
+  dayPrice: number;
+  region: Exclude<MarketFilterRegion, 'all'>;
+  budgetBucket: Exclude<MarketFilterBudget, 'all'>;
+  availabilityTag: Exclude<MarketFilterDate, 'all'>;
+  availability: StudioAvailability;
+};
+
+export type StudioHeroPick = {
+  id: string;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  href: string;
+  badge: string;
+};
+
+export type StudioCurationPick = {
+  id: string;
+  cardId: string;
+  title: string;
+  caption: string;
+  href: string;
+};
+
+export type StudioTrendingItem = {
+  id: string;
+  rank: number;
+  cardId: string;
+  title: string;
+  meta: string;
+  href: string;
+};
 export type CommunityHighlightKind = 'notice' | 'popular';
 
 export type CommunityHighlightPost = {
@@ -158,20 +215,59 @@ export const marketTabs: Array<{ id: MarketTabId; label: string }> = [
   { id: 'jewelry', label: '쥬얼리 악세사리 마켓' }
 ];
 
-export const marketCards: Array<{
-  id: string;
-  tab: MarketTabId;
-  title: string;
-  href: string;
-  imageUrl: string;
-}> = [
+export const marketRegionOptions: Array<{ id: MarketFilterRegion; label: string }> = [
+  { id: 'all', label: '전체 지역' },
+  { id: 'seongsu', label: '성수' },
+  { id: 'hongdae', label: '홍대/연남' },
+  { id: 'gangnam', label: '강남' },
+  { id: 'euljiro', label: '을지로' }
+];
+
+export const marketBudgetOptions: Array<{ id: MarketFilterBudget; label: string }> = [
+  { id: 'all', label: '전체 예산' },
+  { id: 'under_6', label: '6만 원 이하' },
+  { id: 'between_6_10', label: '6~10만 원' },
+  { id: 'over_10', label: '10만 원 이상' }
+];
+
+export const marketDateOptions: Array<{ id: MarketFilterDate; label: string }> = [
+  { id: 'all', label: '전체 일정' },
+  { id: 'today', label: '오늘 가능' },
+  { id: 'tomorrow', label: '내일 가능' },
+  { id: 'within_week', label: '일주일 내' }
+];
+
+export const marketSortOptions: Array<{ id: MarketSort; label: string }> = [
+  { id: 'recommended', label: '추천순' },
+  { id: 'popular', label: '인기순' },
+  { id: 'latest', label: '최신순' },
+  { id: 'price_low', label: '가격 낮은순' }
+];
+
+export const marketCards: StudioListingCard[] = [
   {
     id: 'studio-1',
     tab: 'studio',
     title: '휴대 작업실 A',
     href: '/market/studio/studio-1',
     imageUrl:
-      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '성수',
+    priceLabel: '₩55,000 / 일',
+    availabilityLabel: '오늘 문의 가능',
+    trustBadges: ['verified', 'policy', 'fast_response'],
+    isBookable: true,
+    capacityLabel: '최대 4인',
+    createdAt: '2026-03-04',
+    popularityScore: 97,
+    dayPrice: 55000,
+    region: 'seongsu',
+    budgetBucket: 'under_6',
+    availabilityTag: 'today',
+    availability: {
+      nextAvailableDate: '2026-03-09',
+      minUnit: 'day'
+    }
   },
   {
     id: 'studio-2',
@@ -179,7 +275,23 @@ export const marketCards: Array<{
     title: '성수 공동공방 B',
     href: '/market/studio/studio-2',
     imageUrl:
-      'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '성수',
+    priceLabel: '₩60,000 / 일',
+    availabilityLabel: '내일 가능',
+    trustBadges: ['verified', 'policy'],
+    isBookable: false,
+    capacityLabel: '최대 6인',
+    createdAt: '2026-03-02',
+    popularityScore: 88,
+    dayPrice: 60000,
+    region: 'seongsu',
+    budgetBucket: 'between_6_10',
+    availabilityTag: 'tomorrow',
+    availability: {
+      nextAvailableDate: '2026-03-10',
+      minUnit: 'day'
+    }
   },
   {
     id: 'studio-3',
@@ -187,15 +299,47 @@ export const marketCards: Array<{
     title: '강남 스튜디오 C',
     href: '/market/studio/studio-1',
     imageUrl:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '강남',
+    priceLabel: '₩95,000 / 일',
+    availabilityLabel: '일주일 내 가능',
+    trustBadges: ['policy', 'fast_response'],
+    isBookable: true,
+    capacityLabel: '최대 3인',
+    createdAt: '2026-03-08',
+    popularityScore: 79,
+    dayPrice: 95000,
+    region: 'gangnam',
+    budgetBucket: 'between_6_10',
+    availabilityTag: 'within_week',
+    availability: {
+      nextAvailableDate: '2026-03-14',
+      minUnit: 'day'
+    }
   },
   {
     id: 'studio-4',
     tab: 'studio',
-    title: '실버 링 완성품',
+    title: '을지로 스튜디오 D',
     href: '/market/studio/studio-2',
     imageUrl:
-      'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '을지로',
+    priceLabel: '₩120,000 / 일',
+    availabilityLabel: '오늘 문의 가능',
+    trustBadges: ['verified', 'policy', 'fast_response'],
+    isBookable: true,
+    capacityLabel: '최대 8인',
+    createdAt: '2026-03-06',
+    popularityScore: 84,
+    dayPrice: 120000,
+    region: 'euljiro',
+    budgetBucket: 'over_10',
+    availabilityTag: 'today',
+    availability: {
+      nextAvailableDate: '2026-03-09',
+      minUnit: 'hour'
+    }
   },
   {
     id: 'jewelry-1',
@@ -203,7 +347,23 @@ export const marketCards: Array<{
     title: '핸드메이드 팬던트',
     href: '#',
     imageUrl:
-      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '온라인',
+    priceLabel: '₩38,000',
+    availabilityLabel: '즉시 구매',
+    trustBadges: ['policy'],
+    isBookable: true,
+    capacityLabel: '단일 상품',
+    createdAt: '2026-03-05',
+    popularityScore: 64,
+    dayPrice: 38000,
+    region: 'hongdae',
+    budgetBucket: 'under_6',
+    availabilityTag: 'today',
+    availability: {
+      nextAvailableDate: '2026-03-09',
+      minUnit: 'day'
+    }
   },
   {
     id: 'jewelry-2',
@@ -211,7 +371,23 @@ export const marketCards: Array<{
     title: '원석 비드 세트',
     href: '#',
     imageUrl:
-      'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '온라인',
+    priceLabel: '₩44,000',
+    availabilityLabel: '즉시 구매',
+    trustBadges: ['policy'],
+    isBookable: true,
+    capacityLabel: '단일 상품',
+    createdAt: '2026-03-06',
+    popularityScore: 61,
+    dayPrice: 44000,
+    region: 'hongdae',
+    budgetBucket: 'under_6',
+    availabilityTag: 'today',
+    availability: {
+      nextAvailableDate: '2026-03-09',
+      minUnit: 'day'
+    }
   },
   {
     id: 'jewelry-3',
@@ -219,7 +395,23 @@ export const marketCards: Array<{
     title: '중고 토치 세트',
     href: '#',
     imageUrl:
-      'https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '온라인',
+    priceLabel: '₩82,000',
+    availabilityLabel: '즉시 구매',
+    trustBadges: ['policy', 'fast_response'],
+    isBookable: true,
+    capacityLabel: '단일 상품',
+    createdAt: '2026-03-04',
+    popularityScore: 58,
+    dayPrice: 82000,
+    region: 'gangnam',
+    budgetBucket: 'between_6_10',
+    availabilityTag: 'today',
+    availability: {
+      nextAvailableDate: '2026-03-09',
+      minUnit: 'day'
+    }
   },
   {
     id: 'jewelry-4',
@@ -227,6 +419,119 @@ export const marketCards: Array<{
     title: '소형 은판 스크랩',
     href: '#',
     imageUrl:
-      'https://images.unsplash.com/photo-1511779031865-5b6f2f4c49ce?auto=format&fit=crop&w=900&q=80'
+      'https://images.unsplash.com/photo-1511779031865-5b6f2f4c49ce?auto=format&fit=crop&w=900&q=80',
+    locationLabel: '온라인',
+    priceLabel: '₩110,000',
+    availabilityLabel: '즉시 구매',
+    trustBadges: ['policy'],
+    isBookable: true,
+    capacityLabel: '단일 상품',
+    createdAt: '2026-03-01',
+    popularityScore: 52,
+    dayPrice: 110000,
+    region: 'euljiro',
+    budgetBucket: 'over_10',
+    availabilityTag: 'today',
+    availability: {
+      nextAvailableDate: '2026-03-09',
+      minUnit: 'day'
+    }
+  }
+];
+
+export const studioHeroPicks: StudioHeroPick[] = [
+  {
+    id: 'hero-1',
+    title: "3월 첫번째 Editor's PICK",
+    subtitle: '성수/을지로 금속 작업 친화 공방 큐레이션',
+    imageUrl:
+      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80',
+    href: '/market/studio/studio-1',
+    badge: 'Editor Pick'
+  },
+  {
+    id: 'hero-2',
+    title: '즉시 문의 가능한 공방 모음',
+    subtitle: '오늘 또는 내일 바로 시작 가능한 공간',
+    imageUrl:
+      'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?auto=format&fit=crop&w=1400&q=80',
+    href: '/market/studio/studio-1',
+    badge: 'Quick Match'
+  },
+  {
+    id: 'hero-3',
+    title: '중형 장비 완비 공방',
+    subtitle: '집진/세척/도금 장비가 있는 공간',
+    imageUrl:
+      'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?auto=format&fit=crop&w=1400&q=80',
+    href: '/market/studio/studio-2',
+    badge: 'Equipment'
+  }
+];
+
+export const studioRecommendations: StudioCurationPick[] = [
+  {
+    id: 'recommend-1',
+    cardId: 'studio-1',
+    title: '초보 제작자 추천',
+    caption: '합리적인 일 단가 + 빠른 응답',
+    href: '/market/studio/studio-1'
+  },
+  {
+    id: 'recommend-2',
+    cardId: 'studio-4',
+    title: '팀 작업 추천',
+    caption: '최대 8인 수용 + 장비 완비',
+    href: '/market/studio/studio-2'
+  },
+  {
+    id: 'recommend-3',
+    cardId: 'studio-3',
+    title: '집중 작업 추천',
+    caption: '소규모 전용 + 주 단위 이용 가능',
+    href: '/market/studio/studio-1'
+  }
+];
+
+export const studioTrending: StudioTrendingItem[] = [
+  {
+    id: 'trend-1',
+    rank: 1,
+    cardId: 'studio-1',
+    title: '휴대 작업실 A',
+    meta: '문의 전환율 1위 · 성수',
+    href: '/market/studio/studio-1'
+  },
+  {
+    id: 'trend-2',
+    rank: 2,
+    cardId: 'studio-2',
+    title: '성수 공동공방 B',
+    meta: '대기 요청 다수 · 성수',
+    href: '/market/studio/studio-2'
+  },
+  {
+    id: 'trend-3',
+    rank: 3,
+    cardId: 'studio-4',
+    title: '을지로 스튜디오 D',
+    meta: '장비 만족도 높음 · 을지로',
+    href: '/market/studio/studio-2'
+  },
+  {
+    id: 'trend-4',
+    rank: 4,
+    cardId: 'studio-3',
+    title: '강남 스튜디오 C',
+    meta: '빠른 응답 · 강남',
+    href: '/market/studio/studio-1'
+  },
+  {
+    id: 'trend-5',
+    rank: 5,
+    cardId: 'studio-1',
+    title: '휴대 작업실 A',
+    meta: '재문의율 높음 · 성수',
+    href: '/market/studio/studio-1'
   }
 ];
