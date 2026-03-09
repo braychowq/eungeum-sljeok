@@ -6,10 +6,12 @@ import styles from './TwoMenuShell.module.css';
 type TwoMenuShellProps = {
   activeMenu: 'community' | 'market';
   title: string;
-  subtitle: string;
+  subtitle?: string;
   ctaLabel: string;
   ctaHref: string;
   hideHero?: boolean;
+  hideEyebrow?: boolean;
+  hideCta?: boolean;
   children: React.ReactNode;
 };
 
@@ -25,6 +27,8 @@ export default function TwoMenuShell({
   ctaLabel,
   ctaHref,
   hideHero = false,
+  hideEyebrow = false,
+  hideCta = false,
   children
 }: TwoMenuShellProps) {
   const eyebrow = activeMenu === 'community' ? 'COMMUNITY VIEW' : 'MARKET VIEW';
@@ -58,12 +62,14 @@ export default function TwoMenuShell({
 
         {!hideHero ? (
           <section className={styles.heroBox}>
-            <p className={styles.eyebrow}>{eyebrow}</p>
+            {!hideEyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
             <h1 className={styles.pageTitle}>{title}</h1>
-            <p className={styles.pageSubtitle}>{subtitle}</p>
-            <Link href={ctaHref} className={styles.ctaButton}>
-              {ctaLabel}
-            </Link>
+            {subtitle ? <p className={styles.pageSubtitle}>{subtitle}</p> : null}
+            {!hideCta ? (
+              <Link href={ctaHref} className={styles.ctaButton}>
+                {ctaLabel}
+              </Link>
+            ) : null}
           </section>
         ) : null}
 
