@@ -20,6 +20,13 @@ export type CommunityPost = {
   category: CommunityCategory;
   title: string;
   href: string;
+  likeCount: number;
+  commentCount: number;
+  viewCount: number;
+  // Relative timestamp from now used for "최근 24시간" popular filtering.
+  publishedHoursAgo: number;
+  isNotice?: boolean;
+  isPinned?: boolean;
 };
 
 export type SliderCard = {

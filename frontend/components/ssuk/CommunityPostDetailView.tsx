@@ -16,7 +16,6 @@ type DetailPost = {
   viewCount: number;
   likeCount: number;
   commentCount: number;
-  summary: string;
   body: string[];
   materials: string[];
   tools: string[];
@@ -35,7 +34,6 @@ const detailPostMap: Record<string, DetailPost> = {
     viewCount: 238,
     likeCount: 31,
     commentCount: 7,
-    summary: '얇은 은선 연결부에서 생기는 검은 자국과 울퉁불퉁한 표면을 줄이는 팁이 필요해요.',
     body: [
       '0.7mm 은선을 원형으로 감아 반지를 만들고 있는데 납땜 후 자국이 생각보다 크게 남습니다.',
       '플럭스 양 조절, 버너 거리, 사포 단계(400-800-1200)는 적용했지만 마감이 일정하지 않아요.',
@@ -56,7 +54,6 @@ const detailPostMap: Record<string, DetailPost> = {
     viewCount: 412,
     likeCount: 56,
     commentCount: 12,
-    summary: '작업 전/중/후 확인할 항목을 한 장으로 정리한 템플릿입니다.',
     body: [
       '재료 준비, 공구 점검, 안전 확인, 촬영 체크까지 한 번에 관리할 수 있는 양식을 만들었습니다.',
       'A4 출력용과 모바일 체크리스트 버전을 같이 공유합니다.',
@@ -77,7 +74,6 @@ const detailPostMap: Record<string, DetailPost> = {
     viewCount: 129,
     likeCount: 22,
     commentCount: 9,
-    summary: '작업실에서 생긴 소소한 해프닝을 공유해요.',
     body: [
       '줄질하다가 집중해서 시간을 봤더니 2시간이 순삭이었네요.',
       '다들 작업할 때 공감되는 웃긴 순간 있으면 댓글로 남겨주세요.',
@@ -93,12 +89,6 @@ const detailPostMap: Record<string, DetailPost> = {
 
 const fallbackPost = detailPostMap['qna-1'];
 
-const categoryLabelMap: Record<DetailPost['category'], string> = {
-  qna: 'Q&A',
-  share: '공유',
-  free: '아무말'
-};
-
 const sampleComments = [
   { id: 'c-1', author: '실버초보', time: '12분 전', text: '토치 각도 고정이 핵심이더라고요. 저도 같은 문제 있었어요.' },
   { id: 'c-2', author: '공방운영자', time: '6분 전', text: '피클링 이후 중화 과정까지 체크하면 표면 안정성이 좋아졌습니다.' }
@@ -106,7 +96,6 @@ const sampleComments = [
 
 export default function CommunityPostDetailView({ postId }: CommunityPostDetailViewProps) {
   const post = detailPostMap[postId] ?? fallbackPost;
-  const categoryLabel = categoryLabelMap[post.category];
   const listHref = `/community?tab=${post.category}`;
   const postsInCategory = communityPosts[post.category];
   const currentIndex = postsInCategory.findIndex((item) => item.id === post.id);
@@ -125,7 +114,6 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
       hideHero
     >
       <section className={styles.headerSection} aria-label="게시글 헤더">
-        <p className={styles.breadcrumb}>슬쩍 커뮤니티 &gt; {categoryLabel}</p>
         <h2>{post.title}</h2>
         <div className={styles.metaRow}>
           <span>{post.author}</span>
@@ -133,11 +121,6 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
           <span>조회 {post.viewCount}</span>
           <span>좋아요 {post.likeCount}</span>
         </div>
-      </section>
-
-      <section className={styles.summarySection} aria-label="요약">
-        <h3>요약</h3>
-        <p>{post.summary}</p>
       </section>
 
       <section className={styles.bodySection} aria-label="본문">

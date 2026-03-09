@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { CommunityCategory, CommunityPost } from './types';
 import styles from './CommunitySection.module.css';
 
@@ -9,21 +9,45 @@ type CommunitySectionProps = {
   posts: CommunityPost[];
 };
 
-type HomeCommunityTab = 'all' | CommunityCategory;
+const categoryLabelMap: Record<CommunityCategory, string> = {
+  qna: 'Q&A',
+  share: '공유',
+  free: '아무말'
+};
 
-const tabs: Array<{ id: HomeCommunityTab; label: string }> = [
-  { id: 'all', label: '전체' },
-  { id: 'qna', label: 'Q&A' },
-  { id: 'share', label: '공유' },
-  { id: 'free', label: '아무말' }
-];
+const POPULAR_POST_LIMIT = 5;
+const POPULAR_WINDOW_HOURS = 24;
+
+const getPopularityScore = (post: CommunityPost) =>
+  post.likeCount * 3 + post.commentCount * 2 + post.viewCount * 0.1;
+
+const isPopularCandidate = (post: CommunityPost) =>
+  post.publishedHoursAgo <= POPULAR_WINDOW_HOURS && !post.isNotice && !post.isPinned;
+
+const sortByPopularity = (a: CommunityPost, b: CommunityPost) => {
+  const scoreDiff = getPopularityScore(b) - getPopularityScore(a);
+
+  if (scoreDiff !== 0) {
+    return scoreDiff;
+  }
+
+  const latestDiff = a.publishedHoursAgo - b.publishedHoursAgo;
+
+  if (latestDiff !== 0) {
+    return latestDiff;
+  }
+
+  return b.likeCount - a.likeCount;
+};
 
 export default function CommunitySection({ posts }: CommunitySectionProps) {
-  const [activeTab, setActiveTab] = useState<HomeCommunityTab>('all');
-
-  const filteredPosts = useMemo(
-    () => (activeTab === 'all' ? posts : posts.filter((post) => post.category === activeTab)),
-    [posts, activeTab]
+  const popularPosts = useMemo(
+    () =>
+      posts
+        .filter(isPopularCandidate)
+        .sort(sortByPopularity)
+        .slice(0, POPULAR_POST_LIMIT),
+    [posts]
   );
 
   return (
@@ -36,28 +60,39 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
         </h3>
       </div>
 
-      <div className={styles.tabRow} role="tablist" aria-label="커뮤니티 카테고리">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            aria-selected={tab.id === activeTab}
-            className={`${styles.tab} ${tab.id === activeTab ? styles.activeTab : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className={styles.filterRow}>
+        <span className={styles.fixedFilter}>전체</span>
       </div>
 
-      <ul className={styles.list}>
-        {filteredPosts.map((post) => (
-          <li key={post.id}>
-            <a href={post.href}>{post.title}</a>
-          </li>
-        ))}
-      </ul>
+      <section className={styles.popularSection} aria-label="인기글 TOP 5">
+        <div className={styles.subHeaderRow}>
+          <h4 className={styles.subHeading}>인기글 TOP 5</h4>
+        </div>
+
+        <ul className={styles.popularList}>
+          {popularPosts.length > 0 ? (
+            popularPosts.map((post, index) => (
+              <li key={post.id}>
+                <a href={post.href} className={styles.popularItem}>
+                  <div className={styles.popularContent}>
+                    <div className={styles.titleRow}>
+                      <span className={styles.categoryChip}>{categoryLabelMap[post.category]}</span>
+                      {index < 3 ? <span className={styles.hotBadge}>HOT</span> : null}
+                    </div>
+                    <strong className={styles.postTitle}>{post.title}</strong>
+                  </div>
+                  <div className={styles.reactionBox}>
+                    <span>좋아요 {post.likeCount}</span>
+                    <span>댓글 {post.commentCount}</span>
+                  </div>
+                </a>
+              </li>
+            ))
+          ) : (
+            <li className={styles.emptyState}>최근 24시간 기준 인기글이 아직 없습니다.</li>
+          )}
+        </ul>
+      </section>
     </section>
   );
 }

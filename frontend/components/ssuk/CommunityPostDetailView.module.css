@@ -1,5 +1,4 @@
 .headerSection,
-.summarySection,
 .bodySection,
 .actionSection,
 .commentSection,
@@ -12,14 +11,8 @@
   margin-top: var(--space-6);
 }
 
-.breadcrumb {
-  margin: 0;
-  color: #8b8b8b;
-  font-size: 11px;
-}
-
 .headerSection h2 {
-  margin: 10px 0 0;
+  margin: 0;
   color: var(--text-primary);
   font-size: 28px;
   line-height: 1.24;
@@ -38,7 +31,6 @@
   font-size: 12px;
 }
 
-.summarySection h3,
 .bodySection h3,
 .commentSection h3,
 .relatedSection h3 {
@@ -46,17 +38,6 @@
   color: var(--text-primary);
   font-size: 20px;
   line-height: 1.3;
-}
-
-.summarySection p {
-  margin: 12px 0 0;
-  border: 1px solid #f0f0f0;
-  background: #fbfbfb;
-  border-radius: var(--radius-md);
-  padding: 14px;
-  color: #424242;
-  font-size: 14px;
-  line-height: 1.65;
 }
 
 .paragraphs {
@@ -199,7 +180,6 @@
 
 @media (max-width: 900px) {
   .headerSection,
-  .summarySection,
   .bodySection,
   .actionSection,
   .commentSection,
@@ -212,14 +192,12 @@
     font-size: 24px;
   }
 
-  .summarySection h3,
   .bodySection h3,
   .commentSection h3,
   .relatedSection h3 {
     font-size: 18px;
   }
 
-  .summarySection p,
   .paragraphs p {
     font-size: 13px;
   }
