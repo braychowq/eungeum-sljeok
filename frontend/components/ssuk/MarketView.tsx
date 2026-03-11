@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import {
   marketCards,
-  marketSortOptions,
   studioHeroPicks,
   studioRecommendations,
   studioTrending,
@@ -20,16 +19,9 @@ type MarketViewProps = {
   activeSort: MarketSort;
 };
 
-type MarketQueryState = {
-  sort: MarketSort;
-};
-
 type StudioSectionType = 'hero' | 'recommendation' | 'trending' | 'list';
 
-type MarketEventName =
-  | 'studio_filter_apply'
-  | 'studio_card_click'
-  | 'studio_owner_cta_click';
+type MarketEventName = 'studio_card_click' | 'studio_owner_cta_click';
 
 type RailButtonsProps = {
   label: string;
@@ -95,30 +87,11 @@ function RailButtons({
   );
 }
 
-function toMergedQuery(current: MarketQueryState, next: Partial<MarketQueryState>) {
-  return {
-    sort: next.sort ?? current.sort
-  };
-}
-
-function buildMarketHref(current: MarketQueryState, next: Partial<MarketQueryState>) {
-  const merged = toMergedQuery(current, next);
-  const params = new URLSearchParams();
-
-  params.set('sort', merged.sort);
-
-  return `/market?${params.toString()}`;
-}
-
 function toInquiryHint(card: StudioListingCard) {
   return card.isBookable ? '즉시 문의 가능' : '대기 요청 가능';
 }
 
 export default function MarketView({ activeSort }: MarketViewProps) {
-  const currentQuery: MarketQueryState = {
-    sort: activeSort
-  };
-
   const studioCards = useMemo(
     () => marketCards.filter((card) => card.tab === 'studio' && card.imageUrl.trim().length > 0),
     []
@@ -223,9 +196,9 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         </ul>
       </section>
 
-      <section className={styles.curatedSection} aria-label="이번 주 추천 공방">
+      <section className={styles.curatedSection} aria-label="추천 공방">
         <div className={styles.sectionHeader}>
-          <h2>이번 주 추천 공방</h2>
+          <h2>추천 공방</h2>
           <RailButtons
             label="추천 공방"
             canScrollPrev={recommendationRail.canScrollPrev}
@@ -259,9 +232,9 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         </ul>
       </section>
 
-      <section className={styles.trendingSection} aria-label="인기 공방 Top 5">
+      <section className={styles.trendingSection} aria-label="인기 공방">
         <div className={styles.sectionHeader}>
-          <h2>인기 공방 Top 5</h2>
+          <h2>인기 공방</h2>
           <RailButtons
             label="인기 공방"
             canScrollPrev={trendingRail.canScrollPrev}
@@ -295,35 +268,15 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         </ol>
       </section>
 
-      <section className={styles.listSection} aria-label="공방 목록">
+      <section className={styles.listSection} aria-label="공방 찾아보기">
         <div className={styles.listHeader}>
           <div className={styles.listHeading}>
-            <h2>공방 탐색</h2>
+            <h2>공방 찾아보기</h2>
             <p>총 {filteredStudioCards.length}개</p>
           </div>
           <div className={styles.listControls}>
-            <div className={styles.sortRow} role="tablist" aria-label="정렬">
-              {marketSortOptions.map((sortOption) => (
-                <Link
-                  key={sortOption.id}
-                  href={buildMarketHref(currentQuery, { sort: sortOption.id })}
-                  className={`${styles.sortChip} ${activeSort === sortOption.id ? styles.sortChipActive : ''}`}
-                  role="tab"
-                  aria-selected={activeSort === sortOption.id}
-                  onClick={() => {
-                    emitMarketEvent('studio_filter_apply', {
-                      axis: 'sort',
-                      value: sortOption.id,
-                      sort: sortOption.id
-                    });
-                  }}
-                >
-                  {sortOption.label}
-                </Link>
-              ))}
-            </div>
             <RailButtons
-              label="공방 탐색"
+              label="공방 찾아보기"
               canScrollPrev={browseRail.canScrollPrev}
               canScrollNext={browseRail.canScrollNext}
               onPrev={browseRail.scrollPrev}
