@@ -160,6 +160,24 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       ctaHref="/market/new"
       hideHero
     >
+      <section className={styles.actionBarSection} aria-label="공방 등록 안내">
+        <div className={styles.actionBar}>
+          <div className={styles.actionBarText}>
+            <strong>공방을 찾고 있나요?</strong>
+            <span>등록은 여기서 바로 시작</span>
+          </div>
+          <Link
+            href="/market/new"
+            className={styles.actionBarButton}
+            onClick={() => {
+              emitMarketEvent('studio_owner_cta_click', { from: 'top_bar' });
+            }}
+          >
+            내 공방 등록
+          </Link>
+        </div>
+      </section>
+
       <section className={styles.heroSection} aria-label="Editor Pick">
         <div className={styles.sectionHeader}>
           <h2>Editor&apos;s Pick</h2>
@@ -327,18 +345,6 @@ export default function MarketView({ activeSort }: MarketViewProps) {
           </ul>
         )}
       </section>
-
-      <div className={styles.ownerCtaWrap}>
-        <Link
-          href="/market/new"
-          className={styles.ownerCta}
-          onClick={() => {
-            emitMarketEvent('studio_owner_cta_click', { from: 'list' });
-          }}
-        >
-          내 공방 쉐어 등록하기
-        </Link>
-      </div>
     </TwoMenuShell>
   );
 }
