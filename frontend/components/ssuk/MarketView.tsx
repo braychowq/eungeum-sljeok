@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import {
   marketCards,
+  marketSortOptions,
   studioHeroPicks,
   studioRecommendations,
   studioTrending,
@@ -151,6 +152,12 @@ export default function MarketView({ activeSort }: MarketViewProps) {
   const recommendationRail = useHorizontalRail<HTMLUListElement>(recommendationCards.length);
   const trendingRail = useHorizontalRail<HTMLOListElement>(trendingCards.length);
   const browseRail = useHorizontalRail<HTMLUListElement>(`${activeSort}-${filteredStudioCards.length}`);
+  const activeSortLabel =
+    marketSortOptions.find((option) => option.id === activeSort)?.label ?? '추천순';
+  const bookableCount = filteredStudioCards.filter((card) => card.isBookable).length;
+  const fastResponseCount = filteredStudioCards.filter((card) =>
+    card.trustBadges.includes('fast_response')
+  ).length;
 
   return (
     <TwoMenuShell
@@ -287,12 +294,47 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       </section>
 
       <section className={styles.listSection} aria-label="공방 찾아보기">
+        <div className={styles.browseLead}>
+          <div className={styles.browseLeadText}>
+            <span className={styles.browseEyebrow}>Browse Flow</span>
+            <strong>{activeSortLabel}으로 정리한 공방 탐색</strong>
+            <p>
+              지금 바로 문의 가능한 공방과 응답이 빠른 공방을 먼저 확인한 뒤, 정렬 기준을 바꿔
+              비교해 보세요.
+            </p>
+          </div>
+          <div className={styles.browseStats} aria-label="공방 탐색 요약">
+            <div>
+              <span>즉시 문의 가능</span>
+              <strong>{bookableCount}곳</strong>
+            </div>
+            <div>
+              <span>응답 빠름</span>
+              <strong>{fastResponseCount}곳</strong>
+            </div>
+          </div>
+        </div>
+
         <div className={styles.listHeader}>
           <div className={styles.listHeading}>
             <h2>공방 찾아보기</h2>
-            <p>총 {filteredStudioCards.length}개</p>
+            <p>
+              {activeSortLabel} 기준 · 총 {filteredStudioCards.length}개
+            </p>
           </div>
           <div className={styles.listControls}>
+            <div className={styles.sortGroup} aria-label="공방 정렬">
+              {marketSortOptions.map((option) => (
+                <Link
+                  key={option.id}
+                  href={option.id === 'recommended' ? '/market' : `/market?sort=${option.id}`}
+                  className={`${styles.sortChip} ${activeSort === option.id ? styles.sortChipActive : ''}`}
+                  aria-current={activeSort === option.id ? 'page' : undefined}
+                >
+                  {option.label}
+                </Link>
+              ))}
+            </div>
             <RailButtons
               label="공방 찾아보기"
               canScrollPrev={browseRail.canScrollPrev}

@@ -36,6 +36,7 @@ export default function HomePage() {
           id="market"
           title="슬쩍 물건 판매하기"
           cards={marketCards}
+          headerHref="/market"
         />
 
         <InfoLibrarySection entries={libraryEntries} />

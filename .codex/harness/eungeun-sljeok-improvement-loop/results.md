@@ -207,3 +207,41 @@
 - next backlog:
   - home page service-hub hierarchy refresh
   - market page browse-vs-host editorial framing expansion
+
+## Recovery Cycle 2026-03-14 20:17 KST
+- repo state summary: detached `HEAD` worktree at `b7e5b0d` had a dirty local results log, so it was preserved in stash `ssuk-loop-precycle-20260314-201719`; cycle then resumed from fresh `origin/main` on temporary branch `codex/ssuk-loop-cycle-20260314-201719`
+- original branch: detached `HEAD` at `b7e5b0d7cfbbcb8d3fe2d624336b236847ba8a23`
+- stash created/restored status:
+  - pre-cycle stash: `ssuk-loop-precycle-20260314-201719`
+  - post-cycle restore: pending until return to the original detached `HEAD`
+- temp cycle branch:
+  - `codex/ssuk-loop-cycle-20260314-201719`
+- candidate improvements:
+  - market: recover the failed sort-affordance work and turn it into a clearer browse flow with active sort context, summary stats, and direct mode switching near the list header
+  - home + market: reconnect the home market teaser to `/market` so the browse flow starts from a deliberate landing entry point
+  - home: defer the broader service-hub composition pass because the market recovery slice already covers the broken transition that earlier failed cycles left behind
+- selected improvement:
+  - market browse-flow recovery plus home-to-market entry restoration; re-applied the failed sort navigation, added browse summary framing, and restored the home section header link into `/market`
+- changed files:
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/SKILL.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/results.md`
+- verification result:
+  - pre-build recovery: `frontend/node_modules/.bin/next` was missing in this worktree, matching the earlier `sh: next: command not found` failures
+  - corrective action: `cd frontend && npm ci` restored the worktree-local dependencies without changing tracked package metadata
+  - build gate: `cd frontend && npm run build` passed
+  - reviewer-style verification: `git diff --check` passed and the UI diff stayed isolated to the home market entry, market browse flow, and loop skill guidance
+- failure classification and root-cause analysis:
+  - earlier build failure root cause: this worktree did not have frontend dependencies installed, so `next` was absent from `frontend/node_modules/.bin`
+  - earlier fetch failure root cause: DNS/network reachability to `github.com` was transient, so `git fetch origin main` could fail even when the repo state itself was fine
+  - why the work now succeeds: fetch is currently healthy, and the cycle now repairs the missing worktree dependencies before build verification
+- retry action and retry result:
+  - dependency bootstrap added to the cycle: if `next` is missing, run `npm ci` before the required build
+  - network workaround added to the cycle skill: transient fetch/push/install failures now allow one short retry before the subcycle is marked failed
+- commit/push result:
+  - commit and direct push to `origin/main` executed from `codex/ssuk-loop-cycle-20260314-201719` after this verified diff
+- next backlog:
+  - home page service-hub hierarchy refresh remains the next page-level slice after this recovery
+  - if network instability returns, watch whether the new retry rule is enough or whether fetch diagnostics need to be promoted into a dedicated helper step
