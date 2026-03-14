@@ -34,22 +34,27 @@
 9. 단순 미세 수정은 위 거시적 개선의 일부일 때만 허용한다.
 10. 선택한 작업이 저위험 프론트엔드 범위면 구현한다.
 11. 구현 후 `cd frontend && npm run build`를 실행한다.
-12. reviewer 기준으로 검증이 통과했고 실제 변경 파일이 있으면 auto-commit 한다.
-13. commit 규칙:
+12. 실패 처리 규칙:
+   - fetch, push, install, remote asset access 등 네트워크 의존 실패면 이번 서브사이클만 실패로 기록하고 정리 후 종료한다.
+   - 네트워크 실패가 아니라면 실패 원인을 분류하고 root cause를 분석한다.
+   - 안전한 범위의 교정이 가능하면 같은 서브사이클 안에서 1회만 수정 후 재시도한다.
+   - 재시도 후에도 같은 범주의 실패가 반복되면 원인, 시도한 교정, 남은 blocker를 기록하고 이번 서브사이클을 종료한다.
+13. reviewer 기준으로 검증이 통과했고 실제 변경 파일이 있으면 auto-commit 한다.
+14. commit 규칙:
    - 메시지: `chore: ssuk improvement loop <timestamp>`
-14. commit 후 PR 없이 직접 배포 브랜치로 푸시한다.
+15. commit 후 PR 없이 직접 배포 브랜치로 푸시한다.
    - push 대상: `git push origin HEAD:main`
    - 즉, 임시 브랜치의 HEAD를 원격 `main`으로 직접 fast-forward 푸시한다.
-15. push 실패 시:
+16. push 실패 시:
    - 실패 원인을 `results.md`에 남긴다.
    - 임시 브랜치는 삭제하거나 버려서 다음 서브사이클에 영향을 남기지 않는다.
    - 이번 서브사이클만 종료한다.
-16. 작업 브랜치에서 원래 브랜치로 복귀한다.
-17. stash가 있었다면 복원한다.
+17. 작업 브랜치에서 원래 브랜치로 복귀한다.
+18. stash가 있었다면 복원한다.
    - 복원 성공 시 결과에 기록한다.
    - 복원 충돌 시 stash를 보존한 채 중지하고, 수동 확인 필요를 기록한다.
-18. 사용한 임시 브랜치는 성공/실패 여부와 무관하게 가능하면 정리한다.
-19. 사이클 결과를 `results.md`에 append 한다.
+19. 사용한 임시 브랜치는 성공/실패 여부와 무관하게 가능하면 정리한다.
+20. 사이클 결과를 `results.md`에 append 한다.
 
 ## Low-risk auto-apply criteria
 - 페이지 레이아웃 재구성
@@ -81,6 +86,8 @@
 - selected improvement or skip reason
 - changed files
 - verification result
+- failure classification and root-cause analysis when relevant
+- retry action and retry result when relevant
 - commit/push result
 - next backlog
 
@@ -93,4 +100,5 @@
 - 필요하면 페이지 자체를 개선해도 되지만, 변경 이유와 사용자 경험 개선 효과가 분명해야 한다
 - build 실패 시 결과에 실패 원인과 롤포워드 후보를 기록
 - fetch, push 등 네트워크 실패는 서브사이클 로컬 실패로만 처리하고 다음 실행에 상태를 남기지 않는다
+- 비네트워크 실패는 원인을 분석하고 안전한 범위의 1회 재시도 후에도 해결되지 않으면 종료한다
 - stash 복원 충돌 시 추가 구현을 중단하고 수동 확인이 필요하다고 기록

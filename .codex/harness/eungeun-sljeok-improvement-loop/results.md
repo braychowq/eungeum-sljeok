@@ -49,6 +49,16 @@
 - rationale:
   - 서비스가 체감될 정도로 개선되려면 섹션 단위가 아니라 경험 단위로 작업을 묶는 편이 효과적임
 
+## Policy Update 2026-03-14 12:05 KST
+- requested change:
+  - 네트워크 실패가 아니라면 실패 원인을 분석해서 다시 시도하길 원함
+- updated policy:
+  - fetch, push, install, remote asset access 등 네트워크 의존 실패는 기존처럼 서브사이클 로컬 실패로만 처리
+  - 비네트워크 실패는 원인을 분류하고 분석한 뒤, 안전한 범위의 교정을 거쳐 같은 서브사이클에서 1회 재시도
+  - 재시도 후에도 같은 범주의 실패가 반복되면 원인과 시도한 교정을 기록하고 종료
+- rationale:
+  - 일시적인 로컬 문제나 수정 가능한 구현/환경 오류는 즉시 복구해 같은 사이클 안에서 전진하는 편이 효율적임
+
 ## Cycle 2026-03-14 02:29:36 KST
 - repo state summary: detached `HEAD` worktree at `ae728c9`, clean at cycle start, harness artifacts absent in worktree so canonical results file in main workspace was reviewed
 - original branch: detached `HEAD` at `ae728c9979f38d391a431c2d6015ac9c556d0a9a`

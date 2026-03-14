@@ -12,6 +12,7 @@
 - 임시 브랜치는 `codex/ssuk-loop-cycle-<timestamp>` 형식으로 만들고, 사이클 종료 후 원래 브랜치로 복귀한다.
 - reviewer가 검증 통과를 선언한 뒤에만 auto-commit/push를 허용한다.
 - push는 PR 없이 `git push origin HEAD:main` 으로 직접 반영하되, 네트워크 실패 시 이번 사이클만 실패로 기록한다.
+- 네트워크 실패가 아니라면 실패 원인을 분류하고, 안전한 1회 재시도 가치가 있는지 판단한다.
 - 최종 결과를 `results.md`에 남긴다.
 
 ## Inputs
@@ -29,5 +30,6 @@
 - stash/temp-branch handling summary
 - implementation or skipped-with-reason
 - verification summary
+- failure classification / retry decision when relevant
 - commit/push result
 - next backlog

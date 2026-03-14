@@ -11,6 +11,7 @@ planner가 승인한 저위험 작업만 실제 코드로 구현한다.
 - 구현 후 가능한 한 `cd frontend && npm run build`로 검증한다.
 - build가 통과하고 reviewer pass가 나오기 전까지는 commit/push 하지 않는다.
 - commit/push가 허용되면 현재 임시 브랜치의 HEAD를 `origin/main` 으로 직접 푸시하는 흐름을 따른다.
+- 비네트워크 실패가 나면 원인을 분석하고, 안전한 범위의 교정이 가능할 때만 1회 재시도한다.
 
 ## Do Not
 - backend/API/schema 변경

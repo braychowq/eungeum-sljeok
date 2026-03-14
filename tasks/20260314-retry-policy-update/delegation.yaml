@@ -1,0 +1,29 @@
+task: 20260314-retry-policy-update
+team:
+  - id: planner
+    capability_profile: automation-policy planning, failure classification, retry governance
+    responsibilities:
+      - define the difference between network and non-network failures
+      - set bounded retry rules that are safe for unattended runs
+  - id: implementer
+    capability_profile: automation-config editing, harness-doc maintenance
+    responsibilities:
+      - update the automation prompt and local policy files consistently
+      - preserve the current cadence, direct-push flow, and macro-improvement scope
+  - id: reviewer
+    capability_profile: process review, consistency review
+    responsibilities:
+      - verify the new retry policy is explicit and bounded
+      - verify network failures remain isolated
+execution_order:
+  - step: packet-and-policy-definition
+    owner: planner
+  - step: automation-and-doc-update
+    owner: implementer
+  - step: consistency-review
+    owner: reviewer
+validation_gates:
+  - name: packet_created
+    requirement: brief.md and delegation.yaml exist before policy edits
+  - name: consistency
+    requirement: automation prompt and local harness docs consistently describe bounded non-network retry behavior

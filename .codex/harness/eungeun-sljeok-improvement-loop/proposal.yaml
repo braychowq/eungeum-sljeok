@@ -10,6 +10,7 @@ summary:
     - "dirty worktree는 stash로 정리한 뒤 임시 사이클 브랜치에서 진행"
     - "검증 완료 후 auto-commit 하고 PR 없이 origin/main 으로 직접 push"
     - "네트워크 실패는 해당 서브사이클 로컬 실패로만 격리"
+    - "비네트워크 실패는 원인 분석 후 안전한 1회 재시도"
     - "작업 단위는 작은 수정이 아니라 페이지/흐름 단위의 거시적 개선을 우선"
 proposed_task_local_skill:
   name: ssuk-improvement-loop
@@ -105,3 +106,4 @@ automation:
   dirty_worktree_policy: stash_then_restore
   post_verification_policy: auto_commit_and_direct_push
   scope_bias: page_or_flow_level_improvements
+  non_network_failure_policy: analyze_and_retry_once
