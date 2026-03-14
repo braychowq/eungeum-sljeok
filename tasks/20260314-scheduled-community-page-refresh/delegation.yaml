@@ -1,0 +1,31 @@
+task: 20260314-scheduled-community-page-refresh
+team:
+  - id: planner
+    capability_profile: macro-scope selection, page-level UX prioritization, risk control
+    responsibilities:
+      - select a page-level improvement with clear user-facing impact
+      - keep the change within low-risk frontend bounds
+  - id: implementer
+    capability_profile: nextjs/react ui implementation, css modules, page-level information hierarchy work
+    responsibilities:
+      - redesign the community page as one coherent experience
+      - keep the implementation self-contained to the chosen view
+  - id: reviewer
+    capability_profile: regression review, ux acceptance, release-safety check
+    responsibilities:
+      - verify the page gained stronger hierarchy and scanability
+      - verify build success before direct push
+execution_order:
+  - step: packet-and-selection
+    owner: planner
+  - step: page-level-implementation
+    owner: implementer
+  - step: review-verification-and-direct-push
+    owner: reviewer
+validation_gates:
+  - name: packet_created
+    requirement: brief.md and delegation.yaml exist before product code edits
+  - name: build
+    requirement: cd frontend && npm run build passes before direct push
+  - name: restore_state
+    requirement: the preserved local stash is restored after the cycle
