@@ -100,6 +100,12 @@
   padding: 0 var(--space-3);
 }
 
+.controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .tabRow {
   margin-top: 0;
   display: flex;
@@ -107,13 +113,8 @@
   flex-wrap: wrap;
 }
 
-.controlsRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .tabButton {
+  min-width: 0;
   min-height: 42px;
   border: 1px solid rgba(23, 23, 23, 0.08);
   border-radius: 12px;
@@ -122,6 +123,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   text-decoration: none;
   font-size: 13px;
   font-weight: 700;
@@ -146,6 +148,25 @@
   border-color: rgba(23, 23, 23, 0.08);
   background: rgba(255, 255, 255, 0.92);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.tabCount {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(23, 23, 23, 0.06);
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.tabButtonActive .tabCount {
+  background: rgba(23, 23, 23, 0.08);
 }
 
 .writeButton {
@@ -178,9 +199,100 @@
   outline-offset: 2px;
 }
 
+.activePanel {
+  margin-top: 14px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(252, 249, 245, 0.94) 100%);
+  box-shadow: var(--tone-shadow-soft);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 16px 18px;
+}
+
+.activePanelText {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.activeEyebrow {
+  color: var(--tone-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.activePanelText strong {
+  color: var(--tone-text);
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.activePanelText p {
+  margin: 0;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.activePanelMeta {
+  display: grid;
+  gap: 8px;
+  align-content: center;
+  justify-items: end;
+  text-align: right;
+}
+
+.activePanelMeta span:first-child {
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(23, 23, 23, 0.06);
+  color: var(--tone-text);
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.activePanelMeta span:last-child {
+  max-width: 220px;
+  color: var(--tone-text-secondary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 .listSection {
   margin-top: var(--space-6);
   padding: 0 var(--space-3);
+}
+
+.listHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.listTitle {
+  margin: 0;
+  color: var(--tone-text);
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.listSummary {
+  color: var(--tone-text-secondary);
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: right;
 }
 
 .list {
@@ -247,15 +359,51 @@
     width: 100%;
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .tabRow {
     width: 100%;
+    gap: 8px;
   }
 
   .writeButton {
     width: 100%;
     margin-left: 0;
+  }
+
+  .activePanel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 15px 16px;
+    border-radius: 20px;
+  }
+
+  .activePanelText strong {
+    font-size: 18px;
+  }
+
+  .activePanelMeta {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .activePanelMeta span:last-child {
+    max-width: none;
+  }
+
+  .listHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .listTitle {
+    font-size: 20px;
+  }
+
+  .listSummary {
+    text-align: left;
   }
 
   .listItem {

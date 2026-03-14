@@ -13,9 +13,17 @@ type CommunityViewProps = {
   activeTab: CommunityTabId;
 };
 
+const communityTabDescription: Record<CommunityTabId, string> = {
+  qna: '막히는 작업과 재료 고민을 빠르게 묻고 답하는 공간',
+  share: '거래처, 자료, 운영 팁처럼 바로 써먹을 정보를 모아보는 공간',
+  free: '작업 근황과 가벼운 이야기를 편하게 나누는 공간'
+};
+
 export default function CommunityView({ activeTab }: CommunityViewProps) {
   const posts = communityPosts[activeTab];
   const highlights = [...communityNotices, ...communityPopular];
+  const activeTabLabel = communityTabs.find((tab) => tab.id === activeTab)?.label ?? '커뮤니티';
+  const latestMeta = posts[0]?.meta ?? '새 글이 곧 올라올 예정이에요.';
 
   return (
     <TwoMenuShell
@@ -64,7 +72,8 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
                 }`}
                 aria-current={activeTab === tab.id ? 'page' : undefined}
               >
-                {tab.label}
+                <span>{tab.label}</span>
+                <span className={styles.tabCount}>{communityPosts[tab.id].length}</span>
               </Link>
             ))}
           </div>
@@ -72,9 +81,24 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
             글 등록
           </Link>
         </div>
+        <div className={styles.activePanel}>
+          <div className={styles.activePanelText}>
+            <span className={styles.activeEyebrow}>현재 둘러보는 주제</span>
+            <strong>{activeTabLabel}</strong>
+            <p>{communityTabDescription[activeTab]}</p>
+          </div>
+          <div className={styles.activePanelMeta}>
+            <span>{posts.length}개 글</span>
+            <span>{latestMeta}</span>
+          </div>
+        </div>
       </section>
 
       <section className={styles.listSection} aria-label="게시글 목록">
+        <div className={styles.listHeader}>
+          <h2 className={styles.listTitle}>{activeTabLabel} 최신 글</h2>
+          <span className={styles.listSummary}>최근 대화 흐름을 빠르게 훑어보세요</span>
+        </div>
         <ul className={styles.list}>
           {posts.map((post) => (
             <li key={post.id}>
