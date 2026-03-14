@@ -1,0 +1,29 @@
+task: 20260314-macro-improvement-loop
+team:
+  - id: planner
+    capability_profile: workflow-policy planning, scope shaping, automation governance
+    responsibilities:
+      - redefine the improvement unit from small tweaks to macro service changes
+      - keep the direct-push and safety rules intact
+  - id: implementer
+    capability_profile: automation-config editing, harness-doc maintenance
+    responsibilities:
+      - update automation and harness files consistently
+      - preserve existing execution cadence and recovery behavior
+  - id: reviewer
+    capability_profile: policy review, consistency review
+    responsibilities:
+      - verify all recurring-loop definitions now prefer macro improvements
+      - verify no product files were changed in this task
+execution_order:
+  - step: packet-and-policy-selection
+    owner: planner
+  - step: automation-and-doc-update
+    owner: implementer
+  - step: consistency-review
+    owner: reviewer
+validation_gates:
+  - name: packet_created
+    requirement: brief.md and delegation.yaml exist before policy edits
+  - name: consistency
+    requirement: automation prompt, skill, and repo policy docs all describe macro/page-level improvement preference

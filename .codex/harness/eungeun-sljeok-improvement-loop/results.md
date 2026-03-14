@@ -38,6 +38,17 @@
 - rationale:
   - PR 없이 바로 반영하되, 로컬 `main` 을 오염시키지 않기 위해 임시 브랜치 격리 방식을 채택
 
+## Policy Update 2026-03-14 11:35 KST
+- requested change:
+  - 주기적 개선 작업이 작은 단위가 아니라 큰 단위로 진행되길 원함
+  - 필요하면 페이지 자체 개선도 허용
+- updated policy:
+  - 미세 수정 여러 개보다 페이지/흐름 단위의 거시적 개선 1건을 우선 선택
+  - 페이지 전체 개선, 핵심 사용자 흐름 개선, 강하게 연결된 섹션 묶음 개선을 기본 작업 단위로 사용
+  - 단순 미세 수정은 위 거시적 개선을 완성하는 일부일 때만 허용
+- rationale:
+  - 서비스가 체감될 정도로 개선되려면 섹션 단위가 아니라 경험 단위로 작업을 묶는 편이 효과적임
+
 ## Cycle 2026-03-14 02:29:36 KST
 - repo state summary: detached `HEAD` worktree at `ae728c9`, clean at cycle start, harness artifacts absent in worktree so canonical results file in main workspace was reviewed
 - original branch: detached `HEAD` at `ae728c9979f38d391a431c2d6015ac9c556d0a9a`

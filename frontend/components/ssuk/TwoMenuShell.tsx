@@ -32,22 +32,25 @@ export default function TwoMenuShell({
   children
 }: TwoMenuShellProps) {
   const eyebrow = activeMenu === 'community' ? 'COMMUNITY VIEW' : 'MARKET VIEW';
+  const isMarket = activeMenu === 'market';
 
   return (
-    <main className={styles.page}>
-      <div className={styles.container}>
-        <header className={styles.topNav}>
-          <Link href="/" className={styles.logo}>
+    <main className={`${styles.page} ${isMarket ? styles.marketPage : ''}`}>
+      <div className={`${styles.container} ${isMarket ? styles.marketContainer : ''}`}>
+        <header className={`${styles.topNav} ${isMarket ? styles.marketTopNav : ''}`}>
+          <Link href="/" className={`${styles.logo} ${isMarket ? styles.marketLogo : ''}`}>
             은금슬쩍
           </Link>
 
-          <nav className={styles.mainMenu} aria-label="대메뉴">
+          <nav className={`${styles.mainMenu} ${isMarket ? styles.marketMainMenu : ''}`} aria-label="대메뉴">
             {mainMenus.map((menu) => (
               <Link
                 key={menu.id}
                 href={menu.href}
                 className={`${styles.mainMenuLink} ${
                   activeMenu === menu.id ? styles.mainMenuLinkActive : ''
+                } ${isMarket ? styles.marketMainMenuLink : ''} ${
+                  isMarket && activeMenu === menu.id ? styles.marketMainMenuLinkActive : ''
                 }`}
               >
                 {menu.label}
@@ -55,25 +58,27 @@ export default function TwoMenuShell({
             ))}
           </nav>
 
-          <button type="button" className={styles.alertButton}>
+          <button type="button" className={`${styles.alertButton} ${isMarket ? styles.marketAlertButton : ''}`}>
             알림
           </button>
         </header>
 
         {!hideHero ? (
-          <section className={styles.heroBox}>
+          <section className={`${styles.heroBox} ${isMarket ? styles.marketHeroBox : ''}`}>
             {!hideEyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-            <h1 className={styles.pageTitle}>{title}</h1>
-            {subtitle ? <p className={styles.pageSubtitle}>{subtitle}</p> : null}
+            <h1 className={`${styles.pageTitle} ${isMarket ? styles.marketPageTitle : ''}`}>{title}</h1>
+            {subtitle ? (
+              <p className={`${styles.pageSubtitle} ${isMarket ? styles.marketPageSubtitle : ''}`}>{subtitle}</p>
+            ) : null}
             {!hideCta ? (
-              <Link href={ctaHref} className={styles.ctaButton}>
+              <Link href={ctaHref} className={`${styles.ctaButton} ${isMarket ? styles.marketCtaButton : ''}`}>
                 {ctaLabel}
               </Link>
             ) : null}
           </section>
         ) : null}
 
-        <div className={styles.content}>{children}</div>
+        <div className={`${styles.content} ${isMarket ? styles.marketContent : ''}`}>{children}</div>
 
         <SiteFooter />
       </div>

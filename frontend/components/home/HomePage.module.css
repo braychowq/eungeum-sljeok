@@ -1,5 +1,7 @@
 .page {
-  background: var(--bg-page);
+  background:
+    radial-gradient(circle at top, rgba(132, 109, 82, 0.12), transparent 30%),
+    var(--tone-page);
   min-height: 100vh;
   padding: 20px 14px 40px;
   overflow-x: hidden;
@@ -9,13 +11,16 @@
   width: min(600px, 100%);
   max-width: 100%;
   margin: 0 auto;
-  background: var(--bg-canvas);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.22)),
+    var(--tone-canvas);
   min-height: calc(100vh - 60px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  box-shadow: var(--tone-shadow);
+  border-radius: 30px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 48px;
-  padding-bottom: 32px;
+  gap: 56px;
+  padding-bottom: 40px;
   overflow-x: hidden;
 }
 
@@ -26,7 +31,7 @@
 
 @media (max-width: 960px) {
   .page {
-    background: var(--bg-canvas);
+    background: var(--tone-page);
     padding: 0 0 188px;
   }
 
@@ -34,8 +39,9 @@
     width: 100%;
     max-width: 100%;
     box-shadow: none;
+    border-radius: 0;
     min-height: 100vh;
-    gap: 40px;
-    padding-bottom: 24px;
+    gap: 44px;
+    padding-bottom: 28px;
   }
 }

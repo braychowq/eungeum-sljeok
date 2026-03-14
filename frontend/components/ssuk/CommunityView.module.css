@@ -10,69 +10,71 @@
 
 .highlightTitle {
   margin: 0;
-  color: #221d18;
-  font-size: 20px;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
+  color: var(--tone-text);
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
 }
 
 .highlightList {
   list-style: none;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .highlightItem {
-  min-height: 44px;
-  border: 1px solid #e8e0d4;
-  border-radius: var(--radius-md);
-  background: #fffcf7;
+  min-height: 48px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  color: var(--text-primary);
+  padding: 12px 14px;
+  color: var(--tone-text);
   text-decoration: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  box-shadow: var(--tone-shadow-soft);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .highlightItem:hover {
-  border-color: #ddceb8;
-  background: #fffaf2;
-  box-shadow: 0 5px 12px rgba(93, 70, 43, 0.08);
+  border-color: var(--tone-line-strong);
+  box-shadow: 0 18px 28px rgba(27, 23, 20, 0.08);
+  transform: translateY(-1px);
 }
 
 .highlightItem:focus-visible {
-  outline: 2px solid #d4852a;
+  outline: 2px solid var(--tone-focus);
   outline-offset: 2px;
 }
 
 .highlightBadge {
-  height: 26px;
+  min-height: 24px;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 10px;
-  font-size: 11px;
-  font-weight: 700;
+  padding: 0 9px;
+  font-size: 10px;
+  font-weight: 800;
   line-height: 1;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
 .highlightBadgeNotice {
-  border: 1px solid #d89f5a;
-  background: #fde9cc;
-  color: #744014;
+  border: 1px solid rgba(106, 75, 47, 0.18);
+  background: rgba(131, 97, 63, 0.08);
+  color: var(--tone-accent-strong);
 }
 
 .highlightBadgePopular {
-  border: 1px solid #dbcdbb;
-  background: #f7f3ed;
-  color: #5c5044;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--tone-text-secondary);
 }
 
 .highlightText {
@@ -82,14 +84,15 @@
 }
 
 .highlightText strong {
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
 }
 
 .highlightMeta {
-  color: #6f6458;
+  color: var(--tone-text-secondary);
   font-size: 11px;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .tabSection {
@@ -111,12 +114,11 @@
 }
 
 .tabButton {
-  position: relative;
   min-height: 42px;
-  border: 1px solid #dbd1c4;
-  border-radius: 13px;
-  background: #f9f7f2;
-  color: #4c433d;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--tone-text-secondary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -128,73 +130,51 @@
   transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
-.tabButton::after {
-  content: '';
-  position: absolute;
-  right: -1px;
-  top: 0;
-  bottom: 0;
-  width: 10px;
-  background: linear-gradient(135deg, transparent 0 50%, #f9f7f2 50% 100%);
-  border-top-right-radius: 13px;
-  border-bottom-right-radius: 13px;
-}
-
 .tabButton:hover {
-  border-color: #d2c6b8;
-  background: #f6f3ee;
-}
-
-.tabButton:hover::after {
-  background: linear-gradient(135deg, transparent 0 50%, #f6f3ee 50% 100%);
+  border-color: var(--tone-line-strong);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--tone-text);
 }
 
 .tabButton:focus-visible {
-  outline: 2px solid #d4852a;
+  outline: 2px solid var(--tone-focus);
   outline-offset: 2px;
 }
 
 .tabButtonActive {
-  color: #7a420f;
-  border-color: #d9b488;
-  background: #fff2e1;
-}
-
-.tabButtonActive::after {
-  background: linear-gradient(135deg, transparent 0 50%, #fff2e1 50% 100%);
+  color: var(--tone-text);
+  border-color: rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .writeButton {
   margin-left: auto;
   min-height: 42px;
-  border: 1px solid #dbcfbf;
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, #fffdf8 0%, #f5eee4 100%),
-    repeating-linear-gradient(-45deg, rgba(194, 173, 149, 0.12) 0 4px, transparent 4px 8px);
-  color: #59493b;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 14px;
+  background: var(--tone-text);
+  color: var(--tone-canvas);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 18px;
+  padding: 0 16px;
   font-size: 13px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  box-shadow: 0 3px 8px rgba(118, 92, 69, 0.12);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: var(--tone-shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .writeButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 7px 14px rgba(118, 92, 69, 0.2);
+  box-shadow: 0 16px 28px rgba(23, 23, 23, 0.14);
+  background: #202020;
 }
 
 .writeButton:focus-visible {
-  outline: 2px solid #d4852a;
+  outline: 2px solid var(--tone-focus);
   outline-offset: 2px;
 }
 
@@ -212,32 +192,36 @@
 }
 
 .listItem {
-  border: 1px solid var(--line-soft);
-  border-radius: var(--radius-md);
-  background: var(--bg-canvas);
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
   display: block;
   padding: 14px;
-  color: var(--text-primary);
+  color: var(--tone-text);
   text-decoration: none;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--tone-shadow-soft);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .listItem:hover {
-  border-color: #e7e7e7;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  border-color: var(--tone-line-strong);
+  box-shadow: 0 18px 28px rgba(27, 23, 20, 0.08);
+  transform: translateY(-1px);
 }
 
 .listItem strong {
   display: block;
   font-size: 14px;
-  line-height: 1.45;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
 }
 
 .listItem span {
   display: block;
-  margin-top: 5px;
-  color: #6c6c6c;
+  margin-top: 6px;
+  color: var(--tone-text-secondary);
   font-size: 12px;
+  line-height: 1.4;
 }
 
 @media (max-width: 900px) {
@@ -249,54 +233,32 @@
   }
 
   .highlightTitle {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .highlightItem {
-    padding: 10px;
+    padding: 12px;
     align-items: flex-start;
     gap: 8px;
-  }
-
-  .highlightText strong {
-    font-size: 12px;
-  }
-
-  .highlightMeta {
-    font-size: 10px;
-  }
-
-  .tabButton {
-    min-height: 40px;
-    font-size: 12px;
-    padding: 0 14px;
-  }
-
-  .tabButton::after {
-    width: 8px;
+    border-radius: 18px;
   }
 
   .controlsRow {
-    flex-wrap: wrap;
-    gap: 10px;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabRow {
+    width: 100%;
   }
 
   .writeButton {
-    margin-left: auto;
-    min-height: 40px;
-    padding: 0 16px;
-    font-size: 12px;
+    width: 100%;
+    margin-left: 0;
   }
 
   .listItem {
-    padding: 12px;
-  }
-
-  .listItem strong {
-    font-size: 13px;
-  }
-
-  .listItem span {
-    font-size: 11px;
+    border-radius: 18px;
   }
 }

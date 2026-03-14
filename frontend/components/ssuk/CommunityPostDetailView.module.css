@@ -13,21 +13,21 @@
 
 .headerSection h2 {
   margin: 0;
-  color: var(--text-primary);
-  font-size: 28px;
-  line-height: 1.24;
-  letter-spacing: -0.02em;
+  color: var(--tone-text);
+  font-size: 30px;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
 }
 
 .metaRow {
-  margin-top: 10px;
+  margin-top: 12px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px 10px;
 }
 
 .metaRow span {
-  color: #6e6e6e;
+  color: var(--tone-text-secondary);
   font-size: 12px;
 }
 
@@ -35,22 +35,28 @@
 .commentSection h3,
 .relatedSection h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--tone-text);
   font-size: 20px;
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
 .paragraphs {
-  margin-top: 12px;
+  margin-top: 14px;
   display: grid;
   gap: 10px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: var(--tone-shadow-soft);
+  padding: 16px;
 }
 
 .paragraphs p {
   margin: 0;
-  color: #383838;
+  color: #2f2d2a;
   font-size: 14px;
-  line-height: 1.72;
+  line-height: 1.75;
 }
 
 .actionSection {
@@ -62,55 +68,72 @@
 
 .actionSection button {
   min-height: 42px;
-  border: 1px solid #efefef;
-  border-radius: 999px;
-  background: #fff;
-  color: #3d3d3d;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--tone-text-secondary);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.actionSection button:hover {
+  border-color: var(--tone-line-strong);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--tone-text);
+  transform: translateY(-1px);
 }
 
 .commentInput {
-  margin-top: 12px;
+  margin-top: 14px;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 8px;
 }
 
 .commentInput input {
-  min-height: 42px;
-  border: 1px solid #ededed;
-  border-radius: 10px;
-  padding: 0 12px;
+  min-height: 44px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0 14px;
   font-size: 13px;
+  color: var(--tone-text);
+}
+
+.commentInput input:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
 }
 
 .commentInput button {
-  min-height: 42px;
-  border: 1px solid #202020;
-  border-radius: 10px;
+  min-height: 44px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 14px;
   padding: 0 14px;
-  background: #202020;
-  color: #fff;
+  background: var(--tone-text);
+  color: var(--tone-canvas);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
+  box-shadow: var(--tone-shadow-soft);
 }
 
 .commentList {
   list-style: none;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   padding: 0;
   display: grid;
   gap: 10px;
 }
 
 .commentList li {
-  border: 1px solid #f0f0f0;
-  border-radius: var(--radius-md);
-  background: #fff;
-  padding: 12px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--tone-shadow-soft);
+  padding: 14px;
 }
 
 .commentMeta {
@@ -120,18 +143,18 @@
 }
 
 .commentMeta strong {
-  color: #262626;
+  color: var(--tone-text);
   font-size: 12px;
 }
 
 .commentMeta span {
-  color: #8b8b8b;
+  color: var(--tone-text-secondary);
   font-size: 11px;
 }
 
 .commentList p {
-  margin: 7px 0 0;
-  color: #3d3d3d;
+  margin: 8px 0 0;
+  color: #2f2d2a;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -142,11 +165,12 @@
 
 .postNavList {
   list-style: none;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   padding: 0;
-  border: 1px solid #f0f0f0;
-  border-radius: var(--radius-md);
-  background: #fff;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--tone-shadow-soft);
 }
 
 .postNavItem {
@@ -154,27 +178,30 @@
   grid-template-columns: 68px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 14px;
 }
 
 .postNavItem + .postNavItem {
-  border-top: 1px solid #f3f3f3;
+  border-top: 1px solid rgba(23, 23, 23, 0.06);
 }
 
 .postNavLabel {
-  color: #8b8b8b;
-  font-size: 12px;
+  color: var(--tone-text-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .postNavItem a {
   text-decoration: none;
-  color: #333;
+  color: var(--tone-text);
   font-size: 13px;
   line-height: 1.45;
 }
 
 .postNavEmpty {
-  color: #a1a1a1;
+  color: var(--tone-text-secondary);
   font-size: 13px;
 }
 
@@ -189,13 +216,18 @@
   }
 
   .headerSection h2 {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .bodySection h3,
   .commentSection h3,
   .relatedSection h3 {
     font-size: 18px;
+  }
+
+  .paragraphs {
+    border-radius: 20px;
+    padding: 14px;
   }
 
   .paragraphs p {
@@ -206,13 +238,21 @@
     margin-top: 26px;
   }
 
+  .commentInput {
+    grid-template-columns: 1fr;
+  }
+
   .commentInput input {
     font-size: 12px;
+  }
+
+  .postNavList {
+    border-radius: 20px;
   }
 
   .postNavItem {
     grid-template-columns: 56px minmax(0, 1fr);
     gap: 10px;
-    padding: 11px;
+    padding: 12px;
   }
 }

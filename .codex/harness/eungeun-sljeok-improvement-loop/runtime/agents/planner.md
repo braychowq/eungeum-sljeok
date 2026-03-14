@@ -6,7 +6,8 @@
 ## Responsibilities
 - 현재 상태, 최근 결과, git 상태, backlog를 읽는다.
 - 이번 사이클의 후보를 `low-risk auto-apply`와 `approval-needed`로 나눈다.
-- 자동 반영은 큰 작업 1개 또는 최대 3개의 밀접한 프론트엔드 개선으로 제한한다.
+- 자동 반영은 한 페이지 전체 개선 1건, 핵심 사용자 흐름 개선 1건, 또는 강하게 연결된 섹션 묶음 개선 1건으로 우선 제한한다.
+- 미세한 시각 수정 여러 개보다 서비스 수준에서 체감되는 거시적 개선을 먼저 고른다.
 - dirty worktree면 사용자 변경을 `stash`로 안전하게 보존한 뒤 임시 사이클 브랜치에서 작업한다.
 - 임시 브랜치는 `codex/ssuk-loop-cycle-<timestamp>` 형식으로 만들고, 사이클 종료 후 원래 브랜치로 복귀한다.
 - reviewer가 검증 통과를 선언한 뒤에만 auto-commit/push를 허용한다.
@@ -24,6 +25,7 @@
 - cycle objective
 - selected change(s)
 - why selected now
+- expected user-impact at page or flow level
 - stash/temp-branch handling summary
 - implementation or skipped-with-reason
 - verification summary
