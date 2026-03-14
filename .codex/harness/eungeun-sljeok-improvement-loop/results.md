@@ -1,0 +1,92 @@
+# 은금슬쩍 개선 루프 결과 로그
+
+## Setup Run
+- timestamp: 2026-03-14 Asia/Seoul
+- status: initialized
+- runtime agents created:
+  - planner
+  - service-scenario-planner
+  - ux-design-agent
+  - implementer
+  - reviewer
+- task-local skills created:
+  - ssuk-improvement-loop
+- implementation completed:
+  - 하네스 런타임 아티팩트 생성
+  - 2시간 반복 운영을 위한 역할 계약 생성
+  - dirty worktree 보호 규칙과 build 검증 규칙 정의
+  - stash -> 전용 브랜치 작업 -> 검증 후 auto-commit/push 규칙 정의
+- verification executed:
+  - artifact file creation verified
+- backlog seed:
+  - 메인/커뮤니티/공방 쉐어 전체 흐름 기준 첫 개선 후보 수집
+  - dirty worktree 상태에서는 stash로 정리 후 `codex/ssuk-improvement-loop` 브랜치에서 작업
+  - reviewer 통과 후 auto-commit/push
+- notes:
+  - 사용자 변경은 revert 하지 않고 stash로 보존한다.
+  - 자동 푸시는 현재 작업 브랜치가 아니라 `codex/ssuk-improvement-loop` 브랜치로 제한한다.
+
+## Policy Update 2026-03-14 11:15 KST
+- requested change:
+  - 작업은 자체 검증 후 자동 커밋/푸시까지 수행
+  - PR 같은 절차는 생략
+- updated policy:
+  - 1시간 실행 + 20분 간격 서브사이클 유지
+  - dirty worktree는 stash 후 임시 사이클 브랜치에서 작업
+  - 검증 통과 후 임시 브랜치의 `HEAD`를 `origin/main` 으로 직접 push
+  - push/fetch 등 네트워크 실패는 해당 서브사이클만 실패로 기록하고 상태를 정리
+- rationale:
+  - PR 없이 바로 반영하되, 로컬 `main` 을 오염시키지 않기 위해 임시 브랜치 격리 방식을 채택
+
+## Cycle 2026-03-14 02:29:36 KST
+- repo state summary: detached `HEAD` worktree at `ae728c9`, clean at cycle start, harness artifacts absent in worktree so canonical results file in main workspace was reviewed
+- original branch: detached `HEAD` at `ae728c9979f38d391a431c2d6015ac9c556d0a9a`
+- stash created/restored status:
+  - pre-cycle stash: none required
+  - post-build-failure stash: `ssuk-loop-build-failed-20260314-022936` created on `codex/ssuk-improvement-loop`
+  - restore: switched back to detached `HEAD` successfully; no user stash restore needed
+- candidate improvements:
+  - home: expose real community category shortcuts on the home popular-post block instead of the static `전체` pill
+  - community: strengthen the list toolbar so the active tab and write action stay clearer on narrow mobile widths
+  - market: expose the already-supported `sort` query modes in the UI and reflect the active sort near the listing count
+- selected improvement:
+  - market sorting affordance only; added query-driven sort chips and active sort summary in the list header
+- changed files:
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+- verification result:
+  - `cd frontend && npm run build` failed immediately with `sh: next: command not found`
+  - failure indicates missing local frontend dependencies (`node_modules` absent) rather than a code compile result
+  - reviewer-style diff check found the change isolated to link/CSS additions in market view, but build gate did not pass so the cycle stops here
+- commit/push result:
+  - not attempted due required build failure
+- next backlog:
+  - restore/install frontend dependencies in the loop worktree so `npm run build` can execute
+  - once build is available, re-apply the stashed market sort-chip change and rerun verification
+  - if a second low-risk pass is needed after build recovery, revisit home community shortcuts or community mobile toolbar polish
+
+## Cycle 2026-03-14 08:29:12 KST
+- repo state summary: detached `HEAD` worktree at `ae728c9` was clean at cycle start; switched to `codex/ssuk-improvement-loop` for evaluation and found frontend build prerequisites still missing
+- original branch: detached `HEAD` at `ae728c9979f38d391a431c2d6015ac9c556d0a9a`
+- stash created/restored status:
+  - pre-cycle stash: none required
+  - branch workspace stash: none created this cycle
+  - restore: switched back to detached `HEAD` successfully; no user stash restore needed
+- candidate improvements:
+  - home: replace the static `전체` pill in [`/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/home/CommunitySection.tsx`](/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/home/CommunitySection.tsx) with live category shortcut chips derived from the exposed popular posts
+  - community: tighten the mobile control row in [`/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/ssuk/CommunityView.tsx`](/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/ssuk/CommunityView.tsx) and [`/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/ssuk/CommunityView.module.css`](/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/ssuk/CommunityView.module.css) so the active tab and write CTA stay legible on narrow widths
+  - market: surface sort chips and active sort context in [`/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/ssuk/MarketView.tsx`](/Users/guk/.codex/worktrees/1cbe/eungeun-sljeok/frontend/components/ssuk/MarketView.tsx) near the listing count, reusing the prior failed-cycle stash as reference
+- selected improvement:
+  - none; build gate failed in preflight, so implementation did not start
+- changed files:
+  - none
+- verification result:
+  - `cd frontend && npm run build` failed immediately with `sh: next: command not found`
+  - `frontend/node_modules/.bin/next` is missing, so the failure is environmental and blocks the required verification gate before any low-risk frontend change can be safely applied
+  - reviewer-style verification limited to repo-state review and candidate scoping because no diff was produced
+- commit/push result:
+  - not attempted due required build failure
+- next backlog:
+  - restore frontend dependencies in this worktree so `npm run build` can run
+  - after build recovery, pick one low-risk UI pass from home/community/market and keep scope to one or two tightly related view changes
+  - revisit existing stashes `ssuk-loop-build-failed-20260314-022936` and `ssuk-loop-failed-20260314-042941` only after the build environment is fixed

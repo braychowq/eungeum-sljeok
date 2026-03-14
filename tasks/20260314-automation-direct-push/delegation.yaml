@@ -1,0 +1,29 @@
+task: 20260314-automation-direct-push
+team:
+  - id: planner
+    capability_profile: workflow-policy-planning, automation-risk-control
+    responsibilities:
+      - confirm the intended push behavior and safe branch strategy
+      - keep scope limited to automation and harness docs
+  - id: implementer
+    capability_profile: automation-config-editing, harness-doc-maintenance
+    responsibilities:
+      - update the automation prompt and local runtime skill/proposal files
+      - preserve the existing hourly schedule and subcycle model
+  - id: reviewer
+    capability_profile: process-review, git-safety-review
+    responsibilities:
+      - verify direct-push behavior is documented consistently
+      - confirm no product code files were modified
+execution_order:
+  - step: policy-selection
+    owner: planner
+  - step: automation-and-doc-update
+    owner: implementer
+  - step: verification
+    owner: reviewer
+validation_gates:
+  - name: packet_created
+    requirement: tasks/20260314-automation-direct-push/brief.md and delegation.yaml exist before any other edits
+  - name: consistency
+    requirement: automation prompt and local harness docs both describe direct verified push without PR flow

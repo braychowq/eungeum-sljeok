@@ -1,0 +1,105 @@
+task_slug: eungeun-sljeok-improvement-loop
+approved: true
+approved_at: 2026-03-14T00:00:00+09:00
+summary:
+  request: "은금슬쩍 전면 개선을 위한 approval-gated 에이전트팀과 반복 개선 루프 구성"
+  scope: "frontend-first service improvement loop with planner-led orchestration"
+  constraints:
+    - "repo-local harness 규약 없음: fallback artifact contract 사용"
+    - "기본 검증은 cd frontend && npm run build"
+    - "dirty worktree는 stash로 정리한 뒤 임시 사이클 브랜치에서 진행"
+    - "검증 완료 후 auto-commit 하고 PR 없이 origin/main 으로 직접 push"
+    - "네트워크 실패는 해당 서브사이클 로컬 실패로만 격리"
+proposed_task_local_skill:
+  name: ssuk-improvement-loop
+  location: .codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/
+  purpose: "반복적인 은금슬쩍 개선 사이클을 표준 절차로 수행"
+  promotion_candidate: true
+agents:
+  - name: planner
+    agent_type: default
+    capability_profile: planner-orchestrator
+    recommended_model: gpt-5.4
+    reasoning_effort: high
+    responsibility: "사이클 총괄, 우선순위 결정, 승인 경계 관리, 결과 통합"
+    expected_inputs:
+      - current git status
+      - previous results log
+      - repo structure
+      - current build status
+    expected_output_or_handoff: "cycle brief, task selection, final completion report"
+  - name: service-scenario-planner
+    agent_type: default
+    capability_profile: service-flow-planner
+    recommended_model: gpt-5.4
+    reasoning_effort: high
+    responsibility: "서비스 시나리오와 IA 기준으로 개선 후보 도출"
+    expected_inputs:
+      - planner brief
+      - current frontend structure
+      - recent changes
+    expected_output_or_handoff: "scenario-driven improvement candidates"
+  - name: ux-design-agent
+    agent_type: default
+    capability_profile: ux-visual-system
+    recommended_model: gpt-5.4
+    reasoning_effort: medium
+    responsibility: "UX, 디자인 일관성, CTA 위계, 표면 시스템 개선안 제시"
+    expected_inputs:
+      - planner brief
+      - current CSS and component structure
+      - scenario analysis
+    expected_output_or_handoff: "design and interaction recommendations"
+  - name: implementer
+    agent_type: worker
+    capability_profile: nextjs-frontend-implementer
+    recommended_model: gpt-5.3-codex
+    reasoning_effort: medium
+    responsibility: "승인된 저위험 변경 구현"
+    expected_inputs:
+      - planner decision
+      - implementation notes
+      - relevant files
+    expected_output_or_handoff: "code changes and verification notes"
+  - name: reviewer
+    agent_type: default
+    capability_profile: regression-reviewer
+    recommended_model: gpt-5.4
+    reasoning_effort: high
+    responsibility: "빌드, 회귀 리스크, acceptance 검수"
+    expected_inputs:
+      - code diff
+      - build result
+      - planner brief
+    expected_output_or_handoff: "accept/revise decision and residual risks"
+execution_order:
+  - planner
+  - [service-scenario-planner, ux-design-agent]
+  - planner
+  - implementer
+  - reviewer
+  - planner
+artifacts:
+  - .codex/harness/eungeun-sljeok-improvement-loop/request.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/proposal.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/proposal.yaml
+  - .codex/harness/eungeun-sljeok-improvement-loop/results.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/planner.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/service-scenario-planner.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/ux-design-agent.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/implementer.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/reviewer.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/SKILL.md
+verification:
+  - "artifact files exist"
+  - "agent contracts are defined"
+  - "runtime skill includes safety and verification rules"
+automation:
+  name: SSUK Hourly Subcycle Loop
+  cadence: hourly_with_20min_subcycles
+  rrule: FREQ=HOURLY;INTERVAL=1
+  cwd: /Users/guk/Documents/workspace/eungeun-sljeok
+  temp_branch_prefix: codex/ssuk-loop-cycle-
+  direct_push_target: origin/main
+  dirty_worktree_policy: stash_then_restore
+  post_verification_policy: auto_commit_and_direct_push
