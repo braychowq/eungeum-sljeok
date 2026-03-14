@@ -1,0 +1,34 @@
+task: 20260314-improvement-cycle-run
+team:
+  - id: planner
+    capability_profile: task triage, scope control, acceptance gating
+    responsibilities:
+      - review repo state and select a safe improvement slice
+      - enforce packet-first execution and build gate
+      - summarize results and restoration steps
+  - id: implementer
+    capability_profile: nextjs/react ui implementation, css modules, safe git hygiene
+    responsibilities:
+      - inspect candidate files
+      - apply the selected low-risk frontend change
+      - run build verification and collect changed-file summary
+  - id: reviewer
+    capability_profile: regression review, ux acceptance, release risk assessment
+    responsibilities:
+      - verify the change against requested cycle scope
+      - assess regression risk and note follow-up items
+      - approve or block commit/push based on verification
+execution_order:
+  - step: discovery-and-selection
+    owner: planner
+  - step: implementation
+    owner: implementer
+  - step: review-and-verification
+    owner: reviewer
+validation_gates:
+  - name: packet_created
+    requirement: tasks/20260314-improvement-cycle-run/brief.md and delegation.yaml exist before product code changes
+  - name: build
+    requirement: cd frontend && npm run build
+  - name: restore_state
+    requirement: original branch and preserved stash are restored after the cycle
