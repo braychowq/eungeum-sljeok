@@ -50,6 +50,16 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
     [posts]
   );
 
+  const visibleCategories = useMemo(
+    () =>
+      Array.from(new Set(popularPosts.map((post) => post.category))).map((category) => ({
+        id: category,
+        label: categoryLabelMap[category],
+        href: `/community?tab=${category}`
+      })),
+    [popularPosts]
+  );
+
   return (
     <section id="community" className={styles.section} aria-label="커뮤니티">
       <div className={styles.headerRow}>
@@ -61,7 +71,14 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
       </div>
 
       <div className={styles.filterRow}>
-        <span className={styles.fixedFilter}>전체</span>
+        <Link href="/community" className={`${styles.filterLink} ${styles.filterLinkActive}`}>
+          전체
+        </Link>
+        {visibleCategories.map((category) => (
+          <Link key={category.id} href={category.href} className={styles.filterLink}>
+            {category.label}
+          </Link>
+        ))}
       </div>
 
       <section className={styles.popularSection} aria-label="인기글 TOP 5">

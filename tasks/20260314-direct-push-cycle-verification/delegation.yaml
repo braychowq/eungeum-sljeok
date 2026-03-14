@@ -1,0 +1,37 @@
+task: 20260314-direct-push-cycle-verification
+team:
+  - id: planner
+    capability_profile: task triage, automation-policy execution, risk control
+    responsibilities:
+      - preserve the user's existing work before the cycle
+      - choose one low-risk frontend improvement from the scoped candidates
+      - enforce build-pass-before-push
+  - id: implementer
+    capability_profile: nextjs/react ui implementation, css modules
+    responsibilities:
+      - apply the selected low-risk change
+      - keep the change isolated and easy to review
+  - id: reviewer
+    capability_profile: regression review, ux acceptance, release safety
+    responsibilities:
+      - confirm the scope stayed small
+      - confirm build passed before direct push
+      - note residual risks and backlog
+execution_order:
+  - step: preserve-and-branch
+    owner: planner
+  - step: packet-and-selection
+    owner: planner
+  - step: implementation
+    owner: implementer
+  - step: review-and-verification
+    owner: reviewer
+  - step: direct-push-and-restore
+    owner: planner
+validation_gates:
+  - name: packet_created
+    requirement: brief.md and delegation.yaml exist before product code edits
+  - name: build
+    requirement: cd frontend && npm run build passes before commit and direct push
+  - name: restore_state
+    requirement: main is restored locally and the user's stashed work is reapplied after the cycle
