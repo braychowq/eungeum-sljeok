@@ -303,7 +303,6 @@
   - home page service-hub hierarchy refresh remains the next strongest page-level slice
   - if this worktree is reused, keep the `npm ci` bootstrap in mind before future build-gated cycles
 
-<<<<<<< HEAD
 ## Cycle 2026-03-15 10:11 KST (Fetch Failure)
 - repo state summary: detached `HEAD` worktree at `db3f13f` was clean at cycle start; no tracked or untracked user changes required stashing before preflight
 - original branch: detached `HEAD` at `db3f13f2f027daa02dca3628a65b35280ab8f839`
