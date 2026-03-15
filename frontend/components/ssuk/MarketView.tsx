@@ -158,6 +158,12 @@ export default function MarketView({ activeSort }: MarketViewProps) {
   const fastResponseCount = filteredStudioCards.filter((card) =>
     card.trustBadges.includes('fast_response')
   ).length;
+  const recommendedCount = recommendationCards.length;
+  const nextActionSteps = [
+    { step: '01', title: '둘러보기', description: '큐레이션과 인기 공방으로 분위기를 먼저 파악하세요.' },
+    { step: '02', title: '비교하기', description: `${activeSortLabel} 기준으로 조건이 맞는 공방을 압축합니다.` },
+    { step: '03', title: '문의 넣기', description: '즉시 문의 가능 여부와 응답 속도를 보고 바로 연결하세요.' }
+  ];
 
   return (
     <TwoMenuShell
@@ -167,6 +173,40 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       ctaHref="/market/new"
       hideHero
     >
+      <section className={styles.overviewSection} aria-label="공방 쉐어 이용 가이드">
+        <div className={styles.overviewIntro}>
+          <span className={styles.overviewEyebrow}>Studio Share</span>
+          <h1 className={styles.overviewTitle}>공방을 찾는 사람과 공유하는 사람을 한 흐름으로 연결했습니다</h1>
+          <p className={styles.overviewDescription}>
+            먼저 지금 바로 예약 가능한 공방을 둘러보고, 정렬과 큐레이션으로 비교한 뒤 문의까지
+            이어가세요. 공방을 운영 중이라면 같은 화면에서 등록 출발점도 바로 확인할 수 있습니다.
+          </p>
+          <div className={styles.entryGrid}>
+            <div className={styles.entryCard}>
+              <span className={styles.entryBadge}>찾고 있어요</span>
+              <strong>바로 쓸 수 있는 공방을 빠르게 비교</strong>
+              <p>추천, 인기, 정렬 비교를 따라가며 현재 문의 가능한 곳부터 좁혀보세요.</p>
+              <div className={styles.entryMeta}>
+                <span>즉시 문의 {bookableCount}곳</span>
+                <span>추천 큐레이션 {recommendedCount}개</span>
+              </div>
+            </div>
+            <Link
+              href="/market/new"
+              className={styles.entryCardLink}
+              onClick={() => {
+                emitMarketEvent('studio_owner_cta_click', { from: 'overview_card' });
+              }}
+            >
+              <span className={styles.entryBadge}>공유할게요</span>
+              <strong>내 공방 등록으로 바로 진입</strong>
+              <p>공간 특징과 운영 조건을 정리해 올리고, 문의를 받을 준비를 시작하세요.</p>
+              <span className={styles.entryAction}>공방 등록 시작</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className={styles.actionBarSection} aria-label="공방 등록 안내">
         <div className={styles.actionBar}>
           <div className={styles.actionBarText}>
@@ -313,6 +353,16 @@ export default function MarketView({ activeSort }: MarketViewProps) {
               <strong>{fastResponseCount}곳</strong>
             </div>
           </div>
+        </div>
+
+        <div className={styles.flowSteps} aria-label="공방 탐색 단계">
+          {nextActionSteps.map((item) => (
+            <div key={item.step} className={styles.flowStepCard}>
+              <span className={styles.flowStepIndex}>{item.step}</span>
+              <strong>{item.title}</strong>
+              <p>{item.description}</p>
+            </div>
+          ))}
         </div>
 
         <div className={styles.listHeader}>
