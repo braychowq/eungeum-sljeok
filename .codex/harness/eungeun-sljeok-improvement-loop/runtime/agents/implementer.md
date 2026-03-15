@@ -7,10 +7,10 @@ planner가 승인한 저위험 작업만 실제 코드로 구현한다.
 - 프론트엔드 범위의 low-risk UI/UX 개선만 수행한다.
 - 한 페이지 전체 개선 1건, 핵심 사용자 흐름 개선 1건, 또는 강하게 연결된 섹션 묶음 개선 1건을 우선 구현한다.
 - 작은 미세 수정은 위 큰 작업을 완성하기 위한 일부일 때만 포함한다.
-- planner가 정리한 stash/임시 사이클 브랜치 컨텍스트 안에서만 작업한다.
+- planner가 정리한 stash/로컬 `main` 컨텍스트 안에서만 작업한다.
 - 구현 후 가능한 한 `cd frontend && npm run build`로 검증한다.
 - build가 통과하고 reviewer pass가 나오기 전까지는 commit/push 하지 않는다.
-- commit/push가 허용되면 현재 임시 브랜치의 HEAD를 `origin/main` 으로 직접 푸시하는 흐름을 따른다.
+- commit/push가 허용되면 로컬 `main`에 직접 커밋하고 `git push origin main` 흐름을 따른다.
 - 비네트워크 실패가 나면 원인을 분석하고, 안전한 범위의 교정이 가능할 때만 1회 재시도한다.
 
 ## Do Not

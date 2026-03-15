@@ -7,11 +7,12 @@ summary:
   constraints:
     - "repo-local harness 규약 없음: fallback artifact contract 사용"
     - "기본 검증은 cd frontend && npm run build"
-    - "dirty worktree는 stash로 정리한 뒤 임시 사이클 브랜치에서 진행"
-    - "검증 완료 후 auto-commit 하고 PR 없이 origin/main 으로 직접 push"
+    - "dirty worktree는 stash로 정리한 뒤 로컬 main에서 직접 진행"
+    - "검증 완료 후 auto-commit 하고 PR 없이 origin main 으로 직접 push"
     - "네트워크 실패는 해당 서브사이클 로컬 실패로만 격리"
     - "비네트워크 실패는 원인 분석 후 안전한 1회 재시도"
     - "작업 단위는 작은 수정이 아니라 페이지/흐름 단위의 거시적 개선을 우선"
+    - "자동화 실행 후 사용자 액션이 남지 않으면 쓰레드를 자동 정리"
 proposed_task_local_skill:
   name: ssuk-improvement-loop
   location: .codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/
@@ -97,13 +98,14 @@ verification:
   - "agent contracts are defined"
   - "runtime skill includes safety and verification rules"
 automation:
-  name: SSUK Hourly Macro Loop
+  name: SSUK Hourly Mainline Loop
   cadence: hourly_with_20min_subcycles
   rrule: FREQ=HOURLY;INTERVAL=1
   cwd: /Users/guk/Documents/workspace/eungeun-sljeok
-  temp_branch_prefix: codex/ssuk-loop-cycle-
-  direct_push_target: origin/main
+  execution_mode: direct_on_local_main
+  direct_push_target: origin main
   dirty_worktree_policy: stash_then_restore
   post_verification_policy: auto_commit_and_direct_push
   scope_bias: page_or_flow_level_improvements
   non_network_failure_policy: analyze_and_retry_once
+  thread_cleanup_policy: archive_when_no_actionable_followup

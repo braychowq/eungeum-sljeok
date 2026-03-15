@@ -1,0 +1,26 @@
+team:
+  - role: planner
+    capability: automation-policy-planning
+    responsibilities:
+      - compare current automation behavior with the requested workflow
+      - define safe direct-to-main and thread-cleanup rules
+  - role: implementer
+    capability: repo-automation-editing
+    responsibilities:
+      - update automation config and harness documents
+      - keep changes limited to policy/runtime artifacts
+  - role: reviewer
+    capability: policy-consistency-review
+    responsibilities:
+      - verify the config and docs agree
+      - call out operational risks or residual tradeoffs
+execution:
+  order:
+    - planner
+    - implementer
+    - reviewer
+verification:
+  gates:
+    - automation config references direct work on main and safe archival behavior
+    - harness guidance matches the automation config
+    - residual risks are documented in the result summary

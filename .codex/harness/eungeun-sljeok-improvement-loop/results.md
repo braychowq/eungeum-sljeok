@@ -59,6 +59,30 @@
 - rationale:
   - 일시적인 로컬 문제나 수정 가능한 구현/환경 오류는 즉시 복구해 같은 사이클 안에서 전진하는 편이 효율적임
 
+## Policy Update 2026-03-15 02:00 KST
+- requested change:
+  - 평소 자동화에서 `git fetch origin main` 을 기본 단계로 두지 말 것
+  - 사용자가 브랜치를 따로 조작하지 않는 전제에서 로컬 최신 `origin/main` 기준으로만 작업할 것
+- updated policy:
+  - normal run에서는 로컬 `origin/main` 을 우선 기준점으로 사용하고, 없으면 로컬 `main` 을 사용
+  - 현재 `HEAD` 가 해당 기준 ref 와 같으면 latest 상태로 간주하고 추가 fetch 없이 진행
+  - `git fetch origin main` 은 로컬 기준 ref 자체가 없을 때만 수행하는 예외 절차로 제한
+  - 예외 fetch 가 필요하더라도 DNS/일시 네트워크 오류처럼 재시도로 해소 가능한 유형만 짧게 재확인한다
+- rationale:
+  - 2026-03-14의 fetch 실패는 repo 상태가 아니라 실행 환경의 DNS/네트워크 문제였고, 자동화가 자체적으로 최신 `origin/main` 을 유지하는 운영 가정에서는 평소 fetch 를 선행 조건으로 둘 필요가 없음
+
+## Policy Update 2026-03-15 10:15 KST
+- requested change:
+  - 자동화가 임시 브랜치나 별도 worktree 없이 바로 `main` 에서 작업하길 원함
+  - 작업이 끝나고 사용자 액션이 남지 않으면 쓰레드까지 정리하길 원함
+- updated policy:
+  - dirty worktree는 기존처럼 stash로 보존하되, 사이클 실행은 로컬 `main` 에서 직접 수행
+  - 필요하면 원래 브랜치에서 `main` 으로 전환하고, 로컬 `origin/main` 이 있으면 `git merge --ff-only origin/main` 으로 네트워크 없는 최신 기준만 반영
+  - 검증 통과 후에는 로컬 `main` 에 커밋하고 `git push origin main` 으로 직접 반영
+  - 자동화 결과가 단순 완료 보고이고 approval-needed 항목, 복원 충돌, 후속 결정이 없을 때만 `::archive-thread{}` 로 쓰레드를 정리
+- rationale:
+  - 사용자가 원하는 운영 방식은 별도 격리보다 속도와 단순성을 우선하는 mainline 방식이며, 다만 실제 워크스페이스를 건드리는 만큼 stash/브랜치 복귀/fast-forward 안전 조건을 명확히 해야 함
+
 ## Cycle 2026-03-14 02:29:36 KST
 - repo state summary: detached `HEAD` worktree at `ae728c9`, clean at cycle start, harness artifacts absent in worktree so canonical results file in main workspace was reviewed
 - original branch: detached `HEAD` at `ae728c9979f38d391a431c2d6015ac9c556d0a9a`
