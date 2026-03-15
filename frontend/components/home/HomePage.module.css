@@ -32,7 +32,7 @@
 .serviceHub {
   padding: 0 20px;
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 .serviceHubIntro {
@@ -121,6 +121,185 @@
   gap: 12px;
 }
 
+.serviceJourney {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 30px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 239, 232, 0.72)),
+    rgba(255, 255, 255, 0.84);
+  box-shadow: var(--tone-shadow-soft);
+  padding: 22px 24px 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.serviceJourneyHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.serviceJourneyHeader strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--tone-text);
+  font-size: 26px;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+
+.serviceJourneyHeader p {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.serviceJourneyEyebrow {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 26px;
+  align-items: center;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--tone-text-secondary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.serviceJourneyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.serviceJourneyItem {
+  min-width: 0;
+  border-radius: 24px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.64)),
+    rgba(255, 255, 255, 0.72);
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.serviceJourneyStep {
+  display: grid;
+  gap: 8px;
+}
+
+.serviceJourneyStep span {
+  color: var(--tone-accent-strong);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.serviceJourneyStep strong {
+  color: var(--tone-text);
+  font-size: 21px;
+  line-height: 1.14;
+  letter-spacing: -0.04em;
+}
+
+.serviceJourneyStep p,
+.serviceJourneyPreview {
+  margin: 0;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.serviceJourneyMeta {
+  display: grid;
+  gap: 8px;
+}
+
+.serviceJourneyStat {
+  width: fit-content;
+  min-height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: rgba(23, 23, 23, 0.06);
+  color: var(--tone-text);
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.serviceJourneyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.serviceJourneyAnchor,
+.serviceJourneyLink {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.serviceJourneyAnchor {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--tone-text-secondary);
+}
+
+.serviceJourneyLink {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: var(--tone-text);
+  color: var(--tone-canvas);
+}
+
+.serviceJourneyAnchor:hover,
+.serviceJourneyLink:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(27, 23, 20, 0.08);
+}
+
+.serviceJourneyAnchor:hover {
+  border-color: var(--tone-line-strong);
+  color: var(--tone-text);
+  background: #fff;
+}
+
+.serviceJourneyLink:hover {
+  background: #202020;
+}
+
+.serviceJourneyAnchor:focus-visible,
+.serviceJourneyLink:focus-visible,
+.serviceHubCardLink:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
+}
+
 .serviceHubCard {
   min-width: 0;
   border-radius: 26px;
@@ -178,11 +357,6 @@
   box-shadow: 0 14px 24px rgba(27, 23, 20, 0.08);
 }
 
-.serviceHubCardLink:focus-visible {
-  outline: 2px solid var(--tone-focus);
-  outline-offset: 2px;
-}
-
 @media (max-width: 960px) {
   .page {
     background: var(--tone-page);
@@ -208,6 +382,35 @@
     border-radius: 24px;
     padding: 18px;
     gap: 16px;
+  }
+
+  .serviceJourney {
+    border-radius: 24px;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .serviceJourneyHeader,
+  .serviceJourneyList {
+    grid-template-columns: 1fr;
+  }
+
+  .serviceJourneyHeader {
+    display: grid;
+    align-items: start;
+  }
+
+  .serviceJourneyHeader strong {
+    font-size: 24px;
+  }
+
+  .serviceJourneyList {
+    gap: 10px;
+  }
+
+  .serviceJourneyItem {
+    border-radius: 22px;
+    padding: 16px;
   }
 
   .serviceHubCopy h1 {
