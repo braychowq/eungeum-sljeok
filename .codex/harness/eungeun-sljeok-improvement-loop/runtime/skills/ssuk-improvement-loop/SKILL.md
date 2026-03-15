@@ -21,11 +21,15 @@
 4. dirty worktree 판단:
    - tracked 또는 untracked 변경이 있으면 `git stash push -u -m "ssuk-loop-precycle-<timestamp>"` 로 안전하게 보존한다.
    - stash 생성 여부와 원래 브랜치를 이번 사이클 로그에 기록한다.
-5. 원격 기준 최신 `main`을 기준점으로 잡는다.
-   - `git fetch origin main` 을 시도한다.
-   - DNS/일시 네트워크 오류처럼 재시도로 해소 가능한 유형이면 짧게 다시 시도해 총 2회까지 확인한다.
-   - 2회 모두 실패하면 이번 서브사이클만 실패로 기록하고 정리 후 종료한다.
-6. 임시 작업 브랜치 `codex/ssuk-loop-cycle-<timestamp>`를 `origin/main` 기준으로 생성해 이동한다.
+5. 원격 fetch 없이 로컬 기준점부터 해석한다.
+   - 기본 기준점은 로컬 추적 ref `origin/main` 이다.
+   - `origin/main` 이 없고 로컬 `main` 이 있으면 `main` 을 기준점으로 사용한다.
+   - 현재 `HEAD` 가 이미 `origin/main` 또는 `main` 과 같다면 latest 기준으로 간주하고 추가 fetch 없이 진행한다.
+   - 사용자가 이 자동화 외부에서 브랜치를 조작하지 않는 전제를 우선 사용한다.
+   - 로컬 기준 ref 둘 다 없을 때만 `git fetch origin main` 을 시도한다.
+   - 이 예외 fetch 는 DNS/일시 네트워크 오류처럼 재시도로 해소 가능한 유형이면 짧게 다시 시도해 총 2회까지 확인한다.
+   - 예외 fetch 가 2회 모두 실패하면 이번 서브사이클만 실패로 기록하고 정리 후 종료한다.
+6. 임시 작업 브랜치 `codex/ssuk-loop-cycle-<timestamp>`를 위에서 해석한 로컬 기준 ref 기준으로 생성해 이동한다.
    - 이 브랜치는 PR 용도가 아니라 서브사이클 격리를 위한 임시 브랜치다.
 7. 메인/커뮤니티/공방 쉐어 기준으로 개선 후보를 5개 이내로 추린다.
 8. 후보를 impact vs risk로 정렬하고, planner 규칙에 따라 아래 셋 중 하나를 우선 선택한다.
@@ -37,7 +41,7 @@
 11. 구현 후 `cd frontend && npm run build`를 실행한다.
    - 실행 전에 `frontend/node_modules/.bin/next` 가 없으면 `cd frontend && npm ci` 로 이 worktree의 의존성을 먼저 복구한다.
 12. 실패 처리 규칙:
-   - fetch, push, install, remote asset access 등 네트워크 의존 실패면, 원격 부작용이 없는 명령에 한해 짧은 재시도 1회를 먼저 수행한다.
+   - 예외 fetch, push, install, remote asset access 등 네트워크 의존 실패면, 원격 부작용이 없는 명령에 한해 짧은 재시도 1회를 먼저 수행한다.
    - 재시도 후에도 같은 네트워크 실패가 반복되면 이번 서브사이클만 실패로 기록하고 정리 후 종료한다.
    - 네트워크 실패가 아니라면 실패 원인을 분류하고 root cause를 분석한다.
    - 안전한 범위의 교정이 가능하면 같은 서브사이클 안에서 1회만 수정 후 재시도한다.
@@ -99,6 +103,8 @@
 - 사용자 변경은 stash로 먼저 보존하고, 직접 revert 하지 않는다
 - 자동화는 PR 절차 없이 검증 통과 후 직접 `origin/main` 으로 푸시한다
 - direct push는 임시 사이클 브랜치에서 `HEAD:main` 방식으로 수행해 로컬 `main` 오염을 피한다
+- normal run에서는 `git fetch origin main` 을 선행하지 않고, 로컬 `origin/main` 또는 `main` ref 를 기준으로 작업한다
+- fetch 는 로컬 기준 ref 가 없을 때만 수행하는 예외 절차로 제한한다
 - 한 사이클에서 미세 수정 여러 개보다 의미 있는 거시적 개선 1건을 우선한다
 - 필요하면 페이지 자체를 개선해도 되지만, 변경 이유와 사용자 경험 개선 효과가 분명해야 한다
 - build 실패 시 결과에 실패 원인과 롤포워드 후보를 기록
