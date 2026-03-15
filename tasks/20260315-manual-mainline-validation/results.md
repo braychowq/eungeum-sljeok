@@ -19,7 +19,8 @@
 - `cd frontend && npm run build`
 - `git diff --check`
 - direct-on-main commit/push flow executed after verification
+- stash restore completed successfully after push
 
 ## Notes
-- The pre-cycle dirty state was preserved in stash `ssuk-loop-precycle-manual-20260315-1020` and will be restored after the validated commit/push completes.
+- The pre-cycle dirty state was preserved in stash `ssuk-loop-precycle-manual-20260315-1020` and restored successfully after the validated commit/push completed.
 - This run intentionally keeps the conversation open because it is a manual validation report, not an archive-safe no-action check.

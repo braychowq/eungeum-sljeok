@@ -431,7 +431,7 @@
 - original branch: `main`
 - stash created/restored status:
   - pre-cycle stash: `ssuk-loop-precycle-manual-20260315-1020`
-  - restore: pending until commit/push completes for this manual validation run
+  - restore: `git stash pop stash@{0}` restored the original untracked workspace successfully after push
 - main branch handling:
   - stayed on local `main`
   - no branch switch was required
@@ -458,7 +458,7 @@
 - retry action and retry result:
   - none required
 - commit/push result:
-  - manual validation cycle prepared for direct commit on local `main` and immediate `git push origin main`
+  - commit `078f0ce` and direct push to `origin/main` from local `main` completed successfully
 - thread cleanup decision:
   - keep the thread open because this manual validation run produces a user-facing report rather than a no-action completion check
 - next backlog:
