@@ -1,0 +1,27 @@
+team:
+  - role: planner
+    capability: market-flow-planning
+    responsibilities:
+      - keep scope to one page-level market improvement slice
+      - focus the change on compare-and-contact clarity
+  - role: implementer
+    capability: nextjs-frontend-implementation
+    responsibilities:
+      - update market page structure and styling
+      - isolate the change to low-risk frontend files
+  - role: reviewer
+    capability: regression-and-verification-review
+    responsibilities:
+      - verify build and diff hygiene
+      - confirm the direct-on-main cycle completes safely
+execution:
+  order:
+    - planner
+    - implementer
+    - reviewer
+verification:
+  gates:
+    - market page presents a clearer contact-priority and comparison flow before the browse rail
+    - `cd frontend && npm run build` passes
+    - `git diff --check` passes
+    - commit and push from local `main` succeed

@@ -152,6 +152,23 @@ export default function MarketView({ activeSort }: MarketViewProps) {
   const recommendationRail = useHorizontalRail<HTMLUListElement>(recommendationCards.length);
   const trendingRail = useHorizontalRail<HTMLOListElement>(trendingCards.length);
   const browseRail = useHorizontalRail<HTMLUListElement>(`${activeSort}-${filteredStudioCards.length}`);
+  const contactPriorityCards = useMemo(() => {
+    const ranked = [...filteredStudioCards].sort((a, b) => {
+      if (a.isBookable !== b.isBookable) {
+        return a.isBookable ? -1 : 1;
+      }
+
+      const aFast = a.trustBadges.includes('fast_response');
+      const bFast = b.trustBadges.includes('fast_response');
+      if (aFast !== bFast) {
+        return aFast ? -1 : 1;
+      }
+
+      return b.popularityScore - a.popularityScore;
+    });
+
+    return ranked.slice(0, 3);
+  }, [filteredStudioCards]);
   const activeSortLabel =
     marketSortOptions.find((option) => option.id === activeSort)?.label ?? '추천순';
   const bookableCount = filteredStudioCards.filter((card) => card.isBookable).length;
@@ -159,6 +176,24 @@ export default function MarketView({ activeSort }: MarketViewProps) {
     card.trustBadges.includes('fast_response')
   ).length;
   const recommendedCount = recommendationCards.length;
+  const topComparisonCard = filteredStudioCards[0];
+  const priceRangeLabel = useMemo(() => {
+    if (filteredStudioCards.length === 0) {
+      return '-';
+    }
+
+    const prices = filteredStudioCards.map((card) => card.dayPrice);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const formatter = new Intl.NumberFormat('ko-KR');
+
+    return `₩${formatter.format(minPrice)} - ₩${formatter.format(maxPrice)}`;
+  }, [filteredStudioCards]);
+  const compareMetrics = [
+    { label: '정렬 기준', value: activeSortLabel },
+    { label: '즉시 문의', value: `${bookableCount}곳` },
+    { label: '가격 범위', value: priceRangeLabel }
+  ];
   const nextActionSteps = [
     { step: '01', title: '둘러보기', description: '큐레이션과 인기 공방으로 분위기를 먼저 파악하세요.' },
     { step: '02', title: '비교하기', description: `${activeSortLabel} 기준으로 조건이 맞는 공방을 압축합니다.` },
@@ -363,6 +398,76 @@ export default function MarketView({ activeSort }: MarketViewProps) {
               <p>{item.description}</p>
             </div>
           ))}
+        </div>
+
+        <div className={styles.priorityGrid} aria-label="문의 우선 후보와 비교 요약">
+          <div className={styles.priorityPanel}>
+            <div className={styles.priorityPanelHeader}>
+              <span className={styles.priorityEyebrow}>Contact First</span>
+              <strong>지금 먼저 문의할 후보</strong>
+              <p>예약 가능 여부와 응답 속도를 먼저 보고, 바로 연결하기 좋은 공방부터 압축했습니다.</p>
+            </div>
+            <ul className={styles.priorityList}>
+              {contactPriorityCards.map((card) => (
+                <li key={`priority-${card.id}`}>
+                  <Link
+                    href={card.href}
+                    className={styles.priorityItem}
+                    onClick={() => {
+                      emitMarketEvent('studio_card_click', {
+                        studioId: card.id,
+                        sectionType: 'list' as StudioSectionType
+                      });
+                    }}
+                  >
+                    <div className={styles.priorityItemText}>
+                      <strong>{card.title}</strong>
+                      <p>
+                        {card.locationLabel} · {card.capacityLabel}
+                      </p>
+                      <span>{card.availabilityLabel}</span>
+                    </div>
+                    <div className={styles.priorityItemMeta}>
+                      <span className={styles.priorityPrice}>{card.priceLabel}</span>
+                      <span className={styles.priorityStatus}>{toInquiryHint(card)}</span>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <aside className={styles.comparePanel}>
+            <span className={styles.compareEyebrow}>Compare Snapshot</span>
+            <strong>{activeSortLabel} 기준으로 압축한 비교 포인트</strong>
+            <div className={styles.compareMetrics}>
+              {compareMetrics.map((item) => (
+                <div key={item.label} className={styles.compareMetric}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+            {topComparisonCard ? (
+              <Link
+                href={topComparisonCard.href}
+                className={styles.compareLead}
+                onClick={() => {
+                  emitMarketEvent('studio_card_click', {
+                    studioId: topComparisonCard.id,
+                    sectionType: 'list' as StudioSectionType
+                  });
+                }}
+              >
+                <span className={styles.compareLeadEyebrow}>현재 1순위 후보</span>
+                <strong>{topComparisonCard.title}</strong>
+                <p>
+                  {topComparisonCard.locationLabel} · {topComparisonCard.priceLabel} ·{' '}
+                  {topComparisonCard.availabilityLabel}
+                </p>
+              </Link>
+            ) : null}
+          </aside>
         </div>
 
         <div className={styles.listHeader}>
