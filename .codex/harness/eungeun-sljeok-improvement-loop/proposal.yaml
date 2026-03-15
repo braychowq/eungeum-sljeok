@@ -1,64 +1,67 @@
 task_slug: eungeun-sljeok-improvement-loop
 approved: true
-approved_at: 2026-03-14T00:00:00+09:00
+approved_at: 2026-03-15T22:04:00+09:00
 summary:
-  request: "은금슬쩍 전면 개선을 위한 approval-gated 에이전트팀과 반복 개선 루프 구성"
-  scope: "frontend-first service improvement loop with planner-led orchestration"
+  request: "은금슬쩍을 분석하고 운영하는 PMO 중심 에이전트 팀과 매시간 메인라인 개선 루프 구성"
+  scope: "planner-led hourly mainline improvement loop across frontend UX, feature gaps, lightweight backend support, and operating backlog"
   constraints:
     - "repo-local harness 규약 없음: fallback artifact contract 사용"
-    - "기본 검증은 cd frontend && npm run build"
-    - "dirty worktree는 stash로 정리한 뒤 로컬 main에서 직접 진행"
-    - "검증 완료 후 auto-commit 하고 PR 없이 origin main 으로 직접 push"
-    - "네트워크 실패는 해당 서브사이클 로컬 실패로만 격리"
+    - "현재 로컬 main 만 사용하고 worktree, feature branch, temp branch, PR은 사용하지 않음"
+    - "매시간 정확히 하나의 coherent initiative만 처리"
+    - "기본 검증은 cd frontend && npm run build, backend touched 시 cd backend && ./mvnw test, 공통 git diff --check"
+    - "검증 완료 후 로컬 main 에서 직접 commit 하고 PR 없이 origin main 으로 push"
+    - "네트워크 실패는 해당 시간대 로컬 실패로만 격리"
     - "비네트워크 실패는 원인 분석 후 안전한 1회 재시도"
-    - "작업 단위는 작은 수정이 아니라 페이지/흐름 단위의 거시적 개선을 우선"
+    - "작업 단위는 작은 수정이 아니라 제품 성공에 직접 연결되는 기능/흐름 개선을 우선"
     - "자동화 실행 후 사용자 액션이 남지 않으면 쓰레드를 자동 정리"
+    - "allowlist 밖의 product source 가 dirty 또는 untracked 상태면 구현하지 않고 report-only 로 종료"
 proposed_task_local_skill:
   name: ssuk-improvement-loop
   location: .codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/
-  purpose: "반복적인 은금슬쩍 개선 사이클을 표준 절차로 수행"
+  purpose: "PMO 주도의 은금슬쩍 메인라인 개선 사이클을 표준 절차로 수행"
   promotion_candidate: true
 agents:
   - name: planner
     agent_type: default
-    capability_profile: planner-orchestrator
+    capability_profile: pmo-orchestrator
     recommended_model: gpt-5.4
     reasoning_effort: high
-    responsibility: "사이클 총괄, 우선순위 결정, 승인 경계 관리, 결과 통합"
+    responsibility: "PMO 총괄, 우선순위 결정, 승인 경계 관리, mainline 안전성 판단, 결과 통합"
     expected_inputs:
       - current git status
       - previous results log
-      - repo structure
-      - current build status
+      - priority backlog
+      - managed-files state
     expected_output_or_handoff: "cycle brief, task selection, final completion report"
   - name: service-scenario-planner
     agent_type: default
-    capability_profile: service-flow-planner
+    capability_profile: service-growth-planner
     recommended_model: gpt-5.4
     reasoning_effort: high
-    responsibility: "서비스 시나리오와 IA 기준으로 개선 후보 도출"
+    responsibility: "서비스 시나리오, 기능 공백, 전환 병목, 운영 신뢰 요소 기준으로 개선 후보 도출"
     expected_inputs:
       - planner brief
       - current frontend structure
+      - current backend capability
       - recent changes
-    expected_output_or_handoff: "scenario-driven improvement candidates"
+    expected_output_or_handoff: "prioritized feature and flow recommendations"
   - name: ux-design-agent
     agent_type: default
-    capability_profile: ux-visual-system
+    capability_profile: ux-web-design-lead
     recommended_model: gpt-5.4
     reasoning_effort: medium
-    responsibility: "UX, 디자인 일관성, CTA 위계, 표면 시스템 개선안 제시"
+    responsibility: "UX, 웹디자인, CTA 위계, 인터랙션, 반응형, 표면 시스템 개선안 제시"
     expected_inputs:
       - planner brief
       - current CSS and component structure
       - scenario analysis
-    expected_output_or_handoff: "design and interaction recommendations"
+    expected_output_or_handoff: "implementation-ready design and interaction recommendations"
   - name: implementer
     agent_type: worker
-    capability_profile: nextjs-frontend-implementer
+    capability_profile: mainline-fullstack-implementer
     recommended_model: gpt-5.3-codex
     reasoning_effort: medium
-    responsibility: "승인된 저위험 변경 구현"
+    responsibility: "승인된 한 개 initiative를 local main 에서 구현"
     expected_inputs:
       - planner decision
       - implementation notes
@@ -66,13 +69,14 @@ agents:
     expected_output_or_handoff: "code changes and verification notes"
   - name: reviewer
     agent_type: default
-    capability_profile: regression-reviewer
+    capability_profile: qa-release-reviewer
     recommended_model: gpt-5.4
     reasoning_effort: high
-    responsibility: "빌드, 회귀 리스크, acceptance 검수"
+    responsibility: "QA, 회귀 리스크, acceptance, release readiness 검수"
     expected_inputs:
       - code diff
       - build result
+      - test result
       - planner brief
     expected_output_or_handoff: "accept/revise decision and residual risks"
 execution_order:
@@ -87,25 +91,38 @@ artifacts:
   - .codex/harness/eungeun-sljeok-improvement-loop/proposal.md
   - .codex/harness/eungeun-sljeok-improvement-loop/proposal.yaml
   - .codex/harness/eungeun-sljeok-improvement-loop/results.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/priority-backlog.md
+  - .codex/harness/eungeun-sljeok-improvement-loop/managed-files.json
   - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/planner.md
   - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/service-scenario-planner.md
   - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/ux-design-agent.md
   - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/implementer.md
   - .codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/reviewer.md
   - .codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/SKILL.md
+  - /Users/guk/.codex/automations/ssuk-2h-loop/automation.toml
 verification:
   - "artifact files exist"
-  - "agent contracts are defined"
-  - "runtime skill includes safety and verification rules"
+  - "agent contracts are defined for PMO, planning, UX, implementation, QA"
+  - "runtime skill includes local-main-only, dirty-path safety, and verification rules"
+  - "automation prompt enforces a single hourly cycle on local main"
 automation:
+  id: ssuk-2h-loop
   name: SSUK Hourly Mainline Loop
-  cadence: hourly_with_20min_subcycles
+  cadence: single_hourly_cycle
   rrule: FREQ=HOURLY;INTERVAL=1
   cwd: /Users/guk/Documents/workspace/eungeun-sljeok
-  execution_mode: direct_on_local_main
+  execution_mode: direct_on_local_main_only
   direct_push_target: origin main
-  dirty_worktree_policy: stash_then_restore
-  post_verification_policy: auto_commit_and_direct_push
-  scope_bias: page_or_flow_level_improvements
+  dirty_worktree_policy: allowlist_only_then_report_or_proceed
+  post_verification_policy: commit_and_direct_push_after_reviewer_pass
+  scope_bias: success_driving_feature_or_flow_improvements
   non_network_failure_policy: analyze_and_retry_once
   thread_cleanup_policy: archive_when_no_actionable_followup
+  allowed_dirty_prefixes:
+    - .artifacts/
+    - .codex/harness/eungeun-sljeok-improvement-loop/
+    - frontend/.artifacts/
+    - frontend/app/preview/
+    - frontend/docs/
+    - frontend/test-results/
+    - tasks/

@@ -503,3 +503,87 @@
 - next backlog:
   - market detail page trust-to-contact compression is the next strongest market slice if we stay within the same service area
   - otherwise, the next cross-page macro improvement should return to home or community and keep the scope at page-flow level
+
+## Baseline 2026-03-15 22:11 KST
+- repo state summary:
+  - approved PMO-led hourly mainline loop contract was written into the existing harness workspace
+  - current branch is local `main`
+  - dirty paths were limited to allowlisted harness, artifact, preview, docs, and task paths, so the workspace is eligible for future implementation cycles under the new policy
+- current branch:
+  - `main`
+- dirty-path evaluation:
+  - allowed dirty paths present: `.codex/harness/eungeun-sljeok-improvement-loop/`, `.artifacts/`, `frontend/.artifacts/`, `frontend/app/preview/`, `frontend/docs/`, `frontend/test-results/`, `tasks/`
+  - disallowed dirty product source: none observed in this baseline check
+- runtime agents created:
+  - `planner` handled orchestration locally
+  - `service-scenario-planner` produced a product-gap and strategy-alignment audit
+  - `ux-design-agent` produced a CTA/IA/product-quality audit
+  - `reviewer` produced a QA and direct-main readiness audit
+- candidate improvements:
+  - replace placeholder create/register flows with real, trust-building authoring experiences
+  - introduce a lightweight data/service layer so community can move off static mock-only behavior
+  - fix misleading community/studio detail routing and fallback behavior
+  - align frontend/backend API defaults and add rewrite smoke coverage
+  - strengthen studio-share trust and inquiry conversion with real booking-oriented scaffolding
+- selected improvement or skip reason:
+  - this was a baseline setup and audit cycle, not a product implementation cycle
+  - no product code was changed because the user requested team/automation setup first, and the reviewer recommended revising unattended-mainline readiness before broader auto-implementation
+  - recommended next initiative: `커뮤니티 글 작성 실체화 + 최소 데이터 레이어`
+- selected target files:
+  - none for this baseline audit cycle
+- changed files:
+  - `.codex/harness/eungeun-sljeok-improvement-loop/request.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/proposal.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/proposal.yaml`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/priority-backlog.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/managed-files.json`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/planner.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/service-scenario-planner.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/ux-design-agent.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/implementer.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/reviewer.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/SKILL.md`
+  - `/Users/guk/.codex/automations/ssuk-2h-loop/automation.toml`
+- verification result:
+  - `git diff --check` passed
+  - `cd frontend && npm run build` passed
+  - `cd backend && ./mvnw test` passed
+  - reviewer verdict: `revise before unattended implementation on local main`
+- failure classification and root-cause analysis:
+  - no command failure occurred in the baseline cycle
+  - readiness blockers are product-flow correctness and verification depth, not compile stability
+- retry action and retry result:
+  - none required
+- commit/push result:
+  - not attempted; this baseline cycle intentionally stopped at harness/automation setup and audit
+- thread cleanup decision:
+  - keep the thread open because this setup run leaves a user-facing deliverable and future product work rather than a no-action health check
+- next backlog:
+  - first product initiative should implement a real community create flow with a minimum post data layer
+  - before trusting unattended backend-integrated changes, fix route trust issues, align API default ports, and raise verification depth with route smoke coverage
+
+## Persistence 2026-03-15 22:14 KST
+- purpose:
+  - persist the approved PMO loop contract and baseline audit on local `main` so the next hourly automation starts from a clean tracked state
+- changed files persisted:
+  - `.codex/harness/eungeun-sljeok-improvement-loop/request.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/proposal.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/proposal.yaml`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/results.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/priority-backlog.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/managed-files.json`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/planner.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/service-scenario-planner.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/ux-design-agent.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/implementer.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/agents/reviewer.md`
+  - `.codex/harness/eungeun-sljeok-improvement-loop/runtime/skills/ssuk-improvement-loop/SKILL.md`
+- automation state:
+  - local automation config `/Users/guk/.codex/automations/ssuk-2h-loop/automation.toml` already reflects the hourly PMO mainline loop
+- verification carried forward:
+  - `git diff --check` passed for the workspace
+  - `cd frontend && npm run build` passed in the baseline cycle
+  - `cd backend && ./mvnw test` passed in the baseline cycle
+- expected effect on next run:
+  - tracked harness/runtime setup no longer remains as pending local repo changes
+  - next hourly cycle can start from local `main` with only allowlisted artifact noise left in the worktree

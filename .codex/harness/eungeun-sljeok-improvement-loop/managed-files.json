@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "owner": "ssuk-hourly-pmo-mainline-loop",
+  "updated_at": "2026-03-15T22:04:12+09:00",
+  "allowed_always_dirty_prefixes": [
+    ".artifacts/",
+    ".codex/harness/eungeun-sljeok-improvement-loop/",
+    "frontend/.artifacts/",
+    "frontend/app/preview/",
+    "frontend/docs/",
+    "frontend/test-results/",
+    "tasks/"
+  ],
+  "implementation_target_files": [],
+  "last_cycle": {
+    "status": "baseline_audit_completed",
+    "summary": "PMO-led hourly loop contract created; baseline audit completed with next initiative and unattended-mainline blockers recorded."
+  },
+  "notes": [
+    "Unattended implementation is blocked when dirty or untracked product source appears outside allowed_always_dirty_prefixes.",
+    "Planner must update implementation_target_files before edits and clear or refresh them after the cycle closes."
+  ]
+}
