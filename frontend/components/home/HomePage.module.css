@@ -32,7 +32,7 @@
 .serviceHub {
   padding: 0 20px;
   display: grid;
-  gap: 20px;
+  gap: 18px;
 }
 
 .serviceHubIntro {
@@ -121,183 +121,10 @@
   gap: 12px;
 }
 
-.serviceJourney {
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  border-radius: 30px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 239, 232, 0.72)),
-    rgba(255, 255, 255, 0.84);
-  box-shadow: var(--tone-shadow-soft);
-  padding: 22px 24px 24px;
+.serviceHubJourneyLayout {
   display: grid;
-  gap: 18px;
-}
-
-.serviceJourneyHeader {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.serviceJourneyHeader strong {
-  display: block;
-  margin-top: 8px;
-  color: var(--tone-text);
-  font-size: 26px;
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-}
-
-.serviceJourneyHeader p {
-  margin: 0;
-  max-width: 34ch;
-  color: var(--tone-text-secondary);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.serviceJourneyEyebrow {
-  display: inline-flex;
-  width: fit-content;
-  min-height: 26px;
-  align-items: center;
-  padding: 0 11px;
-  border-radius: 999px;
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--tone-text-secondary);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.serviceJourneyList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.serviceJourneyItem {
-  min-width: 0;
-  border-radius: 24px;
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.64)),
-    rgba(255, 255, 255, 0.72);
-  padding: 18px;
-  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: 14px;
-}
-
-.serviceJourneyStep {
-  display: grid;
-  gap: 8px;
-}
-
-.serviceJourneyStep span {
-  color: var(--tone-accent-strong);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.serviceJourneyStep strong {
-  color: var(--tone-text);
-  font-size: 21px;
-  line-height: 1.14;
-  letter-spacing: -0.04em;
-}
-
-.serviceJourneyStep p,
-.serviceJourneyPreview {
-  margin: 0;
-  color: var(--tone-text-secondary);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.serviceJourneyMeta {
-  display: grid;
-  gap: 8px;
-}
-
-.serviceJourneyStat {
-  width: fit-content;
-  min-height: 28px;
-  padding: 0 11px;
-  border-radius: 999px;
-  background: rgba(23, 23, 23, 0.06);
-  color: var(--tone-text);
-  display: inline-flex;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.serviceJourneyActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.serviceJourneyAnchor,
-.serviceJourneyLink {
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.serviceJourneyAnchor {
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--tone-text-secondary);
-}
-
-.serviceJourneyLink {
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  background: var(--tone-text);
-  color: var(--tone-canvas);
-}
-
-.serviceJourneyAnchor:hover,
-.serviceJourneyLink:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 24px rgba(27, 23, 20, 0.08);
-}
-
-.serviceJourneyAnchor:hover {
-  border-color: var(--tone-line-strong);
-  color: var(--tone-text);
-  background: #fff;
-}
-
-.serviceJourneyLink:hover {
-  background: #202020;
-}
-
-.serviceJourneyAnchor:focus-visible,
-.serviceJourneyLink:focus-visible,
-.serviceHubCardLink:focus-visible {
-  outline: 2px solid var(--tone-focus);
-  outline-offset: 2px;
 }
 
 .serviceHubCard {
@@ -357,6 +184,243 @@
   box-shadow: 0 14px 24px rgba(27, 23, 20, 0.08);
 }
 
+.serviceHubCardLink:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
+}
+
+.serviceHubFeature,
+.serviceHubJourney {
+  min-width: 0;
+  border-radius: 28px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  box-shadow: var(--tone-shadow-soft);
+}
+
+.serviceHubFeature {
+  background:
+    linear-gradient(160deg, rgba(94, 66, 42, 0.96), rgba(128, 97, 69, 0.9)),
+    rgba(89, 62, 38, 0.92);
+  color: rgba(255, 250, 245, 0.98);
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.serviceHubFeature .serviceHubEyebrow {
+  border-color: rgba(255, 241, 228, 0.18);
+  background: rgba(255, 248, 242, 0.12);
+  color: rgba(255, 248, 242, 0.94);
+}
+
+.serviceHubFeatureHeader {
+  display: grid;
+  gap: 12px;
+}
+
+.serviceHubFeatureHeader strong {
+  font-size: 27px;
+  line-height: 1.16;
+  letter-spacing: -0.045em;
+}
+
+.serviceHubFeatureCopy {
+  margin: 0;
+  color: rgba(255, 244, 234, 0.86);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.serviceHubFeaturePanel {
+  display: grid;
+  gap: 10px;
+}
+
+.serviceHubFeatureMetric {
+  border-radius: 20px;
+  border: 1px solid rgba(255, 241, 228, 0.14);
+  background: rgba(255, 250, 245, 0.1);
+  padding: 14px 16px;
+  display: grid;
+  gap: 6px;
+}
+
+.serviceHubFeatureMetric span {
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 244, 234, 0.68);
+}
+
+.serviceHubFeatureMetric strong {
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+.serviceHubFeatureActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.serviceHubPrimaryLink,
+.serviceHubSecondaryLink,
+.serviceHubTextLink {
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.serviceHubPrimaryLink,
+.serviceHubSecondaryLink {
+  min-height: 44px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.serviceHubPrimaryLink {
+  background: rgba(255, 251, 247, 0.94);
+  color: var(--tone-text);
+  box-shadow: 0 14px 24px rgba(39, 26, 15, 0.16);
+}
+
+.serviceHubSecondaryLink {
+  border: 1px solid rgba(255, 241, 228, 0.18);
+  background: rgba(255, 250, 245, 0.08);
+  color: rgba(255, 248, 242, 0.94);
+}
+
+.serviceHubJourney {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(250, 244, 236, 0.68)),
+    rgba(255, 255, 255, 0.82);
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.serviceHubJourneyHeader {
+  display: grid;
+  gap: 10px;
+}
+
+.serviceHubJourneyHeader h2 {
+  margin: 0;
+  color: var(--tone-text);
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+}
+
+.serviceHubJourneyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.serviceHubJourneyItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(23, 23, 23, 0.06);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 16px;
+}
+
+.serviceHubJourneyStep {
+  width: 68px;
+  border-radius: 18px;
+  background: rgba(131, 97, 63, 0.09);
+  color: var(--tone-accent-strong);
+  padding: 12px 10px;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  text-align: center;
+}
+
+.serviceHubJourneyStep span {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.serviceHubJourneyStep small {
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.serviceHubJourneyBody {
+  display: grid;
+  gap: 8px;
+}
+
+.serviceHubJourneyBody strong {
+  color: var(--tone-text);
+  font-size: 19px;
+  line-height: 1.28;
+  letter-spacing: -0.035em;
+}
+
+.serviceHubJourneyBody p {
+  margin: 0;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.serviceHubJourneyFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.serviceHubJourneyFooter span {
+  color: var(--tone-text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.serviceHubTextLink {
+  color: var(--tone-accent-strong);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.serviceHubPrimaryLink:hover,
+.serviceHubSecondaryLink:hover,
+.serviceHubTextLink:hover {
+  transform: translateY(-1px);
+}
+
+.serviceHubPrimaryLink:focus-visible,
+.serviceHubSecondaryLink:focus-visible,
+.serviceHubTextLink:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
+}
+
 @media (max-width: 960px) {
   .page {
     background: var(--tone-page);
@@ -384,35 +448,6 @@
     gap: 16px;
   }
 
-  .serviceJourney {
-    border-radius: 24px;
-    padding: 18px;
-    gap: 16px;
-  }
-
-  .serviceJourneyHeader,
-  .serviceJourneyList {
-    grid-template-columns: 1fr;
-  }
-
-  .serviceJourneyHeader {
-    display: grid;
-    align-items: start;
-  }
-
-  .serviceJourneyHeader strong {
-    font-size: 24px;
-  }
-
-  .serviceJourneyList {
-    gap: 10px;
-  }
-
-  .serviceJourneyItem {
-    border-radius: 22px;
-    padding: 16px;
-  }
-
   .serviceHubCopy h1 {
     font-size: 28px;
   }
@@ -423,7 +458,8 @@
   }
 
   .serviceHubStats,
-  .serviceHubGrid {
+  .serviceHubGrid,
+  .serviceHubJourneyLayout {
     grid-template-columns: 1fr;
   }
 
@@ -439,5 +475,28 @@
 
   .serviceHubCard strong {
     font-size: 18px;
+  }
+
+  .serviceHubFeature,
+  .serviceHubJourney {
+    border-radius: 24px;
+    padding: 18px;
+  }
+
+  .serviceHubFeatureHeader strong,
+  .serviceHubJourneyHeader h2 {
+    font-size: 24px;
+  }
+
+  .serviceHubJourneyItem {
+    grid-template-columns: 1fr;
+  }
+
+  .serviceHubJourneyStep {
+    width: 100%;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
   }
 }
