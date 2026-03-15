@@ -1,0 +1,27 @@
+team:
+  - role: planner
+    capability: service-flow-planning
+    responsibilities:
+      - confirm the macro slice for the manual validation run
+      - keep scope to a community-page continuity improvement
+  - role: implementer
+    capability: nextjs-frontend-implementation
+    responsibilities:
+      - update the community page structure and styling
+      - keep changes isolated to low-risk frontend files
+  - role: reviewer
+    capability: regression-and-verification-review
+    responsibilities:
+      - verify build and diff hygiene
+      - confirm the direct-on-main flow completes safely
+execution:
+  order:
+    - planner
+    - implementer
+    - reviewer
+verification:
+  gates:
+    - community page shows a stronger continuation path from highlights into browse/write actions
+    - `cd frontend && npm run build` passes
+    - `git diff --check` passes
+    - commit and push from local `main` succeed

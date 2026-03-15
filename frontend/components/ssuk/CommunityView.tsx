@@ -19,13 +19,49 @@ const communityTabDescription: Record<CommunityTabId, string> = {
   free: '작업 근황과 가벼운 이야기를 편하게 나누는 공간'
 };
 
+const communityComposeGuide: Record<
+  CommunityTabId,
+  { title: string; description: string; prompts: string[]; ctaLabel: string }
+> = {
+  qna: {
+    title: '막히는 공정이나 재료 고민을 바로 물어보세요.',
+    description: '지금 작업 중인 문제를 짧게 정리해 올리면 비슷한 경험을 가진 메이커가 빠르게 답해줄 수 있어요.',
+    prompts: ['납땜', '도금', '도구 추천'],
+    ctaLabel: '질문 올리기'
+  },
+  share: {
+    title: '바로 써먹을 자료와 운영 팁을 남겨보세요.',
+    description: '거래처, 가격표, 계약 팁처럼 다른 작업자에게 도움이 되는 실무 자료를 공유하기 좋은 흐름입니다.',
+    prompts: ['거래처', '원가표', '운영 팁'],
+    ctaLabel: '정보 공유하기'
+  },
+  free: {
+    title: '오늘 작업 근황이나 가벼운 이야기를 남겨보세요.',
+    description: '최근 작업 로그, 시장 후기, 집중 안 되는 날의 잡담까지 편하게 이어갈 수 있는 대화 흐름입니다.',
+    prompts: ['작업 근황', '시장 후기', '잡담'],
+    ctaLabel: '이야기 남기기'
+  }
+};
+
 export default function CommunityView({ activeTab }: CommunityViewProps) {
   const posts = communityPosts[activeTab];
   const highlights = [...communityNotices, ...communityPopular];
   const [leadHighlight, ...secondaryHighlights] = highlights;
   const activeTabLabel = communityTabs.find((tab) => tab.id === activeTab)?.label ?? '커뮤니티';
+  const activeLeadPost = posts[0];
   const latestMeta = posts[0]?.meta ?? '새 글이 곧 올라올 예정이에요.';
   const totalPostCount = Object.values(communityPosts).reduce((count, items) => count + items.length, 0);
+  const composeGuide = communityComposeGuide[activeTab];
+  const tabFlowCards = communityTabs.map((tab) => {
+    const tabPosts = communityPosts[tab.id];
+    return {
+      ...tab,
+      count: tabPosts.length,
+      latestPost: tabPosts[0],
+      description: communityTabDescription[tab.id],
+      isActive: tab.id === activeTab
+    };
+  });
   const overviewStats = [
     { label: '전체 대화', value: `${totalPostCount}개` },
     { label: '지금 확인할 글', value: `${highlights.length}개` },
@@ -116,6 +152,61 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
         </div>
       </section>
 
+      <section className={styles.continuitySection} aria-label="이어서 참여하기">
+        <div className={styles.sectionIntro}>
+          <div>
+            <h2 className={styles.sectionTitle}>이어서 참여하기</h2>
+            <p className={styles.sectionDescription}>
+              하이라이트를 확인했다면 지금 가장 맞는 대화방으로 들어가거나, 바로 글을 올려 흐름에 합류해보세요.
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.continuityGrid}>
+          <div className={styles.topicGrid}>
+            {tabFlowCards.map((tab) => (
+              <Link
+                key={tab.id}
+                href={`/community?tab=${tab.id}`}
+                className={`${styles.topicCard} ${tab.isActive ? styles.topicCardActive : ''}`}
+              >
+                <div className={styles.topicCardTop}>
+                  <span className={styles.topicBadge}>{tab.label}</span>
+                  <span className={styles.topicCount}>{tab.count}개 글</span>
+                </div>
+                <div className={styles.topicCardText}>
+                  <strong>{tab.description}</strong>
+                  <p>{tab.latestPost?.title ?? '새 글이 곧 올라올 예정이에요.'}</p>
+                  <span>{tab.latestPost?.meta ?? '새 대화 준비 중'}</span>
+                </div>
+                <span className={styles.topicCardAction}>
+                  {tab.isActive ? '지금 보고 있는 주제' : '이 주제로 들어가기'}
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          <aside className={styles.composeCard}>
+            <span className={styles.composeEyebrow}>지금 참여하기</span>
+            <strong>{composeGuide.title}</strong>
+            <p>{composeGuide.description}</p>
+            <div className={styles.composePromptList}>
+              {composeGuide.prompts.map((prompt) => (
+                <span key={prompt}>{prompt}</span>
+              ))}
+            </div>
+            <div className={styles.composeActions}>
+              <Link href="/community/new" className={styles.composePrimaryAction}>
+                {composeGuide.ctaLabel}
+              </Link>
+              <Link href={`/community?tab=${activeTab}`} className={styles.composeSecondaryAction}>
+                {activeTabLabel} 더 보기
+              </Link>
+            </div>
+          </aside>
+        </div>
+      </section>
+
       <section className={styles.tabSection} aria-label="커뮤니티 소카테고리">
         <div className={styles.controlsRow}>
           <div className={styles.tabRow}>
@@ -134,7 +225,7 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
             ))}
           </div>
           <Link href="/community/new" className={styles.writeButton}>
-            글 등록
+            {composeGuide.ctaLabel}
           </Link>
         </div>
 
@@ -143,6 +234,12 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
             <span className={styles.activeEyebrow}>현재 둘러보는 주제</span>
             <strong>{activeTabLabel}</strong>
             <p>{communityTabDescription[activeTab]}</p>
+            {activeLeadPost ? (
+              <a href={activeLeadPost.href} className={styles.activePanelLink}>
+                <span>지금 가장 먼저 볼 글</span>
+                <strong>{activeLeadPost.title}</strong>
+              </a>
+            ) : null}
           </div>
           <div className={styles.activePanelMeta}>
             <span>{posts.length}개 글</span>

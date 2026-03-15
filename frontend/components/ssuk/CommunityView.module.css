@@ -100,6 +100,7 @@
 }
 
 .highlightSection,
+.continuitySection,
 .tabSection,
 .listSection {
   margin-top: var(--space-6);
@@ -274,6 +275,208 @@
   line-height: 1.4;
 }
 
+.continuityGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.topicGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.topicCard {
+  min-height: 198px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--tone-shadow-soft);
+  padding: 16px;
+  color: var(--tone-text);
+  text-decoration: none;
+  display: grid;
+  align-content: space-between;
+  gap: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.topicCard:hover,
+.composePrimaryAction:hover,
+.composeSecondaryAction:hover,
+.activePanelLink:hover {
+  border-color: var(--tone-line-strong);
+  box-shadow: 0 18px 28px rgba(27, 23, 20, 0.08);
+  transform: translateY(-1px);
+}
+
+.topicCard:focus-visible,
+.composePrimaryAction:focus-visible,
+.composeSecondaryAction:focus-visible,
+.activePanelLink:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
+}
+
+.topicCardActive {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 245, 241, 0.9) 100%);
+}
+
+.topicCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.topicBadge,
+.topicCount {
+  min-height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.topicBadge {
+  padding: 0 10px;
+  background: rgba(23, 23, 23, 0.06);
+  color: var(--tone-text);
+}
+
+.topicCount {
+  padding: 0 9px;
+  color: var(--tone-text-secondary);
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.topicCardText {
+  display: grid;
+  gap: 8px;
+}
+
+.topicCardText strong {
+  font-size: 16px;
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+}
+
+.topicCardText p {
+  margin: 0;
+  color: var(--tone-text);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.topicCardText span {
+  color: var(--tone-text-secondary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.topicCardAction {
+  color: var(--tone-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.composeCard {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(250, 248, 244, 0.98) 0%, rgba(244, 240, 234, 0.92) 100%);
+  box-shadow: var(--tone-shadow-soft);
+  padding: 18px;
+  display: grid;
+  align-content: space-between;
+  gap: 14px;
+}
+
+.composeEyebrow {
+  color: var(--tone-text-secondary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.composeCard strong {
+  color: var(--tone-text);
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+
+.composeCard p {
+  margin: 0;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.composePromptList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.composePromptList span {
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--tone-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.composeActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.composePrimaryAction,
+.composeSecondaryAction {
+  min-height: 42px;
+  border-radius: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.composePrimaryAction {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: var(--tone-text);
+  color: var(--tone-canvas);
+}
+
+.composeSecondaryAction {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--tone-text);
+}
+
 .controlsRow {
   display: flex;
   align-items: center;
@@ -403,6 +606,34 @@
   line-height: 1.55;
 }
 
+.activePanelLink {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 4px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+  color: var(--tone-text);
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.activePanelLink span {
+  color: var(--tone-text-secondary);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.activePanelLink strong {
+  color: var(--tone-text);
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
 .activePanelMeta {
   display: grid;
   gap: 8px;
@@ -530,6 +761,7 @@
 @media (max-width: 900px) {
   .overviewSection,
   .highlightSection,
+  .continuitySection,
   .tabSection,
   .listSection {
     margin-top: 40px;
@@ -537,7 +769,31 @@
   }
 
   .overviewSection,
-  .highlightGrid {
+  .highlightGrid,
+  .continuityGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topicGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topicCard {
+    min-height: 0;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .composeCard {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .composeCard strong {
+    font-size: 22px;
+  }
+
+  .composeActions {
     grid-template-columns: minmax(0, 1fr);
   }
 
