@@ -52,6 +52,7 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
   const latestMeta = posts[0]?.meta ?? '새 글이 곧 올라올 예정이에요.';
   const totalPostCount = Object.values(communityPosts).reduce((count, items) => count + items.length, 0);
   const composeGuide = communityComposeGuide[activeTab];
+  const composeHref = `/community/new?tab=${activeTab}`;
   const tabFlowCards = communityTabs.map((tab) => {
     const tabPosts = communityPosts[tab.id];
     return {
@@ -76,7 +77,7 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
       hideEyebrow
       hideCta
       ctaLabel="+ 글 등록"
-      ctaHref="/community/new"
+      ctaHref={composeHref}
     >
       <section className={styles.overviewSection} aria-label="커뮤니티 소개">
         <div className={styles.overviewIntro}>
@@ -196,7 +197,7 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
               ))}
             </div>
             <div className={styles.composeActions}>
-              <Link href="/community/new" className={styles.composePrimaryAction}>
+              <Link href={composeHref} className={styles.composePrimaryAction}>
                 {composeGuide.ctaLabel}
               </Link>
               <Link href={`/community?tab=${activeTab}`} className={styles.composeSecondaryAction}>
@@ -224,7 +225,7 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
               </Link>
             ))}
           </div>
-          <Link href="/community/new" className={styles.writeButton}>
+          <Link href={composeHref} className={styles.writeButton}>
             {composeGuide.ctaLabel}
           </Link>
         </div>

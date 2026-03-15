@@ -1,0 +1,449 @@
+.overviewSection,
+.workspaceGrid {
+  padding: 0 var(--space-3);
+}
+
+.overviewSection {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+  gap: 14px;
+}
+
+.overviewCard,
+.progressCard,
+.sectionCard,
+.sideCard,
+.previewCard {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(247, 243, 236, 0.92) 100%);
+  box-shadow: var(--tone-shadow-soft);
+}
+
+.overviewCard {
+  padding: 22px;
+  display: grid;
+  gap: 12px;
+}
+
+.eyebrow,
+.sectionEyebrow,
+.sideEyebrow {
+  color: var(--tone-text-tertiary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.overviewTitle {
+  margin: 0;
+  color: var(--tone-text);
+  font-size: 29px;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+
+.overviewDescription,
+.sectionDescription,
+.sideDescription,
+.progressDescription,
+.progressNote {
+  margin: 0;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pillRow span {
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  color: var(--tone-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.progressCard {
+  padding: 20px;
+  display: grid;
+  align-content: space-between;
+  gap: 12px;
+}
+
+.progressLabel {
+  color: var(--tone-text-secondary);
+  font-size: 12px;
+}
+
+.progressValue {
+  color: var(--tone-text);
+  font-size: 38px;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.workspaceGrid {
+  margin-top: var(--space-6);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
+  gap: 14px;
+}
+
+.mainColumn,
+.sideColumn {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.sectionCard,
+.sideCard {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 8px;
+}
+
+.sectionTitle,
+.sideTitle {
+  margin: 6px 0 0;
+  color: var(--tone-text);
+  font-size: 24px;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.tabGrid,
+.templateGrid,
+.checklistGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.tabGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.templateGrid,
+.checklistGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tabButton,
+.templateButton,
+.checklistButton {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--tone-text);
+  text-align: left;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.tabButton:hover,
+.templateButton:hover,
+.checklistButton:hover,
+.primaryAction:hover,
+.secondaryAction:hover {
+  border-color: var(--tone-line-strong);
+  box-shadow: 0 18px 28px rgba(27, 23, 20, 0.08);
+  transform: translateY(-1px);
+}
+
+.tabButton:focus-visible,
+.templateButton:focus-visible,
+.checklistButton:focus-visible,
+.textInput:focus-visible,
+.textArea:focus-visible,
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
+}
+
+.tabButtonActive,
+.templateButtonActive,
+.checklistButtonActive {
+  border-color: rgba(106, 75, 47, 0.28);
+  background: rgba(236, 228, 217, 0.86);
+}
+
+.tabLabel {
+  color: var(--tone-accent-strong);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tabButton strong,
+.templateButton strong,
+.checklistButton strong {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.tabMeta,
+.templateButton span,
+.checklistButton span {
+  color: var(--tone-text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fieldGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.fieldBlock {
+  display: grid;
+  gap: 8px;
+}
+
+.fieldBlock span {
+  color: var(--tone-text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.textInput,
+.textArea {
+  width: 100%;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.76);
+  padding: 14px 16px;
+  color: var(--tone-text);
+  font: inherit;
+}
+
+.textInput {
+  min-height: 48px;
+}
+
+.textArea {
+  min-height: 128px;
+  resize: vertical;
+}
+
+.noteList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.noteList li {
+  padding-left: 14px;
+  position: relative;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.noteList li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tone-accent);
+}
+
+.previewCard {
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.previewMeta {
+  color: var(--tone-text-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.previewTitle {
+  display: block;
+  margin-top: 10px;
+  color: var(--tone-text);
+  font-size: 22px;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.previewBody,
+.previewFootnote {
+  margin: 10px 0 0;
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.previewTags {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.previewTags span {
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  color: var(--tone-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stepList {
+  display: grid;
+  gap: 10px;
+}
+
+.stepItem {
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.stepItem span {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(23, 23, 23, 0.08);
+  color: var(--tone-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stepItem strong {
+  color: var(--tone-text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.stepItemActive {
+  border-color: rgba(106, 75, 47, 0.24);
+  background: rgba(236, 228, 217, 0.82);
+}
+
+.stepItemActive span {
+  background: var(--tone-text);
+  color: var(--tone-canvas);
+}
+
+.stepItemActive strong {
+  color: var(--tone-text);
+}
+
+.actionRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.primaryAction,
+.secondaryAction {
+  min-height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.primaryAction {
+  background: var(--tone-text);
+  color: var(--tone-canvas);
+  cursor: pointer;
+}
+
+.secondaryAction {
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--tone-text);
+}
+
+@media (max-width: 900px) {
+  .overviewSection,
+  .workspaceGrid {
+    padding: 0 14px;
+  }
+
+  .overviewSection,
+  .workspaceGrid,
+  .tabGrid,
+  .templateGrid,
+  .checklistGrid,
+  .actionRow {
+    grid-template-columns: 1fr;
+  }
+
+  .overviewTitle {
+    font-size: 26px;
+  }
+
+  .sectionTitle,
+  .sideTitle {
+    font-size: 21px;
+  }
+
+  .overviewCard,
+  .progressCard,
+  .sectionCard,
+  .sideCard,
+  .previewCard {
+    border-radius: 24px;
+  }
+
+  .tabButton,
+  .templateButton,
+  .checklistButton {
+    border-radius: 20px;
+  }
+
+  .textInput,
+  .textArea {
+    border-radius: 16px;
+  }
+}
