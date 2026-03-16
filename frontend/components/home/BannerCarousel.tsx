@@ -32,6 +32,7 @@ export default function BannerCarousel({
   });
   const [isDragging, setIsDragging] = useState(false);
   const displayItems = total > 1 ? [items[total - 1], ...items, items[0]] : items;
+  const bannerLabels = ['Community pick', 'Studio share', 'Market edit'];
 
   const scrollToDisplayIndex = (
     displayIndex: number,
@@ -219,6 +220,11 @@ export default function BannerCarousel({
                 loading={realIndex === activeIndex ? 'eager' : 'lazy'}
                 draggable={false}
               />
+              <div className={styles.cardOverlay}>
+                <span className={styles.cardKicker}>{bannerLabels[realIndex % bannerLabels.length]}</span>
+                <strong>{item.subtitle}</strong>
+                <span className={styles.cardCta}>지금 둘러보기</span>
+              </div>
             </a>
           );
         })}

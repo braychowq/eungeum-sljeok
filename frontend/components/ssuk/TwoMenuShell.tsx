@@ -38,8 +38,9 @@ export default function TwoMenuShell({
     <main className={`${styles.page} ${isMarket ? styles.marketPage : ''}`}>
       <div className={`${styles.container} ${isMarket ? styles.marketContainer : ''}`}>
         <header className={`${styles.topNav} ${isMarket ? styles.marketTopNav : ''}`}>
-          <Link href="/" className={`${styles.logo} ${isMarket ? styles.marketLogo : ''}`}>
-            은금슬쩍
+          <Link href="/" className={styles.brandBlock}>
+            <span className={styles.brandEyebrow}>atelier network</span>
+            <span className={`${styles.logo} ${isMarket ? styles.marketLogo : ''}`}>은금슬쩍</span>
           </Link>
 
           <nav className={`${styles.mainMenu} ${isMarket ? styles.marketMainMenu : ''}`} aria-label="대메뉴">
@@ -59,22 +60,34 @@ export default function TwoMenuShell({
           </nav>
 
           <button type="button" className={`${styles.alertButton} ${isMarket ? styles.marketAlertButton : ''}`}>
-            알림
+            <span className={styles.alertDot} aria-hidden="true" />
+            새 소식
           </button>
         </header>
 
         {!hideHero ? (
           <section className={`${styles.heroBox} ${isMarket ? styles.marketHeroBox : ''}`}>
-            {!hideEyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-            <h1 className={`${styles.pageTitle} ${isMarket ? styles.marketPageTitle : ''}`}>{title}</h1>
-            {subtitle ? (
-              <p className={`${styles.pageSubtitle} ${isMarket ? styles.marketPageSubtitle : ''}`}>{subtitle}</p>
-            ) : null}
-            {!hideCta ? (
-              <Link href={ctaHref} className={`${styles.ctaButton} ${isMarket ? styles.marketCtaButton : ''}`}>
-                {ctaLabel}
-              </Link>
-            ) : null}
+            <div className={styles.heroCopy}>
+              {!hideEyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+              <h1 className={`${styles.pageTitle} ${isMarket ? styles.marketPageTitle : ''}`}>{title}</h1>
+              {subtitle ? (
+                <p className={`${styles.pageSubtitle} ${isMarket ? styles.marketPageSubtitle : ''}`}>{subtitle}</p>
+              ) : null}
+              {!hideCta ? (
+                <Link href={ctaHref} className={`${styles.ctaButton} ${isMarket ? styles.marketCtaButton : ''}`}>
+                  {ctaLabel}
+                </Link>
+              ) : null}
+            </div>
+
+            <div className={styles.heroMeta}>
+              <span className={styles.heroMetaLabel}>{isMarket ? '오늘의 셀렉션' : '오늘의 흐름'}</span>
+              <strong>
+                {isMarket
+                  ? '공방 쉐어와 판매 흐름을 감도 있게 탐색'
+                  : '질문과 공유가 빠르게 섞이는 대화 라인'}
+              </strong>
+            </div>
           </section>
         ) : null}
 

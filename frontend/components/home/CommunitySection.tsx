@@ -63,11 +63,17 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
   return (
     <section id="community" className={styles.section} aria-label="커뮤니티">
       <div className={styles.headerRow}>
-        <h3 className={styles.heading}>
-          <Link href="/community" className={styles.headerLink}>
-            <span className={styles.headerTitle}>슬쩍 얘기하기</span>
-          </Link>
-        </h3>
+        <div className={styles.headerBlock}>
+          <span className={styles.eyebrow}>Community pulse</span>
+          <h3 className={styles.heading}>
+            <Link href="/community" className={styles.headerLink}>
+              <span className={styles.headerTitle}>슬쩍 얘기하기</span>
+            </Link>
+          </h3>
+          <p className={styles.headerDescription}>
+            지금 반응이 빠른 질문과 공유 흐름을 먼저 모았습니다. 바로 읽고 대화에 합류할 수 있습니다.
+          </p>
+        </div>
       </div>
 
       <div className={styles.filterRow}>
@@ -90,7 +96,7 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
           {popularPosts.length > 0 ? (
             popularPosts.map((post, index) => (
               <li key={post.id}>
-                <a href={post.href} className={styles.popularItem}>
+                <Link href={post.href} className={styles.popularItem}>
                   <div className={styles.popularContent}>
                     <div className={styles.titleRow}>
                       <span className={styles.categoryChip}>{categoryLabelMap[post.category]}</span>
@@ -99,10 +105,13 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
                     <strong className={styles.postTitle}>{post.title}</strong>
                   </div>
                   <div className={styles.reactionBox}>
-                    <span>좋아요 {post.likeCount}</span>
-                    <span>댓글 {post.commentCount}</span>
+                    <span className={styles.rankBadge}>{String(index + 1).padStart(2, '0')}</span>
+                    <div className={styles.reactionMeta}>
+                      <span>좋아요 {post.likeCount}</span>
+                      <span>댓글 {post.commentCount}</span>
+                    </div>
                   </div>
-                </a>
+                </Link>
               </li>
             ))
           ) : (

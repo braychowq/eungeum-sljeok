@@ -6,11 +6,11 @@
 
 .viewport {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding: 0 24px;
+  padding: 0 20px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
@@ -24,29 +24,29 @@
 .card {
   position: relative;
   display: block;
-  flex: 0 0 calc(100% - 56px);
+  flex: 0 0 calc(100% - 40px);
+  min-height: clamp(320px, 42vw, 430px);
   scroll-snap-align: center;
-  border-radius: 28px;
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  height: clamp(228px, 34vw, 360px);
+  border-radius: 34px;
   overflow: hidden;
   background: var(--tone-surface);
-  box-shadow: var(--tone-shadow-soft);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow: var(--tone-shadow);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
 }
 
 .card::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(22, 22, 22, 0.04), rgba(22, 22, 22, 0.18));
+  background:
+    linear-gradient(180deg, rgba(14, 19, 18, 0.06) 10%, rgba(14, 19, 18, 0.62) 100%),
+    linear-gradient(120deg, rgba(201, 108, 77, 0.16), transparent 42%);
   pointer-events: none;
 }
 
 .card:hover {
-  border-color: var(--tone-line-strong);
-  box-shadow: 0 18px 34px rgba(27, 23, 20, 0.1);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.002);
+  box-shadow: 0 34px 60px rgba(21, 29, 27, 0.16);
 }
 
 .dragging {
@@ -54,51 +54,111 @@
 }
 
 .card img {
-  display: block;
   width: 100%;
   height: 100%;
+  min-height: inherit;
   object-fit: cover;
-  filter: saturate(0.84) contrast(0.98);
+  filter: saturate(0.88) contrast(0.96);
   -webkit-user-drag: none;
 }
 
+.cardOverlay {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  padding: 26px;
+  display: grid;
+  gap: 12px;
+}
+
+.cardKicker,
+.cardCta {
+  width: fit-content;
+  min-height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardKicker {
+  color: rgba(255, 247, 241, 0.92);
+  border: 1px solid rgba(255, 247, 241, 0.22);
+  background: rgba(255, 247, 241, 0.08);
+}
+
+.cardOverlay strong {
+  max-width: 12ch;
+  color: #fffaf5;
+  font-family: var(--font-logo);
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+}
+
+.cardCta {
+  background: rgba(255, 247, 241, 0.92);
+  color: var(--tone-text);
+  box-shadow: 0 14px 24px rgba(14, 19, 18, 0.12);
+}
+
 .dots {
-  margin-top: 10px;
+  margin-top: 14px;
   display: flex;
   justify-content: center;
-  gap: 7px;
+  gap: 8px;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 22px;
+  height: 6px;
   border-radius: 999px;
   border: none;
-  background: rgba(23, 23, 23, 0.18);
+  background: rgba(23, 34, 31, 0.14);
   cursor: pointer;
+  transition: width 0.2s ease, background-color 0.2s ease;
 }
 
 .activeDot {
-  background: var(--tone-accent);
+  width: 42px;
+  background: linear-gradient(135deg, #204744, #c96c4d);
 }
 
 @media (max-width: 960px) {
-  .section {
-    padding: 0;
-  }
-
   .viewport {
-    gap: 10px;
-    padding: 0 12px;
+    gap: 12px;
+    padding: 0 14px;
   }
 
   .card {
-    flex-basis: calc(100% - 42px);
-    height: 214px;
-    border-radius: 24px;
+    flex-basis: calc(100% - 28px);
+    min-height: 312px;
+    border-radius: 28px;
+  }
+
+  .cardOverlay {
+    padding: 20px;
+    gap: 10px;
+  }
+
+  .cardKicker,
+  .cardCta {
+    min-height: 28px;
+    padding: 0 11px;
+    font-size: 10px;
+  }
+
+  .cardOverlay strong {
+    max-width: 11ch;
+    font-size: 32px;
   }
 
   .dots {
-    margin-top: 10px;
+    margin-top: 12px;
   }
 }

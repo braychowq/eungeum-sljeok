@@ -50,6 +50,7 @@ export default function HomePage() {
     .sort((a, b) => a.publishedHoursAgo - b.publishedHoursAgo)[0];
   const featuredStudioCard = studioCards[0];
   const featuredMarketCard = marketCards[0];
+  const featuredBanner = bannerItems[0];
   const serviceHubStats = [
     { label: '최근 대화', value: `${freshCommunityCount}개` },
     { label: '공방 쉐어', value: `${studioCards.length}곳` },
@@ -96,6 +97,8 @@ export default function HomePage() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.pageGlow} aria-hidden="true" />
+
       <div className={styles.container}>
         <TopNav items={navItems} />
 
@@ -103,13 +106,34 @@ export default function HomePage() {
 
         <section className={styles.serviceHub} aria-label="슬쩍 서비스 허브">
           <div className={styles.serviceHubIntro}>
-            <div className={styles.serviceHubCopy}>
-              <span className={styles.serviceHubEyebrow}>Service Hub</span>
-              <h1>배우고, 공간을 찾고, 판매까지 이어지는 오늘의 슬쩍 흐름</h1>
-              <p>
-                홈에서 바로 커뮤니티와 공방 쉐어, 마켓을 한 호흡으로 탐색할 수 있도록 시작점을 다시
-                묶었습니다. 지금 필요한 행동부터 고르고 아래 섹션으로 곧바로 이어가면 됩니다.
-              </p>
+            <div className={styles.serviceHubLead}>
+              <div className={styles.serviceHubCopy}>
+                <span className={styles.serviceHubEyebrow}>Atelier flow</span>
+                <h1>배우고, 연결하고, 판매까지 이어지는 오늘의 슬쩍 리듬</h1>
+                <p>
+                  홈에서 바로 커뮤니티와 공방 쉐어, 마켓을 한 호흡으로 탐색할 수 있도록 시작점을 다시
+                  묶었습니다. 박스형 관리자 화면 대신 브랜드형 모바일 서비스처럼, 오늘 필요한 행동부터
+                  곧바로 이어가게 만듭니다.
+                </p>
+              </div>
+
+              <div className={styles.serviceHubIntroAside}>
+                <div className={styles.serviceHubMoodCard}>
+                  <span>오늘의 큐레이션</span>
+                  <strong>
+                    {featuredBanner?.subtitle ?? '작업과 거래를 잇는 주얼리 메이커 네트워크'}
+                  </strong>
+                </div>
+
+                <div className={styles.serviceHubActionRow}>
+                  <Link href="#community" className={styles.serviceHubPrimaryLink}>
+                    대화부터 시작
+                  </Link>
+                  <Link href="/market" className={styles.serviceHubGhostLink}>
+                    마켓 둘러보기
+                  </Link>
+                </div>
+              </div>
             </div>
 
             <div className={styles.serviceHubStats} aria-label="서비스 현황 요약">
@@ -123,9 +147,12 @@ export default function HomePage() {
           </div>
 
           <div className={styles.serviceHubGrid}>
-            {serviceHubCards.map((card) => (
+            {serviceHubCards.map((card, index) => (
               <article key={card.id} className={styles.serviceHubCard}>
-                <span className={styles.serviceHubCardEyebrow}>{card.eyebrow}</span>
+                <div className={styles.serviceHubCardTop}>
+                  <span className={styles.serviceHubCardIndex}>{String(index + 1).padStart(2, '0')}</span>
+                  <span className={styles.serviceHubCardEyebrow}>{card.eyebrow}</span>
+                </div>
                 <strong>{card.title}</strong>
                 <p>{card.description}</p>
                 <Link href={card.href} className={styles.serviceHubCardLink}>
@@ -138,7 +165,7 @@ export default function HomePage() {
           <div className={styles.serviceHubJourneyLayout}>
             <section className={styles.serviceHubFeature} aria-label="오늘의 시작 추천">
               <div className={styles.serviceHubFeatureHeader}>
-                <span className={styles.serviceHubEyebrow}>Recommended Start</span>
+                <span className={styles.serviceHubEyebrow}>Recommended start</span>
                 <strong>오늘은 커뮤니티에서 먼저 막힌 지점을 푸는 흐름이 가장 빠릅니다.</strong>
               </div>
 
@@ -170,7 +197,7 @@ export default function HomePage() {
 
             <section className={styles.serviceHubJourney} aria-label="서비스 이동 흐름">
               <div className={styles.serviceHubJourneyHeader}>
-                <span className={styles.serviceHubEyebrow}>Today's Path</span>
+                <span className={styles.serviceHubEyebrow}>Today&apos;s path</span>
                 <h2>홈에서 바로 이어지는 3단계 작업 여정</h2>
               </div>
 
@@ -203,6 +230,9 @@ export default function HomePage() {
         <HorizontalCardSlider
           id="studio"
           title="슬쩍 공방 쉐어하기"
+          eyebrow="Studio share"
+          description="오늘 필요한 작업 공간을 한 눈에 둘러보고 바로 연결할 수 있는 셀렉션"
+          cardTag="공방 쉐어"
           cards={studioCards}
           headerHref="/market?tab=studio"
         />
@@ -210,6 +240,9 @@ export default function HomePage() {
         <HorizontalCardSlider
           id="market"
           title="슬쩍 물건 판매하기"
+          eyebrow="Maker market"
+          description="판매 중인 재료와 도구를 감도 있는 카드 흐름으로 이어보는 셀렉션"
+          cardTag="판매 셀렉션"
           cards={marketCards}
           headerHref="/market"
         />

@@ -1,87 +1,86 @@
 .page {
+  --shell-highlight: var(--tone-accent);
+  --shell-highlight-strong: var(--tone-accent-strong);
+  --shell-panel: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(249, 238, 228, 0.72));
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, rgba(132, 109, 82, 0.1), transparent 28%),
+    radial-gradient(circle at top, rgba(219, 195, 163, 0.18), transparent 30%),
     var(--tone-page);
-  padding: 20px 14px 40px;
+  padding: 24px 16px 44px;
   color: var(--tone-text);
 }
 
 .marketPage {
-  --studio-page-bg: var(--tone-page);
-  --studio-page-glow: rgba(132, 109, 82, 0.16);
-  --studio-canvas: var(--tone-canvas);
-  --studio-surface: var(--tone-surface);
-  --studio-surface-strong: #ffffff;
-  --studio-surface-soft: var(--tone-surface-soft);
-  --studio-line: var(--tone-line);
-  --studio-line-strong: var(--tone-line-strong);
-  --studio-text: var(--tone-text);
-  --studio-text-secondary: var(--tone-text-secondary);
-  --studio-text-tertiary: var(--tone-text-tertiary);
-  --studio-accent: var(--tone-accent);
-  --studio-accent-strong: var(--tone-accent-strong);
-  --studio-accent-soft: var(--tone-accent-soft);
-  --studio-sage: var(--tone-support);
-  --studio-sage-soft: var(--tone-support-soft);
-  --studio-focus: var(--tone-focus);
-  --studio-shadow: var(--tone-shadow);
-  --studio-shadow-soft: var(--tone-shadow-soft);
-  background:
-    radial-gradient(circle at top, var(--studio-page-glow), transparent 28%),
-    var(--studio-page-bg);
-  color: var(--studio-text);
+  --shell-highlight: var(--tone-support);
+  --shell-highlight-strong: #204744;
+  --shell-panel: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(232, 243, 240, 0.76));
 }
 
 .container {
-  width: min(600px, 100%);
+  width: min(640px, 100%);
   margin: 0 auto;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.24)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.18)),
     var(--tone-canvas);
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 68px);
   box-shadow: var(--tone-shadow);
-  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 34px;
   overflow: hidden;
 }
 
 .marketContainer {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.24)),
-    var(--studio-canvas);
-  box-shadow: var(--studio-shadow);
+  box-shadow: var(--tone-shadow);
 }
 
 .topNav {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 24;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid rgba(23, 23, 23, 0.08);
-  background: rgba(251, 250, 247, 0.86);
-  backdrop-filter: blur(18px);
+  gap: 14px;
+  padding: 18px 20px 14px;
+  background:
+    linear-gradient(180deg, rgba(251, 248, 243, 0.92), rgba(251, 248, 243, 0.74)),
+    rgba(251, 248, 243, 0.7);
+  backdrop-filter: blur(22px);
 }
 
 .marketTopNav {
-  border-bottom: 1px solid rgba(23, 23, 23, 0.08);
-  background: rgba(251, 250, 247, 0.86);
-  backdrop-filter: blur(18px);
+  background:
+    linear-gradient(180deg, rgba(251, 248, 243, 0.92), rgba(251, 248, 243, 0.74)),
+    rgba(251, 248, 243, 0.7);
+}
+
+.brandBlock {
+  display: grid;
+  gap: 3px;
+  color: var(--tone-text);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brandEyebrow {
+  color: var(--tone-text-tertiary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .logo {
   color: var(--tone-text);
   text-decoration: none;
   font-family: var(--font-logo);
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: 24px;
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: -0.05em;
 }
 
 .marketLogo {
-  color: var(--studio-text);
+  color: var(--tone-text);
 }
 
 .mainMenu {
@@ -89,6 +88,11 @@
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  padding: 6px;
+  border: 1px solid rgba(23, 34, 31, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.44);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .marketMainMenu {
@@ -96,24 +100,20 @@
 }
 
 .mainMenuLink {
-  min-height: 34px;
-  padding: 0 12px;
-  border-radius: 12px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   color: var(--tone-text-secondary);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   transition:
     color 0.2s ease,
     background-color 0.2s ease,
-    border-color 0.2s ease,
+    transform 0.2s ease,
     box-shadow 0.2s ease;
-}
-
-.mainMenuLink::after {
-  display: none;
 }
 
 .mainMenuLink:hover {
@@ -122,108 +122,175 @@
 }
 
 .mainMenuLinkActive {
-  color: var(--tone-text);
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #fff7f1;
+  background: linear-gradient(135deg, var(--shell-highlight-strong), var(--shell-highlight));
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--shell-highlight-strong) 24%, transparent);
 }
 
 .marketMainMenuLink {
-  color: var(--studio-text-secondary);
+  color: var(--tone-text-secondary);
 }
 
 .marketMainMenuLink:hover {
-  color: var(--studio-text);
-  background: rgba(255, 255, 255, 0.5);
+  color: var(--tone-text);
 }
 
 .marketMainMenuLinkActive {
-  color: var(--studio-text);
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #fff7f1;
 }
 
 .alertButton {
-  min-height: 34px;
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  border-radius: 12px;
-  padding: 6px 10px;
-  font-size: 11px;
-  background: rgba(255, 255, 255, 0.62);
-  color: var(--tone-text-secondary);
+  min-height: 40px;
+  border: 1px solid rgba(23, 34, 31, 0.08);
+  border-radius: 999px;
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--tone-text);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.alertButton:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 12px 20px rgba(21, 29, 27, 0.08);
 }
 
 .marketAlertButton {
-  color: var(--studio-text-secondary);
+  color: var(--tone-text);
+}
+
+.alertDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--shell-highlight);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--shell-highlight) 18%, transparent);
 }
 
 .heroBox {
-  padding: 26px 20px 0;
+  margin: 8px 20px 0;
+  border: 1px solid rgba(23, 34, 31, 0.08);
+  border-radius: 32px;
+  background: var(--shell-panel), rgba(255, 255, 255, 0.74);
+  box-shadow: var(--tone-shadow-soft);
+  padding: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(220px, 0.9fr);
+  gap: 18px;
+  align-items: stretch;
 }
 
 .marketHeroBox {
-  padding-top: 26px;
+  background: var(--shell-panel), rgba(255, 255, 255, 0.74);
+}
+
+.heroCopy {
+  display: grid;
+  align-content: start;
 }
 
 .eyebrow {
   margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  display: inline-flex;
+  width: fit-content;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 34, 31, 0.08);
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--tone-text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tone-text-tertiary);
 }
 
 .pageTitle {
-  margin: 8px 0 0;
+  margin: 14px 0 0;
   color: var(--tone-text);
-  font-size: 30px;
-  line-height: 1.06;
-  letter-spacing: -0.04em;
+  font-family: var(--font-logo);
+  font-size: 38px;
+  line-height: 0.96;
+  letter-spacing: -0.065em;
 }
 
 .marketPageTitle {
-  color: var(--studio-text);
+  color: var(--tone-text);
 }
 
 .pageSubtitle {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   color: var(--tone-text-secondary);
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .marketPageSubtitle {
-  color: var(--studio-text-secondary);
+  color: var(--tone-text-secondary);
 }
 
 .ctaButton {
+  width: fit-content;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  margin-top: 16px;
-  padding: 0 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(23, 23, 23, 0.08);
-  background: var(--tone-text);
-  color: var(--tone-canvas);
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--shell-highlight), var(--shell-highlight-strong));
+  color: #fff7f1;
   text-decoration: none;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
-  box-shadow: var(--tone-shadow-soft);
+  box-shadow: 0 14px 26px color-mix(in srgb, var(--shell-highlight-strong) 18%, transparent);
 }
 
 .marketCtaButton {
-  background: var(--studio-text);
-  color: var(--studio-canvas);
-  box-shadow: var(--studio-shadow-soft);
+  background: linear-gradient(135deg, var(--shell-highlight), var(--shell-highlight-strong));
+  color: #fff7f1;
+}
+
+.heroMeta {
+  border-radius: 28px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--shell-highlight-strong) 90%, #0f1716), var(--shell-highlight-strong)),
+    rgba(32, 71, 68, 0.94);
+  color: #fff7f1;
+  padding: 18px;
+  display: grid;
+  align-content: space-between;
+  gap: 16px;
+}
+
+.heroMetaLabel {
+  color: rgba(255, 247, 241, 0.7);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.heroMeta strong {
+  font-family: var(--font-logo);
+  font-size: 28px;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
 }
 
 .content {
-  padding-bottom: 36px;
+  padding: 0 0 40px;
 }
 
 .marketContent {
@@ -232,12 +299,7 @@
 
 @media (max-width: 900px) {
   .page {
-    background: var(--tone-page);
     padding: 0 0 188px;
-  }
-
-  .marketPage {
-    background: var(--studio-page-bg);
   }
 
   .container {
@@ -245,6 +307,7 @@
     min-height: 100vh;
     box-shadow: none;
     border-radius: 0;
+    border: none;
   }
 
   .marketContainer {
@@ -253,21 +316,28 @@
   }
 
   .topNav {
-    padding: 12px 14px 10px;
+    padding: 16px 14px 12px;
+    gap: 10px;
+  }
+
+  .brandEyebrow {
+    font-size: 9px;
+    letter-spacing: 0.14em;
   }
 
   .logo {
-    font-size: 16px;
+    font-size: 21px;
     white-space: nowrap;
   }
 
   .mainMenu {
-    gap: 8px;
+    gap: 6px;
+    padding: 5px;
   }
 
   .mainMenuLink {
-    min-height: 32px;
-    padding: 0 10px;
+    min-height: 34px;
+    padding: 0 12px;
     font-size: 11px;
   }
 
@@ -276,11 +346,15 @@
   }
 
   .heroBox {
-    padding: 20px 14px 0;
+    margin: 8px 14px 0;
+    padding: 18px;
+    grid-template-columns: 1fr;
+    border-radius: 26px;
   }
 
-  .pageTitle {
-    font-size: 28px;
+  .pageTitle,
+  .heroMeta strong {
+    font-size: 32px;
   }
 
   .pageSubtitle {
@@ -289,7 +363,7 @@
 
   .ctaButton {
     min-height: 44px;
-    padding: 0 14px;
+    padding: 0 15px;
   }
 
   .content,

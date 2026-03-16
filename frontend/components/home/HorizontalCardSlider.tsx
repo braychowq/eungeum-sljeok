@@ -8,6 +8,9 @@ import styles from './HorizontalCardSlider.module.css';
 type HorizontalCardSliderProps = {
   id: string;
   title: string;
+  eyebrow?: string;
+  description?: string;
+  cardTag?: string;
   cards: SliderCard[];
   headerHref?: string;
 };
@@ -15,6 +18,9 @@ type HorizontalCardSliderProps = {
 export default function HorizontalCardSlider({
   id,
   title,
+  eyebrow,
+  description,
+  cardTag,
   cards,
   headerHref
 }: HorizontalCardSliderProps) {
@@ -32,21 +38,25 @@ export default function HorizontalCardSlider({
   return (
     <section id={id} className={styles.section} aria-label={title}>
       <div className={styles.headerRow}>
-        <h3 className={styles.heading}>
-          {headerHref ? (
-            <Link href={headerHref} className={styles.headerLink}>
+        <div className={styles.headerBlock}>
+          {eyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
+          <h3 className={styles.heading}>
+            {headerHref ? (
+              <Link href={headerHref} className={styles.headerLink}>
+                <span className={styles.headerTitle}>{title}</span>
+              </Link>
+            ) : (
               <span className={styles.headerTitle}>{title}</span>
-            </Link>
-          ) : (
-            <span className={styles.headerTitle}>{title}</span>
-          )}
-        </h3>
+            )}
+          </h3>
+          {description ? <p className={styles.headerDescription}>{description}</p> : null}
+        </div>
         <div className={styles.actions}>
           <button type="button" onClick={() => slideBy('prev')} aria-label={`${title} 이전`}>
-            {'<'}
+            Prev
           </button>
           <button type="button" onClick={() => slideBy('next')} aria-label={`${title} 다음`}>
-            {'>'}
+            Next
           </button>
         </div>
       </div>
@@ -57,7 +67,11 @@ export default function HorizontalCardSlider({
             <div className={styles.imageArea}>
               <img src={card.imageUrl} alt={card.imageAlt} loading="lazy" />
             </div>
-            <h4>{card.title}</h4>
+            <div className={styles.cardBody}>
+              {cardTag ? <span className={styles.cardTag}>{cardTag}</span> : null}
+              <h4>{card.title}</h4>
+              <span className={styles.cardHint}>자세히 보기</span>
+            </div>
           </a>
         ))}
       </div>

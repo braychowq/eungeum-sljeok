@@ -17,8 +17,9 @@ export default function TopNav({ items }: TopNavProps) {
 
   return (
     <header className={styles.header}>
-      <Link className={styles.logo} href="/">
-        은금슬쩍
+      <Link className={styles.brandBlock} href="/">
+        <span className={styles.brandEyebrow}>atelier network</span>
+        <span className={styles.logo}>은금슬쩍</span>
       </Link>
 
       <nav className={styles.nav} aria-label="메인 네비게이션">
@@ -34,7 +35,8 @@ export default function TopNav({ items }: TopNavProps) {
       </nav>
 
       <button className={styles.alertButton} type="button">
-        알림
+        <span className={styles.alertDot} aria-hidden="true" />
+        새 소식
       </button>
     </header>
   );
