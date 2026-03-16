@@ -22,9 +22,10 @@
   - `git pull --rebase origin main` 실패: 작업 트리에 미커밋 변경 존재
   - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
   - UX 변경 커밋 `1cbd25f` (`Redesign community feed experience`) 생성
-  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 실행 로그 커밋 `5f5b9f9` (`Log community feed redesign run`) 생성
+  - `git push origin main` 재시도 포함 반복 실패: `Could not resolve host: github.com`
   - 작업 범위 밖의 로컬 수정 `frontend/app/layout.tsx`는 그대로 유지하고 이번 변경과 섞지 않음
-- 커밋 해시: `1cbd25f`
+- 커밋 해시: `1cbd25f`, `5f5b9f9`
 - 남은 가장 큰 UX 문제: `MarketView`는 레일/비교 패널/액션 바가 여전히 큐레이션 대시보드처럼 보여 제품형 탐색 흐름이 완전히 정리되지 않음
 - 다음 실행 우선순위 1~3:
   - `MarketView`의 브라우즈/비교 영역을 더 연속적인 제품형 피드로 재구성
