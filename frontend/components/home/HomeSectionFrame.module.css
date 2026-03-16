@@ -1,0 +1,125 @@
+.frame {
+  --frame-accent: var(--home-stage-clay);
+  --frame-accent-strong: var(--home-stage-clay-strong);
+  --frame-accent-soft: var(--home-stage-clay-soft);
+  display: grid;
+  grid-template-columns: minmax(170px, 0.24fr) minmax(0, 0.76fr);
+  gap: 24px;
+}
+
+.frame[data-tone='moss'] {
+  --frame-accent: var(--home-stage-moss);
+  --frame-accent-strong: var(--home-stage-moss-strong);
+  --frame-accent-soft: var(--home-stage-moss-soft);
+}
+
+.frame[data-tone='gold'] {
+  --frame-accent: #8d6540;
+  --frame-accent-strong: #624321;
+  --frame-accent-soft: var(--home-stage-gold-soft);
+}
+
+.rail {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding-right: 24px;
+  border-right: 1px solid var(--home-sequence-line);
+}
+
+.index {
+  color: var(--frame-accent-strong);
+  font-family: var(--font-logo);
+  font-size: clamp(56px, 5vw, 78px);
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+}
+
+.copy {
+  display: grid;
+  gap: 14px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--frame-accent) 18%, transparent);
+  background: color-mix(in srgb, var(--frame-accent-soft) 84%, white);
+  color: var(--frame-accent-strong);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.headingBlock {
+  display: grid;
+  gap: 12px;
+}
+
+.title {
+  min-width: 0;
+}
+
+.headingBlock p {
+  margin: 0;
+  color: var(--home-sequence-muted);
+  font-size: 14px;
+  line-height: 1.78;
+}
+
+.main {
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+}
+
+.aside {
+  width: min(100%, 460px);
+  justify-self: end;
+}
+
+.content {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+}
+
+@media (max-width: 1080px) {
+  .frame {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .rail {
+    gap: 14px;
+    padding-right: 0;
+    padding-bottom: 18px;
+    border-right: none;
+    border-bottom: 1px solid var(--home-sequence-line);
+  }
+
+  .aside {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 960px) {
+  .frame {
+    gap: 18px;
+  }
+
+  .index {
+    font-size: 48px;
+  }
+
+  .headingBlock p {
+    font-size: 13px;
+    line-height: 1.72;
+  }
+}

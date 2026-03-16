@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
+import HomeSectionFrame from './HomeSectionFrame';
 import { CommunityCategory, CommunityPost } from './types';
 import styles from './CommunitySection.module.css';
 
@@ -72,30 +73,37 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
   const leadPost = popularPosts[0];
   const sidePosts = leadPost ? popularPosts.slice(1) : popularPosts;
   const activePulseCount = posts.filter(isPopularCandidate).length;
+  const pulseCategories = visibleCategories.length > 0 ? visibleCategories : categorySummaries;
 
   return (
     <section id="community" className={styles.section} aria-label="커뮤니티">
-      <div className={styles.sectionShell}>
-        <div className={styles.headerRow}>
-          <div className={styles.headerBlock}>
-            <span className={styles.eyebrow}>Community pulse</span>
-            <h3 className={styles.heading}>
-              <Link href="/community" className={styles.headerLink}>
-                <span className={styles.headerTitle}>슬쩍 얘기하기</span>
-              </Link>
-            </h3>
-            <p className={styles.headerDescription}>
-              지금 반응이 빠른 질문과 공유 흐름을 먼저 모았습니다. 바로 읽고 대화에 합류할 수 있습니다.
-            </p>
-          </div>
-
+      <HomeSectionFrame
+        index="01"
+        eyebrow="Community pulse"
+        tone="clay"
+        title={
+          <Link href="/community" className={styles.headerLink}>
+            <span className={styles.headerTitle}>슬쩍 얘기하기</span>
+          </Link>
+        }
+        description="지금 반응이 빠른 질문과 공유 흐름을 먼저 모았습니다. 바로 읽고 대화에 합류할 수 있습니다."
+        aside={
           <div className={styles.metricCard}>
             <span>24h 대화 신호</span>
             <strong>{activePulseCount}개</strong>
             <p>질문, 공유, 아무말 흐름을 한 번에 묶어 오늘 가장 빠른 대화를 먼저 보여줍니다.</p>
-          </div>
-        </div>
 
+            <div className={styles.metricMeta}>
+              {pulseCategories.slice(0, 3).map((category) => (
+                <div key={category.id}>
+                  <span>{category.label}</span>
+                  <strong>{category.count}개</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+      >
         <div className={styles.filterRow}>
           <Link href="/community" className={`${styles.filterLink} ${styles.filterLinkActive}`}>
             전체
@@ -185,7 +193,7 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
             </div>
           </div>
         </section>
-      </div>
+      </HomeSectionFrame>
     </section>
   );
 }

@@ -200,6 +200,18 @@
   --home-stage-moss-soft: rgba(33, 73, 66, 0.14);
   --home-stage-gold: #c89a64;
   --home-stage-gold-soft: rgba(200, 154, 100, 0.16);
+  --home-sequence-shell:
+    linear-gradient(148deg, rgba(255, 255, 255, 0.96), rgba(245, 238, 228, 0.88));
+  --home-sequence-panel:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.74));
+  --home-sequence-card: rgba(255, 255, 255, 0.82);
+  --home-sequence-line: rgba(28, 24, 20, 0.08);
+  --home-sequence-line-strong: rgba(28, 24, 20, 0.16);
+  --home-sequence-shadow: 0 28px 56px rgba(28, 24, 20, 0.1);
+  --home-sequence-shadow-soft: 0 16px 30px rgba(28, 24, 20, 0.06);
+  --home-sequence-ink: #191410;
+  --home-sequence-muted: #6f665f;
+  --home-sequence-subtle: #9e9388;
   --landing-shell:
     linear-gradient(154deg, rgba(255, 255, 255, 0.98), rgba(246, 238, 226, 0.9));
   --landing-panel:

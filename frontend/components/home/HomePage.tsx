@@ -121,6 +121,28 @@ export default function HomePage() {
       readoutValue: featuredMarketCard?.title ?? '새로운 판매 셀렉션'
     };
   });
+  const editorialSequenceStops = [
+    {
+      label: 'Talk',
+      value: `${freshCommunityCount}개의 새 대화`,
+      detail: latestCommunityPost?.title ?? '최근 커뮤니티 대화'
+    },
+    {
+      label: 'Studio',
+      value: `${studioCards.length}곳 공간 셀렉션`,
+      detail: featuredStudioCard?.title ?? '공방 쉐어 셀렉션'
+    },
+    {
+      label: 'Market',
+      value: `${marketCards.length}건 거래 흐름`,
+      detail: featuredMarketCard?.title ?? '판매 셀렉션'
+    },
+    {
+      label: 'Archive',
+      value: `${libraryEntries.length}개 자료 아카이브`,
+      detail: libraryEntries[0]?.title ?? '대표 가이드'
+    }
+  ] as const;
 
   return (
     <main className={styles.page}>
@@ -237,31 +259,62 @@ export default function HomePage() {
           </div>
         </section>
 
-        <CommunitySection posts={communityPosts} />
+        <section className={styles.editorialSequence} aria-label="홈 큐레이션 시퀀스">
+          <div className={styles.editorialSequenceLead}>
+            <div className={styles.editorialSequenceHeader}>
+              <div className={styles.editorialSequenceEyebrowRow}>
+                <span className={styles.editorialSequenceEyebrow}>Home sequence</span>
+                <span className={styles.editorialSequenceIssue}>Edition 04</span>
+              </div>
 
-        <HorizontalCardSlider
-          id="studio"
-          title="슬쩍 공방 쉐어하기"
-          eyebrow="Studio share"
-          description="오늘 필요한 작업 공간을 한 눈에 둘러보고 바로 연결할 수 있는 셀렉션"
-          cardTag="공방 쉐어"
-          cards={studioCards}
-          headerHref="/market?tab=studio"
-          tone="studio"
-        />
+              <strong>질문, 공간, 판매, 자료를 하나의 편집 리듬으로 다시 엮었습니다</strong>
+              <p>
+                홈 하단은 더 이상 기능별 박스를 나열하지 않고, 지금 바로 필요한 액션을 고르는 연속된
+                흐름으로 정리했습니다. 먼저 읽을 대화와 공간, 거래, 참고 자료가 같은 속도로 이어집니다.
+              </p>
+            </div>
 
-        <HorizontalCardSlider
-          id="market"
-          title="슬쩍 물건 판매하기"
-          eyebrow="Maker market"
-          description="판매 중인 재료와 도구를 감도 있는 카드 흐름으로 이어보는 셀렉션"
-          cardTag="판매 셀렉션"
-          cards={marketCards}
-          headerHref="/market"
-          tone="market"
-        />
+            <div className={styles.editorialSequenceStops}>
+              {editorialSequenceStops.map((item) => (
+                <div key={item.label} className={styles.editorialSequenceStop}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                  <p>{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <InfoLibrarySection entries={libraryEntries} />
+          <div className={styles.editorialSequenceStack}>
+            <CommunitySection posts={communityPosts} />
+
+            <HorizontalCardSlider
+              id="studio"
+              sequence="02"
+              title="슬쩍 공방 쉐어하기"
+              eyebrow="Studio share"
+              description="오늘 필요한 작업 공간을 한 눈에 둘러보고 바로 연결할 수 있는 셀렉션"
+              cardTag="공방 쉐어"
+              cards={studioCards}
+              headerHref="/market?tab=studio"
+              tone="studio"
+            />
+
+            <HorizontalCardSlider
+              id="market"
+              sequence="03"
+              title="슬쩍 물건 판매하기"
+              eyebrow="Maker market"
+              description="판매 중인 재료와 도구를 감도 있는 카드 흐름으로 이어보는 셀렉션"
+              cardTag="판매 셀렉션"
+              cards={marketCards}
+              headerHref="/market"
+              tone="market"
+            />
+
+            <InfoLibrarySection entries={libraryEntries} sequence="04" />
+          </div>
+        </section>
 
         <SiteFooter />
       </div>
