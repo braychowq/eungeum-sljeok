@@ -434,6 +434,26 @@
   -webkit-line-clamp: 1;
 }
 
+.recommendMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.recommendMetaChip {
+  min-height: 22px;
+  border-radius: 999px;
+  border: 1px solid #e8dccf;
+  background: #fbf7f1;
+  color: #604d3a;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .recommendBody p {
   margin: 0;
   font-size: 12px;
@@ -443,6 +463,19 @@
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.recommendHint {
+  width: fit-content;
+  min-height: 24px;
+  border-radius: 8px;
+  background: #f7f1e8;
+  color: #5d4a37;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .trendingList {
@@ -455,7 +488,7 @@
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.7);
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
+  grid-template-columns: 42px minmax(0, 1fr) auto;
   gap: 12px;
   padding: 16px;
   color: var(--studio-text, #171717);
@@ -512,8 +545,24 @@
   line-height: 1.45;
 }
 
+.trendingMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #786b5d;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.trendingSide {
+  display: grid;
+  align-content: start;
+  justify-items: end;
+  gap: 8px;
+}
+
 .trendingPrice {
-  grid-column: 2;
   width: fit-content;
   min-height: 26px;
   border-radius: 999px;
@@ -524,6 +573,19 @@
   background: rgba(255, 255, 255, 0.86);
   border: 1px solid rgba(23, 23, 23, 0.08);
   color: var(--studio-text-secondary, #5f5b56);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.trendingHint {
+  width: fit-content;
+  min-height: 24px;
+  border-radius: 8px;
+  background: #fff4e7;
+  color: #7b4a1a;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
   font-size: 11px;
   font-weight: 700;
 }
@@ -1201,6 +1263,15 @@
     grid-template-columns: 108px minmax(0, 1fr);
     min-height: 122px;
     border-radius: 20px;
+  }
+
+  .trendingItem {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .trendingSide {
+    grid-column: 2;
+    justify-items: start;
   }
 
   .trendingItem,

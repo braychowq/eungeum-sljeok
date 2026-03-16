@@ -324,7 +324,12 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                 <div className={styles.recommendBody}>
                   <span>{item.title}</span>
                   <strong>{card.title}</strong>
+                  <div className={styles.recommendMetaRow}>
+                    <span className={styles.recommendMetaChip}>{card.locationLabel}</span>
+                    <span className={styles.recommendMetaChip}>{card.priceLabel}</span>
+                  </div>
                   <p>{item.caption}</p>
+                  <span className={styles.recommendHint}>{toInquiryHint(card)}</span>
                 </div>
               </Link>
             </li>
@@ -360,8 +365,15 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                 <div className={styles.trendingText}>
                   <strong>{item.title}</strong>
                   <p>{item.meta}</p>
+                  <div className={styles.trendingMetaRow}>
+                    <span>{card.locationLabel}</span>
+                    <span>{card.availabilityLabel}</span>
+                  </div>
                 </div>
-                <span className={styles.trendingPrice}>{card.priceLabel}</span>
+                <div className={styles.trendingSide}>
+                  <span className={styles.trendingPrice}>{card.priceLabel}</span>
+                  <span className={styles.trendingHint}>{toInquiryHint(card)}</span>
+                </div>
               </Link>
             </li>
           ))}
