@@ -1,5 +1,39 @@
 # UX Redesign Log
 
+## 2026-03-17 01:35:28 KST
+- timestamp: 2026-03-17 01:35:28 KST
+- 이번 실행 목표: `market`/`community` 상세 화면과 공통 모바일 도크·푸터를 같은 제품형 디테일 시스템으로 재구성해 목록 화면과의 톤 단절을 줄인다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/MobileBottomSheet.tsx`
+  - `frontend/components/common/MobileBottomSheet.module.css`
+  - `frontend/components/common/SiteFooter.tsx`
+  - `frontend/components/common/SiteFooter.module.css`
+  - `frontend/components/ssuk/CommunityPostDetailView.tsx`
+  - `frontend/components/ssuk/CommunityPostDetailView.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.tsx`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+- 핵심 시각 변화:
+  - `StudioShareDetailView`를 정보 위젯 레일 중심 상세에서 `lead briefing + gallery stage + booking card + field notes` 구조로 재편해 마켓 카드 이후의 탐색 흐름이 실제 제품 상세처럼 이어지도록 정리
+  - `CommunityPostDetailView`를 게시판 CRUD 적층 화면에서 `conversation hero + story/resource split + response dock + related reading` 흐름으로 바꿔 카테고리 성격과 커뮤니티 리듬이 상세에서도 유지되게 조정
+  - 공통 `--detail-*` 토큰을 정리하고 `MobileBottomSheet`를 유틸 패널형 바텀시트에서 탐색 도크로, `SiteFooter`를 플레이스홀더 푸터에서 브랜드/빠른 이동이 있는 제품형 마감 영역으로 교체
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/common/MobileBottomSheet.tsx frontend/components/common/MobileBottomSheet.module.css frontend/components/common/SiteFooter.tsx frontend/components/common/SiteFooter.module.css frontend/components/ssuk/CommunityPostDetailView.tsx frontend/components/ssuk/CommunityPostDetailView.module.css frontend/components/ssuk/StudioShareDetailView.tsx frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 캡처: 브라우저 자동화/캡처 도구 미설치로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `f4a999d` (`Redesign detail product flows`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+- 커밋 해시: `f4a999d`
+- 남은 가장 큰 UX 문제: `TwoMenuShell` 상단 네비/상태 배지와 작성(`community/new`, `market/new`) 흐름의 필드·버튼 상태값이 아직 상세/홈에서 만든 브랜드 디테일 언어만큼 세밀하게 통일되지 않음
+- 다음 실행 우선순위 1~3:
+  - `TwoMenuShell` 상단 크롬과 페이지별 alert/status 영역을 더 덜 앱-크롬스럽고 더 브랜드형으로 정리
+  - 작성/등록 화면의 입력 필드, 보조 액션, 단계 안내 패널을 이번 `--detail-*` 토큰까지 포함하는 공통 시스템으로 통합
+  - 원격 DNS가 복구되는 환경에서 누적 커밋과 이번 상세 리디자인 커밋을 정상 push
+
 ## 2026-03-17 00:35:04 KST
 - timestamp: 2026-03-17 00:35:04 KST
 - 이번 실행 목표: 홈 첫 진입 인상을 모바일 캔버스형 목록에서 넓은 에디토리얼 랜딩으로 재구성하고, 커뮤니티/공방/정보 섹션의 반복 카드 리듬을 제품형 피드로 교체
@@ -83,6 +117,41 @@
   - `MarketView` 상세 카드와 `StudioShareDetailView`를 홈과 같은 표면/CTA 리듬으로 맞춘다
   - 공통 버튼/칩/모달 토큰을 `home`과 `ssuk` 내부 화면 모두에서 같은 상태값으로 통합한다
   - 원격 DNS가 복구되는 환경에서 누적 미푸시 커밋과 이번 홈 재설계 커밋을 정상 push한다
+
+## 2026-03-17 01:35:43 KST
+- timestamp: 2026-03-17 01:35:43 KST
+- 이번 실행 목표: `community/post`와 `market/studio/[studioId]` 상세 화면을 관리자형 카드 묶음에서 제품형 상세 경험으로 재구성하고, 모바일 도크/푸터를 같은 공통 언어로 묶는다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/MobileBottomSheet.tsx`
+  - `frontend/components/common/MobileBottomSheet.module.css`
+  - `frontend/components/common/SiteFooter.tsx`
+  - `frontend/components/common/SiteFooter.module.css`
+  - `frontend/components/ssuk/CommunityPostDetailView.tsx`
+  - `frontend/components/ssuk/CommunityPostDetailView.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.tsx`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+- 핵심 시각 변화:
+  - 커뮤니티 상세를 `스토리 스테이지 + 메이커 브리프 + 반응 도크 + 대화 피드` 구조로 재편해 단순 게시판 상세 인상을 제거
+  - 공방 상세를 `공간 리드 스테이지 + 예약 카드 + 현장 정보 레일 + 운영 정책 레이어`로 바꿔 제품 상세/예약 흐름처럼 읽히게 정리
+  - 공통 `--detail-*` 토큰을 추가하고 모바일 바텀 도크/푸터를 같은 잉크 톤, 라운드 표면, 액션 강조 방식으로 맞춰 상세 화면과 공통 컴포넌트 연결감을 강화
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/common/MobileBottomSheet.tsx frontend/components/common/MobileBottomSheet.module.css frontend/components/common/SiteFooter.tsx frontend/components/common/SiteFooter.module.css frontend/components/ssuk/CommunityPostDetailView.tsx frontend/components/ssuk/CommunityPostDetailView.module.css frontend/components/ssuk/StudioShareDetailView.tsx frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 캡처 시도: `npm run start -- --hostname 127.0.0.1 --port 3005` 실행 시 `listen EPERM`으로 로컬 서버 기동이 차단되어 Playwright 캡처 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase origin main` 실패: `.git/FETCH_HEAD` 쓰기 권한 없음 (`Operation not permitted`)
+  - `git add ...` 및 `git commit` 실패: `.git/index.lock` 생성 권한 없음 (`Operation not permitted`)
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경은 로컬 작업 트리에만 존재하며 커밋/푸시는 미완료
+- 커밋 해시: 없음 (`.git/index.lock` 생성 차단)
+- 남은 가장 큰 UX 문제: 상세 화면은 제품형으로 정리됐지만 `TwoMenuShell` 상단 셸과 작성 워크스페이스 버튼/입력 상태값이 아직 새 상세 언어만큼 강하게 통일되지 않음
+- 다음 실행 우선순위 1~3:
+  - `TwoMenuShell` 헤더/히어로/상태 영역을 상세 화면과 같은 브랜드 셸로 재구성
+  - `community/new`와 `market/new`의 버튼, 입력, 요약 패널을 `--detail-*` 토큰까지 확장해 동일한 액션 리듬으로 통합
+  - `.git` 쓰기 권한과 DNS 차단이 해소되는 환경에서 누적 로컬 UX 변경을 커밋/푸시하고 Playwright 캡처를 다시 시도
 
 ## 2026-03-16 23:35:10 KST
 - timestamp: 2026-03-16 23:35:10 KST
