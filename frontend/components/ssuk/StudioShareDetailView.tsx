@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ProductButton } from '../common/ProductControl';
 import { type StudioTrustBadge } from './mockData';
 import TwoMenuShell from './TwoMenuShell';
 import { useHorizontalRail } from './useHorizontalRail';
@@ -225,24 +226,32 @@ function RailButtons({
 }: RailButtonsProps) {
   return (
     <div className={styles.railActions} aria-label={`${label} 이동`}>
-      <button
+      <ProductButton
         type="button"
+        tone="neutral"
+        variant="secondary"
+        size="sm"
+        iconOnly
         className={styles.railButton}
         onClick={onPrev}
         disabled={!canScrollPrev}
         aria-label={`${label} 이전`}
       >
         &lt;
-      </button>
-      <button
+      </ProductButton>
+      <ProductButton
         type="button"
+        tone="neutral"
+        variant="secondary"
+        size="sm"
+        iconOnly
         className={styles.railButton}
         onClick={onNext}
         disabled={!canScrollNext}
         aria-label={`${label} 다음`}
       >
         &gt;
-      </button>
+      </ProductButton>
     </div>
   );
 }

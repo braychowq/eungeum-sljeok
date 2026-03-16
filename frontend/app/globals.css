@@ -309,6 +309,25 @@
   --button-secondary-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 14px 26px rgba(21, 29, 27, 0.08);
+  --product-button-height: var(--button-pill-height);
+  --product-button-height-sm: var(--button-pill-height-sm);
+  --product-button-radius: var(--button-pill-radius);
+  --product-button-padding: var(--button-pill-padding);
+  --product-button-padding-sm: 0 14px;
+  --product-button-font-size: var(--button-pill-font-size);
+  --product-button-font-weight: var(--button-pill-font-weight);
+  --product-button-secondary-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 16px 30px rgba(21, 29, 27, 0.08);
+  --product-button-ghost-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+  --product-section-chip-height: 30px;
+  --product-section-chip-padding: 0 12px;
+  --product-section-chip-radius: 999px;
+  --product-section-chip-font-size: 10px;
+  --product-section-chip-font-weight: 800;
+  --product-section-title-size: clamp(26px, 4vw, 32px);
+  --product-section-title-size-compact: clamp(22px, 3.2vw, 28px);
+  --product-section-description-size: 13px;
   --control-height: 54px;
   --control-height-sm: 42px;
   --control-radius-pill: 999px;

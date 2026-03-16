@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import MobileBottomSheet from '../common/MobileBottomSheet';
+import { ProductLink } from '../common/ProductControl';
 import SiteFooter from '../common/SiteFooter';
 import styles from './TwoMenuShell.module.css';
 
@@ -90,56 +91,79 @@ export default function TwoMenuShell({
   children
 }: TwoMenuShellProps) {
   const isMarket = activeMenu === 'market';
-  const showHeaderAction = hideHero || hideCta;
+  const showHeaderAction = hideCta;
   const story = shellStory[activeMenu];
   const leadDescription = subtitle ?? story.contextDescription;
+  const actionTone = isMarket ? 'forest' : 'shell';
+  const headerHighlights = [
+    { label: story.statusLabel, value: story.statusValue },
+    ...story.highlights.map((item) => ({ label: item.label, value: item.title }))
+  ];
 
   return (
     <main className={`${styles.page} ${isMarket ? styles.marketPage : ''}`}>
       <div className={styles.container}>
         <header className={styles.topNav}>
-          <Link href="/" className={styles.brandBlock}>
-            <span className={styles.brandEyebrow}>atelier network</span>
-            <span className={styles.logo}>은금슬쩍</span>
-          </Link>
+          <div className={styles.headerStory}>
+            <Link href="/" className={styles.brandBlock}>
+              <span className={styles.brandEyebrow}>atelier network</span>
+              <span className={styles.logo}>은금슬쩍</span>
+            </Link>
 
-          <nav className={styles.mainMenu} aria-label="대메뉴">
-            {mainMenus.map((menu) => {
-              const isActive = activeMenu === menu.id;
-
-              return (
-                <Link
-                  key={menu.id}
-                  href={menu.href}
-                  className={`${styles.mainMenuLink} ${isActive ? styles.mainMenuLinkActive : ''}`}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  <span className={styles.mainMenuText}>
-                    <span className={styles.mainMenuLabel}>{menu.label}</span>
-                    <span className={styles.mainMenuCaption}>{menu.caption}</span>
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className={styles.utilityCluster}>
-            <div className={styles.headerStatus}>
-              <span className={styles.headerStatusLabel}>{story.statusLabel}</span>
-              <strong>{story.statusValue}</strong>
-              <p>{story.headerDescription}</p>
+            <div className={styles.headerCopy}>
+              <span className={styles.headerCopyEyebrow}>{story.contextEyebrow}</span>
+              <strong className={styles.headerCopyTitle}>{title}</strong>
+              <p className={styles.headerCopyDescription}>{leadDescription}</p>
             </div>
+          </div>
 
-            {showHeaderAction ? (
-              <Link href={ctaHref} className={styles.headerAction}>
-                {ctaLabel}
-              </Link>
-            ) : (
-              <div className={styles.alertButton}>
-                <span className={styles.alertDot} aria-hidden="true" />
-                새 흐름
+          <div className={styles.menuBand}>
+            <nav className={styles.mainMenu} aria-label="대메뉴">
+              {mainMenus.map((menu) => {
+                const isActive = menu.id === activeMenu;
+
+                return (
+                  <Link
+                    key={menu.id}
+                    href={menu.href}
+                    className={styles.mainMenuLink}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    <span className={styles.mainMenuText}>
+                      <span className={styles.mainMenuLabel}>{menu.label}</span>
+                      <span className={styles.mainMenuCaption}>{menu.caption}</span>
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className={styles.utilityCluster}>
+              <div className={styles.headerHighlightRow} aria-label={`${title} 빠른 신호`}>
+                {headerHighlights.map((item) => (
+                  <div key={`${activeMenu}-${item.label}`} className={styles.headerHighlight}>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
               </div>
-            )}
+
+              {showHeaderAction ? (
+                <ProductLink
+                  href={ctaHref}
+                  tone={actionTone}
+                  variant="primary"
+                  className={styles.headerAction}
+                >
+                  {ctaLabel}
+                </ProductLink>
+              ) : (
+                <div className={styles.alertButton}>
+                  <span className={styles.alertDot} aria-hidden="true" />
+                  {story.headerDescription}
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
@@ -161,23 +185,33 @@ export default function TwoMenuShell({
             </div>
 
             {!hideCta ? (
-              <Link href={ctaHref} className={styles.contextAction}>
+              <ProductLink
+                href={ctaHref}
+                tone={actionTone}
+                variant="primary"
+                className={styles.contextAction}
+              >
                 {ctaLabel}
-              </Link>
+              </ProductLink>
             ) : null}
           </section>
         ) : (
           <section className={styles.heroBox} aria-label={`${title} 소개`}>
-            <div className={styles.heroIntro}>
+            <div className={styles.heroPanel}>
               {!hideEyebrow ? <p className={styles.eyebrow}>{story.heroEyebrow}</p> : null}
               <h1 className={styles.pageTitle}>{title}</h1>
               <p className={styles.pageSubtitle}>{leadDescription}</p>
 
               <div className={styles.heroActionRow}>
                 {!hideCta ? (
-                  <Link href={ctaHref} className={styles.ctaButton}>
+                  <ProductLink
+                    href={ctaHref}
+                    tone={actionTone}
+                    variant="primary"
+                    className={styles.ctaButton}
+                  >
                     {ctaLabel}
-                  </Link>
+                  </ProductLink>
                 ) : null}
                 <p className={styles.heroCaption}>{story.heroDescription}</p>
               </div>

@@ -1,0 +1,104 @@
+.header {
+  --section-chip-bg: rgba(255, 255, 255, 0.8);
+  --section-chip-border: rgba(23, 34, 31, 0.08);
+  --section-chip-ink: var(--tone-accent-strong);
+  --section-title-ink: var(--text-primary);
+  --section-description-ink: var(--text-secondary);
+  display: grid;
+  gap: 14px;
+  align-items: end;
+}
+
+.withAction {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.copy {
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.eyebrow {
+  width: fit-content;
+  min-height: var(--product-section-chip-height);
+  padding: var(--product-section-chip-padding);
+  border-radius: var(--product-section-chip-radius);
+  border: 1px solid var(--section-chip-border);
+  background: var(--section-chip-bg);
+  color: var(--section-chip-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--product-section-chip-font-size);
+  font-weight: var(--product-section-chip-font-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.title {
+  margin: 0;
+  color: var(--section-title-ink);
+  font-size: var(--product-section-title-size);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.description {
+  margin: 0;
+  max-width: 58ch;
+  color: var(--section-description-ink);
+  font-size: var(--product-section-description-size);
+  line-height: 1.68;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.compact .title {
+  font-size: var(--product-section-title-size-compact);
+}
+
+.neutralTone {
+  --section-chip-bg: rgba(255, 255, 255, 0.84);
+  --section-chip-border: rgba(23, 34, 31, 0.08);
+  --section-chip-ink: var(--detail-accent-strong);
+}
+
+.warmTone {
+  --section-chip-bg: rgba(180, 90, 50, 0.1);
+  --section-chip-border: rgba(141, 64, 33, 0.14);
+  --section-chip-ink: var(--detail-accent-strong);
+  --section-title-ink: var(--tone-text);
+  --section-description-ink: var(--tone-text-secondary);
+}
+
+.forestTone {
+  --section-chip-bg: rgba(47, 95, 91, 0.1);
+  --section-chip-border: rgba(33, 77, 73, 0.14);
+  --section-chip-ink: var(--market-accent-strong);
+  --section-title-ink: var(--market-text);
+  --section-description-ink: var(--market-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .withAction {
+    grid-template-columns: 1fr;
+  }
+
+  .action {
+    justify-content: flex-start;
+  }
+}

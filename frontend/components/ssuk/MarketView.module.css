@@ -272,36 +272,7 @@
   position: relative;
   z-index: 1;
   justify-self: end;
-  min-height: var(--button-pill-height);
-  padding: var(--button-pill-padding);
-  border-radius: var(--button-pill-radius);
-  border: 1px solid rgba(33, 77, 73, 0.16);
-  background: linear-gradient(135deg, var(--market-accent-strong), var(--market-accent));
-  color: var(--button-primary-ink);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--button-pill-font-size);
-  font-weight: var(--button-pill-font-weight);
-  letter-spacing: 0.02em;
   white-space: nowrap;
-  box-shadow: var(--button-primary-shadow);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
-}
-
-.actionBarButton:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--button-primary-shadow-strong);
-  filter: saturate(1.06);
-}
-
-.actionBarButton:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring), var(--button-primary-shadow-strong);
 }
 
 .heroSection,
@@ -313,19 +284,7 @@
 }
 
 .sectionHeader {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.sectionHeader h2,
-.listHeading h2 {
   margin: 0;
-  color: var(--market-text);
-  font-size: 25px;
-  line-height: 1.08;
-  letter-spacing: -0.04em;
 }
 
 .railActions {
@@ -336,37 +295,7 @@
 }
 
 .railButton {
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--market-line);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.82);
-  color: var(--market-text-secondary);
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.railButton:hover:not(:disabled) {
-  border-color: var(--market-line-strong);
-  color: var(--market-text);
-  background: rgba(255, 255, 255, 0.96);
-  transform: translateY(-1px);
-}
-
-.railButton:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.railButton:disabled {
-  opacity: 0.34;
-  cursor: default;
+  flex-shrink: 0;
 }
 
 .railTrack {
@@ -1107,47 +1036,7 @@
 
 .emptyStatePrimaryAction,
 .emptyStateSecondaryAction {
-  min-height: var(--button-pill-height-sm);
-  padding: var(--button-pill-padding);
-  border-radius: var(--button-pill-radius);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--button-pill-font-size);
-  font-weight: var(--button-pill-font-weight);
-  letter-spacing: -0.02em;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.emptyStatePrimaryAction {
-  border: 1px solid rgba(33, 77, 73, 0.16);
-  background: linear-gradient(135deg, var(--market-accent-strong), var(--market-accent));
-  color: var(--button-primary-ink);
-  box-shadow: var(--button-primary-shadow);
-}
-
-.emptyStateSecondaryAction {
-  border: 1px solid var(--button-secondary-border);
-  background: var(--button-secondary-bg);
-  color: var(--button-secondary-ink);
-  box-shadow: var(--button-secondary-shadow);
-}
-
-.emptyStatePrimaryAction:hover,
-.emptyStateSecondaryAction:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--button-primary-shadow);
-}
-
-.emptyStatePrimaryAction:focus-visible,
-.emptyStateSecondaryAction:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring), var(--button-primary-shadow);
+  white-space: nowrap;
 }
 
 .cardGrid {
@@ -1378,17 +1267,6 @@
   .browseStats,
   .stageHighlightMetrics {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .sectionHeader,
-  .listHeader {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .listControls {
-    width: 100%;
-    justify-content: flex-start;
   }
 
   .sortGroup {

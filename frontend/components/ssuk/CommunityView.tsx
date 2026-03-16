@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
+import { ProductLink } from '../common/ProductControl';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import {
   communityNotices,
   communityPopular,
@@ -182,23 +184,26 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
                 <p>{stat.note}</p>
               </div>
             ))}
-            <Link href={composeHref} className={styles.heroPrimaryAction}>
+            <ProductLink
+              href={composeHref}
+              tone="warm"
+              variant="primary"
+              className={styles.heroPrimaryAction}
+            >
               {composeGuide.ctaLabel}
-            </Link>
+            </ProductLink>
           </div>
         </div>
       </section>
 
       <section className={styles.boardSection} aria-label="지금 확인할 글">
-        <div className={styles.sectionIntro}>
-          <div>
-            <h2 className={styles.sectionTitle}>지금 확인할 글</h2>
-            <p className={styles.sectionDescription}>
-              공지부터 인기 글까지 먼저 스캔한 뒤, 가장 반응이 큰 이야기에서 바로 대화 흐름을 잡을
-              수 있도록 재정리했습니다.
-            </p>
-          </div>
-        </div>
+        <ProductSectionHeader
+          tone="warm"
+          eyebrow="Opening Board"
+          title="지금 확인할 글"
+          description="공지부터 인기 글까지 먼저 스캔한 뒤, 가장 반응이 큰 이야기에서 바로 대화 흐름을 잡을 수 있도록 재정리했습니다."
+          compact
+        />
 
         <div className={styles.boardLayout}>
           {leadHighlight ? (
@@ -256,15 +261,13 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
       </section>
 
       <section className={styles.roomsSection} aria-label="대화방 둘러보기">
-        <div className={styles.sectionIntro}>
-          <div>
-            <h2 className={styles.sectionTitle}>대화방 둘러보기</h2>
-            <p className={styles.sectionDescription}>
-              방마다 다른 분위기를 한눈에 보고, 지금 필요한 곳으로 바로 옮겨갈 수 있도록 구조를
-              단순화했습니다.
-            </p>
-          </div>
-        </div>
+        <ProductSectionHeader
+          tone="warm"
+          eyebrow="Conversation Atlas"
+          title="대화방 둘러보기"
+          description="방마다 다른 분위기를 한눈에 보고, 지금 필요한 곳으로 바로 옮겨갈 수 있도록 구조를 단순화했습니다."
+          compact
+        />
 
         <div className={styles.roomLayout}>
           <div className={styles.roomRail}>
@@ -306,12 +309,22 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
               </Link>
             ) : null}
             <div className={styles.roomStageActions}>
-              <Link href={composeHref} className={styles.roomPrimaryAction}>
+              <ProductLink
+                href={composeHref}
+                tone="warm"
+                variant="primary"
+                className={styles.roomPrimaryAction}
+              >
                 {composeGuide.ctaLabel}
-              </Link>
-              <Link href={`/community?tab=${activeTab}`} className={styles.roomSecondaryAction}>
+              </ProductLink>
+              <ProductLink
+                href={`/community?tab=${activeTab}`}
+                tone="warm"
+                variant="secondary"
+                className={styles.roomSecondaryAction}
+              >
                 {activeTabLabel} 둘러보기
-              </Link>
+              </ProductLink>
             </div>
           </aside>
         </div>
@@ -319,14 +332,13 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
 
       <section className={styles.feedSection} aria-label={`${activeTabLabel} 대화 흐름`}>
         <div className={styles.feedHeader}>
-          <div>
-            <span className={styles.feedEyebrow}>Live Feed</span>
-            <h2 className={styles.feedTitle}>{activeTabLabel}에서 이어지는 대화 흐름</h2>
-            <p className={styles.feedDescription}>
-              관리자형 목록 대신, 가장 먼저 읽을 글과 이어서 따라갈 대화를 한 흐름으로 배치해 빠르게
-              맥락을 잡도록 바꿨습니다.
-            </p>
-          </div>
+          <ProductSectionHeader
+            tone="warm"
+            eyebrow="Live Feed"
+            title={`${activeTabLabel}에서 이어지는 대화 흐름`}
+            description="관리자형 목록 대신, 가장 먼저 읽을 글과 이어서 따라갈 대화를 한 흐름으로 배치해 빠르게 맥락을 잡도록 바꿨습니다."
+            compact
+          />
 
           <div className={styles.feedControlCluster}>
             <EditorialSelectionDeck
@@ -377,9 +389,15 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
                     {index === 0 ? <span className={styles.feedMetaBadge}>먼저 읽기</span> : null}
                   </div>
                 </div>
-                <Link href={post.href} className={styles.feedItemAction}>
+                <ProductLink
+                  href={post.href}
+                  tone="warm"
+                  variant="secondary"
+                  size="sm"
+                  className={styles.feedItemAction}
+                >
                   대화 보기
-                </Link>
+                </ProductLink>
               </li>
             ))}
           </ol>

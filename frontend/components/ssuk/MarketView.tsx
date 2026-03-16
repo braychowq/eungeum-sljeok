@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
+import { ProductButton, ProductLink } from '../common/ProductControl';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import {
   marketCards,
   marketSortOptions,
@@ -67,24 +69,32 @@ function RailButtons({
 }: RailButtonsProps) {
   return (
     <div className={styles.railActions} aria-label={`${label} 이동`}>
-      <button
+      <ProductButton
         type="button"
+        tone="forest"
+        variant="secondary"
+        size="sm"
+        iconOnly
         className={styles.railButton}
         onClick={onPrev}
         disabled={!canScrollPrev}
         aria-label={`${label} 이전`}
       >
         &lt;
-      </button>
-      <button
+      </ProductButton>
+      <ProductButton
         type="button"
+        tone="forest"
+        variant="secondary"
+        size="sm"
+        iconOnly
         className={styles.railButton}
         onClick={onNext}
         disabled={!canScrollNext}
         aria-label={`${label} 다음`}
       >
         &gt;
-      </button>
+      </ProductButton>
     </div>
   );
 }
@@ -415,29 +425,38 @@ export default function MarketView({ activeSort }: MarketViewProps) {
             ))}
           </div>
 
-          <Link
+          <ProductLink
             href="/market/new"
+            tone="forest"
+            variant="primary"
             className={styles.actionBarButton}
             onClick={() => {
               emitMarketEvent('studio_owner_cta_click', { from: 'top_bar' });
             }}
           >
             내 공방 등록
-          </Link>
+          </ProductLink>
         </div>
       </section>
 
       <section className={styles.heroSection} aria-label="Editor Pick">
-        <div className={styles.sectionHeader}>
-          <h2>Editor&apos;s Pick</h2>
-          <RailButtons
-            label="Editor Pick"
-            canScrollPrev={heroRail.canScrollPrev}
-            canScrollNext={heroRail.canScrollNext}
-            onPrev={heroRail.scrollPrev}
-            onNext={heroRail.scrollNext}
-          />
-        </div>
+        <ProductSectionHeader
+          tone="forest"
+          className={styles.sectionHeader}
+          eyebrow="Editor's Cut"
+          title="오늘의 공방 톤을 먼저 읽는 시작 레일"
+          description="분위기와 운영 결이 선명한 공간부터 훑고, 아래 비교 구간으로 자연스럽게 이어지도록 첫 장면을 편집했습니다."
+          compact
+          action={
+            <RailButtons
+              label="Editor Pick"
+              canScrollPrev={heroRail.canScrollPrev}
+              canScrollNext={heroRail.canScrollNext}
+              onPrev={heroRail.scrollPrev}
+              onNext={heroRail.scrollNext}
+            />
+          }
+        />
         <ul ref={heroRail.railRef} className={`${styles.heroCarousel} ${styles.railTrack}`}>
           {studioHeroPicks.map((pick) => (
             <li key={pick.id}>
@@ -464,16 +483,23 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       </section>
 
       <section className={styles.curatedSection} aria-label="추천 공방">
-        <div className={styles.sectionHeader}>
-          <h2>추천 공방</h2>
-          <RailButtons
-            label="추천 공방"
-            canScrollPrev={recommendationRail.canScrollPrev}
-            canScrollNext={recommendationRail.canScrollNext}
-            onPrev={recommendationRail.scrollPrev}
-            onNext={recommendationRail.scrollNext}
-          />
-        </div>
+        <ProductSectionHeader
+          tone="forest"
+          className={styles.sectionHeader}
+          eyebrow="Balanced Match"
+          title="추천 공방"
+          description="가격과 분위기, 운영 조건의 균형이 좋은 공간을 먼저 압축해 빠르게 후보를 좁힙니다."
+          compact
+          action={
+            <RailButtons
+              label="추천 공방"
+              canScrollPrev={recommendationRail.canScrollPrev}
+              canScrollNext={recommendationRail.canScrollNext}
+              onPrev={recommendationRail.scrollPrev}
+              onNext={recommendationRail.scrollNext}
+            />
+          }
+        />
         <ul ref={recommendationRail.railRef} className={`${styles.recommendList} ${styles.railTrack}`}>
           {recommendationCards.map(({ item, card }) => (
             <li key={item.id}>
@@ -505,16 +531,23 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       </section>
 
       <section className={styles.trendingSection} aria-label="인기 공방">
-        <div className={styles.sectionHeader}>
-          <h2>인기 공방</h2>
-          <RailButtons
-            label="인기 공방"
-            canScrollPrev={trendingRail.canScrollPrev}
-            canScrollNext={trendingRail.canScrollNext}
-            onPrev={trendingRail.scrollPrev}
-            onNext={trendingRail.scrollNext}
-          />
-        </div>
+        <ProductSectionHeader
+          tone="forest"
+          className={styles.sectionHeader}
+          eyebrow="Live Reaction"
+          title="인기 공방"
+          description="지금 반응이 몰리는 공간과 일정 신호를 짧고 빠르게 훑을 수 있도록 속도감 있는 레일로 정리했습니다."
+          compact
+          action={
+            <RailButtons
+              label="인기 공방"
+              canScrollPrev={trendingRail.canScrollPrev}
+              canScrollNext={trendingRail.canScrollNext}
+              onPrev={trendingRail.scrollPrev}
+              onNext={trendingRail.scrollNext}
+            />
+          }
+        />
         <ol ref={trendingRail.railRef} className={`${styles.trendingList} ${styles.railTrack}`}>
           {trendingCards.map(({ item, card }) => (
             <li key={item.id}>
@@ -548,6 +581,15 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       </section>
 
       <section className={styles.listSection} aria-label="공방 찾아보기">
+        <ProductSectionHeader
+          tone="forest"
+          className={styles.sectionHeader}
+          eyebrow="Studio Browser"
+          title="조건과 일정, 응답 속도를 한 화면에서 비교하기"
+          description="위 큐레이션으로 공간 감도를 잡았다면, 여기서는 실제 연결 후보를 압축할 차례입니다. 가격, 가능 일정, 신뢰 신호를 같은 리듬으로 정리했습니다."
+          compact
+        />
+
         <div className={styles.browseStudio}>
           <div className={styles.browseStage} aria-label="공방 탐색 스테이지">
             <div className={styles.browseLead}>
@@ -708,18 +750,27 @@ export default function MarketView({ activeSort }: MarketViewProps) {
             <strong>지금 정렬에서는 바로 비교할 후보가 없습니다</strong>
             <p>추천 흐름으로 돌아가거나, 내 공방 등록으로 새로운 연결 흐름을 시작해보세요.</p>
             <div className={styles.emptyStateActions}>
-              <Link href="/market" className={styles.emptyStatePrimaryAction}>
+              <ProductLink
+                href="/market"
+                tone="forest"
+                variant="primary"
+                size="sm"
+                className={styles.emptyStatePrimaryAction}
+              >
                 추천 흐름으로 돌아가기
-              </Link>
-              <Link
+              </ProductLink>
+              <ProductLink
                 href="/market/new"
+                tone="forest"
+                variant="secondary"
+                size="sm"
                 className={styles.emptyStateSecondaryAction}
                 onClick={() => {
                   emitMarketEvent('studio_owner_cta_click', { from: 'empty_state' });
                 }}
               >
                 내 공방 등록
-              </Link>
+              </ProductLink>
             </div>
           </div>
         ) : (

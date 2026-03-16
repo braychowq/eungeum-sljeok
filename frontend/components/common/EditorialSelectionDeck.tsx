@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ProductLink } from './ProductControl';
 import styles from './EditorialSelectionDeck.module.css';
 
 export type EditorialSelectionDeckTheme = 'warm' | 'forest';
@@ -60,9 +61,15 @@ export default function EditorialSelectionDeck({
             </div>
 
             {action ? (
-              <Link href={action.href} className={styles.actionLink} onClick={action.onClick}>
+              <ProductLink
+                href={action.href}
+                tone={theme === 'forest' ? 'forest' : 'warm'}
+                variant="primary"
+                className={styles.actionLink}
+                onClick={action.onClick}
+              >
                 {action.label}
-              </Link>
+              </ProductLink>
             ) : null}
           </div>
         </div>

@@ -67,32 +67,7 @@
 
 .actionLink {
   flex-shrink: 0;
-  min-height: var(--button-pill-height);
-  padding: var(--button-pill-padding);
-  border-radius: var(--button-pill-radius);
-  border: 1px solid rgba(23, 34, 31, 0.08);
-  background: linear-gradient(135deg, var(--deck-accent-strong), var(--deck-accent));
-  color: var(--button-primary-ink);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: var(--button-pill-font-weight);
-  letter-spacing: -0.02em;
-  box-shadow: var(--button-primary-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-}
-
-.actionLink:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--button-primary-shadow-strong);
-  filter: saturate(1.04);
-}
-
-.actionLink:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring), var(--button-primary-shadow-strong);
+  align-self: flex-start;
 }
 
 .signalRow {
