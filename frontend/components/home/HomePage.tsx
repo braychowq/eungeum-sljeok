@@ -19,27 +19,42 @@ import styles from './HomePage.module.css';
 const serviceHubCards = [
   {
     id: 'community',
+    step: '01',
     eyebrow: 'Talk',
-    title: '질문과 공유로 막히는 지점을 먼저 푼다',
-    description: '최근 인기 글과 카테고리 바로가기로 지금 필요한 대화 흐름에 빠르게 합류합니다.',
+    title: '질문과 공유에서 오늘의 막힘을 먼저 푼다',
+    description: '최근 올라온 질문과 공유 흐름부터 읽고, 가장 가까운 대화에 바로 합류할 수 있습니다.',
     href: '/community',
-    ctaLabel: '커뮤니티 보기'
+    ctaLabel: '커뮤니티 보기',
+    metric: '대화 흐름',
+    readoutLabel: '가장 가까운 글',
+    tags: ['Q&A', '공유', '아무말'],
+    note: '막힌 지점을 먼저 푸는 시작점'
   },
   {
     id: 'studio',
+    step: '02',
     eyebrow: 'Share',
-    title: '작업 공간을 찾거나 내 공방을 연결한다',
-    description: '공방 쉐어 섹션에서 바로 둘러보고, 작업 가능한 공간과 운영 흐름을 이어서 확인합니다.',
+    title: '공방 쉐어로 작업 공간과 조건을 바로 잇는다',
+    description: '공방 분위기와 조건을 먼저 읽고, 오늘 필요한 작업 환경을 끊기지 않게 이어갑니다.',
     href: '/market?tab=studio',
-    ctaLabel: '공방 쉐어 보기'
+    ctaLabel: '공방 쉐어 보기',
+    metric: '공간 연결',
+    readoutLabel: '바로 이어질 공간',
+    tags: ['위치', '장비', '운영 조건'],
+    note: '실제 작업 가능한 공간을 비교하는 단계'
   },
   {
     id: 'market',
+    step: '03',
     eyebrow: 'Sell',
-    title: '재료와 도구를 사고팔며 작업 흐름을 닫는다',
-    description: '판매로 이어지는 마켓 진입점을 홈에서 미리 열어 두고, 다음 행동을 끊기지 않게 만듭니다.',
+    title: '마켓에서 재료 수급과 판매 흐름을 마무리한다',
+    description: '재료와 도구를 훑고 판매 글까지 바로 이어지도록, 작업 후반 액션을 한 리듬 안에 묶었습니다.',
     href: '/market',
-    ctaLabel: '마켓 보기'
+    ctaLabel: '마켓 보기',
+    metric: '판매 마감',
+    readoutLabel: '오늘의 셀렉션',
+    tags: ['재료', '도구', '판매 글'],
+    note: '마지막 거래 액션까지 닫는 단계'
   }
 ] as const;
 
@@ -51,64 +66,61 @@ export default function HomePage() {
   const featuredStudioCard = studioCards[0];
   const featuredMarketCard = marketCards[0];
   const featuredBanner = bannerItems[0];
-  const serviceHubStats = [
-    { label: '최근 대화', value: `${freshCommunityCount}개` },
-    { label: '공방 쉐어', value: `${studioCards.length}곳` },
-    { label: '판매 아이템', value: `${marketCards.length}건` }
-  ];
   const studioBrowseHref = '/market?tab=studio';
-  const atelierSignals = [
+  const serviceHubSignals = [
     {
-      label: '오늘의 큐레이션',
-      value: featuredBanner?.subtitle ?? '작업과 거래를 잇는 주얼리 메이커 네트워크'
+      label: 'This hour',
+      value: featuredBanner?.subtitle ?? '작업과 거래를 잇는 주얼리 메이커 네트워크',
+      detail: '배너 큐레이션에서 오늘의 톤과 무드를 먼저 읽습니다.'
     },
     {
-      label: '가장 가까운 질문',
+      label: 'Talk first',
+      value: latestCommunityPost?.title ?? '최근 인기 커뮤니티 글',
+      detail: `최근 24시간 새 대화 ${freshCommunityCount}개가 이어지는 중입니다.`
+    },
+    {
+      label: 'Next move',
+      value: featuredStudioCard?.title ?? '공방 쉐어 셀렉션',
+      detail: `공방 ${studioCards.length}곳과 판매 ${marketCards.length}건을 한 흐름으로 엮었습니다.`
+    }
+  ] as const;
+  const serviceHubSpotlight = [
+    {
+      label: '오늘의 시작',
       value: latestCommunityPost?.title ?? '최근 인기 커뮤니티 글'
     },
     {
-      label: '바로 이어질 공간',
+      label: '이어질 공간',
       value: featuredStudioCard?.title ?? '공방 쉐어 셀렉션'
-    }
-  ] as const;
-  const journeySteps = [
-    {
-      id: 'community',
-      step: '01',
-      eyebrow: 'Start',
-      title: '막힌 지점을 먼저 질문으로 푼다',
-      description: latestCommunityPost
-        ? `지금 가장 가까운 대화는 "${latestCommunityPost.title}" 입니다. 최근 올라온 질문 흐름부터 확인하고 바로 참여할 수 있습니다.`
-        : '최근 올라온 질문과 공유 글을 살펴보며 오늘 필요한 대화 흐름부터 정리합니다.',
-      href: '#community',
-      ctaLabel: '커뮤니티에서 시작',
-      meta: `최근 24시간 대화 ${freshCommunityCount}개`
     },
     {
-      id: 'studio',
-      step: '02',
-      eyebrow: 'Space',
-      title: '공방 쉐어로 작업 공간을 바로 잇는다',
-      description: featuredStudioCard
-        ? `"${featuredStudioCard.title}" 같은 공방 쉐어 카드에서 위치와 조건을 보고 다음 작업 공간을 이어서 찾습니다.`
-        : '작업 가능한 공간을 빠르게 비교하며 오늘 필요한 작업 환경을 바로 찾습니다.',
-      href: '#studio',
-      ctaLabel: '공방 쉐어 보기',
-      meta: `현재 등록 ${studioCards.length}곳`
-    },
-    {
-      id: 'market',
-      step: '03',
-      eyebrow: 'Finish',
-      title: '마켓에서 판매와 재료 흐름을 닫는다',
-      description: featuredMarketCard
-        ? `"${featuredMarketCard.title}" 같은 판매 글로 이어지며 재료 수급과 판매 액션을 한 화면 안에서 마무리합니다.`
-        : '판매와 재료 탐색을 같은 흐름 안에 묶어 작업 후반 액션까지 자연스럽게 연결합니다.',
-      href: '#market',
-      ctaLabel: '마켓으로 이동',
-      meta: `현재 판매 ${marketCards.length}건`
+      label: '마감 액션',
+      value: featuredMarketCard?.title ?? '판매 셀렉션'
     }
   ] as const;
+  const dispatchCards = serviceHubCards.map((card) => {
+    if (card.id === 'community') {
+      return {
+        ...card,
+        metric: `24h ${freshCommunityCount}개`,
+        readoutValue: latestCommunityPost?.title ?? '최근 커뮤니티 대화'
+      };
+    }
+
+    if (card.id === 'studio') {
+      return {
+        ...card,
+        metric: `${studioCards.length}곳`,
+        readoutValue: featuredStudioCard?.title ?? '새로운 공방 쉐어'
+      };
+    }
+
+    return {
+      ...card,
+      metric: `${marketCards.length}건`,
+      readoutValue: featuredMarketCard?.title ?? '새로운 판매 셀렉션'
+    };
+  });
 
   return (
     <main className={styles.page}>
@@ -120,95 +132,106 @@ export default function HomePage() {
         <BannerCarousel items={bannerItems} />
 
         <section className={styles.serviceHub} aria-label="슬쩍 서비스 허브">
-          <div className={styles.serviceHubCanvas}>
+          <div className={styles.serviceHubRunway}>
             <section className={styles.serviceHubLead} aria-label="홈 시작 안내">
               <div className={styles.serviceHubCopy}>
                 <span className={styles.serviceHubEyebrow}>Atelier dispatch</span>
-                <h1>오늘 필요한 연결을 먼저 고르고, 바로 다음 액션으로 이어갑니다</h1>
+                <h1>오늘 필요한 흐름을 먼저 고르고, 바로 작업 리듬으로 이어갑니다</h1>
                 <p>
-                  홈 상단을 요약 패널 묶음이 아니라 메이커용 랜딩 경험으로 다시 엮었습니다. 지금 가장
-                  반응이 빠른 대화, 바로 이어질 공방, 판매 흐름을 한 리듬 안에서 고를 수 있게 정리했습니다.
+                  질문이 먼저인지, 공간 탐색이 급한지, 판매 마감이 필요한지 한 번에 읽고 바로 다음
+                  화면으로 이어갈 수 있게 엮었습니다. 가장 가까운 대화와 공간, 거래 액션을 같은 리듬으로
+                  고를 수 있습니다.
                 </p>
               </div>
 
               <div className={styles.serviceHubActionRow}>
-                <Link href="#community" className={styles.serviceHubPrimaryLink}>
-                  인기 대화부터 보기
+                <Link href="/community" className={styles.serviceHubPrimaryLink}>
+                  커뮤니티에서 시작
                 </Link>
                 <Link href={studioBrowseHref} className={styles.serviceHubGhostLink}>
                   공방 둘러보기
                 </Link>
               </div>
 
-              <div className={styles.serviceHubStats} aria-label="서비스 현황 요약">
-                {serviceHubStats.map((item) => (
-                  <div key={item.label} className={styles.serviceHubStatCard}>
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
+              <div className={styles.serviceHubSignalRail} aria-label="홈 실시간 신호">
+                {serviceHubSignals.map((signal) => (
+                  <div key={signal.label} className={styles.serviceHubSignalCard}>
+                    <span>{signal.label}</span>
+                    <strong>{signal.value}</strong>
+                    <p>{signal.detail}</p>
                   </div>
                 ))}
               </div>
             </section>
 
-            <aside className={styles.serviceHubAside}>
-              <article className={styles.serviceHubMoodCard}>
-                <div className={styles.serviceHubMoodHeader}>
-                  <span>this hour&apos;s edit</span>
-                  <strong>{featuredBanner?.subtitle ?? '오늘의 큐레이션'}</strong>
+            <article className={styles.serviceHubSpotlight}>
+              {featuredBanner ? (
+                <div className={styles.serviceHubSpotlightMedia} aria-hidden="true">
+                  <img
+                    src={featuredBanner.imageUrl}
+                    alt={featuredBanner.imageAlt}
+                    className={styles.serviceHubSpotlightImage}
+                  />
+                  <div className={styles.serviceHubSpotlightOverlay} />
                 </div>
+              ) : null}
 
+              <div className={styles.serviceHubSpotlightBody}>
+                <span className={styles.serviceHubEyebrow}>This hour&apos;s edit</span>
+                <strong>{featuredBanner?.subtitle ?? '오늘의 큐레이션'}</strong>
                 <p>
-                  최근 {freshCommunityCount}개의 새 대화와 함께 공간 탐색, 판매 액션이 한 흐름으로
-                  이어지도록 지금 볼 만한 신호만 추렸습니다.
+                  최근 {freshCommunityCount}개의 새 대화와 함께 공간 탐색, 판매 액션이 같은 흐름으로
+                  이어지도록 가장 먼저 열어둘 장면만 추렸습니다.
                 </p>
 
-                <ul className={styles.serviceHubSignalList}>
-                  {atelierSignals.map((signal) => (
-                    <li key={signal.label} className={styles.serviceHubSignalItem}>
-                      <span>{signal.label}</span>
-                      <strong>{signal.value}</strong>
-                    </li>
+                <div className={styles.serviceHubSpotlightGrid}>
+                  {serviceHubSpotlight.map((item) => (
+                    <div key={item.label} className={styles.serviceHubSpotlightItem}>
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                    </div>
                   ))}
-                </ul>
-              </article>
-
-              <section className={styles.serviceHubJourney} aria-label="서비스 이동 흐름">
-                <div className={styles.serviceHubJourneyHeader}>
-                  <span className={styles.serviceHubEyebrow}>Today&apos;s path</span>
-                  <h2>홈에서 바로 이어지는 3단계 작업 여정</h2>
                 </div>
-
-                <ol className={styles.serviceHubJourneyList}>
-                  {journeySteps.map((step) => (
-                    <li key={step.id} className={styles.serviceHubJourneyItem}>
-                      <Link href={step.href} className={styles.serviceHubJourneyLink}>
-                        <div className={styles.serviceHubJourneyStep}>
-                          <span>{step.step}</span>
-                          <small>{step.eyebrow}</small>
-                        </div>
-                        <div className={styles.serviceHubJourneyBody}>
-                          <strong>{step.title}</strong>
-                          <p>{step.meta}</p>
-                          <span className={styles.serviceHubTextLink}>{step.ctaLabel}</span>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            </aside>
+              </div>
+            </article>
           </div>
 
-          <div className={styles.serviceHubGrid}>
-            {serviceHubCards.map((card, index) => (
-              <Link key={card.id} href={card.href} className={styles.serviceHubCard}>
-                <div className={styles.serviceHubCardTop}>
-                  <span className={styles.serviceHubCardIndex}>{String(index + 1).padStart(2, '0')}</span>
-                  <span className={styles.serviceHubCardEyebrow}>{card.eyebrow}</span>
+          <div className={styles.serviceHubRouteGrid}>
+            {dispatchCards.map((card) => (
+              <Link
+                key={card.id}
+                href={card.href}
+                className={styles.serviceHubRouteCard}
+                data-route={card.id}
+              >
+                <div className={styles.serviceHubRouteTop}>
+                  <div className={styles.serviceHubRouteIdentity}>
+                    <span className={styles.serviceHubRouteStep}>{card.step}</span>
+                    <span className={styles.serviceHubRouteEyebrow}>{card.eyebrow}</span>
+                  </div>
+                  <span className={styles.serviceHubRouteMetric}>{card.metric}</span>
                 </div>
+
                 <strong>{card.title}</strong>
                 <p>{card.description}</p>
-                <span className={styles.serviceHubCardLink}>{card.ctaLabel}</span>
+
+                <div className={styles.serviceHubRouteReadout}>
+                  <span>{card.readoutLabel}</span>
+                  <strong>{card.readoutValue}</strong>
+                </div>
+
+                <div className={styles.serviceHubRouteTags}>
+                  {card.tags.map((tag) => (
+                    <span key={tag} className={styles.serviceHubRouteTag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className={styles.serviceHubRouteFooter}>
+                  <span>{card.note}</span>
+                  <span className={styles.serviceHubRouteAction}>{card.ctaLabel}</span>
+                </div>
               </Link>
             ))}
           </div>
