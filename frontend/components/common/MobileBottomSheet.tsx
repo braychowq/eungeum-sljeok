@@ -6,8 +6,8 @@ type MobileBottomSheetProps = {
 };
 
 const menus = [
-  { id: 'community', label: '커뮤니티', href: '/community' },
-  { id: 'market', label: '마켓', href: '/market' }
+  { id: 'community', label: '커뮤니티', caption: '질문과 공유', href: '/community' },
+  { id: 'market', label: '마켓', caption: '공방 탐색', href: '/market' }
 ] as const;
 
 export default function MobileBottomSheet({
@@ -25,8 +25,10 @@ export default function MobileBottomSheet({
             className={`${styles.menuLink} ${
               activeMenu === menu.id ? styles.menuLinkActive : ''
             }`}
+            aria-current={activeMenu === menu.id ? 'page' : undefined}
           >
-            {menu.label}
+            <span className={styles.menuLabel}>{menu.label}</span>
+            <span className={styles.menuCaption}>{menu.caption}</span>
           </Link>
         ))}
       </nav>

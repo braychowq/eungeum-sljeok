@@ -1,27 +1,22 @@
 .footer {
-  margin-top: 8px;
-  padding: 0 20px;
+  margin-top: 18px;
+  padding: 0 24px 24px;
   display: grid;
   gap: 14px;
 }
 
 .brandCard {
-  border: 1px solid rgba(23, 34, 31, 0.08);
-  border-radius: 28px;
-  background:
-    linear-gradient(150deg, rgba(255, 255, 255, 0.82), rgba(249, 238, 228, 0.72)),
-    rgba(255, 255, 255, 0.7);
-  padding: 18px;
-  box-shadow: var(--tone-shadow-soft);
+  padding: 22px 0 0;
+  border-top: 1px solid var(--shell-divider);
   display: grid;
   gap: 10px;
 }
 
 .brandEyebrow {
-  color: var(--tone-text-secondary);
+  color: var(--tone-text-tertiary);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-weight: 800;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -35,8 +30,8 @@
 .brandRow strong {
   color: var(--tone-text);
   font-family: var(--font-logo);
-  font-size: 30px;
-  line-height: 0.98;
+  font-size: 32px;
+  line-height: 0.94;
   font-weight: 700;
   letter-spacing: -0.06em;
 }
@@ -45,8 +40,7 @@
   min-height: 28px;
   padding: 0 11px;
   border-radius: 999px;
-  border: 1px solid rgba(23, 34, 31, 0.08);
-  background: rgba(255, 255, 255, 0.56);
+  background: rgba(255, 255, 255, 0.72);
   color: var(--tone-text-secondary);
   display: inline-flex;
   align-items: center;
@@ -59,18 +53,17 @@
 
 .brandDescription {
   margin: 0;
-  max-width: 48ch;
+  max-width: 56ch;
   color: var(--tone-text-secondary);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.68;
 }
 
 .metaRow {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
-  padding: 0 2px;
+  gap: 16px;
 }
 
 .companyInfo {
@@ -78,7 +71,7 @@
   color: var(--tone-text-secondary);
   font-style: normal;
   font-size: 11px;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .companyInfo p {
@@ -95,16 +88,11 @@
 
 @media (max-width: 960px) {
   .footer {
-    padding: 0 14px;
-  }
-
-  .brandCard {
-    border-radius: 24px;
-    padding: 16px;
+    padding: 0 14px 20px;
   }
 
   .brandRow strong {
-    font-size: 26px;
+    font-size: 28px;
   }
 
   .metaRow {

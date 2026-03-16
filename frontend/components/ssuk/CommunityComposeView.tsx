@@ -9,7 +9,7 @@ import {
   communityComposeData,
   communityComposePublishingSteps
 } from './communityComposeData';
-import styles from './CommunityComposeView.module.css';
+import styles from './ComposeWorkspace.module.css';
 
 type CommunityComposeViewProps = {
   initialTab: CommunityTabId;
@@ -66,8 +66,8 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
   return (
     <TwoMenuShell
       activeMenu="community"
-      title="글 등록 워크스페이스"
-      subtitle="탭 분위기에 맞는 작성 포맷과 체크리스트를 먼저 고르고, 미리보기까지 한 번에 정리하세요."
+      title="커뮤니티 글 올리기"
+      subtitle="탭 분위기에 맞는 포맷과 체크리스트를 먼저 고르고, 사람에게 읽히는 문장 흐름까지 한 번에 정리하세요."
       ctaLabel="커뮤니티로 돌아가기"
       ctaHref={listHref}
     >
@@ -86,6 +86,16 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
         <aside className={styles.progressCard}>
           <span className={styles.progressLabel}>게시 준비 점수</span>
           <strong className={styles.progressValue}>{readinessScore}%</strong>
+          <div
+            className={styles.progressMeter}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={readinessScore}
+            aria-label="게시 준비도"
+          >
+            <span className={styles.progressFill} style={{ width: `${readinessScore}%` }} />
+          </div>
           <p className={styles.progressDescription}>
             필수 입력 {completedRequiredFields}/4 · 신뢰 체크 {draft.completedChecklistIds.length}/
             {guide.checklist.length}
@@ -170,7 +180,7 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
                 />
               </label>
 
-              <label className={styles.fieldBlock}>
+              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
                 <span>첫 문장</span>
                 <textarea
                   className={styles.textArea}
@@ -180,7 +190,7 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
                 />
               </label>
 
-              <label className={styles.fieldBlock}>
+              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
                 <span>본문 핵심</span>
                 <textarea
                   className={styles.textArea}
@@ -190,7 +200,7 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
                 />
               </label>
 
-              <label className={styles.fieldBlock}>
+              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
                 <span>마지막 한 줄</span>
                 <textarea
                   className={styles.textArea}
