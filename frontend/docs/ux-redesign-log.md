@@ -1,5 +1,51 @@
 # UX Redesign Log
 
+## 2026-03-17 08:37:33 KST
+- timestamp: 2026-03-17 08:37:33 KST
+- 이번 실행 목표: `TwoMenuShell` 드리프트를 복구하고, 반복되던 CTA/보조 버튼을 공용 제어 컴포넌트로 끌어올려 `ssuk` 목록 셸의 상단 크롬과 액션 문법을 한 시스템으로 묶는다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductControl.tsx`
+  - `frontend/components/common/ProductControl.module.css`
+  - `frontend/components/common/ProductSectionHeader.tsx`
+  - `frontend/components/common/ProductSectionHeader.module.css`
+  - `frontend/components/common/EditorialSelectionDeck.tsx`
+  - `frontend/components/common/EditorialSelectionDeck.module.css`
+  - `frontend/components/ssuk/TwoMenuShell.tsx`
+  - `frontend/components/ssuk/TwoMenuShell.module.css`
+  - `frontend/components/ssuk/CommunityView.tsx`
+  - `frontend/components/ssuk/CommunityView.module.css`
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.tsx`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `components/common`에 `ProductControl`, `ProductSectionHeader`를 추가하고 `globals.css`에 `--product-button-*`, `--product-section-*` 토큰을 연결해 버튼과 섹션 헤더를 페이지별 임시 CSS가 아니라 같은 공용 제어 계층으로 끌어올렸다
+  - `TwoMenuShell`의 TSX/CSS 드리프트를 정리해 빠져 있던 클래스 의존을 제거했고, 브랜드 헤더·메뉴 런웨이·하이라이트 칩·컨텍스트 스트립·히어로 패널이 실제 제품형 셸처럼 읽히는 상단 크롬으로 복구했다
+  - `EditorialSelectionDeck`, 커뮤니티 피드 CTA, 마켓 rail 버튼/빈 상태 액션, `StudioShareDetailView` 이미지 rail 버튼까지 공통 control 컴포넌트로 교체해 목록과 상세에서 같은 반응/포커스/보조 액션 리듬이 보이도록 통합했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductControl.tsx frontend/components/common/ProductControl.module.css frontend/components/common/ProductSectionHeader.tsx frontend/components/common/ProductSectionHeader.module.css frontend/components/common/EditorialSelectionDeck.tsx frontend/components/common/EditorialSelectionDeck.module.css frontend/components/ssuk/TwoMenuShell.tsx frontend/components/ssuk/TwoMenuShell.module.css frontend/components/ssuk/CommunityView.tsx frontend/components/ssuk/CommunityView.module.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css frontend/components/ssuk/StudioShareDetailView.tsx frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/ssuk/TwoMenuShell.tsx | sed 's/styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/ssuk/TwoMenuShell.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `933bfe2` (`Unify ssuk shell controls`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경은 로컬 `main` 커밋까지 완료됐지만, DNS 제한 때문에 원격 push는 미완료
+- 커밋 해시: `933bfe2`
+- 남은 가장 큰 UX 문제: 상단 셸과 주요 CTA는 공통 제어 언어로 묶였지만 `ComposeWorkspace`/상세 화면의 입력·선택·섹션 헤더는 여전히 화면별 CSS에 남아 있어 버튼만큼 강한 수준의 공용 시스템으로 닫히지 않음
+- 다음 실행 우선순위 1~3:
+  - `ComposeWorkspace`, `CommunityPostDetailView`, `StudioShareDetailView`의 입력/토글/보조 액션을 이번 `ProductControl` 계열과 맞물리는 공용 필드 컴포넌트로 끌어올리기
+  - 홈/`ssuk` 양쪽의 섹션 헤더와 상태 배지까지 공통 컴포넌트 계층으로 정리해 카드 바깥 리듬도 한 언어로 통합하기
+  - `.git` 쓰기 가능 + DNS 제한이 없는 환경에서 누적 변경을 커밋/푸시하고 실제 화면 캡처를 다시 시도하기
+
 ## 2026-03-17 07:32:03 KST
 - timestamp: 2026-03-17 07:32:03 KST
 - 이번 실행 목표: `compose`/상세 화면의 액션·입력 표면을 관리자형 유틸리티 묶음에서 목적 중심 제품 플로우로 재구성하고, `StudioShareDetailView`의 CSS 드리프트를 복구한다
