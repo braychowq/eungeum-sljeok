@@ -1,5 +1,43 @@
 # UX Redesign Log
 
+## 2026-03-17 05:36:25 KST
+- timestamp: 2026-03-17 05:36:25 KST
+- 이번 실행 목표: 홈 하단 `CommunitySection`, `HorizontalCardSlider`, `InfoLibrarySection`을 공통 프레임 기반 에디토리얼 시퀀스로 재구성해 개별 박스 나열형 인상을 줄인다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/home/HomeSectionFrame.tsx`
+  - `frontend/components/home/HomeSectionFrame.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/components/home/CommunitySection.tsx`
+  - `frontend/components/home/CommunitySection.module.css`
+  - `frontend/components/home/HorizontalCardSlider.tsx`
+  - `frontend/components/home/HorizontalCardSlider.module.css`
+  - `frontend/components/home/InfoLibrarySection.tsx`
+  - `frontend/components/home/InfoLibrarySection.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `--home-sequence-*` 토큰과 공통 `HomeSectionFrame`을 추가해, 홈 하단 섹션들이 각자 둥근 박스로 분리되는 대신 같은 인덱스 레일과 카피 위계를 공유하는 편집형 시퀀스로 읽히게 재구성
+  - `HomePage`에 `editorialSequence` 래퍼와 시퀀스 리드 패널을 추가해 `커뮤니티 → 공방 → 마켓 → 자료실` 흐름이 하나의 큐레이션 밴드 안에서 이어지도록 정리
+  - `CommunitySection`, `HorizontalCardSlider`, `InfoLibrarySection`의 헤더/메타/CTA를 공통 프레임 위로 올리고, 내부 카드만 남기는 방식으로 바깥 셸의 관리자형 박스 감각을 줄임
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/home/HomeSectionFrame.tsx frontend/components/home/HomeSectionFrame.module.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css frontend/components/home/CommunitySection.tsx frontend/components/home/CommunitySection.module.css frontend/components/home/HorizontalCardSlider.tsx frontend/components/home/HorizontalCardSlider.module.css frontend/components/home/InfoLibrarySection.tsx frontend/components/home/InfoLibrarySection.module.css` 통과
+  - 캡처/서버 검증: `npm run start -- --hostname 127.0.0.1 --port 3005` 실패 (`listen EPERM`), Playwright/브라우저 캡처 도구 없음
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `9a8d648` (`Refine home editorial sequence`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 푸시는 DNS 차단으로 미완료
+- 커밋 해시: `9a8d648`
+- 남은 가장 큰 UX 문제: 홈 하단 시퀀스는 정리됐지만 `BannerCarousel`과 `serviceHub` 상단 블록이 아직 하단 공통 프레임만큼 강하게 연결되지 않아 첫 진입부터 전체 리듬이 완전히 하나로 묶이지 않음
+- 다음 실행 우선순위 1~3:
+  - 홈 상단 `BannerCarousel`과 `serviceHub`의 간격/액션 위계를 새 `home-sequence` 프레임과 더 일관되게 연결한다
+  - `common` 계열 CTA와 상태칩을 `home-sequence`/`selection` 토큰으로 확장해 홈과 내부 화면의 버튼 리듬을 더 통합한다
+  - DNS 차단이 해소되는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 푸시하고 실제 화면 캡처를 다시 시도한다
+
 ## 2026-03-17 04:34:25 KST
 - timestamp: 2026-03-17 04:34:25 KST
 - 이번 실행 목표: 홈 `serviceHub`를 대시보드형 허브에서 브랜드형 dispatch runway로 재구성하고, 상단 `TopNav`를 같은 랜딩 문법으로 정렬한다
