@@ -21,9 +21,10 @@
   - 시작 브랜치 확인: `main`
   - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
   - UX 변경 커밋 `323cc4a` (`Redesign market browse flow`) 생성
-  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 로그/레이아웃 마감 커밋 `41fa294` (`Polish market concierge layout`) 생성
+  - `git push origin main` 2회 실패: `Could not resolve host: github.com`
   - 작업 범위 밖의 로컬 수정 `frontend/app/layout.tsx`는 그대로 유지하고 이번 변경과 섞지 않음
-- 커밋 해시: `323cc4a`
+- 커밋 해시: `323cc4a`, `41fa294`
 - 남은 가장 큰 UX 문제: 홈 화면은 첫 진입 인상은 좋아졌지만 섹션 간 위계와 CTA 리듬이 아직 SSUK 내부 화면만큼 강하게 정리되지 않음
 - 다음 실행 우선순위 1~3:
   - 홈 상단 히어로와 서비스 허브를 더 과감한 브랜드형 첫인상으로 재구성
