@@ -1,5 +1,37 @@
 # UX Redesign Log
 
+## 2026-03-17 04:34:25 KST
+- timestamp: 2026-03-17 04:34:25 KST
+- 이번 실행 목표: 홈 `serviceHub`를 대시보드형 허브에서 브랜드형 dispatch runway로 재구성하고, 상단 `TopNav`를 같은 랜딩 문법으로 정렬한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/components/home/TopNav.tsx`
+  - `frontend/components/home/TopNav.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `landing` 및 `home-stage` 토큰을 전역에 추가해 홈 상단 전용 표면, 라인, 그림자, 액센트 계층을 공통 변수로 분리
+  - 홈 서비스 허브를 `지표 카드 + 여정 카드 + 서비스 카드` 반복 구조에서 `lead runway + spotlight image stage + 3개 목적지 route card` 조합으로 재편해 첫 화면이 더 이상 운영 대시보드처럼 보이지 않게 정리
+  - `TopNav`에 edition 메타, 숫자 인덱스 내비, 새 소식 카운터를 추가하고 같은 랜딩 토큰으로 묶어 상단 헤더도 소비자용 편집 허브처럼 읽히게 조정
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css frontend/components/home/TopNav.tsx frontend/components/home/TopNav.module.css` 통과
+  - 캡처: `frontend/node_modules/.bin/playwright` 부재로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `8686f9d` (`Redesign home dispatch runway`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 푸시는 DNS 차단으로 미완료
+- 커밋 해시: `8686f9d`
+- 남은 가장 큰 UX 문제: 홈 상단 런웨이는 정리됐지만 `CommunitySection`, `HorizontalCardSlider`, `InfoLibrarySection`이 아직 섹션별 독립 박스 감각이 강해 첫 스크롤 이후 리듬이 다시 분절된다
+- 다음 실행 우선순위 1~3:
+  - `CommunitySection`, `HorizontalCardSlider`, `InfoLibrarySection`을 새 `landing`/`home-stage` 언어로 재정렬해 섹션별 박스 분절감을 줄인다
+  - 홈/내부 공통 CTA와 상태 배지를 `landing`/`selection` 토큰 기반으로 더 일관되게 통합한다
+  - DNS가 복구되는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 푸시하고 데스크톱/모바일 캡처를 다시 수행
+
 ## 2026-03-17 03:32:33 KST
 - timestamp: 2026-03-17 03:32:33 KST
 - 이번 실행 목표: `MarketView` 카탈로그 제어부의 관리자형 정렬 칩을 제품형 선택 덱으로 교체하고, 같은 상호작용 언어를 `CommunityView` 피드 전환부까지 확장한다
