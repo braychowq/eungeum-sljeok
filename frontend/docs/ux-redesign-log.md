@@ -1,5 +1,45 @@
 # UX Redesign Log
 
+## 2026-03-17 07:32:03 KST
+- timestamp: 2026-03-17 07:32:03 KST
+- 이번 실행 목표: `compose`/상세 화면의 액션·입력 표면을 관리자형 유틸리티 묶음에서 목적 중심 제품 플로우로 재구성하고, `StudioShareDetailView`의 CSS 드리프트를 복구한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/ssuk/ComposeWorkspace.module.css`
+  - `frontend/components/ssuk/CommunityComposeView.tsx`
+  - `frontend/components/ssuk/MarketComposeView.tsx`
+  - `frontend/components/ssuk/CommunityPostDetailView.tsx`
+  - `frontend/components/ssuk/CommunityPostDetailView.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--control-*`, `--section-rhythm`, `--sticky-offset`, `--motion-emphasized` 의미 토큰을 추가해 버튼, 입력창, 액션 도크, 스티키 패널이 페이지별 임시 스타일이 아니라 같은 제어 언어를 공유하도록 정리
+  - `CommunityComposeView`, `MarketComposeView`, `ComposeWorkspace.module.css`를 함께 수정해 준비 점수 카드 중심 작성 워크플로를 `readiness summary + 누락 필드 칩 + 단일 primary action + preview/list secondary action` 구조의 발행 트레이로 재구성
+  - `CommunityPostDetailView`의 반응 버튼과 댓글 입력을 분리된 게시판형 섹션에서 하나의 `response dock`으로 합치고, 입력/버튼 표면도 새 control 토큰 기반으로 다시 설계
+  - `StudioShareDetailView.module.css`를 현재 TSX 구조와 일치하도록 전면 재작성해 리드 영역, 예약 카드, 레일형 정보 블록, 하단 스티키 CTA가 실제 제품 상세 페이지처럼 읽히도록 복구
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/ssuk/ComposeWorkspace.module.css frontend/components/ssuk/CommunityComposeView.tsx frontend/components/ssuk/MarketComposeView.tsx frontend/components/ssuk/CommunityPostDetailView.tsx frontend/components/ssuk/CommunityPostDetailView.module.css frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/ssuk/StudioShareDetailView.tsx | sed 's/styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/ssuk/StudioShareDetailView.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+    `frontend/node_modules/.bin/playwright` 없음
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `1ebb549` (`Rebuild ssuk action surfaces`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 push는 DNS 차단으로 미완료
+- 커밋 해시: `1ebb549`
+- 남은 가장 큰 UX 문제: 새 액션 문법이 compose/detail에는 들어갔지만 `TwoMenuShell`, `common` 계열 공용 버튼/입력 컴포넌트로 추출되지 않아 홈·목록·상세 전반의 제어 언어가 아직 완전히 하나의 시스템으로 닫히지 않음
+- 다음 실행 우선순위 1~3:
+  - `components/common`에 현재 `control` 토큰을 받는 공용 버튼/필드/액션 바 컴포넌트를 만들고 `TwoMenuShell` 및 목록 CTA에 확장 적용
+  - 홈/`ssuk`가 서로 다른 전역 톤을 덮어쓰는 문제를 줄이도록 scoped theme wrapper 또는 semantic alias 레이어를 정리
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 재시도
+
 ## 2026-03-17 06:34:16 KST
 - timestamp: 2026-03-17 06:34:16 KST
 - 이번 실행 목표: `ssuk` 공통 셸과 모바일 도크, CTA 문법을 홈 랜딩과 같은 제품형 내비게이션 시스템으로 다시 묶는다
