@@ -1,5 +1,43 @@
 # UX Redesign Log
 
+## 2026-03-17 06:34:16 KST
+- timestamp: 2026-03-17 06:34:16 KST
+- 이번 실행 목표: `ssuk` 공통 셸과 모바일 도크, CTA 문법을 홈 랜딩과 같은 제품형 내비게이션 시스템으로 다시 묶는다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/EditorialSelectionDeck.module.css`
+  - `frontend/components/common/MobileBottomSheet.tsx`
+  - `frontend/components/common/MobileBottomSheet.module.css`
+  - `frontend/components/common/SiteFooter.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/ssuk/TwoMenuShell.tsx`
+  - `frontend/components/ssuk/TwoMenuShell.module.css`
+  - `frontend/components/ssuk/CommunityView.module.css`
+  - `frontend/components/ssuk/MarketView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `--ssuk-shell-*`, `--shell-ribbon-*`, `--button-pill-*`, `--dock-*` 토큰을 정리해 내부 셸, 하단 도크, CTA가 서로 다른 관리자형 패턴이 아니라 같은 제품 언어를 공유하도록 재구성
+  - `TwoMenuShell`을 1180px급 제품 캔버스와 `홈 / 커뮤니티 / 공방 쉐어` 3축 내비게이션 masthead로 재설계해, 커뮤니티/마켓 내부 화면 상단 인상이 툴형 유틸리티 바에서 소비자용 제품 헤더로 바뀌도록 조정
+  - `MobileBottomSheet`를 홈/커뮤니티/마켓 3슬롯 도크로 유지하면서 `EditorialSelectionDeck`, `SiteFooter`, 커뮤니티/마켓 CTA와 같은 pill 버튼 그림자와 표면 토큰을 공유하도록 맞춰 모바일과 데스크톱 액션 리듬을 통일
+  - `CommunityView`, `MarketView`의 CTA/선택 영역이 새 셸 버튼 문법과 어긋나지 않도록 상태/표면 질감을 같은 계열로 정리
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/common/MobileBottomSheet.tsx frontend/components/common/MobileBottomSheet.module.css frontend/components/common/EditorialSelectionDeck.module.css frontend/components/home/HomePage.tsx frontend/components/ssuk/TwoMenuShell.tsx frontend/components/ssuk/TwoMenuShell.module.css frontend/components/ssuk/CommunityView.module.css frontend/components/ssuk/MarketView.module.css` 통과
+  - 캡처/서버 검증: `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`), 브라우저 캡처 도구 없음
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `3d729bc` (`Rebuild ssuk navigation runway`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 DNS 차단으로 원격 push는 미완료
+- 커밋 해시: `3d729bc`
+- 남은 가장 큰 UX 문제: 내부 리스트 화면의 셸과 CTA는 새 제품 문법에 맞춰졌지만 `ComposeWorkspace`, `CommunityPostDetailView`, `StudioShareDetailView`가 아직 같은 내비 런웨이와 액션 리듬으로 완전히 이어지지 않음
+- 다음 실행 우선순위 1~3:
+  - `ComposeWorkspace`와 상세 화면들의 내부 그리드/폼/액션 바를 새 `ssuk-shell` 거터 기준으로 확장한다
+  - `CommunityPostDetailView`, `StudioShareDetailView`에 이번 런의 도크/CTA/내비 런웨이를 연결한다
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 정상 push한다
+
 ## 2026-03-17 05:36:25 KST
 - timestamp: 2026-03-17 05:36:25 KST
 - 이번 실행 목표: 홈 하단 `CommunitySection`, `HorizontalCardSlider`, `InfoLibrarySection`을 공통 프레임 기반 에디토리얼 시퀀스로 재구성해 개별 박스 나열형 인상을 줄인다
