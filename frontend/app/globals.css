@@ -109,6 +109,34 @@
     linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
   --market-ink-inverse: #fff8f2;
   --market-chip-soft: rgba(255, 255, 255, 0.88);
+  --home-shell: #fffaf4;
+  --home-shell-strong: rgba(255, 250, 244, 0.94);
+  --home-panel:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(247, 239, 228, 0.9));
+  --home-panel-strong:
+    linear-gradient(158deg, rgba(32, 47, 44, 0.98), rgba(69, 88, 83, 0.94));
+  --home-panel-soft:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.62));
+  --home-line: rgba(29, 23, 17, 0.08);
+  --home-line-strong: rgba(29, 23, 17, 0.18);
+  --home-shadow: 0 36px 84px rgba(28, 24, 20, 0.12);
+  --home-shadow-soft: 0 18px 42px rgba(28, 24, 20, 0.08);
+  --home-ink: #191410;
+  --home-muted: #6f665f;
+  --home-subtle: #9f9489;
+  --home-accent: #b45a32;
+  --home-accent-strong: #8d4021;
+  --home-accent-soft: rgba(180, 90, 50, 0.12);
+  --home-forest: #244843;
+  --home-forest-strong: #173430;
+  --home-forest-soft: rgba(36, 72, 67, 0.12);
+  --home-gold: #caa16f;
+  --home-gold-soft: rgba(202, 161, 111, 0.16);
+  --home-chip: rgba(255, 255, 255, 0.88);
+  --home-chip-strong: rgba(255, 255, 255, 0.96);
+  --home-wash:
+    radial-gradient(circle at top right, rgba(202, 161, 111, 0.18), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(36, 72, 67, 0.1), transparent 34%);
   --radius-sm: 10px;
   --radius-md: 16px;
   --space-1: 8px;

@@ -56,6 +56,21 @@ export default function HomePage() {
     { label: '공방 쉐어', value: `${studioCards.length}곳` },
     { label: '판매 아이템', value: `${marketCards.length}건` }
   ];
+  const studioBrowseHref = '/market?tab=studio';
+  const atelierSignals = [
+    {
+      label: '오늘의 큐레이션',
+      value: featuredBanner?.subtitle ?? '작업과 거래를 잇는 주얼리 메이커 네트워크'
+    },
+    {
+      label: '가장 가까운 질문',
+      value: latestCommunityPost?.title ?? '최근 인기 커뮤니티 글'
+    },
+    {
+      label: '바로 이어질 공간',
+      value: featuredStudioCard?.title ?? '공방 쉐어 셀렉션'
+    }
+  ] as const;
   const journeySteps = [
     {
       id: 'community',
@@ -100,128 +115,102 @@ export default function HomePage() {
       <div className={styles.pageGlow} aria-hidden="true" />
 
       <div className={styles.container}>
-        <TopNav items={navItems} />
+        <TopNav items={navItems} freshCount={freshCommunityCount} />
 
         <BannerCarousel items={bannerItems} />
 
         <section className={styles.serviceHub} aria-label="슬쩍 서비스 허브">
-          <div className={styles.serviceHubIntro}>
-            <div className={styles.serviceHubLead}>
+          <div className={styles.serviceHubCanvas}>
+            <section className={styles.serviceHubLead} aria-label="홈 시작 안내">
               <div className={styles.serviceHubCopy}>
-                <span className={styles.serviceHubEyebrow}>Atelier flow</span>
-                <h1>배우고, 연결하고, 판매까지 이어지는 오늘의 슬쩍 리듬</h1>
+                <span className={styles.serviceHubEyebrow}>Atelier dispatch</span>
+                <h1>오늘 필요한 연결을 먼저 고르고, 바로 다음 액션으로 이어갑니다</h1>
                 <p>
-                  홈에서 바로 커뮤니티와 공방 쉐어, 마켓을 한 호흡으로 탐색할 수 있도록 시작점을 다시
-                  묶었습니다. 박스형 관리자 화면 대신 브랜드형 모바일 서비스처럼, 오늘 필요한 행동부터
-                  곧바로 이어가게 만듭니다.
+                  홈 상단을 요약 패널 묶음이 아니라 메이커용 랜딩 경험으로 다시 엮었습니다. 지금 가장
+                  반응이 빠른 대화, 바로 이어질 공방, 판매 흐름을 한 리듬 안에서 고를 수 있게 정리했습니다.
                 </p>
               </div>
 
-              <div className={styles.serviceHubIntroAside}>
-                <div className={styles.serviceHubMoodCard}>
-                  <span>오늘의 큐레이션</span>
-                  <strong>
-                    {featuredBanner?.subtitle ?? '작업과 거래를 잇는 주얼리 메이커 네트워크'}
-                  </strong>
-                </div>
-
-                <div className={styles.serviceHubActionRow}>
-                  <Link href="#community" className={styles.serviceHubPrimaryLink}>
-                    대화부터 시작
-                  </Link>
-                  <Link href="/market" className={styles.serviceHubGhostLink}>
-                    마켓 둘러보기
-                  </Link>
-                </div>
+              <div className={styles.serviceHubActionRow}>
+                <Link href="#community" className={styles.serviceHubPrimaryLink}>
+                  인기 대화부터 보기
+                </Link>
+                <Link href={studioBrowseHref} className={styles.serviceHubGhostLink}>
+                  공방 둘러보기
+                </Link>
               </div>
-            </div>
 
-            <div className={styles.serviceHubStats} aria-label="서비스 현황 요약">
-              {serviceHubStats.map((item) => (
-                <div key={item.label} className={styles.serviceHubStatCard}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
+              <div className={styles.serviceHubStats} aria-label="서비스 현황 요약">
+                {serviceHubStats.map((item) => (
+                  <div key={item.label} className={styles.serviceHubStatCard}>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <aside className={styles.serviceHubAside}>
+              <article className={styles.serviceHubMoodCard}>
+                <div className={styles.serviceHubMoodHeader}>
+                  <span>this hour&apos;s edit</span>
+                  <strong>{featuredBanner?.subtitle ?? '오늘의 큐레이션'}</strong>
                 </div>
-              ))}
-            </div>
+
+                <p>
+                  최근 {freshCommunityCount}개의 새 대화와 함께 공간 탐색, 판매 액션이 한 흐름으로
+                  이어지도록 지금 볼 만한 신호만 추렸습니다.
+                </p>
+
+                <ul className={styles.serviceHubSignalList}>
+                  {atelierSignals.map((signal) => (
+                    <li key={signal.label} className={styles.serviceHubSignalItem}>
+                      <span>{signal.label}</span>
+                      <strong>{signal.value}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+
+              <section className={styles.serviceHubJourney} aria-label="서비스 이동 흐름">
+                <div className={styles.serviceHubJourneyHeader}>
+                  <span className={styles.serviceHubEyebrow}>Today&apos;s path</span>
+                  <h2>홈에서 바로 이어지는 3단계 작업 여정</h2>
+                </div>
+
+                <ol className={styles.serviceHubJourneyList}>
+                  {journeySteps.map((step) => (
+                    <li key={step.id} className={styles.serviceHubJourneyItem}>
+                      <Link href={step.href} className={styles.serviceHubJourneyLink}>
+                        <div className={styles.serviceHubJourneyStep}>
+                          <span>{step.step}</span>
+                          <small>{step.eyebrow}</small>
+                        </div>
+                        <div className={styles.serviceHubJourneyBody}>
+                          <strong>{step.title}</strong>
+                          <p>{step.meta}</p>
+                          <span className={styles.serviceHubTextLink}>{step.ctaLabel}</span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </aside>
           </div>
 
           <div className={styles.serviceHubGrid}>
             {serviceHubCards.map((card, index) => (
-              <article key={card.id} className={styles.serviceHubCard}>
+              <Link key={card.id} href={card.href} className={styles.serviceHubCard}>
                 <div className={styles.serviceHubCardTop}>
                   <span className={styles.serviceHubCardIndex}>{String(index + 1).padStart(2, '0')}</span>
                   <span className={styles.serviceHubCardEyebrow}>{card.eyebrow}</span>
                 </div>
                 <strong>{card.title}</strong>
                 <p>{card.description}</p>
-                <Link href={card.href} className={styles.serviceHubCardLink}>
-                  {card.ctaLabel}
-                </Link>
-              </article>
+                <span className={styles.serviceHubCardLink}>{card.ctaLabel}</span>
+              </Link>
             ))}
-          </div>
-
-          <div className={styles.serviceHubJourneyLayout}>
-            <section className={styles.serviceHubFeature} aria-label="오늘의 시작 추천">
-              <div className={styles.serviceHubFeatureHeader}>
-                <span className={styles.serviceHubEyebrow}>Recommended start</span>
-                <strong>오늘은 커뮤니티에서 먼저 막힌 지점을 푸는 흐름이 가장 빠릅니다.</strong>
-              </div>
-
-              <p className={styles.serviceHubFeatureCopy}>
-                최근 대화량이 가장 높고, 공방 쉐어와 마켓 진입 전 필요한 정보가 여기에서 먼저
-                풀립니다. 질문을 확인하고 이어서 공간이나 판매 흐름으로 넘어가면 훨씬 자연스럽습니다.
-              </p>
-
-              <div className={styles.serviceHubFeaturePanel}>
-                <div className={styles.serviceHubFeatureMetric}>
-                  <span>가장 먼저 볼 항목</span>
-                  <strong>{latestCommunityPost?.title ?? '최근 인기 커뮤니티 글'}</strong>
-                </div>
-                <div className={styles.serviceHubFeatureMetric}>
-                  <span>바로 이어질 다음 단계</span>
-                  <strong>공방 쉐어와 마켓 탐색</strong>
-                </div>
-              </div>
-
-              <div className={styles.serviceHubFeatureActions}>
-                <Link href="#community" className={styles.serviceHubPrimaryLink}>
-                  인기글부터 보기
-                </Link>
-                <Link href="/community" className={styles.serviceHubSecondaryLink}>
-                  전체 커뮤니티 보기
-                </Link>
-              </div>
-            </section>
-
-            <section className={styles.serviceHubJourney} aria-label="서비스 이동 흐름">
-              <div className={styles.serviceHubJourneyHeader}>
-                <span className={styles.serviceHubEyebrow}>Today&apos;s path</span>
-                <h2>홈에서 바로 이어지는 3단계 작업 여정</h2>
-              </div>
-
-              <ol className={styles.serviceHubJourneyList}>
-                {journeySteps.map((step) => (
-                  <li key={step.id} className={styles.serviceHubJourneyItem}>
-                    <div className={styles.serviceHubJourneyStep}>
-                      <span>{step.step}</span>
-                      <small>{step.eyebrow}</small>
-                    </div>
-                    <div className={styles.serviceHubJourneyBody}>
-                      <strong>{step.title}</strong>
-                      <p>{step.description}</p>
-                      <div className={styles.serviceHubJourneyFooter}>
-                        <span>{step.meta}</span>
-                        <Link href={step.href} className={styles.serviceHubTextLink}>
-                          {step.ctaLabel}
-                        </Link>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </section>
           </div>
         </section>
 
@@ -235,6 +224,7 @@ export default function HomePage() {
           cardTag="공방 쉐어"
           cards={studioCards}
           headerHref="/market?tab=studio"
+          tone="studio"
         />
 
         <HorizontalCardSlider
@@ -245,6 +235,7 @@ export default function HomePage() {
           cardTag="판매 셀렉션"
           cards={marketCards}
           headerHref="/market"
+          tone="market"
         />
 
         <InfoLibrarySection entries={libraryEntries} />

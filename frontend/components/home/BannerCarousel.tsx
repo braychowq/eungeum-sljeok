@@ -111,13 +111,23 @@ export default function BannerCarousel({
     return () => window.cancelAnimationFrame(raf);
   }, [total]);
 
+  const goToIndex = (index: number) => {
+    if (total <= 0) return;
+    const normalized = ((index % total) + total) % total;
+    setActiveIndex(normalized);
+    scrollToDisplayIndex(total > 1 ? normalized + 1 : normalized);
+  };
+
+  const handlePrev = () => goToIndex(activeIndex - 1);
+  const handleNext = () => goToIndex(activeIndex + 1);
+
   useEffect(() => {
     if (total <= 1) return undefined;
 
     const timer = window.setInterval(() => {
       const next = (activeIndex + 1) % total;
       setActiveIndex(next);
-      scrollToDisplayIndex(next + 1);
+      scrollToDisplayIndex(total > 1 ? next + 1 : next);
     }, autoplayMs);
 
     return () => window.clearInterval(timer);
@@ -221,8 +231,12 @@ export default function BannerCarousel({
                 draggable={false}
               />
               <div className={styles.cardOverlay}>
-                <span className={styles.cardKicker}>{bannerLabels[realIndex % bannerLabels.length]}</span>
-                <strong>{item.subtitle}</strong>
+                <div className={styles.cardBadgeRow}>
+                  <span className={styles.cardKicker}>{bannerLabels[realIndex % bannerLabels.length]}</span>
+                  <span className={styles.cardLabel}>#{realIndex + 1}</span>
+                </div>
+                <h3 className={styles.cardTitle}>{item.title}</h3>
+                <p className={styles.cardText}>{item.subtitle}</p>
                 <span className={styles.cardCta}>지금 둘러보기</span>
               </div>
             </a>
@@ -230,21 +244,43 @@ export default function BannerCarousel({
         })}
       </div>
 
-      <div className={styles.dots} role="tablist" aria-label="배너 페이지네이션">
-        {items.map((item, index) => (
+      <div className={styles.controls}>
+        <div className={styles.controlGroup}>
           <button
-            key={item.id}
             type="button"
-            role="tab"
-            aria-selected={index === activeIndex}
-            aria-label={`${index + 1}번 배너`}
-            className={`${styles.dot} ${index === activeIndex ? styles.activeDot : ''}`}
-            onClick={() => {
-              setActiveIndex(index);
-              scrollToDisplayIndex(total > 1 ? index + 1 : index);
-            }}
-          />
-        ))}
+            className={styles.controlButton}
+            onClick={handlePrev}
+            aria-label="이전 배너"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            className={styles.controlButton}
+            onClick={handleNext}
+            aria-label="다음 배너"
+          >
+            ›
+          </button>
+        </div>
+
+        <div className={styles.dots} role="tablist" aria-label="배너 페이지네이션">
+          {items.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={index === activeIndex}
+              aria-label={`${index + 1}번 배너`}
+              className={`${styles.dot} ${index === activeIndex ? styles.activeDot : ''}`}
+              onClick={() => goToIndex(index)}
+            />
+          ))}
+        </div>
+
+        <span className={styles.counter} aria-live="polite">
+          {total > 0 ? `${activeIndex + 1} / ${total}` : '0 / 0'}
+        </span>
       </div>
     </section>
   );

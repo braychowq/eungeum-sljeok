@@ -50,75 +50,142 @@ export default function CommunitySection({ posts }: CommunitySectionProps) {
     [posts]
   );
 
-  const visibleCategories = useMemo(
+  const categorySummaries = useMemo(
     () =>
-      Array.from(new Set(popularPosts.map((post) => post.category))).map((category) => ({
+      (Object.entries(categoryLabelMap) as [CommunityCategory, string][]).map(([category, label]) => ({
         id: category,
-        label: categoryLabelMap[category],
+        label,
+        count: posts.filter((post) => post.category === category && !post.isNotice && !post.isPinned).length,
         href: `/community?tab=${category}`
       })),
-    [popularPosts]
+    [posts]
   );
+
+  const visibleCategories = useMemo(
+    () =>
+      categorySummaries.filter((category) =>
+        popularPosts.some((post) => post.category === category.id)
+      ),
+    [categorySummaries, popularPosts]
+  );
+
+  const leadPost = popularPosts[0];
+  const sidePosts = leadPost ? popularPosts.slice(1) : popularPosts;
+  const activePulseCount = posts.filter(isPopularCandidate).length;
 
   return (
     <section id="community" className={styles.section} aria-label="커뮤니티">
-      <div className={styles.headerRow}>
-        <div className={styles.headerBlock}>
-          <span className={styles.eyebrow}>Community pulse</span>
-          <h3 className={styles.heading}>
-            <Link href="/community" className={styles.headerLink}>
-              <span className={styles.headerTitle}>슬쩍 얘기하기</span>
-            </Link>
-          </h3>
-          <p className={styles.headerDescription}>
-            지금 반응이 빠른 질문과 공유 흐름을 먼저 모았습니다. 바로 읽고 대화에 합류할 수 있습니다.
-          </p>
-        </div>
-      </div>
+      <div className={styles.sectionShell}>
+        <div className={styles.headerRow}>
+          <div className={styles.headerBlock}>
+            <span className={styles.eyebrow}>Community pulse</span>
+            <h3 className={styles.heading}>
+              <Link href="/community" className={styles.headerLink}>
+                <span className={styles.headerTitle}>슬쩍 얘기하기</span>
+              </Link>
+            </h3>
+            <p className={styles.headerDescription}>
+              지금 반응이 빠른 질문과 공유 흐름을 먼저 모았습니다. 바로 읽고 대화에 합류할 수 있습니다.
+            </p>
+          </div>
 
-      <div className={styles.filterRow}>
-        <Link href="/community" className={`${styles.filterLink} ${styles.filterLinkActive}`}>
-          전체
-        </Link>
-        {visibleCategories.map((category) => (
-          <Link key={category.id} href={category.href} className={styles.filterLink}>
-            {category.label}
+          <div className={styles.metricCard}>
+            <span>24h 대화 신호</span>
+            <strong>{activePulseCount}개</strong>
+            <p>질문, 공유, 아무말 흐름을 한 번에 묶어 오늘 가장 빠른 대화를 먼저 보여줍니다.</p>
+          </div>
+        </div>
+
+        <div className={styles.filterRow}>
+          <Link href="/community" className={`${styles.filterLink} ${styles.filterLinkActive}`}>
+            전체
           </Link>
-        ))}
-      </div>
-
-      <section className={styles.popularSection} aria-label="인기글 TOP 5">
-        <div className={styles.subHeaderRow}>
-          <h4 className={styles.subHeading}>인기글 TOP 5</h4>
+          {visibleCategories.map((category) => (
+            <Link key={category.id} href={category.href} className={styles.filterLink}>
+              <span>{category.label}</span>
+              <strong>{category.count}</strong>
+            </Link>
+          ))}
         </div>
 
-        <ul className={styles.popularList}>
-          {popularPosts.length > 0 ? (
-            popularPosts.map((post, index) => (
-              <li key={post.id}>
-                <Link href={post.href} className={styles.popularItem}>
-                  <div className={styles.popularContent}>
-                    <div className={styles.titleRow}>
-                      <span className={styles.categoryChip}>{categoryLabelMap[post.category]}</span>
-                      {index < 3 ? <span className={styles.hotBadge}>HOT</span> : null}
-                    </div>
-                    <strong className={styles.postTitle}>{post.title}</strong>
+        <section className={styles.popularSection} aria-label="인기글 TOP 5">
+          <div className={styles.layout}>
+            {leadPost ? (
+              <article className={styles.leadCard}>
+                <div className={styles.leadBadgeRow}>
+                  <span className={styles.rankBadge}>TOP 01</span>
+                  <span className={styles.categoryChip}>{categoryLabelMap[leadPost.category]}</span>
+                </div>
+                <strong className={styles.leadTitle}>{leadPost.title}</strong>
+                <p className={styles.leadDescription}>
+                  좋아요와 댓글이 빠르게 붙고 있는 글입니다. 지금 읽고 바로 대화에 참여하면 흐름을 가장
+                  놓치지 않습니다.
+                </p>
+                <dl className={styles.leadStats}>
+                  <div>
+                    <dt>좋아요</dt>
+                    <dd>{leadPost.likeCount}</dd>
                   </div>
-                  <div className={styles.reactionBox}>
-                    <span className={styles.rankBadge}>{String(index + 1).padStart(2, '0')}</span>
-                    <div className={styles.reactionMeta}>
-                      <span>좋아요 {post.likeCount}</span>
-                      <span>댓글 {post.commentCount}</span>
-                    </div>
+                  <div>
+                    <dt>댓글</dt>
+                    <dd>{leadPost.commentCount}</dd>
                   </div>
-                </Link>
-              </li>
-            ))
-          ) : (
-            <li className={styles.emptyState}>최근 24시간 기준 인기글이 아직 없습니다.</li>
-          )}
-        </ul>
-      </section>
+                  <div>
+                    <dt>조회</dt>
+                    <dd>{leadPost.viewCount}</dd>
+                  </div>
+                </dl>
+                <div className={styles.leadActions}>
+                  <Link href={leadPost.href} className={styles.primaryLink}>
+                    지금 읽기
+                  </Link>
+                  <Link href="/community" className={styles.secondaryLink}>
+                    전체 커뮤니티
+                  </Link>
+                </div>
+              </article>
+            ) : (
+              <div className={styles.emptyState}>최근 24시간 기준 인기글이 아직 없습니다.</div>
+            )}
+
+            <div className={styles.sideColumn}>
+              <div className={styles.subHeaderRow}>
+                <h4 className={styles.subHeading}>지금 뜨는 대화</h4>
+                <span className={styles.subDescription}>반응이 빠른 순서</span>
+              </div>
+
+              <ul className={styles.popularList}>
+                {sidePosts.length > 0 ? (
+                  sidePosts.map((post, index) => (
+                    <li key={post.id}>
+                      <Link href={post.href} className={styles.popularItem}>
+                        <div className={styles.popularContent}>
+                          <div className={styles.titleRow}>
+                            <span className={styles.categoryChip}>{categoryLabelMap[post.category]}</span>
+                            {index < 2 ? <span className={styles.hotBadge}>HOT</span> : null}
+                          </div>
+                          <strong className={styles.postTitle}>{post.title}</strong>
+                        </div>
+                        <div className={styles.reactionBox}>
+                          <span className={styles.sideRankBadge}>
+                            {String(index + 2).padStart(2, '0')}
+                          </span>
+                          <div className={styles.reactionMeta}>
+                            <span>좋아요 {post.likeCount}</span>
+                            <span>댓글 {post.commentCount}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  ))
+                ) : leadPost ? (
+                  <li className={styles.sideEmptyState}>대표 글 외 추가 인기글이 아직 없습니다.</li>
+                ) : null}
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
     </section>
   );
 }

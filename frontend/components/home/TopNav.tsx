@@ -7,9 +7,10 @@ import styles from './TopNav.module.css';
 
 type TopNavProps = {
   items: NavItem[];
+  freshCount: number;
 };
 
-export default function TopNav({ items }: TopNavProps) {
+export default function TopNav({ items, freshCount }: TopNavProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -17,27 +18,33 @@ export default function TopNav({ items }: TopNavProps) {
 
   return (
     <header className={styles.header}>
-      <Link className={styles.brandBlock} href="/">
-        <span className={styles.brandEyebrow}>atelier network</span>
-        <span className={styles.logo}>은금슬쩍</span>
-      </Link>
+      <div className={styles.brandCluster}>
+        <Link className={styles.brandBlock} href="/">
+          <span className={styles.brandEyebrow}>atelier bulletin</span>
+          <span className={styles.logo}>은금슬쩍</span>
+        </Link>
+        <span className={styles.brandNote}>배우고, 연결하고, 판매까지 이어지는 makers&apos; daily flow</span>
+      </div>
 
-      <nav className={styles.nav} aria-label="메인 네비게이션">
-        {items.map((item) => (
-          <Link
-            key={item.id}
-            className={`${styles.navLink} ${isActive(item.href) ? styles.navLinkActive : ''}`}
-            href={item.href}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+      <div className={styles.navTray}>
+        <nav className={styles.nav} aria-label="메인 네비게이션">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              className={`${styles.navLink} ${isActive(item.href) ? styles.navLinkActive : ''}`}
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
-      <button className={styles.alertButton} type="button">
-        <span className={styles.alertDot} aria-hidden="true" />
-        새 소식
-      </button>
+        <Link className={styles.alertButton} href="/community">
+          <span className={styles.alertCount}>{String(Math.min(freshCount, 99)).padStart(2, '0')}</span>
+          오늘의 새 소식
+        </Link>
+      </div>
     </header>
   );
 }
