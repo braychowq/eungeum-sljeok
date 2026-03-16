@@ -109,6 +109,33 @@
     linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
   --market-ink-inverse: #fff8f2;
   --market-chip-soft: rgba(255, 255, 255, 0.88);
+  --detail-shell:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.98), rgba(247, 240, 230, 0.9));
+  --detail-panel:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(244, 236, 225, 0.86));
+  --detail-panel-strong:
+    linear-gradient(160deg, rgba(28, 46, 44, 0.98), rgba(68, 96, 90, 0.94));
+  --detail-card: rgba(255, 255, 255, 0.82);
+  --detail-card-strong: rgba(255, 255, 255, 0.92);
+  --detail-line: rgba(29, 23, 17, 0.08);
+  --detail-line-strong: rgba(29, 23, 17, 0.18);
+  --detail-shadow: 0 26px 58px rgba(28, 24, 20, 0.1);
+  --detail-shadow-soft: 0 16px 34px rgba(28, 24, 20, 0.08);
+  --detail-ink: #1b1510;
+  --detail-muted: #695f56;
+  --detail-subtle: #998c7f;
+  --detail-accent: #ab6038;
+  --detail-accent-strong: #87452a;
+  --detail-accent-soft: rgba(171, 96, 56, 0.12);
+  --detail-support: #2a5752;
+  --detail-support-strong: #1f4642;
+  --detail-support-soft: rgba(42, 87, 82, 0.12);
+  --detail-warm: #c29a66;
+  --detail-warm-soft: rgba(194, 154, 102, 0.16);
+  --detail-focus: #9f4f2d;
+  --detail-radius-xl: 34px;
+  --detail-radius-lg: 26px;
+  --detail-radius-md: 18px;
   --home-shell: #fffaf4;
   --home-shell-strong: rgba(255, 250, 244, 0.94);
   --home-panel:
@@ -137,6 +164,26 @@
   --home-wash:
     radial-gradient(circle at top right, rgba(202, 161, 111, 0.18), transparent 28%),
     radial-gradient(circle at bottom left, rgba(36, 72, 67, 0.1), transparent 34%);
+  --detail-panel:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(247, 239, 228, 0.9));
+  --detail-panel-strong:
+    linear-gradient(158deg, rgba(30, 44, 41, 0.98), rgba(71, 92, 86, 0.94));
+  --detail-panel-soft:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.66));
+  --detail-line: rgba(28, 24, 20, 0.08);
+  --detail-line-strong: rgba(28, 24, 20, 0.18);
+  --detail-shadow: 0 28px 62px rgba(28, 24, 20, 0.12);
+  --detail-shadow-soft: 0 18px 36px rgba(28, 24, 20, 0.08);
+  --detail-chip: rgba(255, 255, 255, 0.88);
+  --detail-chip-strong: rgba(255, 255, 255, 0.96);
+  --detail-ink: #191410;
+  --detail-muted: #6f665f;
+  --detail-subtle: #9e9388;
+  --detail-accent: #b45a32;
+  --detail-accent-strong: #8d4021;
+  --detail-accent-soft: rgba(180, 90, 50, 0.12);
+  --detail-forest: #244843;
+  --detail-forest-soft: rgba(36, 72, 67, 0.12);
   --radius-sm: 10px;
   --radius-md: 16px;
   --space-1: 8px;

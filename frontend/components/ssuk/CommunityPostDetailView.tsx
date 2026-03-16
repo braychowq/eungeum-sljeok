@@ -89,9 +89,31 @@ const detailPostMap: Record<string, DetailPost> = {
 
 const fallbackPost = detailPostMap['qna-1'];
 
+const categoryLabelMap: Record<DetailPost['category'], string> = {
+  qna: 'Q&A',
+  share: '공유 아카이브',
+  free: '메이커 라운지'
+};
+
+const categorySummaryMap: Record<DetailPost['category'], string> = {
+  qna: '실패율을 줄이는 기준을 빠르게 맞춰보는 질문 노트입니다.',
+  share: '작업 흐름에 바로 가져다 쓸 수 있는 실전 템플릿과 공유 기록입니다.',
+  free: '메이커 사이의 호흡과 분위기를 가볍게 나누는 라운지 대화입니다.'
+};
+
 const sampleComments = [
-  { id: 'c-1', author: '실버초보', time: '12분 전', text: '토치 각도 고정이 핵심이더라고요. 저도 같은 문제 있었어요.' },
-  { id: 'c-2', author: '공방운영자', time: '6분 전', text: '피클링 이후 중화 과정까지 체크하면 표면 안정성이 좋아졌습니다.' }
+  {
+    id: 'c-1',
+    author: '실버초보',
+    time: '12분 전',
+    text: '토치 각도 고정이 핵심이더라고요. 저도 같은 문제 있었어요.'
+  },
+  {
+    id: 'c-2',
+    author: '공방운영자',
+    time: '6분 전',
+    text: '피클링 이후 중화 과정까지 체크하면 표면 안정성이 좋아졌습니다.'
+  }
 ];
 
 export default function CommunityPostDetailView({ postId }: CommunityPostDetailViewProps) {
@@ -103,6 +125,29 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
   const previousPost = resolvedIndex > 0 ? postsInCategory[resolvedIndex - 1] : null;
   const nextPost =
     resolvedIndex < postsInCategory.length - 1 ? postsInCategory[resolvedIndex + 1] : null;
+  const makerBrief = [
+    { label: '난이도', value: post.difficulty },
+    { label: '예상 시간', value: post.duration },
+    { label: '안전 메모', value: post.safetyNote }
+  ];
+  const resources = [
+    { label: '재료', items: post.materials },
+    { label: '도구', items: post.tools }
+  ];
+  const storyMetrics = [
+    { label: '조회', value: post.viewCount },
+    { label: '좋아요', value: post.likeCount },
+    { label: '댓글', value: post.commentCount }
+  ];
+  const reactionButtons = [
+    { id: 'like', label: '유용했어요', value: `${post.likeCount}` },
+    { id: 'reply', label: '답변 이어가기', value: `${post.commentCount}` },
+    { id: 'share', label: '메이커에게 공유', value: '링크' }
+  ];
+  const relatedPosts = [
+    { id: 'previous', label: '이전 글', post: previousPost },
+    { id: 'next', label: '다음 글', post: nextPost }
+  ];
 
   return (
     <TwoMenuShell
@@ -113,71 +158,153 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
       ctaHref={listHref}
       hideHero
     >
-      <section className={styles.headerSection} aria-label="게시글 헤더">
-        <h2>{post.title}</h2>
-        <div className={styles.metaRow}>
-          <span>{post.author}</span>
-          <span>{post.createdAt}</span>
-          <span>조회 {post.viewCount}</span>
-          <span>좋아요 {post.likeCount}</span>
-        </div>
-      </section>
+      <article className={styles.page} aria-label="게시글 상세">
+        <section className={styles.heroSection} aria-label="게시글 헤더">
+          <div className={styles.heroMain}>
+            <div className={styles.badgeRow}>
+              <span className={styles.categoryBadge}>{categoryLabelMap[post.category]}</span>
+              <span className={styles.readingBadge}>Maker thread</span>
+            </div>
+            <h1>{post.title}</h1>
+            <p className={styles.heroIntro}>{categorySummaryMap[post.category]}</p>
 
-      <section className={styles.bodySection} aria-label="본문">
-        <h3>본문</h3>
-        <div className={styles.paragraphs}>
-          {post.body.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-        </div>
-      </section>
+            <div className={styles.metaRow}>
+              <span>{post.author}</span>
+              <span>{post.createdAt}</span>
+              <span>{categoryLabelMap[post.category]}</span>
+            </div>
 
-      <section className={styles.actionSection} aria-label="게시글 반응">
-        <button type="button">좋아요 {post.likeCount}</button>
-        <button type="button">댓글 {post.commentCount}</button>
-        <button type="button">공유</button>
-      </section>
+            <div className={styles.metricGrid}>
+              {storyMetrics.map((metric) => (
+                <article key={metric.label} className={styles.metricCard}>
+                  <span className={styles.metricLabel}>{metric.label}</span>
+                  <strong className={styles.metricValue}>{metric.value}</strong>
+                </article>
+              ))}
+            </div>
+          </div>
 
-      <section className={styles.commentSection} aria-label="댓글">
-        <h3>댓글 {post.commentCount}</h3>
-        <div className={styles.commentInput}>
-          <input type="text" placeholder="댓글을 입력해 주세요." />
-          <button type="button">등록</button>
-        </div>
-        <ul className={styles.commentList}>
-          {sampleComments.map((comment) => (
-            <li key={comment.id}>
-              <div className={styles.commentMeta}>
-                <strong>{comment.author}</strong>
-                <span>{comment.time}</span>
-              </div>
-              <p>{comment.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+          <aside className={styles.heroAside} aria-label="글 요약">
+            <span className={styles.panelEyebrow}>Conversation brief</span>
+            <ul className={styles.briefList}>
+              {makerBrief.map((item) => (
+                <li key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </li>
+              ))}
+            </ul>
 
-      <section className={styles.relatedSection} aria-label="앞뒤 게시글">
-        <h3>이전/다음 게시글</h3>
-        <ul className={styles.postNavList}>
-          <li className={styles.postNavItem}>
-            <span className={styles.postNavLabel}>이전 글</span>
-            {previousPost ? (
-              <Link href={previousPost.href}>{previousPost.title}</Link>
-            ) : (
-              <span className={styles.postNavEmpty}>이전 글이 없습니다.</span>
-            )}
-          </li>
-          <li className={styles.postNavItem}>
-            <span className={styles.postNavLabel}>다음 글</span>
-            {nextPost ? (
-              <Link href={nextPost.href}>{nextPost.title}</Link>
-            ) : (
-              <span className={styles.postNavEmpty}>다음 글이 없습니다.</span>
-            )}
-          </li>
-        </ul>
-      </section>
+            <Link href={listHref} className={styles.backLink}>
+              이 카테고리 목록으로 돌아가기
+            </Link>
+          </aside>
+        </section>
+
+        <section className={styles.storySection} aria-label="본문과 재료 요약">
+          <div className={styles.storyMain}>
+            <div className={styles.sectionLead}>
+              <span className={styles.sectionEyebrow}>Story line</span>
+              <h2>본문</h2>
+              <p>질문이 생긴 맥락과 현재 시도한 기준값을 한 번에 읽을 수 있습니다.</p>
+            </div>
+
+            <div className={styles.paragraphs}>
+              {post.body.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </div>
+          </div>
+
+          <aside className={styles.resourcePanel} aria-label="재료와 도구">
+            {resources.map((group) => (
+              <section key={group.label} className={styles.resourceGroup}>
+                <span className={styles.resourceLabel}>{group.label}</span>
+                <div className={styles.chipList}>
+                  {group.items.map((item) => (
+                    <span key={item} className={styles.chip}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            ))}
+
+            <section className={styles.notePanel} aria-label="안전 메모">
+              <span className={styles.resourceLabel}>Safety note</span>
+              <p>{post.safetyNote}</p>
+            </section>
+          </aside>
+        </section>
+
+        <section className={styles.actionSection} aria-label="게시글 반응">
+          <div className={styles.sectionLead}>
+            <span className={styles.sectionEyebrow}>Response dock</span>
+            <h2>반응 남기기</h2>
+            <p>공감, 답변, 공유를 한 번에 남길 수 있는 빠른 액션 구간입니다.</p>
+          </div>
+
+          <div className={styles.actionGrid}>
+            {reactionButtons.map((action) => (
+              <button key={action.id} type="button" className={styles.actionButton}>
+                <span>{action.value}</span>
+                <strong>{action.label}</strong>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.commentSection} aria-label="댓글">
+          <div className={styles.sectionLead}>
+            <span className={styles.sectionEyebrow}>Maker replies</span>
+            <h2>댓글 {post.commentCount}</h2>
+            <p>실전 경험과 기준값을 짧고 선명하게 남겨 대화를 이어보세요.</p>
+          </div>
+
+          <div className={styles.commentComposer}>
+            <label className={styles.commentField}>
+              <span>의견 남기기</span>
+              <input type="text" placeholder="댓글을 입력해 주세요." />
+            </label>
+            <button type="button" className={styles.commentSubmit}>
+              댓글 등록
+            </button>
+          </div>
+
+          <ul className={styles.commentList}>
+            {sampleComments.map((comment) => (
+              <li key={comment.id} className={styles.commentCard}>
+                <div className={styles.commentMeta}>
+                  <strong>{comment.author}</strong>
+                  <span>{comment.time}</span>
+                </div>
+                <p>{comment.text}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className={styles.relatedSection} aria-label="앞뒤 게시글">
+          <div className={styles.sectionLead}>
+            <span className={styles.sectionEyebrow}>Continue reading</span>
+            <h2>이전/다음 게시글</h2>
+            <p>같은 카테고리의 흐름을 끊지 않고 이어서 읽을 수 있도록 정리했습니다.</p>
+          </div>
+
+          <div className={styles.relatedGrid}>
+            {relatedPosts.map((item) => (
+              <article key={item.id} className={styles.relatedCard}>
+                <span className={styles.relatedLabel}>{item.label}</span>
+                {item.post ? (
+                  <Link href={item.post.href}>{item.post.title}</Link>
+                ) : (
+                  <p className={styles.relatedEmpty}>연결할 게시글이 없습니다.</p>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      </article>
     </TwoMenuShell>
   );
 }

@@ -263,6 +263,24 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
     { key: 'refund', label: '환불 정책', value: studio.refundPolicyLabel },
     { key: 'response', label: '응답 속도', value: studio.responseLabel }
   ];
+  const leadSignals = [
+    { id: 'capacity', label: '수용 인원', value: studio.capacityLabel },
+    { id: 'scale', label: '공간 규모', value: `${studio.areaPyeong}평` },
+    { id: 'minimum', label: '최소 이용', value: `${minUnitLabelMap[studio.minUnit]} 단위` }
+  ];
+  const overviewCards = [
+    { id: 'location', label: '지역', value: studio.locationLabel },
+    { id: 'address', label: '주소', value: studio.address },
+    { id: 'available', label: '다음 가능일', value: formatDate(studio.nextAvailableDate) },
+    { id: 'response', label: '응답 속도', value: studio.responseLabel },
+    { id: 'policy', label: '계약 정책', value: studio.contractPolicyLabel },
+    { id: 'contact', label: '문의 메일', value: studio.email, href: `mailto:${studio.email}` }
+  ];
+  const bookingFacts = [
+    { id: 'refund', label: '환불 정책', value: studio.refundPolicyLabel },
+    { id: 'contract', label: '계약 정책', value: studio.contractPolicyLabel },
+    { id: 'response', label: '응답 속도', value: studio.responseLabel }
+  ];
 
   const priceText = useMemo(
     () => `₩${formatKrw(studio.priceByUnit[selectedUnit])} / ${unitLabelMap[selectedUnit]}`,
@@ -311,6 +329,23 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
     setCurrentImageIndex((prev) => (prev - 1 + studio.images.length) % studio.images.length);
   };
 
+  const toggleSaved = () => {
+    const nextSaved = !saved;
+    setSaved(nextSaved);
+    emitStudioEvent('studio_save_click', {
+      studioId: studio.id,
+      saved: nextSaved
+    });
+  };
+
+  const handleInquiryClick = (sourceSection: string) => {
+    emitStudioEvent('studio_contact_click', {
+      studioId: studio.id,
+      sourceSection,
+      status: studio.status
+    });
+  };
+
   const onSwipeStart = (clientX: number) => {
     swipeStartXRef.current = clientX;
     swipeCurrentXRef.current = clientX;
@@ -354,31 +389,122 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
       hideHero
     >
       <article className={styles.page} aria-label="공방 쉐어 상세">
-        <section className={styles.headerSection} aria-label="공방 상태 및 핵심 정보">
-          <div className={styles.titleRow}>
-            <div className={styles.titleBlock}>
-              <h1>{studio.name}</h1>
-              <p>
-                {studio.locationLabel} · 등록일 {formatDate(studio.createdAt)} · 운영자 {studio.ownerName}
-              </p>
+        <section className={styles.leadSection} aria-label="공방 상태 및 예약 요약">
+          <div className={styles.leadCopy}>
+            <div className={styles.leadEyebrowRow}>
+              <span className={styles.leadEyebrow}>Studio share</span>
+              <span
+                className={`${styles.statusBadge} ${studio.status === 'open' ? styles.statusOpen : styles.statusClosed}`}
+              >
+                {statusLabel}
+              </span>
             </div>
-            <span
-              className={`${styles.statusBadge} ${studio.status === 'open' ? styles.statusOpen : styles.statusClosed}`}
-            >
-              {statusLabel}
-            </span>
+
+            <h1>{studio.name}</h1>
+            <p className={styles.leadSummary}>
+              {studio.description[0]} 작업 집중도와 운영 감도를 먼저 읽고 문의까지 바로 이어갈 수 있도록 정리했습니다.
+            </p>
+
+            <div className={styles.metaRow}>
+              <span>{studio.locationLabel}</span>
+              <span>등록일 {formatDate(studio.createdAt)}</span>
+              <span>운영자 {studio.ownerName}</span>
+            </div>
+
+            <div className={styles.signalRow}>
+              {leadSignals.map((signal) => (
+                <article key={signal.id} className={styles.signalCard}>
+                  <span>{signal.label}</span>
+                  <strong>{signal.value}</strong>
+                </article>
+              ))}
+            </div>
+
+            <div className={styles.trustBadgeRow}>
+              {studio.trustBadges.map((badge) => (
+                <span key={`${studio.id}-${badge}`} className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}>
+                  {trustBadgeLabel[badge]}
+                </span>
+              ))}
+            </div>
           </div>
 
-          <div className={styles.trustBadgeRow}>
-            {studio.trustBadges.map((badge) => (
-              <span key={`${studio.id}-${badge}`} className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}>
-                {trustBadgeLabel[badge]}
-              </span>
-            ))}
-          </div>
+          <aside className={styles.bookingCard} aria-label="문의 카드">
+            <span className={styles.bookingEyebrow}>Booking signal</span>
+            <div className={styles.unitRow} role="tablist" aria-label="가격 단위 선택">
+              {(Object.keys(unitLabelMap) as PriceUnit[]).map((unit) => (
+                <button
+                  key={unit}
+                  type="button"
+                  className={selectedUnit === unit ? styles.unitButtonActive : styles.unitButton}
+                  onClick={() => setSelectedUnit(unit)}
+                  role="tab"
+                  aria-selected={selectedUnit === unit}
+                >
+                  {unitLabelMap[unit]}
+                </button>
+              ))}
+            </div>
+            <strong className={styles.bookingPrice}>{priceText}</strong>
+            <p className={styles.bookingCaption}>
+              {formatDate(studio.nextAvailableDate)}부터 이용 가능하며, {studio.responseLabel} 문의 응답을 제공합니다.
+            </p>
+
+            <dl className={styles.bookingFacts}>
+              {bookingFacts.map((item) => (
+                <div key={item.id} className={styles.bookingFact}>
+                  <dt>{item.label}</dt>
+                  <dd>{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div className={styles.bookingActions}>
+              <a
+                href={inquiryHref}
+                className={styles.primaryCta}
+                onClick={() => {
+                  handleInquiryClick('lead_card');
+                }}
+              >
+                {primaryCtaLabel}
+              </a>
+              <button
+                type="button"
+                className={`${styles.secondaryCta} ${saved ? styles.secondaryCtaActive : ''}`}
+                onClick={toggleSaved}
+              >
+                {saved ? '저장됨' : '저장'}
+              </button>
+            </div>
+
+            <Link
+              href="/market/new"
+              className={styles.ownerLink}
+              onClick={() => {
+                emitStudioEvent('studio_owner_cta_click', { from: 'detail' });
+              }}
+            >
+              내 공방 쉐어 등록하기
+            </Link>
+          </aside>
         </section>
 
         <section className={styles.gallerySection} aria-label="공방 이미지 갤러리">
+          <div className={styles.sectionHeader}>
+            <div className={styles.sectionHeadingGroup}>
+              <span className={styles.sectionEyebrow}>Space cut</span>
+              <h2 className={styles.sectionTitle}>공간을 먼저 느껴보세요</h2>
+            </div>
+            <RailButtons
+              label="공방 이미지"
+              canScrollPrev={thumbnailRail.canScrollPrev}
+              canScrollNext={thumbnailRail.canScrollNext}
+              onPrev={thumbnailRail.scrollPrev}
+              onNext={thumbnailRail.scrollNext}
+            />
+          </div>
+
           <div
             className={styles.mainImageFrame}
             onTouchStart={(event) => onSwipeStart(event.touches[0].clientX)}
@@ -437,9 +563,12 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
 
         <section className={styles.infoSection} aria-label="핵심 정보">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>핵심 정보</h2>
+            <div className={styles.sectionHeadingGroup}>
+              <span className={styles.sectionEyebrow}>Field notes</span>
+              <h2 className={styles.sectionTitle}>현장 정보</h2>
+            </div>
             <RailButtons
-              label="핵심 정보"
+              label="현장 정보"
               canScrollPrev={infoRail.canScrollPrev}
               canScrollNext={infoRail.canScrollNext}
               onPrev={infoRail.scrollPrev}
@@ -447,66 +576,23 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             />
           </div>
           <dl ref={infoRail.railRef} className={`${styles.infoGrid} ${styles.railTrack}`}>
-            <div className={styles.infoCard}>
-              <dt>지역</dt>
-              <dd>{studio.locationLabel}</dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>주소</dt>
-              <dd>{studio.address}</dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>가격</dt>
-              <dd>
-                <div className={styles.priceBlock}>
-                  <div className={styles.unitRow} role="tablist" aria-label="가격 단위 선택">
-                    {(Object.keys(unitLabelMap) as PriceUnit[]).map((unit) => (
-                      <button
-                        key={unit}
-                        type="button"
-                        className={selectedUnit === unit ? styles.unitButtonActive : styles.unitButton}
-                        onClick={() => setSelectedUnit(unit)}
-                        role="tab"
-                        aria-selected={selectedUnit === unit}
-                      >
-                        {unitLabelMap[unit]}
-                      </button>
-                    ))}
-                  </div>
-                  <strong>{priceText}</strong>
-                </div>
-              </dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>다음 가능일</dt>
-              <dd>{formatDate(studio.nextAvailableDate)}</dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>수용 인원</dt>
-              <dd>{studio.capacityLabel}</dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>최소 이용 단위</dt>
-              <dd>{minUnitLabelMap[studio.minUnit]} 단위</dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>공간 규모</dt>
-              <dd>{studio.areaPyeong}평</dd>
-            </div>
-            <div className={styles.infoCard}>
-              <dt>문의 메일</dt>
-              <dd>
-                <a href={`mailto:${studio.email}`}>{studio.email}</a>
-              </dd>
-            </div>
+            {overviewCards.map((item) => (
+              <div key={item.id} className={styles.infoCard}>
+                <dt>{item.label}</dt>
+                <dd>{item.href ? <a href={item.href}>{item.value}</a> : item.value}</dd>
+              </div>
+            ))}
           </dl>
         </section>
 
         <section className={styles.trustSection} aria-label="신뢰 및 정책 정보">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>신뢰 정보</h2>
+            <div className={styles.sectionHeadingGroup}>
+              <span className={styles.sectionEyebrow}>Trust layer</span>
+              <h2 className={styles.sectionTitle}>운영 정책</h2>
+            </div>
             <RailButtons
-              label="신뢰 정보"
+              label="운영 정책"
               canScrollPrev={trustRail.canScrollPrev}
               canScrollNext={trustRail.canScrollNext}
               onPrev={trustRail.scrollPrev}
@@ -524,7 +610,10 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.descriptionSection} aria-label="공간 설명">
-          <h2 className={styles.sectionTitle}>공간 설명</h2>
+          <div className={styles.sectionHeadingGroup}>
+            <span className={styles.sectionEyebrow}>Studio narrative</span>
+            <h2 className={styles.sectionTitle}>공간 설명</h2>
+          </div>
           <div className={styles.descriptionBody}>
             {studio.description.map((line) => (
               <p key={line}>{line}</p>
@@ -534,7 +623,10 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
 
         <section className={styles.equipmentSection} aria-label="장비 및 시설">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>장비 및 시설</h2>
+            <div className={styles.sectionHeadingGroup}>
+              <span className={styles.sectionEyebrow}>Available tools</span>
+              <h2 className={styles.sectionTitle}>장비 및 시설</h2>
+            </div>
             <RailButtons
               label="장비 및 시설"
               canScrollPrev={equipmentRail.canScrollPrev}
@@ -554,7 +646,10 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
 
         <section className={styles.socialSection} aria-label="리뷰 및 문의 요약">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>리뷰/문의 요약</h2>
+            <div className={styles.sectionHeadingGroup}>
+              <span className={styles.sectionEyebrow}>Market pulse</span>
+              <h2 className={styles.sectionTitle}>리뷰/문의 요약</h2>
+            </div>
           </div>
 
           <div className={styles.socialBlock}>
@@ -615,11 +710,7 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
               href={inquiryHref}
               className={styles.primaryCta}
               onClick={() => {
-                emitStudioEvent('studio_contact_click', {
-                  studioId: studio.id,
-                  sourceSection: 'detail_sticky',
-                  status: studio.status
-                });
+                handleInquiryClick('detail_sticky');
               }}
             >
               {primaryCtaLabel}
@@ -627,27 +718,11 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             <button
               type="button"
               className={`${styles.secondaryCta} ${saved ? styles.secondaryCtaActive : ''}`}
-              onClick={() => {
-                const nextSaved = !saved;
-                setSaved(nextSaved);
-                emitStudioEvent('studio_save_click', {
-                  studioId: studio.id,
-                  saved: nextSaved
-                });
-              }}
+              onClick={toggleSaved}
             >
               {saved ? '저장됨' : '저장'}
             </button>
           </div>
-          <Link
-            href="/market/new"
-            className={styles.ownerLink}
-            onClick={() => {
-              emitStudioEvent('studio_owner_cta_click', { from: 'detail' });
-            }}
-          >
-            내 공방 쉐어 등록하기
-          </Link>
         </div>
 
         <section className={styles.backSection} aria-label="뒤로가기">

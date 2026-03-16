@@ -1,19 +1,37 @@
 .footer {
-  margin-top: 18px;
+  margin-top: 22px;
   padding: 0 24px 24px;
   display: grid;
+  gap: 16px;
+}
+
+.topGrid {
+  padding-top: 22px;
+  border-top: 1px solid var(--shell-divider);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
   gap: 14px;
 }
 
-.brandCard {
-  padding: 22px 0 0;
-  border-top: 1px solid var(--shell-divider);
-  display: grid;
-  gap: 10px;
+.brandCard,
+.routeCard {
+  border: 1px solid var(--detail-line);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(171, 96, 56, 0.1), transparent 26%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(244, 237, 227, 0.86));
+  box-shadow: var(--detail-shadow-soft);
 }
 
-.brandEyebrow {
-  color: var(--tone-text-tertiary);
+.brandCard {
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.brandEyebrow,
+.routeEyebrow {
+  color: var(--detail-subtle);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -28,7 +46,7 @@
 }
 
 .brandRow strong {
-  color: var(--tone-text);
+  color: var(--detail-ink);
   font-family: var(--font-logo);
   font-size: 32px;
   line-height: 0.94;
@@ -40,8 +58,9 @@
   min-height: 28px;
   padding: 0 11px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--tone-text-secondary);
+  border: 1px solid rgba(29, 23, 17, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--detail-muted);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -53,10 +72,55 @@
 
 .brandDescription {
   margin: 0;
-  max-width: 56ch;
-  color: var(--tone-text-secondary);
+  max-width: 52ch;
+  color: var(--detail-muted);
   font-size: 13px;
-  line-height: 1.68;
+  line-height: 1.72;
+}
+
+.routeCard {
+  padding: 20px;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.routeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.routeLink {
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(29, 23, 17, 0.08);
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--detail-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.routeLink:hover {
+  transform: translateY(-1px);
+  border-color: var(--detail-line-strong);
+  background: #fff;
+  box-shadow: var(--detail-shadow-soft);
+}
+
+.routeLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring), var(--detail-shadow-soft);
 }
 
 .metaRow {
@@ -68,7 +132,7 @@
 
 .companyInfo {
   margin: 0;
-  color: var(--tone-text-secondary);
+  color: var(--detail-muted);
   font-style: normal;
   font-size: 11px;
   line-height: 1.6;
@@ -80,7 +144,7 @@
 
 .copyright {
   margin: 0;
-  color: var(--tone-text-tertiary);
+  color: var(--detail-subtle);
   font-size: 10px;
   line-height: 1.5;
   text-align: right;
@@ -89,6 +153,10 @@
 @media (max-width: 960px) {
   .footer {
     padding: 0 14px 20px;
+  }
+
+  .topGrid {
+    grid-template-columns: 1fr;
   }
 
   .brandRow strong {
