@@ -314,6 +314,13 @@
   gap: 18px;
 }
 
+.responseLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
 .actionGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -322,9 +329,9 @@
 
 .actionButton {
   min-height: 92px;
-  border: 1px solid var(--detail-line);
+  border: 1px solid var(--control-border);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--control-surface-tint);
   color: var(--detail-ink);
   display: grid;
   align-content: center;
@@ -333,15 +340,16 @@
   padding: 18px;
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    transform var(--motion-emphasized),
+    box-shadow var(--motion-emphasized),
+    border-color var(--motion-emphasized);
+  box-shadow: var(--control-shadow-rest);
 }
 
 .actionButton:hover {
   transform: translateY(-1px);
-  border-color: var(--detail-line-strong);
-  box-shadow: var(--detail-shadow-soft);
+  border-color: var(--control-border-strong);
+  box-shadow: var(--control-shadow-hover);
 }
 
 .actionButton span {
@@ -364,11 +372,14 @@
 .commentComposer {
   border-radius: 30px;
   padding: 18px;
-  background: var(--detail-panel);
+  background:
+    radial-gradient(circle at top right, rgba(180, 90, 50, 0.12), transparent 34%),
+    var(--detail-panel);
+  border: 1px solid var(--control-border);
+  box-shadow: var(--control-shadow-rest);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: end;
+  gap: 12px;
+  align-content: start;
 }
 
 .commentField {
@@ -385,30 +396,37 @@
 }
 
 .commentField input {
-  min-height: 52px;
-  border: 1px solid var(--detail-line);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.92);
+  min-height: var(--control-height);
+  border: 1px solid transparent;
+  border-radius: var(--control-radius-md);
+  background: var(--control-surface-strong);
   padding: 0 16px;
   font-size: 14px;
   color: var(--detail-ink);
+  box-shadow:
+    inset 0 0 0 1px var(--control-border),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    box-shadow var(--motion-emphasized),
+    border-color var(--motion-emphasized),
+    background-color var(--motion-emphasized);
 }
 
 .commentField input:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring);
+  box-shadow: var(--control-focus-ring), inset 0 0 0 1px var(--control-active-border);
 }
 
 .commentSubmit {
-  min-width: 120px;
-  min-height: 52px;
-  border: 1px solid rgba(36, 72, 67, 0.16);
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--detail-forest), #56736d);
+  min-height: var(--control-height);
+  border: 1px solid transparent;
+  border-radius: var(--control-radius-pill);
+  background: var(--control-primary-gradient-support);
   color: #fff7f1;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
+  box-shadow: var(--button-primary-shadow);
 }
 
 .commentList {
@@ -423,6 +441,8 @@
   border-radius: 24px;
   padding: 18px;
   background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--control-border);
+  box-shadow: var(--control-shadow-rest);
 }
 
 .commentMeta {
@@ -531,12 +551,9 @@
   }
 
   .metricGrid,
+  .responseLayout,
   .actionGrid,
   .relatedGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .commentComposer {
     grid-template-columns: 1fr;
   }
 

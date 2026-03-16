@@ -21,6 +21,13 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
   const guide = communityComposeData[draft.activeTab];
   const selectedTemplate =
     guide.templates.find((template) => template.id === draft.selectedTemplateId) ?? guide.templates[0];
+  const requiredFieldStatus = [
+    { label: '제목', filled: draft.title.trim().length > 0 },
+    { label: '첫 문장', filled: draft.context.trim().length > 0 },
+    { label: '본문 핵심', filled: draft.details.trim().length > 0 },
+    { label: '마지막 한 줄', filled: draft.request.trim().length > 0 }
+  ];
+  const missingFieldLabels = requiredFieldStatus.filter((field) => !field.filled).map((field) => field.label);
   const previewTags = draft.tags
     .split(',')
     .map((tag) => tag.trim())
@@ -41,6 +48,10 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
   const activeStepIndex =
     readinessScore >= 100 ? communityComposePublishingSteps.length - 1 : Math.min(2, Math.floor(readinessScore / 34));
   const activePublishingStep = communityComposePublishingSteps[activeStepIndex];
+  const readinessMessage =
+    missingFieldLabels.length > 0
+      ? `아직 ${missingFieldLabels.join(', ')} 입력이 남아 있습니다. 핵심 맥락부터 채우면 게시 준비가 더 빨라집니다.`
+      : '핵심 입력은 모두 채워졌습니다. 체크리스트만 정리하면 바로 게시 흐름으로 이어갈 수 있습니다.';
 
   const applyDraftPreset = (tabId: CommunityTabId, templateId?: string) => {
     setDraft(buildCommunityComposeDraft(tabId, templateId));
@@ -318,7 +329,7 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
             </ul>
           </section>
 
-          <section className={styles.sideCard} aria-label="게시 미리보기">
+          <section id="compose-preview" className={styles.sideCard} aria-label="게시 미리보기">
             <span className={styles.sideEyebrow}>Preview</span>
             <div className={styles.previewCard}>
               <span className={styles.previewMeta}>
@@ -335,7 +346,29 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
           </section>
 
           <section className={styles.sideCard} aria-label="게시 준비 상태">
-            <span className={styles.sideEyebrow}>Publishing Rail</span>
+            <span className={styles.sideEyebrow}>Publishing tray</span>
+            <div className={styles.launchTray}>
+              <div className={styles.launchSummary}>
+                <span className={styles.launchLabel}>Readiness</span>
+                <div className={styles.launchHeadline}>
+                  <strong>{readinessScore}%</strong>
+                  <span>{activePublishingStep}</span>
+                </div>
+                <p className={styles.launchDescription}>{readinessMessage}</p>
+              </div>
+
+              <div className={styles.launchChecklist} aria-label="핵심 입력 상태">
+                {requiredFieldStatus.map((field) => (
+                  <span
+                    key={field.label}
+                    className={`${styles.launchItem} ${field.filled ? styles.launchItemComplete : ''}`}
+                  >
+                    {field.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
             <div className={styles.stepList}>
               {communityComposePublishingSteps.map((step, index) => (
                 <div
@@ -347,13 +380,23 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
                 </div>
               ))}
             </div>
+
             <div className={styles.actionRow}>
               <button type="button" className={styles.primaryAction} onClick={markChecklistComplete}>
-                체크리스트 모두 완료
+                게시 준비 흐름 정리
               </button>
-              <Link href={listHref} className={styles.secondaryAction}>
-                이 주제 흐름 보기
-              </Link>
+              <p className={styles.actionFootnote}>
+                필수 입력 {completedRequiredFields}/4 · 신뢰 체크 {draft.completedChecklistIds.length}/
+                {guide.checklist.length}
+              </p>
+              <div className={styles.actionRowSecondary}>
+                <Link href={listHref} className={styles.secondaryAction}>
+                  이 주제 흐름 보기
+                </Link>
+                <a href="#compose-preview" className={styles.secondaryAction}>
+                  미리보기로 이동
+                </a>
+              </div>
             </div>
           </section>
         </aside>

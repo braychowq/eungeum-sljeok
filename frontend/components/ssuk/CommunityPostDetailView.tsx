@@ -237,20 +237,32 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
           </aside>
         </section>
 
-        <section className={styles.actionSection} aria-label="게시글 반응">
+        <section className={styles.actionSection} aria-label="게시글 반응과 댓글">
           <div className={styles.sectionLead}>
             <span className={styles.sectionEyebrow}>Response dock</span>
-            <h2>반응 남기기</h2>
-            <p>공감, 답변, 공유를 한 번에 남길 수 있는 빠른 액션 구간입니다.</p>
+            <h2>반응과 댓글을 한 흐름으로</h2>
+            <p>공감 버튼과 한 줄 댓글 입력을 같은 도크에 묶어 바로 대화를 이어갈 수 있게 정리했습니다.</p>
           </div>
 
-          <div className={styles.actionGrid}>
-            {reactionButtons.map((action) => (
-              <button key={action.id} type="button" className={styles.actionButton}>
-                <span>{action.value}</span>
-                <strong>{action.label}</strong>
+          <div className={styles.responseLayout}>
+            <div className={styles.actionGrid}>
+              {reactionButtons.map((action) => (
+                <button key={action.id} type="button" className={styles.actionButton}>
+                  <span>{action.value}</span>
+                  <strong>{action.label}</strong>
+                </button>
+              ))}
+            </div>
+
+            <div className={styles.commentComposer}>
+              <label className={styles.commentField}>
+                <span>의견 남기기</span>
+                <input type="text" placeholder="대화에 보탤 기준값이나 경험을 짧게 남겨보세요." />
+              </label>
+              <button type="button" className={styles.commentSubmit}>
+                댓글 남기기
               </button>
-            ))}
+            </div>
           </div>
         </section>
 
@@ -258,17 +270,7 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
           <div className={styles.sectionLead}>
             <span className={styles.sectionEyebrow}>Maker replies</span>
             <h2>댓글 {post.commentCount}</h2>
-            <p>실전 경험과 기준값을 짧고 선명하게 남겨 대화를 이어보세요.</p>
-          </div>
-
-          <div className={styles.commentComposer}>
-            <label className={styles.commentField}>
-              <span>의견 남기기</span>
-              <input type="text" placeholder="댓글을 입력해 주세요." />
-            </label>
-            <button type="button" className={styles.commentSubmit}>
-              댓글 등록
-            </button>
+            <p>지금 이어지는 대화 흐름과 실전 피드백을 빠르게 훑어볼 수 있습니다.</p>
           </div>
 
           <ul className={styles.commentList}>

@@ -16,6 +16,16 @@ export default function MarketComposeView() {
   const selectedTemplate =
     marketComposeGuide.templates.find((template) => template.id === draft.selectedTemplateId) ??
     marketComposeGuide.templates[0];
+  const requiredFieldStatus = [
+    { label: '등록 제목', filled: draft.title.trim().length > 0 },
+    { label: '지역 / 접근성', filled: draft.region.trim().length > 0 },
+    { label: '이용 가능 시간', filled: draft.availability.trim().length > 0 },
+    { label: '가격 / 최소 이용 단위', filled: draft.priceLabel.trim().length > 0 },
+    { label: '공간 소개', filled: draft.summary.trim().length > 0 },
+    { label: '하이라이트', filled: draft.highlights.trim().length > 0 },
+    { label: '운영 메모', filled: draft.hostNote.trim().length > 0 }
+  ];
+  const missingFieldLabels = requiredFieldStatus.filter((field) => !field.filled).map((field) => field.label);
   const previewTags = draft.tags
     .split(',')
     .map((tag) => tag.trim())
@@ -46,6 +56,10 @@ export default function MarketComposeView() {
       ? marketComposePublishingSteps.length - 1
       : Math.min(2, Math.floor(readinessScore / 34));
   const activePublishingStep = marketComposePublishingSteps[activeStepIndex];
+  const readinessMessage =
+    missingFieldLabels.length > 0
+      ? `아직 ${missingFieldLabels.join(', ')} 입력이 남아 있습니다. 문의 전에 사용자가 판단해야 할 조건을 먼저 채워주세요.`
+      : '핵심 조건은 모두 채워졌습니다. 신뢰 체크만 정리하면 바로 문의 흐름으로 연결되는 등록이 됩니다.';
   const listHref = '/market';
 
   const applyTemplatePreset = (templateId: string) => {
@@ -350,7 +364,7 @@ export default function MarketComposeView() {
             </ul>
           </section>
 
-          <section className={styles.sideCard} aria-label="등록 미리보기">
+          <section id="compose-preview" className={styles.sideCard} aria-label="등록 미리보기">
             <span className={styles.sideEyebrow}>Preview</span>
             <div className={styles.previewCard}>
               <span className={styles.previewMeta}>공방 쉐어 · {selectedTemplate.label}</span>
@@ -380,7 +394,29 @@ export default function MarketComposeView() {
           </section>
 
           <section className={styles.sideCard} aria-label="등록 준비 단계">
-            <span className={styles.sideEyebrow}>Publishing Rail</span>
+            <span className={styles.sideEyebrow}>Publishing tray</span>
+            <div className={styles.launchTray}>
+              <div className={styles.launchSummary}>
+                <span className={styles.launchLabel}>Readiness</span>
+                <div className={styles.launchHeadline}>
+                  <strong>{readinessScore}%</strong>
+                  <span>{activePublishingStep}</span>
+                </div>
+                <p className={styles.launchDescription}>{readinessMessage}</p>
+              </div>
+
+              <div className={styles.launchChecklist} aria-label="핵심 입력 상태">
+                {requiredFieldStatus.map((field) => (
+                  <span
+                    key={field.label}
+                    className={`${styles.launchItem} ${field.filled ? styles.launchItemComplete : ''}`}
+                  >
+                    {field.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
             <div className={styles.stepList}>
               {marketComposePublishingSteps.map((step, index) => (
                 <div
@@ -394,11 +430,20 @@ export default function MarketComposeView() {
             </div>
             <div className={styles.actionRow}>
               <button type="button" className={styles.primaryAction} onClick={markChecklistComplete}>
-                체크리스트 모두 완료
+                등록 준비 흐름 정리
               </button>
-              <Link href={listHref} className={styles.secondaryAction}>
-                공방 흐름 보기
-              </Link>
+              <p className={styles.actionFootnote}>
+                필수 입력 {completedRequiredFields}/7 · 신뢰 체크 {draft.completedChecklistIds.length}/
+                {marketComposeGuide.checklist.length}
+              </p>
+              <div className={styles.actionRowSecondary}>
+                <Link href={listHref} className={styles.secondaryAction}>
+                  공방 흐름 보기
+                </Link>
+                <a href="#compose-preview" className={styles.secondaryAction}>
+                  미리보기로 이동
+                </a>
+              </div>
             </div>
           </section>
         </aside>
