@@ -21,6 +21,11 @@ export default function MarketComposeView() {
     .map((tag) => tag.trim())
     .filter(Boolean)
     .slice(0, 4);
+  const previewFeatureTags = draft.highlights
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 4);
   const completedRequiredFields = [
     draft.title,
     draft.region,
@@ -40,6 +45,7 @@ export default function MarketComposeView() {
     readinessScore >= 100
       ? marketComposePublishingSteps.length - 1
       : Math.min(2, Math.floor(readinessScore / 34));
+  const activePublishingStep = marketComposePublishingSteps[activeStepIndex];
   const listHref = '/market';
 
   const applyTemplatePreset = (templateId: string) => {
@@ -80,11 +86,29 @@ export default function MarketComposeView() {
             <span>{marketComposeGuide.boardPulse}</span>
             <span>신뢰 체크 {marketComposeGuide.checklist.length}개</span>
           </div>
+          <div className={styles.signalRow}>
+            <div className={styles.signalCard}>
+              <span className={styles.signalLabel}>Demand pulse</span>
+              <strong>지금 열리는 문의 흐름</strong>
+              <p>{marketComposeGuide.boardPulse}</p>
+            </div>
+            <div className={styles.signalCard}>
+              <span className={styles.signalLabel}>Selected format</span>
+              <strong>{selectedTemplate.label}</strong>
+              <p>{selectedTemplate.description}</p>
+            </div>
+            <div className={styles.signalCard}>
+              <span className={styles.signalLabel}>Next focus</span>
+              <strong>{activePublishingStep}</strong>
+              <p>신뢰 체크 {draft.completedChecklistIds.length}/{marketComposeGuide.checklist.length}</p>
+            </div>
+          </div>
         </div>
 
         <aside className={styles.progressCard}>
           <span className={styles.progressLabel}>등록 준비 점수</span>
           <strong className={styles.progressValue}>{readinessScore}%</strong>
+          <p className={styles.progressStage}>현재 집중: {activePublishingStep}</p>
           <div
             className={styles.progressMeter}
             role="progressbar"
@@ -149,9 +173,30 @@ export default function MarketComposeView() {
               </p>
             </div>
 
+            <div className={styles.fieldPromptGrid}>
+              <div className={styles.fieldPrompt}>
+                <span>Title cue</span>
+                <strong>{selectedTemplate.titleSuggestion}</strong>
+                <p>등록 제목에서 위치와 분위기가 함께 읽히면 클릭 이유가 더 분명해집니다.</p>
+              </div>
+              <div className={styles.fieldPrompt}>
+                <span>Space cue</span>
+                <strong>{selectedTemplate.highlightsSeed}</strong>
+                <p>장비, 채광, 좌석 같은 구체적인 촉감을 먼저 보여주는 편이 좋습니다.</p>
+              </div>
+              <div className={styles.fieldPrompt}>
+                <span>Host note</span>
+                <strong>{marketComposeGuide.supportNotes[0]}</strong>
+                <p>가격표보다 운영 톤이 먼저 읽히면 문의 전환이 부드럽게 이어집니다.</p>
+              </div>
+            </div>
+
             <div className={styles.fieldGrid}>
               <label className={styles.fieldBlock}>
-                <span>등록 제목</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>등록 제목</span>
+                  <span className={styles.fieldCaption}>공방 이름과 한 줄 분위기가 함께 보이게 적어주세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.title}
@@ -161,7 +206,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={styles.fieldBlock}>
-                <span>지역 / 접근성</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>지역 / 접근성</span>
+                  <span className={styles.fieldCaption}>지하철, 도보 시간, 주변 맥락까지 짧게 보여주세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.region}
@@ -171,7 +219,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={styles.fieldBlock}>
-                <span>이용 가능 시간</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>이용 가능 시간</span>
+                  <span className={styles.fieldCaption}>문의 전에 바로 판단할 수 있게 운영 리듬을 적어주세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.availability}
@@ -183,7 +234,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={styles.fieldBlock}>
-                <span>가격 / 최소 이용 단위</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>가격 / 최소 이용 단위</span>
+                  <span className={styles.fieldCaption}>왕복 문의를 줄이도록 최소 기준을 분명하게 적어주세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.priceLabel}
@@ -195,7 +249,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <span>공간 소개</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>공간 소개</span>
+                  <span className={styles.fieldCaption}>누가 어떤 순간에 이 공간을 쓰면 좋은지부터 설명해주세요.</span>
+                </div>
                 <textarea
                   className={styles.textArea}
                   value={draft.summary}
@@ -205,7 +262,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <span>하이라이트</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>하이라이트</span>
+                  <span className={styles.fieldCaption}>채광, 공구, 좌석, 촬영 존처럼 눈에 띄는 요소를 먼저 적어주세요.</span>
+                </div>
                 <textarea
                   className={styles.textArea}
                   value={draft.highlights}
@@ -218,7 +278,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <span>운영 메모</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>운영 메모</span>
+                  <span className={styles.fieldCaption}>응답 방식, 안내 톤, 주의사항을 사용자가 이해하기 쉽게 적어주세요.</span>
+                </div>
                 <textarea
                   className={styles.textArea}
                   value={draft.hostNote}
@@ -228,7 +291,10 @@ export default function MarketComposeView() {
               </label>
 
               <label className={styles.fieldBlock}>
-                <span>태그</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>태그</span>
+                  <span className={styles.fieldCaption}>지역, 공간 성격, 사용 장면을 쉼표로 정리해보세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.tags}
@@ -290,11 +356,23 @@ export default function MarketComposeView() {
               <span className={styles.previewMeta}>공방 쉐어 · {selectedTemplate.label}</span>
               <strong className={styles.previewTitle}>{draft.title || marketComposeGuide.titlePlaceholder}</strong>
               <p className={styles.previewBody}>{draft.summary || marketComposeGuide.valuePitch}</p>
+              <p className={styles.previewSecondary}>{draft.highlights || selectedTemplate.highlightsSeed}</p>
               <p className={styles.previewFootnote}>
                 {draft.region || '지역 입력'} · {draft.priceLabel || '가격 입력'} ·{' '}
                 {draft.availability || '시간 입력'}
               </p>
               <p className={styles.previewFootnote}>{draft.hostNote || marketComposeGuide.moderationNote}</p>
+              <div className={styles.previewFeatureRow}>
+                {previewFeatureTags.length > 0 ? (
+                  previewFeatureTags.map((item) => (
+                    <span key={item} className={styles.previewFeatureTag}>
+                      {item}
+                    </span>
+                  ))
+                ) : (
+                  <span className={styles.previewFeatureTag}>공간 하이라이트를 추가해보세요</span>
+                )}
+              </div>
               <div className={styles.previewTags}>
                 {previewTags.length > 0 ? previewTags.map((tag) => <span key={tag}>#{tag}</span>) : <span>#공방_태그를_추가해보세요</span>}
               </div>

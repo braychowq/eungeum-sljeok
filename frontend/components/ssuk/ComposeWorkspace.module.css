@@ -1,12 +1,12 @@
 .overviewSection,
 .workspaceGrid {
-  padding: 0 24px;
+  padding: 0 28px;
 }
 
 .overviewSection {
-  margin-top: 24px;
+  margin-top: 28px;
   display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(260px, 0.82fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
   gap: 18px;
   align-items: stretch;
 }
@@ -14,16 +14,10 @@
 .overviewCard,
 .progressCard,
 .sectionCard,
-.sideCard,
-.previewCard {
+.sideCard {
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--shell-edge);
-  border-radius: 30px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 242, 233, 0.9)),
-    var(--surface-raised);
-  box-shadow: var(--shadow-inline);
+  border-radius: var(--compose-radius-xl);
 }
 
 .overviewCard::before,
@@ -37,26 +31,32 @@
   right: 0;
   top: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent 78%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent 76%);
 }
 
 .overviewCard {
-  padding: 24px;
+  padding: 28px;
   display: grid;
-  gap: 14px;
+  gap: 18px;
+  border: 1px solid var(--compose-line);
+  background: var(--compose-shell);
+  box-shadow: var(--compose-shadow);
 }
 
 .progressCard {
-  padding: 22px;
+  padding: 24px;
   display: grid;
   align-content: start;
   gap: 14px;
+  background: var(--compose-shell-strong);
+  color: #fff7f1;
+  box-shadow: var(--shadow-floating);
 }
 
 .eyebrow,
 .sectionEyebrow,
 .sideEyebrow {
-  color: var(--tone-text-tertiary);
+  color: var(--compose-subtle);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -65,20 +65,27 @@
 
 .overviewTitle {
   margin: 0;
-  color: var(--tone-text);
-  font-size: clamp(28px, 3vw, 36px);
-  line-height: 1.02;
-  letter-spacing: -0.055em;
+  color: var(--compose-ink);
+  font-family: var(--font-logo);
+  font-size: clamp(30px, 3vw, 40px);
+  line-height: 0.96;
+  letter-spacing: -0.065em;
 }
 
 .overviewDescription,
 .sectionDescription,
 .sideDescription,
-.progressDescription,
-.progressNote,
 .fieldHint {
   margin: 0;
-  color: var(--tone-text-secondary);
+  color: var(--compose-muted);
+  font-size: 14px;
+  line-height: 1.72;
+}
+
+.progressDescription,
+.progressNote {
+  margin: 0;
+  color: rgba(255, 247, 241, 0.78);
   font-size: 13px;
   line-height: 1.65;
 }
@@ -90,38 +97,83 @@
 }
 
 .pillRow span {
-  min-height: 32px;
+  min-height: 34px;
   padding: 0 12px;
   border-radius: 999px;
-  border: 1px solid var(--shell-edge);
-  background: rgba(255, 255, 255, 0.74);
-  color: var(--tone-text-secondary);
+  border: 1px solid var(--compose-line);
+  background: var(--compose-chip);
+  color: var(--compose-muted);
   display: inline-flex;
   align-items: center;
   font-size: 12px;
   font-weight: 700;
 }
 
-.progressLabel {
-  color: var(--tone-text-secondary);
+.signalRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.signalCard {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 22px;
+  border: 1px solid var(--compose-line);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.signalLabel {
+  color: var(--compose-subtle);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.signalCard strong {
+  color: var(--compose-ink);
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.signalCard p {
+  margin: 0;
+  color: var(--compose-muted);
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  line-height: 1.55;
+}
+
+.progressLabel {
+  color: rgba(255, 247, 241, 0.72);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .progressValue {
-  color: var(--tone-text);
-  font-size: 42px;
-  line-height: 1;
-  letter-spacing: -0.08em;
+  color: #fff7f1;
+  font-family: var(--font-logo);
+  font-size: 48px;
+  line-height: 0.96;
+  letter-spacing: -0.075em;
+}
+
+.progressStage {
+  margin: -2px 0 2px;
+  color: rgba(255, 247, 241, 0.9);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .progressMeter {
   width: 100%;
   height: 12px;
   border-radius: 999px;
-  background: rgba(23, 34, 31, 0.08);
+  background: rgba(255, 247, 241, 0.16);
   overflow: hidden;
 }
 
@@ -129,14 +181,14 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--tone-accent-strong), var(--tone-highlight));
+  background: linear-gradient(90deg, #fff3ea, #caa16f);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 .workspaceGrid {
-  margin-top: var(--space-6);
+  margin-top: 24px;
   display: grid;
-  grid-template-columns: minmax(0, 1.16fr) minmax(260px, 0.84fr);
+  grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr);
   gap: 18px;
   align-items: start;
 }
@@ -148,30 +200,39 @@
   align-content: start;
 }
 
+.sideColumn {
+  position: sticky;
+  top: 108px;
+}
+
 .sectionCard,
 .sideCard {
-  padding: 22px;
+  padding: 24px;
   display: grid;
   gap: 18px;
+  border: 1px solid var(--compose-line);
+  background: var(--compose-panel);
+  box-shadow: var(--compose-shadow-soft);
 }
 
 .sectionHeader {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .sectionTitle,
 .sideTitle {
   margin: 6px 0 0;
-  color: var(--tone-text);
-  font-size: 24px;
+  color: var(--compose-ink);
+  font-size: 26px;
   line-height: 1.08;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.05em;
 }
 
 .tabGrid,
 .templateGrid,
-.checklistGrid {
+.checklistGrid,
+.fieldPromptGrid {
   display: grid;
   gap: 10px;
 }
@@ -185,16 +246,18 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.fieldPromptGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .tabButton,
 .templateButton,
 .checklistButton {
   min-width: 0;
-  border: 1px solid var(--field-border);
-  border-radius: 24px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 240, 229, 0.86)),
-    var(--field-surface);
-  color: var(--tone-text);
+  border: 1px solid var(--compose-line);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--compose-ink);
   text-align: left;
   padding: 18px;
   display: grid;
@@ -213,8 +276,8 @@
 .checklistButton:hover,
 .primaryAction:hover,
 .secondaryAction:hover {
-  border-color: var(--field-border-strong);
-  box-shadow: var(--shadow-inline);
+  border-color: var(--compose-line-strong);
+  box-shadow: var(--compose-shadow-soft);
   transform: translateY(-1px);
 }
 
@@ -227,20 +290,18 @@
 .primaryAction:focus-visible,
 .secondaryAction:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring), var(--shadow-inline);
+  box-shadow: var(--focus-ring), var(--compose-shadow-soft);
 }
 
 .tabButtonActive,
 .templateButtonActive,
 .checklistButtonActive {
-  border-color: rgba(159, 67, 40, 0.24);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(236, 224, 209, 0.9)),
-    var(--field-surface);
+  border-color: rgba(141, 64, 33, 0.22);
+  background: var(--compose-panel-strong);
 }
 
 .tabLabel {
-  color: var(--tone-accent-strong);
+  color: var(--compose-accent-strong);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -249,66 +310,112 @@
 .tabButton strong,
 .templateButton strong,
 .checklistButton strong {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.45;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .tabMeta,
 .templateButton span,
 .checklistButton span {
-  color: var(--tone-text-secondary);
+  color: var(--compose-muted);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.55;
+}
+
+.fieldPrompt {
+  display: grid;
+  gap: 7px;
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid var(--compose-line);
+}
+
+.fieldPrompt span {
+  color: var(--compose-subtle);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fieldPrompt strong {
+  color: var(--compose-ink);
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+.fieldPrompt p {
+  margin: 0;
+  color: var(--compose-muted);
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .fieldGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 .fieldBlock {
   display: grid;
-  gap: 8px;
+  gap: 12px;
+  padding: 16px 18px 18px;
+  border-radius: 28px;
+  border: 1px solid var(--compose-line);
+  background: rgba(255, 255, 255, 0.68);
 }
 
 .fieldBlockWide {
   grid-column: 1 / -1;
 }
 
-.fieldBlock > span {
-  color: var(--tone-text);
+.fieldHeader {
+  display: grid;
+  gap: 6px;
+}
+
+.fieldLabel {
+  color: var(--compose-ink);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.fieldCaption {
+  color: var(--compose-muted);
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  line-height: 1.55;
 }
 
 .textInput,
 .textArea,
 .selectInput {
   width: 100%;
-  border: 1px solid var(--field-border);
-  border-radius: 20px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 247, 242, 0.98)),
-    var(--field-surface-strong);
-  padding: 15px 16px;
-  color: var(--tone-text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  border: none;
+  border-radius: 18px;
+  background: var(--compose-input-strong);
+  padding: 16px 18px;
+  color: var(--compose-ink);
+  box-shadow:
+    inset 0 0 0 1px rgba(28, 24, 20, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   font: inherit;
 }
 
 .textInput,
 .selectInput {
-  min-height: 52px;
+  min-height: 54px;
 }
 
 .selectInput {
   appearance: none;
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--tone-text-secondary) 50%),
-    linear-gradient(135deg, var(--tone-text-secondary) 50%, transparent 50%);
+    linear-gradient(45deg, transparent 50%, var(--compose-muted) 50%),
+    linear-gradient(135deg, var(--compose-muted) 50%, transparent 50%);
   background-position:
     calc(100% - 20px) calc(50% - 2px),
     calc(100% - 14px) calc(50% - 2px);
@@ -318,7 +425,7 @@
 }
 
 .textArea {
-  min-height: 148px;
+  min-height: 156px;
   resize: vertical;
 }
 
@@ -333,9 +440,9 @@
 .noteList li {
   padding-left: 14px;
   position: relative;
-  color: var(--tone-text-secondary);
+  color: var(--compose-muted);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .noteList li::before {
@@ -346,52 +453,65 @@
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: var(--tone-accent);
+  background: var(--compose-accent);
 }
 
 .previewCard {
-  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  padding: 22px;
   display: grid;
-  gap: 12px;
+  gap: 14px;
+  border-radius: 28px;
+  background: var(--compose-shell-strong);
+  box-shadow: var(--shadow-floating);
 }
 
 .previewMeta {
-  color: var(--tone-text-tertiary);
+  color: rgba(255, 247, 241, 0.7);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .previewTitle {
   display: block;
-  color: var(--tone-text);
-  font-size: 24px;
-  line-height: 1.08;
-  letter-spacing: -0.05em;
+  color: #fff7f1;
+  font-family: var(--font-logo);
+  font-size: 30px;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
 }
 
 .previewBody,
-.previewFootnote {
+.previewFootnote,
+.previewSecondary {
   margin: 0;
-  color: var(--tone-text-secondary);
+  color: rgba(255, 247, 241, 0.84);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
+.previewSecondary {
+  color: rgba(255, 247, 241, 0.72);
+}
+
+.previewFeatureRow,
 .previewTags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
+.previewFeatureTag,
 .previewTags span {
   min-height: 30px;
   padding: 0 11px;
   border-radius: 999px;
-  border: 1px solid var(--field-border);
-  background: rgba(255, 255, 255, 0.88);
-  color: var(--tone-text-secondary);
+  border: 1px solid rgba(255, 247, 241, 0.12);
+  background: rgba(255, 247, 241, 0.08);
+  color: #fff7f1;
   display: inline-flex;
   align-items: center;
   font-size: 11px;
@@ -399,67 +519,76 @@
 }
 
 .stepList {
+  position: relative;
   display: grid;
-  gap: 10px;
+  gap: 12px;
+  padding-left: 6px;
+}
+
+.stepList::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgba(28, 24, 20, 0.1);
 }
 
 .stepItem {
-  border: 1px solid var(--field-border);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.62);
-  padding: 13px 14px;
+  position: relative;
+  background: transparent;
+  padding: 0 0 0 16px;
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
   align-items: center;
 }
 
 .stepItem span {
-  width: 30px;
-  height: 30px;
+  width: 38px;
+  height: 38px;
   border-radius: 999px;
-  background: rgba(23, 34, 31, 0.08);
-  color: var(--tone-text-secondary);
+  background: rgba(28, 24, 20, 0.05);
+  border: 1px solid var(--compose-line);
+  color: var(--compose-muted);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   font-weight: 800;
+  z-index: 1;
 }
 
 .stepItem strong {
-  color: var(--tone-text-secondary);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.stepItemActive {
-  border-color: rgba(159, 67, 40, 0.24);
-  background: rgba(236, 224, 209, 0.86);
+  color: var(--compose-muted);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .stepItemActive span {
-  background: var(--tone-text);
-  color: var(--tone-canvas);
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--compose-accent-strong), var(--compose-support));
+  color: #fff7f1;
+  box-shadow: 0 14px 24px rgba(141, 64, 33, 0.18);
 }
 
 .stepItemActive strong {
-  color: var(--tone-text);
+  color: var(--compose-ink);
 }
 
 .actionRow {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
 .primaryAction,
 .secondaryAction {
-  min-height: 48px;
-  border-radius: 18px;
-  border: 1px solid var(--field-border);
+  min-height: 52px;
+  border-radius: 999px;
+  border: 1px solid var(--compose-line);
   text-decoration: none;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
@@ -473,15 +602,26 @@
 }
 
 .primaryAction {
-  background: linear-gradient(135deg, var(--tone-accent-strong), var(--tone-accent));
+  background: linear-gradient(135deg, var(--compose-accent-strong), var(--compose-accent));
   color: #fff7f1;
   cursor: pointer;
-  box-shadow: 0 16px 24px rgba(159, 67, 40, 0.16);
+  box-shadow: 0 18px 30px rgba(141, 64, 33, 0.18);
 }
 
 .secondaryAction {
-  background: rgba(255, 255, 255, 0.88);
-  color: var(--tone-text);
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--compose-ink);
+}
+
+@media (max-width: 1024px) {
+  .signalRow,
+  .fieldPromptGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sideColumn {
+    position: static;
+  }
 }
 
 @media (max-width: 900px) {
@@ -495,8 +635,9 @@
   .tabGrid,
   .templateGrid,
   .checklistGrid,
-  .actionRow,
-  .fieldGrid {
+  .fieldGrid,
+  .signalRow,
+  .fieldPromptGrid {
     grid-template-columns: 1fr;
   }
 
@@ -506,6 +647,13 @@
   .sideCard,
   .previewCard {
     border-radius: 24px;
+  }
+
+  .overviewCard,
+  .progressCard,
+  .sectionCard,
+  .sideCard {
+    padding: 20px;
   }
 
   .overviewTitle {
@@ -519,16 +667,20 @@
 
   .tabButton,
   .templateButton,
-  .checklistButton {
+  .checklistButton,
+  .fieldBlock,
+  .fieldPrompt {
     border-radius: 20px;
     padding: 16px;
   }
 
+  .previewTitle {
+    font-size: 26px;
+  }
+
   .textInput,
   .textArea,
-  .selectInput,
-  .primaryAction,
-  .secondaryAction {
+  .selectInput {
     border-radius: 16px;
   }
 }

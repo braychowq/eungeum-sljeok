@@ -40,6 +40,7 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
   );
   const activeStepIndex =
     readinessScore >= 100 ? communityComposePublishingSteps.length - 1 : Math.min(2, Math.floor(readinessScore / 34));
+  const activePublishingStep = communityComposePublishingSteps[activeStepIndex];
 
   const applyDraftPreset = (tabId: CommunityTabId, templateId?: string) => {
     setDraft(buildCommunityComposeDraft(tabId, templateId));
@@ -81,11 +82,29 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
             <span>{guide.boardPulse}</span>
             <span>체크리스트 {guide.checklist.length}개</span>
           </div>
+          <div className={styles.signalRow}>
+            <div className={styles.signalCard}>
+              <span className={styles.signalLabel}>Board pulse</span>
+              <strong>{guide.label} 대화 톤</strong>
+              <p>{guide.boardPulse}</p>
+            </div>
+            <div className={styles.signalCard}>
+              <span className={styles.signalLabel}>Selected format</span>
+              <strong>{selectedTemplate.label}</strong>
+              <p>{selectedTemplate.description}</p>
+            </div>
+            <div className={styles.signalCard}>
+              <span className={styles.signalLabel}>Next focus</span>
+              <strong>{activePublishingStep}</strong>
+              <p>신뢰 체크 {draft.completedChecklistIds.length}/{guide.checklist.length}</p>
+            </div>
+          </div>
         </div>
 
         <aside className={styles.progressCard}>
           <span className={styles.progressLabel}>게시 준비 점수</span>
           <strong className={styles.progressValue}>{readinessScore}%</strong>
+          <p className={styles.progressStage}>현재 집중: {activePublishingStep}</p>
           <div
             className={styles.progressMeter}
             role="progressbar"
@@ -169,9 +188,30 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
               </p>
             </div>
 
+            <div className={styles.fieldPromptGrid}>
+              <div className={styles.fieldPrompt}>
+                <span>Title cue</span>
+                <strong>{selectedTemplate.titleSuggestion}</strong>
+                <p>제목에서 글의 목적이 바로 드러나면 열람과 답변 전환이 빨라집니다.</p>
+              </div>
+              <div className={styles.fieldPrompt}>
+                <span>Context note</span>
+                <strong>{guide.supportNotes[0]}</strong>
+                <p>첫 문단은 상황 설명보다 현재 조건을 읽히게 만드는 데 집중합니다.</p>
+              </div>
+              <div className={styles.fieldPrompt}>
+                <span>Closing line</span>
+                <strong>{guide.supportNotes[1]}</strong>
+                <p>마지막 한 줄은 독자가 답하기 쉬운 질문이나 요청으로 닫는 편이 좋습니다.</p>
+              </div>
+            </div>
+
             <div className={styles.fieldGrid}>
               <label className={styles.fieldBlock}>
-                <span>제목</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>제목</span>
+                  <span className={styles.fieldCaption}>질문이나 공유 목적이 첫눈에 보이게 적어주세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.title}
@@ -181,7 +221,10 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
               </label>
 
               <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <span>첫 문장</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>첫 문장</span>
+                  <span className={styles.fieldCaption}>지금의 상황과 맥락을 2~3문장 안에서 잡아주세요.</span>
+                </div>
                 <textarea
                   className={styles.textArea}
                   value={draft.context}
@@ -191,7 +234,10 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
               </label>
 
               <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <span>본문 핵심</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>본문 핵심</span>
+                  <span className={styles.fieldCaption}>이미 시도한 방법, 조건값, 핵심 포인트를 중심으로 적어주세요.</span>
+                </div>
                 <textarea
                   className={styles.textArea}
                   value={draft.details}
@@ -201,7 +247,10 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
               </label>
 
               <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <span>마지막 한 줄</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>마지막 한 줄</span>
+                  <span className={styles.fieldCaption}>받고 싶은 피드백이나 이어질 질문으로 글을 마무리하세요.</span>
+                </div>
                 <textarea
                   className={styles.textArea}
                   value={draft.request}
@@ -211,7 +260,10 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
               </label>
 
               <label className={styles.fieldBlock}>
-                <span>태그</span>
+                <div className={styles.fieldHeader}>
+                  <span className={styles.fieldLabel}>태그</span>
+                  <span className={styles.fieldCaption}>검색보다 대화 맥락을 돕는 단어를 쉼표로 적어주세요.</span>
+                </div>
                 <input
                   className={styles.textInput}
                   value={draft.tags}
@@ -274,6 +326,7 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
               </span>
               <strong className={styles.previewTitle}>{draft.title || guide.titlePlaceholder}</strong>
               <p className={styles.previewBody}>{draft.context || guide.intro}</p>
+              <p className={styles.previewSecondary}>{draft.details || selectedTemplate.description}</p>
               <p className={styles.previewFootnote}>{draft.request || guide.valuePitch}</p>
               <div className={styles.previewTags}>
                 {previewTags.length > 0 ? previewTags.map((tag) => <span key={tag}>#{tag}</span>) : <span>#태그를_추가해보세요</span>}
