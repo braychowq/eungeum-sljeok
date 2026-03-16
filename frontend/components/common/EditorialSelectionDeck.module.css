@@ -1,0 +1,316 @@
+.shell {
+  display: grid;
+  gap: 14px;
+}
+
+.summaryBand {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--selection-line);
+  border-radius: 32px;
+  background: var(--selection-shell);
+  box-shadow: var(--selection-shadow);
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+}
+
+.summaryBand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 86% 14%, var(--deck-aura), transparent 30%),
+    radial-gradient(circle at 14% 100%, var(--deck-aura-soft), transparent 34%);
+  pointer-events: none;
+}
+
+.copyBlock,
+.signalRow {
+  position: relative;
+  z-index: 1;
+}
+
+.copyBlock {
+  display: grid;
+  gap: 10px;
+}
+
+.eyebrow,
+.cardEyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--deck-accent);
+}
+
+.copyStack {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.title {
+  margin: 0;
+  color: var(--selection-text);
+  font-size: clamp(26px, 4.2vw, 34px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  max-width: 14ch;
+}
+
+.description {
+  margin: 10px 0 0;
+  max-width: 60ch;
+  color: var(--selection-muted);
+  font-size: 13px;
+  line-height: 1.62;
+}
+
+.actionLink {
+  flex-shrink: 0;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 34, 31, 0.08);
+  background: linear-gradient(135deg, var(--deck-accent-strong), var(--deck-accent));
+  color: var(--deck-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: 0 16px 30px rgba(21, 29, 27, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.actionLink:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--selection-shadow-strong);
+  filter: saturate(1.04);
+}
+
+.actionLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring), var(--selection-shadow-strong);
+}
+
+.signalRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.signalCard {
+  min-width: 0;
+  border-radius: 22px;
+  border: 1px solid var(--selection-line);
+  background: var(--selection-card-strong);
+  padding: 14px;
+  display: grid;
+  gap: 5px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.signalCard span {
+  color: var(--selection-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.signalCard strong {
+  color: var(--selection-text);
+  font-size: 18px;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.signalCard p {
+  margin: 0;
+  color: var(--selection-subtle);
+  font-size: 12px;
+  line-height: 1.48;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 214px;
+  border-radius: 28px;
+  border: 1px solid var(--selection-line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 241, 233, 0.84)),
+    var(--selection-card);
+  color: var(--selection-text);
+  text-decoration: none;
+  padding: 18px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  box-shadow: var(--selection-shadow);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: auto -34px -46px auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--deck-aura), transparent 70%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: var(--selection-line-strong);
+  box-shadow: var(--selection-shadow-strong);
+  transform: translateY(-2px);
+}
+
+.card:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring), var(--selection-shadow-strong);
+}
+
+.cardActive {
+  border-color: color-mix(in srgb, var(--deck-accent) 20%, rgba(23, 34, 31, 0.12));
+  background:
+    linear-gradient(156deg, color-mix(in srgb, var(--deck-accent) 12%, white 88%), rgba(255, 255, 255, 0.96)),
+    var(--selection-card-strong);
+  box-shadow: var(--selection-shadow-strong);
+}
+
+.cardTop,
+.cardMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cardEyebrow {
+  color: var(--deck-accent);
+}
+
+.cardBadge,
+.cardMeta,
+.cardAction {
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cardBadge {
+  background: var(--deck-badge);
+  color: var(--deck-accent-strong);
+}
+
+.card strong {
+  font-size: 21px;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  max-width: 12ch;
+}
+
+.card p {
+  margin: 0;
+  color: var(--selection-muted);
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+.cardMetaRow {
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.cardMeta {
+  border: 1px solid var(--selection-line);
+  background: var(--selection-chip);
+  color: var(--selection-muted);
+}
+
+.cardAction {
+  background: rgba(23, 34, 31, 0.8);
+  color: var(--deck-ink);
+}
+
+.cardActive .cardAction {
+  background: linear-gradient(135deg, var(--deck-accent-strong), var(--deck-accent));
+}
+
+.warmShell {
+  --deck-accent: var(--tone-accent);
+  --deck-accent-strong: var(--tone-accent-strong);
+  --deck-badge: var(--tone-accent-soft);
+  --deck-aura: rgba(201, 108, 77, 0.14);
+  --deck-aura-soft: rgba(47, 95, 91, 0.1);
+  --deck-ink: var(--tone-canvas);
+}
+
+.forestShell {
+  --deck-accent: var(--market-accent);
+  --deck-accent-strong: var(--market-accent-strong);
+  --deck-badge: var(--market-accent-soft);
+  --deck-aura: rgba(47, 95, 91, 0.16);
+  --deck-aura-soft: rgba(185, 115, 68, 0.12);
+  --deck-ink: var(--market-ink-inverse);
+}
+
+@media (max-width: 900px) {
+  .copyStack {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .signalRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .summaryBand {
+    padding: 18px;
+    border-radius: 28px;
+  }
+
+  .cardGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .signalRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card {
+    min-height: 0;
+  }
+}

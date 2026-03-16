@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
+import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
 import {
   marketCards,
   marketSortOptions,
@@ -261,6 +262,85 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       description: '가능 일정과 응답 속도를 확인하고 바로 문의 흐름으로 넘어갑니다.'
     }
   ];
+  const topRegionLabel = regionHighlights[0]
+    ? `${regionHighlights[0].label} ${regionHighlights[0].count}곳`
+    : '전체 지역';
+  const lowestPriceLabel = priceRangeLabel.includes(' - ') ? priceRangeLabel.split(' - ')[0] : priceRangeLabel;
+  const sortStory = {
+    recommended: {
+      title: '추천 흐름으로 후보를 빠르게 압축해보세요',
+      description: '일정, 가격, 반응 속도를 한쪽으로 치우치지 않고 함께 읽는 기본 브라우즈 리듬입니다.',
+      signal: '가장 먼저 보기 좋은 균형 잡힌 선택'
+    },
+    popular: {
+      title: '지금 반응이 큰 공방부터 훑어보세요',
+      description: '조회와 저장이 빠르게 붙는 공간을 먼저 보며 오늘의 온도를 읽는 탐색 모드입니다.',
+      signal: '실시간 인기 흐름 중심'
+    },
+    latest: {
+      title: '최근 올라온 공간 위주로 신선하게 둘러보세요',
+      description: '새로 등록된 공방을 앞에 두고 일정과 가격 변화를 빠르게 확인하는 흐름입니다.',
+      signal: '최근 업데이트 중심'
+    },
+    price_low: {
+      title: '예산에 맞는 공간부터 가볍게 시작해보세요',
+      description: '가격 문턱이 낮은 공방부터 먼저 압축해 비용 감도에 맞춰 비교하는 리듬입니다.',
+      signal: '예산 우선 브라우즈'
+    }
+  }[activeSort];
+  const sortDeckItems = marketSortOptions.map((option) => {
+    const href = option.id === 'recommended' ? '/market' : `/market?sort=${option.id}`;
+
+    if (option.id === 'popular') {
+      return {
+        id: option.id,
+        href,
+        eyebrow: 'Reaction first',
+        title: option.label,
+        description: '인기와 저장 신호가 강한 공방부터 훑으며 빠르게 감도를 맞춥니다.',
+        meta: `인기 큐레이션 ${trendingCards.length}곳`,
+        badge: '실시간 반응',
+        isActive: activeSort === option.id
+      };
+    }
+
+    if (option.id === 'latest') {
+      return {
+        id: option.id,
+        href,
+        eyebrow: 'Fresh drop',
+        title: option.label,
+        description: '최근 등록된 공간을 먼저 보며 새롭게 열린 일정과 조건을 따라갑니다.',
+        meta: topComparisonDateLabel ? `최근 프런트 러너 ${topComparisonDateLabel}` : '새 등록 우선',
+        badge: '최신 업데이트',
+        isActive: activeSort === option.id
+      };
+    }
+
+    if (option.id === 'price_low') {
+      return {
+        id: option.id,
+        href,
+        eyebrow: 'Budget cue',
+        title: option.label,
+        description: '낮은 일일 가격부터 비교하며 비용 부담이 적은 공간을 앞에 둡니다.',
+        meta: `최저 ${lowestPriceLabel}`,
+        badge: '예산 우선',
+        isActive: activeSort === option.id
+      };
+    }
+
+    return {
+      id: option.id,
+      href,
+      eyebrow: 'Balanced match',
+      title: option.label,
+      description: '예약 가능성과 반응, 가격을 함께 보며 균형 좋은 후보부터 시작합니다.',
+      meta: `즉시 문의 ${bookableCount}곳`,
+      badge: '기본 브라우즈',
+      isActive: activeSort === option.id
+    };
+  });
 
   return (
     <TwoMenuShell
@@ -589,30 +669,59 @@ export default function MarketView({ activeSort }: MarketViewProps) {
           </div>
         </div>
 
-        <div className={styles.listHeader}>
-          <div className={styles.listHeading}>
-            <span className={styles.listEyebrow}>Studio Catalogue</span>
-            <h2>공방 찾아보기</h2>
-            <p>{activeSortLabel} 기준으로 총 {filteredStudioCards.length}곳을 제품 카드 리듬으로 다시 정리했습니다.</p>
-          </div>
-          <div className={styles.listControls}>
-            <div className={styles.sortGroup} aria-label="공방 정렬">
-              {marketSortOptions.map((option) => (
-                <Link
-                  key={option.id}
-                  href={option.id === 'recommended' ? '/market' : `/market?sort=${option.id}`}
-                  className={`${styles.sortChip} ${activeSort === option.id ? styles.sortChipActive : ''}`}
-                  aria-current={activeSort === option.id ? 'page' : undefined}
-                >
-                  {option.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
+        <EditorialSelectionDeck
+          theme="forest"
+          eyebrow="Studio Catalogue"
+          title={sortStory.title}
+          description={`${sortStory.description} 총 ${filteredStudioCards.length}곳을 지금 리듬에 맞춰 다시 정리했습니다.`}
+          signals={[
+            {
+              label: '현재 흐름',
+              value: activeSortLabel,
+              detail: sortStory.signal
+            },
+            {
+              label: '즉시 문의',
+              value: `${bookableCount}곳`,
+              detail: '오늘 빠르게 연결할 수 있는 후보'
+            },
+            {
+              label: '지역 신호',
+              value: topRegionLabel,
+              detail: `현재 카드 기준 가격 ${priceRangeLabel}`
+            }
+          ]}
+          items={sortDeckItems}
+          action={{
+            href: '/market/new',
+            label: '내 공방 등록',
+            onClick: () => {
+              emitMarketEvent('studio_owner_cta_click', { from: 'catalogue_selection_deck' });
+            }
+          }}
+          ariaLabel="공방 브라우즈 리듬 선택"
+        />
 
         {filteredStudioCards.length === 0 ? (
-          <p className={styles.emptyState}>조건에 맞는 공방이 없습니다. 정렬을 다시 선택해 보세요.</p>
+          <div className={styles.emptyState}>
+            <span className={styles.emptyStateEyebrow}>No match yet</span>
+            <strong>지금 정렬에서는 바로 비교할 후보가 없습니다</strong>
+            <p>추천 흐름으로 돌아가거나, 내 공방 등록으로 새로운 연결 흐름을 시작해보세요.</p>
+            <div className={styles.emptyStateActions}>
+              <Link href="/market" className={styles.emptyStatePrimaryAction}>
+                추천 흐름으로 돌아가기
+              </Link>
+              <Link
+                href="/market/new"
+                className={styles.emptyStateSecondaryAction}
+                onClick={() => {
+                  emitMarketEvent('studio_owner_cta_click', { from: 'empty_state' });
+                }}
+              >
+                내 공방 등록
+              </Link>
+            </div>
+          </div>
         ) : (
           <ul className={styles.cardGrid}>
             {filteredStudioCards.map((card) => (

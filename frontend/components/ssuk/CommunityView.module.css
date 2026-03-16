@@ -162,8 +162,7 @@
 }
 
 .heroPrimaryAction,
-.roomPrimaryAction,
-.writeButton {
+.roomPrimaryAction {
   min-height: 46px;
   border-radius: 999px;
   border: 1px solid rgba(23, 34, 31, 0.08);
@@ -182,8 +181,7 @@
 }
 
 .heroPrimaryAction:hover,
-.roomPrimaryAction:hover,
-.writeButton:hover {
+.roomPrimaryAction:hover {
   transform: translateY(-1px);
   box-shadow: 0 16px 28px rgba(23, 23, 23, 0.14);
   background: #202020;
@@ -440,7 +438,6 @@
 .roomRailBadge,
 .roomRailCount,
 .roomStageMeta span,
-.tabCount,
 .feedLeadMeta span,
 .feedMetaBadge,
 .feedItemAction,
@@ -456,8 +453,7 @@
   line-height: 1;
 }
 
-.roomRailBadge,
-.tabCount {
+.roomRailBadge {
   background: rgba(23, 34, 31, 0.06);
   color: var(--tone-text);
 }
@@ -575,48 +571,13 @@
 }
 
 .feedHeader {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  display: grid;
+  align-items: start;
   gap: 16px;
 }
 
 .feedControlCluster {
-  display: grid;
-  gap: 12px;
-  justify-items: end;
-}
-
-.tabRow {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.tabButton {
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid var(--feed-line);
-  background: rgba(255, 255, 255, 0.66);
-  color: var(--tone-text-secondary);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-}
-
-.tabButtonActive {
-  background: rgba(255, 255, 255, 0.92);
-  border-color: var(--feed-line-strong);
-  color: var(--tone-text);
-  box-shadow: var(--tone-shadow-soft);
+  width: 100%;
 }
 
 .feedCanvas {
@@ -745,16 +706,10 @@
 .roomRailItem:hover,
 .roomStageLink:hover,
 .roomSecondaryAction:hover,
-.tabButton:hover,
 .feedItemAction:hover {
   border-color: var(--feed-line-strong);
   box-shadow: 0 18px 28px rgba(27, 23, 20, 0.08);
   transform: translateY(-1px);
-}
-
-.tabButton:hover {
-  color: var(--tone-text);
-  background: rgba(255, 255, 255, 0.84);
 }
 
 .heroPrimaryAction:focus-visible,
@@ -764,8 +719,6 @@
 .roomStageLink:focus-visible,
 .roomPrimaryAction:focus-visible,
 .roomSecondaryAction:focus-visible,
-.tabButton:focus-visible,
-.writeButton:focus-visible,
 .feedLink:focus-visible,
 .feedItemAction:focus-visible {
   outline: 2px solid var(--tone-focus);
@@ -780,18 +733,8 @@
     grid-template-columns: 1fr;
   }
 
-  .feedHeader {
-    align-items: start;
-    flex-direction: column;
-  }
-
   .feedControlCluster {
     width: 100%;
-    justify-items: start;
-  }
-
-  .tabRow {
-    justify-content: flex-start;
   }
 
   .boardLead,
@@ -864,8 +807,7 @@
 
   .heroPrimaryAction,
   .roomPrimaryAction,
-  .roomSecondaryAction,
-  .writeButton {
+  .roomSecondaryAction {
     width: 100%;
   }
 
@@ -873,16 +815,6 @@
     display: grid;
     grid-template-columns: 1fr;
   }
-
-  .tabRow {
-    gap: 8px;
-  }
-
-  .tabButton {
-    width: 100%;
-    justify-content: space-between;
-  }
-
   .feedItemAction {
     width: fit-content;
   }

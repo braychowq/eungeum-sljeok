@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
 import {
   communityNotices,
   communityPopular,
@@ -116,6 +117,35 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
     note:
       feedLaneDescriptions[activeTab][index] ??
       '메이커들의 최근 흐름을 빠르게 따라잡기 좋은 대화입니다.'
+  }));
+
+  const selectionSignals = [
+    {
+      label: '현재 탭',
+      value: activeTabLabel,
+      detail: composeGuide.title
+    },
+    {
+      label: '대화 개수',
+      value: `${posts.length}개 글`,
+      detail: `${activeTabLabel} 흐름`
+    },
+    {
+      label: '키워드',
+      value: composeGuide.prompts.join(' · '),
+      detail: '자주 오가는 표현으로 맥락을 빠르게 파악할 수 있습니다.'
+    }
+  ];
+
+  const selectionItems = communityTabs.map((tab) => ({
+    id: tab.id,
+    href: `/community?tab=${tab.id}`,
+    eyebrow: 'Conversation mode',
+    title: tab.label,
+    description: communityTabDescription[tab.id],
+    meta: `${communityPosts[tab.id].length}개 글`,
+    badge: tab.id === activeTab ? '현재 흐름' : '이 흐름 보기',
+    isActive: tab.id === activeTab
   }));
 
   return (
@@ -299,26 +329,18 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
           </div>
 
           <div className={styles.feedControlCluster}>
-            <div className={styles.tabRow}>
-              {communityTabs.map((tab) => (
-                <Link
-                  key={tab.id}
-                  href={`/community?tab=${tab.id}`}
-                  className={`${styles.tabButton} ${
-                    activeTab === tab.id ? styles.tabButtonActive : ''
-                  }`}
-                  aria-current={activeTab === tab.id ? 'page' : undefined}
-                >
-                  <span>{tab.label}</span>
-                  <span className={styles.tabCount}>{communityPosts[tab.id].length}</span>
-                </Link>
-              ))}
-            </div>
-
-            <Link href={composeHref} className={styles.writeButton}>
-              {composeGuide.ctaLabel}
-            </Link>
+            <EditorialSelectionDeck
+              theme="warm"
+              eyebrow="Conversation Picker"
+              title={`지금 ${activeTabLabel} 흐름에서 이어볼 대화방을 고르세요`}
+              description="탭을 단순 필터처럼 누르는 대신, 각 방의 성격과 최근 흐름을 먼저 읽고 지금 맞는 대화로 부드럽게 넘어가도록 다시 묶었습니다."
+              signals={selectionSignals}
+              items={selectionItems}
+              action={{ href: composeHref, label: composeGuide.ctaLabel }}
+              ariaLabel="커뮤니티 모드 선택"
+            />
           </div>
+
         </div>
 
         <div className={styles.feedCanvas}>
