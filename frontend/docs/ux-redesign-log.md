@@ -1,5 +1,87 @@
 # UX Redesign Log
 
+## 2026-03-17 00:35:04 KST
+- timestamp: 2026-03-17 00:35:04 KST
+- 이번 실행 목표: 홈 첫 진입 인상을 모바일 캔버스형 목록에서 넓은 에디토리얼 랜딩으로 재구성하고, 커뮤니티/공방/정보 섹션의 반복 카드 리듬을 제품형 피드로 교체
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/app/layout.tsx`
+  - `frontend/components/home/BannerCarousel.tsx`
+  - `frontend/components/home/BannerCarousel.module.css`
+  - `frontend/components/home/CommunitySection.tsx`
+  - `frontend/components/home/CommunitySection.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/components/home/HorizontalCardSlider.tsx`
+  - `frontend/components/home/HorizontalCardSlider.module.css`
+  - `frontend/components/home/InfoLibrarySection.tsx`
+  - `frontend/components/home/InfoLibrarySection.module.css`
+  - `frontend/components/home/TopNav.tsx`
+  - `frontend/components/home/TopNav.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - 홈 데스크톱 폭을 넓힌 캔버스와 에디토리얼 히어로 구조로 바꿔, 좁은 모바일 프레임처럼 보이던 첫인상을 제품형 랜딩으로 전환
+  - 배너에 명시적인 이전/다음 버튼, 카운터, 새 타이포 위계를 붙여 탐색 제어와 메이커 브랜드 톤을 동시에 강화
+  - 커뮤니티를 `리드 포스트 + 실시간 대화 컬럼`으로, 공방/마켓을 `에디토리얼 패널 + 큐레이션 레일`로, 정보 공유를 `대표 가이드 + 보조 아카이브` 구조로 재편
+  - 홈 전용 토큰(`--home-*`)과 상단 내비/배너/섹션 카드 표면을 통일해 이후 홈 계열 화면 확장 기반을 마련
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/app/layout.tsx frontend/components/home/BannerCarousel.tsx frontend/components/home/BannerCarousel.module.css frontend/components/home/CommunitySection.tsx frontend/components/home/CommunitySection.module.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css frontend/components/home/HorizontalCardSlider.tsx frontend/components/home/HorizontalCardSlider.module.css frontend/components/home/InfoLibrarySection.tsx frontend/components/home/InfoLibrarySection.module.css frontend/components/home/TopNav.tsx frontend/components/home/TopNav.module.css` 통과
+  - 캡처: 브라우저 자동화/캡처 도구 미설치로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `.git/FETCH_HEAD` 쓰기 권한 없음 (`Operation not permitted`)
+  - `git add ...` 실패: `.git/index.lock` 생성 권한 없음 (`Operation not permitted`)
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 코드 변경은 로컬 작업 트리에만 남아 있으며 커밋/푸시는 미완료
+- 커밋 해시: 없음 (`git add` 단계 차단)
+- 남은 가장 큰 UX 문제: 홈 상단과 하단 섹션은 새 제품형 언어로 가까워졌지만, `common` 계열 바텀시트/푸터와 상세 화면들이 아직 같은 밀도와 브랜드 리듬으로 연결되지 않음
+- 다음 실행 우선순위 1~3:
+  - Git 쓰기 권한과 원격 DNS 문제를 해소한 뒤 이번 홈 재설계 변경분을 우선 커밋/푸시
+  - `common` 바텀시트/푸터와 홈 섹션 버튼/칩 상태값을 같은 토큰 세트로 더 강하게 통합
+  - `community/post`와 `market/studio/[studioId]` 상세 화면을 홈에서 만든 에디토리얼 위계에 맞춰 재설계
+
+## 2026-03-17 00:35:49 KST
+- timestamp: 2026-03-17 00:35:49 KST
+- 이번 실행 목표: 홈 첫 진입부를 대시보드형 카드 묶음에서 브랜드형 랜딩 경험으로 재구성하고, 배너/커뮤니티/슬라이더 섹션을 같은 홈 디자인 시스템으로 맞춘다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/home/BannerCarousel.tsx`
+  - `frontend/components/home/BannerCarousel.module.css`
+  - `frontend/components/home/CommunitySection.tsx`
+  - `frontend/components/home/CommunitySection.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/components/home/HorizontalCardSlider.tsx`
+  - `frontend/components/home/HorizontalCardSlider.module.css`
+  - `frontend/components/home/InfoLibrarySection.tsx`
+  - `frontend/components/home/InfoLibrarySection.module.css`
+  - `frontend/components/home/TopNav.tsx`
+  - `frontend/components/home/TopNav.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - 홈 캔버스를 더 넓은 에디토리얼 셸로 재구성하고 상단 허브를 `dispatch + signals + journey` 구조로 바꿔 관리자형 요약판 인상을 제거
+  - 상단 내비, 배너 히어로, 커뮤니티 피드, 공방/마켓 슬라이더, 정보 공유 섹션이 모두 `--home-*` 토큰 기반 표면/타이포/CTA 언어를 공유하도록 정리
+  - 배너에 prev/next 제어와 카운터를 추가하고, 공방/마켓 슬라이더에는 tone별 에디토리얼 셸을 도입해 첫 화면 전체가 하나의 소비자용 제품처럼 읽히게 조정
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/home/BannerCarousel.tsx frontend/components/home/BannerCarousel.module.css frontend/components/home/CommunitySection.tsx frontend/components/home/CommunitySection.module.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css frontend/components/home/HorizontalCardSlider.tsx frontend/components/home/HorizontalCardSlider.module.css frontend/components/home/InfoLibrarySection.tsx frontend/components/home/InfoLibrarySection.module.css frontend/components/home/TopNav.tsx frontend/components/home/TopNav.module.css` 통과
+  - 캡처: Playwright/Chromium 미설치로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `c7c5ddb` (`Redesign home landing experience`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 작업 범위 밖의 로컬 수정 `frontend/app/layout.tsx`는 이번 커밋에 포함하지 않음
+- 커밋 해시: `c7c5ddb`
+- 남은 가장 큰 UX 문제: 홈 첫인상은 정리됐지만 `ssuk/community/market` 내부 상세 화면과 홈의 버튼/표면 질감이 아직 완전히 같은 제품 언어로 이어지지 않음
+- 다음 실행 우선순위 1~3:
+  - `MarketView` 상세 카드와 `StudioShareDetailView`를 홈과 같은 표면/CTA 리듬으로 맞춘다
+  - 공통 버튼/칩/모달 토큰을 `home`과 `ssuk` 내부 화면 모두에서 같은 상태값으로 통합한다
+  - 원격 DNS가 복구되는 환경에서 누적 미푸시 커밋과 이번 홈 재설계 커밋을 정상 push한다
+
 ## 2026-03-16 23:35:10 KST
 - timestamp: 2026-03-16 23:35:10 KST
 - 이번 실행 목표: `MarketView`의 브라우즈/비교 구간을 대시보드형 패널에서 제품형 탐색 피드로 재구성
