@@ -1,5 +1,39 @@
 # UX Redesign Log
 
+## 2026-03-17 02:34:30 KST
+- timestamp: 2026-03-17 02:34:30 KST
+- 이번 실행 목표: `TwoMenuShell` 헤더/히어로와 `community/new`, `market/new` 작성 워크스페이스를 같은 에디토리얼 `compose` 시스템으로 재구성해 관리자형 입력 툴 인상을 제거한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/ssuk/TwoMenuShell.tsx`
+  - `frontend/components/ssuk/TwoMenuShell.module.css`
+  - `frontend/components/ssuk/ComposeWorkspace.module.css`
+  - `frontend/components/ssuk/CommunityComposeView.tsx`
+  - `frontend/components/ssuk/MarketComposeView.tsx`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `TwoMenuShell` 상단 크롬을 탭+더미 배지 조합에서 브랜드형 메뉴 캡슐, 컨텍스트 상태 패널, `hideHero` 화면에서도 쓰이는 헤더 액션으로 재구성해 상단이 더 이상 운영 툴 헤더처럼 보이지 않게 정리
+  - 공통 `compose-*` 토큰을 `globals.css`에 정리하고 작성 화면을 `overview stage + signal row + guided field deck + sticky preview rail` 구조로 바꿔 동일 카드 반복형 폼 인상을 제거
+  - 필드마다 맥락 설명을 붙이고 미리보기 카드에 본문/하이라이트 정보를 더해, 작성 화면이 단순 입력 검수 패널이 아니라 실제 게시/등록 결과물을 편집하는 제품형 경험으로 읽히게 조정
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/ssuk/TwoMenuShell.tsx frontend/components/ssuk/TwoMenuShell.module.css frontend/components/ssuk/ComposeWorkspace.module.css frontend/components/ssuk/CommunityComposeView.tsx frontend/components/ssuk/MarketComposeView.tsx` 통과
+  - 캡처: 브라우저 자동화/캡처 도구 미설치로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - `git add ...` 성공
+  - UX 변경 커밋 `a987eca` (`Redesign compose shell experience`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 푸시는 DNS 차단으로 미완료
+- 커밋 해시: `a987eca`
+- 남은 가장 큰 UX 문제: `community`/`market` 목록·상세 본문 안의 필터 칩, 보조 액션, 인라인 상태 패널이 새 compose 셸만큼 일관된 제품형 상태 언어를 아직 공유하지 않음
+- 다음 실행 우선순위 1~3:
+  - `CommunityView`/`MarketView` 필터 칩, 보조 CTA, 인라인 상태 패널을 이번 `compose` 셸과 같은 상태 언어로 통합
+  - `CommunityPostDetailView`/`StudioShareDetailView`의 응답·예약 액션 표면을 같은 토큰 세트로 재정리
+  - `.git` 쓰기 차단과 DNS 문제를 해소할 수 있는 환경에서 누적 로컬 UX 변경을 커밋/푸시
+
 ## 2026-03-17 01:35:28 KST
 - timestamp: 2026-03-17 01:35:28 KST
 - 이번 실행 목표: `market`/`community` 상세 화면과 공통 모바일 도크·푸터를 같은 제품형 디테일 시스템으로 재구성해 목록 화면과의 톤 단절을 줄인다
