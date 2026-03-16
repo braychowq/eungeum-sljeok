@@ -7,7 +7,7 @@
 
 .topGrid {
   padding-top: 22px;
-  border-top: 1px solid var(--shell-divider);
+  border-top: 1px solid var(--shell-frame-line, var(--shell-ribbon-line, var(--shell-divider)));
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
   gap: 14px;
@@ -15,12 +15,12 @@
 
 .brandCard,
 .routeCard {
-  border: 1px solid var(--detail-line);
+  border: 1px solid var(--shell-frame-line, var(--shell-ribbon-line, var(--detail-line)));
   border-radius: 28px;
   background:
-    radial-gradient(circle at top right, rgba(171, 96, 56, 0.1), transparent 26%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(244, 237, 227, 0.86));
-  box-shadow: var(--detail-shadow-soft);
+    radial-gradient(circle at top right, color-mix(in srgb, var(--shell-highlight, var(--detail-accent)) 12%, transparent), transparent 26%),
+    var(--shell-frame-bg-strong, var(--shell-ribbon-strong, linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(244, 237, 227, 0.86))));
+  box-shadow: var(--shell-frame-shadow, var(--shell-ribbon-shadow, var(--detail-shadow-soft)));
 }
 
 .brandCard {
@@ -31,7 +31,7 @@
 
 .brandEyebrow,
 .routeEyebrow {
-  color: var(--detail-subtle);
+  color: var(--shell-subtle, var(--detail-subtle));
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -46,7 +46,7 @@
 }
 
 .brandRow strong {
-  color: var(--detail-ink);
+  color: var(--shell-ink, var(--detail-ink));
   font-family: var(--font-logo);
   font-size: 32px;
   line-height: 0.94;
@@ -58,9 +58,9 @@
   min-height: 28px;
   padding: 0 11px;
   border-radius: 999px;
-  border: 1px solid rgba(29, 23, 17, 0.08);
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--detail-muted);
+  border: 1px solid var(--shell-frame-line, var(--shell-ribbon-line, rgba(29, 23, 17, 0.08)));
+  background: var(--shell-frame-pill, var(--shell-ribbon-pill, rgba(255, 255, 255, 0.8)));
+  color: var(--shell-muted, var(--detail-muted));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -73,7 +73,7 @@
 .brandDescription {
   margin: 0;
   max-width: 52ch;
-  color: var(--detail-muted);
+  color: var(--shell-muted, var(--detail-muted));
   font-size: 13px;
   line-height: 1.72;
 }
@@ -95,9 +95,9 @@
   min-height: 34px;
   padding: 0 14px;
   border-radius: 999px;
-  border: 1px solid rgba(29, 23, 17, 0.08);
-  background: rgba(255, 255, 255, 0.84);
-  color: var(--detail-ink);
+  border: 1px solid var(--shell-frame-line, var(--shell-ribbon-line, rgba(29, 23, 17, 0.08)));
+  background: var(--shell-frame-pill-strong, var(--shell-ribbon-pill-strong, rgba(255, 255, 255, 0.84)));
+  color: var(--shell-ink, var(--detail-ink));
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -113,14 +113,14 @@
 
 .routeLink:hover {
   transform: translateY(-1px);
-  border-color: var(--detail-line-strong);
+  border-color: var(--shell-frame-line-strong, var(--shell-ribbon-line-strong, var(--detail-line-strong)));
   background: #fff;
-  box-shadow: var(--detail-shadow-soft);
+  box-shadow: var(--shell-frame-shadow, var(--shell-ribbon-shadow, var(--detail-shadow-soft)));
 }
 
 .routeLink:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring), var(--detail-shadow-soft);
+  box-shadow: var(--focus-ring), var(--shell-frame-shadow, var(--shell-ribbon-shadow, var(--detail-shadow-soft)));
 }
 
 .metaRow {
@@ -132,7 +132,7 @@
 
 .companyInfo {
   margin: 0;
-  color: var(--detail-muted);
+  color: var(--shell-muted, var(--detail-muted));
   font-style: normal;
   font-size: 11px;
   line-height: 1.6;
@@ -144,7 +144,7 @@
 
 .copyright {
   margin: 0;
-  color: var(--detail-subtle);
+  color: var(--shell-subtle, var(--detail-subtle));
   font-size: 10px;
   line-height: 1.5;
   text-align: right;

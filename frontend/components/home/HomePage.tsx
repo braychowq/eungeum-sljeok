@@ -319,7 +319,7 @@ export default function HomePage() {
         <SiteFooter />
       </div>
 
-      <MobileBottomSheet />
+      <MobileBottomSheet activeMenu="home" />
     </main>
   );
 }

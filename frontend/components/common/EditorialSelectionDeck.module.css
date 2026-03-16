@@ -7,22 +7,15 @@
   position: relative;
   overflow: hidden;
   border: 1px solid var(--selection-line);
-  border-radius: 32px;
-  background: var(--selection-shell);
-  box-shadow: var(--selection-shadow);
-  padding: 22px;
-  display: grid;
-  gap: 16px;
-}
-
-.summaryBand::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+  border-radius: 34px;
   background:
-    radial-gradient(circle at 86% 14%, var(--deck-aura), transparent 30%),
-    radial-gradient(circle at 14% 100%, var(--deck-aura-soft), transparent 34%);
-  pointer-events: none;
+    radial-gradient(circle at 86% 14%, var(--deck-aura), transparent 32%),
+    radial-gradient(circle at 14% 100%, var(--deck-aura-soft), transparent 36%),
+    var(--selection-shell);
+  box-shadow: var(--selection-shadow);
+  padding: 24px;
+  display: grid;
+  gap: 18px;
 }
 
 .copyBlock,
@@ -33,7 +26,7 @@
 
 .copyBlock {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .eyebrow,
@@ -50,9 +43,9 @@
 
 .copyStack {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
 }
 
 .title {
@@ -69,37 +62,37 @@
   max-width: 60ch;
   color: var(--selection-muted);
   font-size: 13px;
-  line-height: 1.62;
+  line-height: 1.68;
 }
 
 .actionLink {
   flex-shrink: 0;
-  min-height: 46px;
-  padding: 0 18px;
-  border-radius: 999px;
+  min-height: var(--button-pill-height);
+  padding: var(--button-pill-padding);
+  border-radius: var(--button-pill-radius);
   border: 1px solid rgba(23, 34, 31, 0.08);
   background: linear-gradient(135deg, var(--deck-accent-strong), var(--deck-accent));
-  color: var(--deck-ink);
+  color: var(--button-primary-ink);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: var(--button-pill-font-weight);
   letter-spacing: -0.02em;
-  box-shadow: 0 16px 30px rgba(21, 29, 27, 0.12);
+  box-shadow: var(--button-primary-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .actionLink:hover {
   transform: translateY(-1px);
-  box-shadow: var(--selection-shadow-strong);
+  box-shadow: var(--button-primary-shadow-strong);
   filter: saturate(1.04);
 }
 
 .actionLink:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring), var(--selection-shadow-strong);
+  box-shadow: var(--focus-ring), var(--button-primary-shadow-strong);
 }
 
 .signalRow {
@@ -110,13 +103,13 @@
 
 .signalCard {
   min-width: 0;
-  border-radius: 22px;
+  border-radius: 24px;
   border: 1px solid var(--selection-line);
   background: var(--selection-card-strong);
-  padding: 14px;
+  padding: 16px;
   display: grid;
-  gap: 5px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  gap: 6px;
+  box-shadow: var(--button-secondary-shadow);
 }
 
 .signalCard span {
@@ -150,17 +143,17 @@
   overflow: hidden;
   min-width: 0;
   min-height: 214px;
-  border-radius: 28px;
+  border-radius: 30px;
   border: 1px solid var(--selection-line);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 241, 233, 0.84)),
     var(--selection-card);
   color: var(--selection-text);
   text-decoration: none;
-  padding: 18px;
+  padding: 20px;
   display: grid;
   align-content: start;
-  gap: 10px;
+  gap: 12px;
   box-shadow: var(--selection-shadow);
   transition:
     border-color 0.2s ease,
@@ -248,21 +241,28 @@
 .cardMetaRow {
   align-items: flex-end;
   margin-top: auto;
+  gap: 8px;
 }
 
 .cardMeta {
   border: 1px solid var(--selection-line);
-  background: var(--selection-chip);
+  background: var(--button-secondary-bg);
   color: var(--selection-muted);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
 }
 
 .cardAction {
-  background: rgba(23, 34, 31, 0.8);
-  color: var(--deck-ink);
+  border: 1px solid var(--selection-line);
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--selection-text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
 }
 
 .cardActive .cardAction {
   background: linear-gradient(135deg, var(--deck-accent-strong), var(--deck-accent));
+  border-color: transparent;
+  color: var(--button-primary-ink);
+  box-shadow: var(--button-primary-shadow);
 }
 
 .warmShell {

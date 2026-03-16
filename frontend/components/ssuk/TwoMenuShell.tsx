@@ -16,9 +16,67 @@ type TwoMenuShellProps = {
 };
 
 const mainMenus = [
-  { id: 'community', label: '슬쩍 커뮤니티', href: '/community' },
-  { id: 'market', label: '공방 쉐어', href: '/market' }
+  { id: 'home', label: '홈', caption: '메인 런웨이', href: '/' },
+  { id: 'community', label: '슬쩍 커뮤니티', caption: '질문과 공유', href: '/community' },
+  { id: 'market', label: '공방 쉐어', caption: '공간 탐색', href: '/market' }
 ] as const;
+
+const shellStory = {
+  community: {
+    headerDescription: '질문, 공유, 상세, 작성 화면이 하나의 제품 캔버스에서 이어집니다.',
+    statusLabel: "Today's route",
+    statusValue: '질문 → 맥락 파악 → 답변',
+    contextEyebrow: 'Maker conversation',
+    contextDescription:
+      '지금 필요한 대화 흐름으로 바로 들어가고, 상세와 작성 화면까지 같은 제품 톤으로 이어집니다.',
+    heroEyebrow: 'Community view',
+    heroDescription:
+      '탭 분위기와 작성 동선을 같은 캔버스에 묶어 관리자형 게시판보다 사람 사이의 대화 흐름이 먼저 읽히게 정리했습니다.',
+    highlights: [
+      {
+        label: 'Flow cue',
+        title: '상황과 시도한 내용을 먼저',
+        description: '질문과 공유의 맥락을 앞에 두어 반응이 더 빨리 붙도록 만듭니다.'
+      },
+      {
+        label: 'Writing cue',
+        title: '답변을 부르는 끝맺음',
+        description: '마지막 요청 문장을 선명하게 보여줘 다음 대화가 자연스럽게 이어집니다.'
+      }
+    ],
+    ledger: [
+      { label: 'Product line', value: '탐색 → 상세 → 작성' },
+      { label: 'Audience', value: '질문과 공유를 오가는 메이커' }
+    ]
+  },
+  market: {
+    headerDescription: '공방 탐색, 상세, 등록 화면이 하나의 제품 캔버스에서 이어집니다.',
+    statusLabel: "Today's route",
+    statusValue: '탐색 → 비교 → 문의',
+    contextEyebrow: 'Studio share',
+    contextDescription:
+      '공방 감도와 운영 조건, 문의 흐름을 같은 제품 리듬으로 이어 지금 필요한 공간을 더 빠르게 고르게 합니다.',
+    heroEyebrow: 'Market view',
+    heroDescription:
+      '가격과 조건만 나열하는 툴이 아니라 공간 감도와 운영 톤이 먼저 읽히고, 문의까지 같은 흐름으로 이어지게 정리했습니다.',
+    highlights: [
+      {
+        label: 'Atmosphere first',
+        title: '공간 무드가 먼저',
+        description: '가격표보다 먼저 공간의 결을 읽어 내 작업과 맞는지 빠르게 판단할 수 있습니다.'
+      },
+      {
+        label: 'Host cue',
+        title: '운영 톤을 바로 파악',
+        description: '응답 방식과 사용 리듬을 한 번에 보여줘 비교와 문의 사이의 왕복을 줄입니다.'
+      }
+    ],
+    ledger: [
+      { label: 'Product line', value: '탐색 → 상세 → 등록' },
+      { label: 'Audience', value: '공방을 찾는 메이커와 팀' }
+    ]
+  }
+} as const;
 
 export default function TwoMenuShell({
   activeMenu,
@@ -31,102 +89,53 @@ export default function TwoMenuShell({
   hideCta = false,
   children
 }: TwoMenuShellProps) {
-  const eyebrow = activeMenu === 'community' ? 'COMMUNITY VIEW' : 'MARKET VIEW';
   const isMarket = activeMenu === 'market';
   const showHeaderAction = hideHero || hideCta;
-  const headerStatus = isMarket
-    ? {
-        label: '오늘의 연결',
-        value: '탐색과 등록이 같은 제품 톤으로 이어집니다.'
-      }
-    : {
-        label: '오늘의 흐름',
-        value: '질문과 공유가 같은 리듬으로 이어집니다.'
-      };
-  const heroStatus = isMarket
-    ? {
-        label: 'Registration Note',
-        value: '운영 톤과 공간 감도가 먼저 읽히는 등록 흐름',
-        description: '가격과 조건만 쌓는 관리 화면이 아니라, 들어오자마자 공간 경험이 느껴지는 소개 흐름으로 맞췄습니다.'
-      }
-    : {
-        label: 'Writing Note',
-        value: '답변과 공감이 붙는 맥락 중심의 작성 흐름',
-        description: '탭 분위기와 체크리스트를 한 캔버스에 묶어, 게시판 입력 폼이 아니라 읽히는 글을 만드는 흐름으로 정리했습니다.'
-      };
-  const heroHighlights = isMarket
-    ? [
-        {
-          label: 'Intro direction',
-          title: '공간 무드가 먼저',
-          description: '위치와 가격보다 어떤 작업자가 잘 맞는 공간인지 먼저 보여줍니다.'
-        },
-        {
-          label: 'Host rhythm',
-          title: '문의 전에 운영 톤 정리',
-          description: '응답 방식과 사용 리듬이 한 번에 읽혀 불필요한 왕복을 줄입니다.'
-        }
-      ]
-    : [
-        {
-          label: 'Conversation cue',
-          title: '상황과 시도한 내용부터',
-          description: '질문/공유의 배경이 먼저 보여야 다음 답변이 빠르게 붙습니다.'
-        },
-        {
-          label: 'Closing line',
-          title: '대답을 부르는 마지막 문장',
-          description: '읽는 사람이 바로 반응할 수 있는 한 줄 요청으로 게시판 톤을 바꿉니다.'
-        }
-      ];
-  const heroLedger = isMarket
-    ? [
-        { label: 'Flow', value: '소개 톤 → 조건 정리 → 문의 준비' },
-        { label: 'Audience', value: '공방을 찾는 메이커와 팀' }
-      ]
-    : [
-        { label: 'Flow', value: '주제 선택 → 맥락 정리 → 게시 준비' },
-        { label: 'Audience', value: '질문과 공유를 찾는 메이커' }
-      ];
+  const story = shellStory[activeMenu];
+  const leadDescription = subtitle ?? story.contextDescription;
 
   return (
     <main className={`${styles.page} ${isMarket ? styles.marketPage : ''}`}>
-      <div className={`${styles.container} ${isMarket ? styles.marketContainer : ''}`}>
-        <header className={`${styles.topNav} ${isMarket ? styles.marketTopNav : ''}`}>
+      <div className={styles.container}>
+        <header className={styles.topNav}>
           <Link href="/" className={styles.brandBlock}>
             <span className={styles.brandEyebrow}>atelier network</span>
-            <span className={`${styles.logo} ${isMarket ? styles.marketLogo : ''}`}>은금슬쩍</span>
+            <span className={styles.logo}>은금슬쩍</span>
           </Link>
 
-          <nav className={`${styles.mainMenu} ${isMarket ? styles.marketMainMenu : ''}`} aria-label="대메뉴">
-            {mainMenus.map((menu) => (
-              <Link
-                key={menu.id}
-                href={menu.href}
-                className={`${styles.mainMenuLink} ${
-                  activeMenu === menu.id ? styles.mainMenuLinkActive : ''
-                } ${isMarket ? styles.marketMainMenuLink : ''} ${
-                  isMarket && activeMenu === menu.id ? styles.marketMainMenuLinkActive : ''
-                }`}
-                aria-current={activeMenu === menu.id ? 'page' : undefined}
-              >
-                {menu.label}
-              </Link>
-            ))}
+          <nav className={styles.mainMenu} aria-label="대메뉴">
+            {mainMenus.map((menu) => {
+              const isActive = activeMenu === menu.id;
+
+              return (
+                <Link
+                  key={menu.id}
+                  href={menu.href}
+                  className={`${styles.mainMenuLink} ${isActive ? styles.mainMenuLinkActive : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <span className={styles.mainMenuText}>
+                    <span className={styles.mainMenuLabel}>{menu.label}</span>
+                    <span className={styles.mainMenuCaption}>{menu.caption}</span>
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
 
           <div className={styles.utilityCluster}>
-            <div className={`${styles.headerStatus} ${isMarket ? styles.marketHeaderStatus : ''}`}>
-              <span className={styles.headerStatusLabel}>{headerStatus.label}</span>
-              <strong>{headerStatus.value}</strong>
+            <div className={styles.headerStatus}>
+              <span className={styles.headerStatusLabel}>{story.statusLabel}</span>
+              <strong>{story.statusValue}</strong>
+              <p>{story.headerDescription}</p>
             </div>
 
             {showHeaderAction ? (
-              <Link href={ctaHref} className={`${styles.headerAction} ${isMarket ? styles.marketHeaderAction : ''}`}>
+              <Link href={ctaHref} className={styles.headerAction}>
                 {ctaLabel}
               </Link>
             ) : (
-              <div className={`${styles.alertButton} ${isMarket ? styles.marketAlertButton : ''}`}>
+              <div className={styles.alertButton}>
                 <span className={styles.alertDot} aria-hidden="true" />
                 새 흐름
               </div>
@@ -134,29 +143,48 @@ export default function TwoMenuShell({
           </div>
         </header>
 
-        {!hideHero ? (
-          <section className={`${styles.heroBox} ${isMarket ? styles.marketHeroBox : ''}`}>
-            <div className={styles.heroPanel}>
-              <div className={styles.heroCopy}>
-                {!hideEyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-                <h1 className={`${styles.pageTitle} ${isMarket ? styles.marketPageTitle : ''}`}>{title}</h1>
-                {subtitle ? (
-                  <p className={`${styles.pageSubtitle} ${isMarket ? styles.marketPageSubtitle : ''}`}>{subtitle}</p>
-                ) : null}
+        {hideHero ? (
+          <section className={styles.contextStrip} aria-label={`${title} 페이지 소개`}>
+            <div className={styles.contextCopy}>
+              <span className={styles.contextEyebrow}>{story.contextEyebrow}</span>
+              <strong>{title}</strong>
+              <p>{leadDescription}</p>
+            </div>
 
-                <div className={styles.heroActionRow}>
-                  {!hideCta ? (
-                    <Link href={ctaHref} className={`${styles.ctaButton} ${isMarket ? styles.marketCtaButton : ''}`}>
-                      {ctaLabel}
-                    </Link>
-                  ) : null}
-                  <p className={styles.heroCaption}>{heroStatus.description}</p>
+            <div className={styles.contextSignals}>
+              {story.ledger.map((item) => (
+                <div key={`${activeMenu}-${item.label}`} className={styles.contextSignal}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
                 </div>
+              ))}
+            </div>
+
+            {!hideCta ? (
+              <Link href={ctaHref} className={styles.contextAction}>
+                {ctaLabel}
+              </Link>
+            ) : null}
+          </section>
+        ) : (
+          <section className={styles.heroBox} aria-label={`${title} 소개`}>
+            <div className={styles.heroIntro}>
+              {!hideEyebrow ? <p className={styles.eyebrow}>{story.heroEyebrow}</p> : null}
+              <h1 className={styles.pageTitle}>{title}</h1>
+              <p className={styles.pageSubtitle}>{leadDescription}</p>
+
+              <div className={styles.heroActionRow}>
+                {!hideCta ? (
+                  <Link href={ctaHref} className={styles.ctaButton}>
+                    {ctaLabel}
+                  </Link>
+                ) : null}
+                <p className={styles.heroCaption}>{story.heroDescription}</p>
               </div>
 
               <div className={styles.heroLedger}>
-                {heroLedger.map((item) => (
-                  <div key={item.label} className={styles.heroLedgerItem}>
+                {story.ledger.map((item) => (
+                  <div key={`${activeMenu}-hero-${item.label}`} className={styles.heroLedgerItem}>
                     <span>{item.label}</span>
                     <strong>{item.value}</strong>
                   </div>
@@ -166,13 +194,14 @@ export default function TwoMenuShell({
 
             <div className={styles.heroMeta}>
               <div className={styles.heroMetaLead}>
-                <span className={styles.heroMetaLabel}>{heroStatus.label}</span>
-                <strong>{heroStatus.value}</strong>
+                <span className={styles.heroMetaLabel}>{story.statusLabel}</span>
+                <strong>{story.statusValue}</strong>
+                <p>{story.headerDescription}</p>
               </div>
 
               <div className={styles.heroSignalGrid}>
-                {heroHighlights.map((item) => (
-                  <div key={item.title} className={styles.heroSignalItem}>
+                {story.highlights.map((item) => (
+                  <div key={`${activeMenu}-${item.title}`} className={styles.heroSignalItem}>
                     <span>{item.label}</span>
                     <strong>{item.title}</strong>
                     <p>{item.description}</p>
@@ -181,9 +210,9 @@ export default function TwoMenuShell({
               </div>
             </div>
           </section>
-        ) : null}
+        )}
 
-        <div className={`${styles.content} ${isMarket ? styles.marketContent : ''}`}>{children}</div>
+        <div className={styles.content}>{children}</div>
 
         <SiteFooter />
       </div>
