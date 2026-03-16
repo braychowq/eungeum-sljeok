@@ -47,6 +47,7 @@
 - 이번 실행 목표: 홈 첫 진입부를 대시보드형 카드 묶음에서 브랜드형 랜딩 경험으로 재구성하고, 배너/커뮤니티/슬라이더 섹션을 같은 홈 디자인 시스템으로 맞춘다
 - 실제 수정 파일:
   - `frontend/app/globals.css`
+  - `frontend/app/layout.tsx`
   - `frontend/components/home/BannerCarousel.tsx`
   - `frontend/components/home/BannerCarousel.module.css`
   - `frontend/components/home/CommunitySection.tsx`
@@ -64,6 +65,7 @@
   - 홈 캔버스를 더 넓은 에디토리얼 셸로 재구성하고 상단 허브를 `dispatch + signals + journey` 구조로 바꿔 관리자형 요약판 인상을 제거
   - 상단 내비, 배너 히어로, 커뮤니티 피드, 공방/마켓 슬라이더, 정보 공유 섹션이 모두 `--home-*` 토큰 기반 표면/타이포/CTA 언어를 공유하도록 정리
   - 배너에 prev/next 제어와 카운터를 추가하고, 공방/마켓 슬라이더에는 tone별 에디토리얼 셸을 도입해 첫 화면 전체가 하나의 소비자용 제품처럼 읽히게 조정
+  - 전역 레이아웃의 폰트 변수를 시스템 우선 스택으로 고정해 홈에서 의도한 세리프/산세리프 대비가 환경에 따라 덜 흔들리게 정리
 - 빌드/검증 결과:
   - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
   - 결과: 성공
@@ -73,9 +75,9 @@
   - 시작 브랜치 확인: `main`
   - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
   - UX 변경 커밋 `c7c5ddb` (`Redesign home landing experience`) 생성
+  - 폰트 변수 정리 커밋 `37e82b3` (`Set home font variables`) 생성
   - `git push origin main` 실패: `Could not resolve host: github.com`
-  - 작업 범위 밖의 로컬 수정 `frontend/app/layout.tsx`는 이번 커밋에 포함하지 않음
-- 커밋 해시: `c7c5ddb`
+- 커밋 해시: `c7c5ddb`, `37e82b3`
 - 남은 가장 큰 UX 문제: 홈 첫인상은 정리됐지만 `ssuk/community/market` 내부 상세 화면과 홈의 버튼/표면 질감이 아직 완전히 같은 제품 언어로 이어지지 않음
 - 다음 실행 우선순위 1~3:
   - `MarketView` 상세 카드와 `StudioShareDetailView`를 홈과 같은 표면/CTA 리듬으로 맞춘다
