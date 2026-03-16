@@ -56,6 +56,15 @@
   --field-border: rgba(23, 34, 31, 0.12);
   --field-border-strong: rgba(23, 34, 31, 0.2);
   --focus-ring: 0 0 0 3px rgba(159, 67, 40, 0.18);
+  --feed-band:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(243, 236, 226, 0.84));
+  --feed-surface: rgba(255, 255, 255, 0.74);
+  --feed-surface-strong: rgba(255, 255, 255, 0.9);
+  --feed-line: rgba(23, 34, 31, 0.1);
+  --feed-line-strong: rgba(23, 34, 31, 0.18);
+  --feed-accent-soft: rgba(201, 108, 77, 0.12);
+  --feed-support-soft: rgba(47, 95, 91, 0.12);
+  --feed-shadow: 0 22px 46px rgba(21, 29, 27, 0.08);
   --radius-sm: 10px;
   --radius-md: 16px;
   --space-1: 8px;
