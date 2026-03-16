@@ -65,6 +65,50 @@
   --feed-accent-soft: rgba(201, 108, 77, 0.12);
   --feed-support-soft: rgba(47, 95, 91, 0.12);
   --feed-shadow: 0 22px 46px rgba(21, 29, 27, 0.08);
+  --studio-canvas: #fcf7ef;
+  --studio-surface: #efe6d9;
+  --studio-panel:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(246, 239, 229, 0.82));
+  --studio-panel-strong:
+    linear-gradient(160deg, rgba(29, 50, 47, 0.98), rgba(67, 97, 91, 0.94));
+  --studio-line: rgba(75, 55, 31, 0.12);
+  --studio-line-strong: rgba(75, 55, 31, 0.22);
+  --studio-text: #201913;
+  --studio-text-secondary: #6c5f52;
+  --studio-accent: #8a6339;
+  --studio-accent-strong: #5e3d1a;
+  --studio-accent-soft: rgba(177, 137, 99, 0.16);
+  --studio-sage: #446159;
+  --studio-sage-soft: rgba(68, 97, 89, 0.12);
+  --studio-focus: #a65c21;
+  --studio-shadow-soft: 0 18px 30px rgba(44, 31, 18, 0.08);
+  --market-band:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(242, 236, 227, 0.88));
+  --market-band-strong:
+    linear-gradient(155deg, rgba(27, 58, 55, 0.98), rgba(69, 108, 102, 0.9));
+  --market-surface: rgba(255, 255, 255, 0.76);
+  --market-surface-strong: rgba(255, 255, 255, 0.9);
+  --market-line: rgba(23, 34, 31, 0.09);
+  --market-line-strong: rgba(23, 34, 31, 0.18);
+  --market-accent: #2f5f5b;
+  --market-accent-strong: #214d49;
+  --market-accent-soft: rgba(47, 95, 91, 0.12);
+  --market-warm: #b97344;
+  --market-warm-soft: rgba(185, 115, 68, 0.12);
+  --market-text: #17221f;
+  --market-text-secondary: #59645e;
+  --market-shadow: 0 24px 50px rgba(21, 29, 27, 0.08);
+  --market-shadow-strong: 0 30px 64px rgba(21, 29, 27, 0.12);
+  --market-focus: #214d49;
+  --market-radius-xl: 34px;
+  --market-radius-lg: 26px;
+  --market-radius-md: 18px;
+  --market-panel-soft:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.94), rgba(243, 235, 224, 0.84));
+  --market-card-sheen:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+  --market-ink-inverse: #fff8f2;
+  --market-chip-soft: rgba(255, 255, 255, 0.88);
   --radius-sm: 10px;
   --radius-md: 16px;
   --space-1: 8px;

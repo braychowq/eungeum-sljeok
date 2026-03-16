@@ -1,5 +1,34 @@
 # UX Redesign Log
 
+## 2026-03-16 23:31:36 KST
+- timestamp: 2026-03-16 23:31:36 KST
+- 이번 실행 목표: `MarketView`의 브라우즈/비교 구간을 대시보드형 패널에서 제품형 탐색 피드로 재구성
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+- 핵심 시각 변화:
+  - `Browse Flow`와 비교 패널을 분리된 보드 대신 `concierge stage + featured lead + contact lane` 흐름으로 재배치
+  - 공방 찾아보기 목록을 가로 레일 타일에서 세로 피드형 에디토리얼 카드로 전환해 운영툴 인상을 약화
+  - 공통 `studio-*` 토큰을 실제 전역 변수로 정리해 마켓 화면의 표면, 포커스, 액센트 질감을 일관되게 통일
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css` 통과
+  - 캡처: 로컬 브라우저/캡처 도구 부재로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `error: cannot open '.git/FETCH_HEAD': Operation not permitted`
+  - `git commit` 실패: `fatal: Unable to create '/Users/guk/Documents/workspace/eungeun-sljeok/.git/index.lock': Operation not permitted`
+  - `git push origin main` 미실행: sandbox가 `.git` 쓰기를 막아 커밋 자체를 만들 수 없음
+  - 작업 범위 밖의 로컬 수정 `frontend/app/layout.tsx`는 그대로 유지하고 이번 변경과 섞지 않음
+- 커밋 해시: 없음 (`.git/index.lock` 생성 차단으로 커밋 실패)
+- 남은 가장 큰 UX 문제: 홈 화면은 첫 진입 인상은 좋아졌지만 섹션 간 위계와 CTA 리듬이 아직 SSUK 내부 화면만큼 강하게 정리되지 않음
+- 다음 실행 우선순위 1~3:
+  - 홈 상단 히어로와 서비스 허브를 더 과감한 브랜드형 첫인상으로 재구성
+  - `MarketView` 상세 카드와 `StudioShareDetailView`의 정보 위계를 같은 제품 언어로 맞추기
+  - `.git` 쓰기 제약이 풀리는 환경에서 누적 UX 변경 커밋과 push를 정상화하기
+
 ## 2026-03-16 22:34:10 KST
 - timestamp: 2026-03-16 22:34:10 KST
 - 이번 실행 목표: `/community` 피드를 관리자형 카드 목록에서 에디토리얼 피드 경험으로 재구성
