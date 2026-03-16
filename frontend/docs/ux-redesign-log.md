@@ -1,5 +1,39 @@
 # UX Redesign Log
 
+## 2026-03-17 03:32:33 KST
+- timestamp: 2026-03-17 03:32:33 KST
+- 이번 실행 목표: `MarketView` 카탈로그 제어부의 관리자형 정렬 칩을 제품형 선택 덱으로 교체하고, 같은 상호작용 언어를 `CommunityView` 피드 전환부까지 확장한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/EditorialSelectionDeck.tsx`
+  - `frontend/components/common/EditorialSelectionDeck.module.css`
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+  - `frontend/components/ssuk/CommunityView.tsx`
+  - `frontend/components/ssuk/CommunityView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - 공통 `selection-*` 토큰과 `EditorialSelectionDeck` 컴포넌트를 추가해, 정렬/탭 전환을 우상단 관리자형 칩 모음이 아니라 현재 흐름 설명과 신호 카드가 붙은 제품형 선택 스테이지로 교체
+  - `MarketView`의 카탈로그 헤더를 정렬 칩 바에서 `현재 브라우즈 리듬 + 세부 탐색 카드 + 등록 CTA` 조합으로 재구성하고, 빈 상태도 경고 문구 대신 추천 흐름으로 복귀시키는 큐레이션 카드로 전환
+  - `CommunityView` 피드 상단도 같은 선택 덱을 써서 각 방의 성격과 최근 대화 맥락이 먼저 읽히게 바꾸고, 기존 탭/작성 버튼 군집이 남기던 게시판 관리자 툴 인상을 줄임
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증: `git diff --check -- frontend/app/globals.css frontend/components/common/EditorialSelectionDeck.tsx frontend/components/common/EditorialSelectionDeck.module.css frontend/components/ssuk/CommunityView.tsx frontend/components/ssuk/CommunityView.module.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css` 통과
+  - 캡처: `frontend/node_modules/.bin/playwright` 부재로 미실행
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `082aeba` (`Redesign browse selection decks`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 푸시는 DNS 차단으로 미완료
+- 커밋 해시: `082aeba`
+- 남은 가장 큰 UX 문제: 홈/서비스 허브 첫 진입 인상은 내부 `selection`·`compose`·`detail` 시스템만큼 강하게 통합되지 않아 랜딩과 내부 화면 사이의 브랜드 리듬 단절이 남아 있음
+- 다음 실행 우선순위 1~3:
+  - 홈 히어로와 서비스 허브를 이번 `selection` 시스템과 같은 큐레이션 언어로 재구성
+  - `TwoMenuShell` 및 공통 CTA/보조 버튼을 홈, 커뮤니티, 마켓 전반에서 더 일관된 액션 위계로 정리
+  - DNS가 복구되는 환경에서 누적 로컬 커밋을 원격 `origin/main`에 푸시하고 화면 캡처까지 다시 수행
+
 ## 2026-03-17 02:34:30 KST
 - timestamp: 2026-03-17 02:34:30 KST
 - 이번 실행 목표: `TwoMenuShell` 헤더/히어로와 `community/new`, `market/new` 작성 워크스페이스를 같은 에디토리얼 `compose` 시스템으로 재구성해 관리자형 입력 툴 인상을 제거한다
