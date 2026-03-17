@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
-import { ProductLink } from '../common/ProductControl';
+import ProductFeatureBand from '../common/ProductFeatureBand';
+import { ProductAnchor, ProductLink } from '../common/ProductControl';
 import ProductRail from '../common/ProductRail';
 import productRailStyles from '../common/ProductRail.module.css';
 import ProductSectionHeader from '../common/ProductSectionHeader';
+import ProductStatGrid, { type ProductStatGridItem } from '../common/ProductStatGrid';
 import {
   marketCards,
   marketSortOptions,
@@ -149,6 +151,9 @@ export default function MarketView({ activeSort }: MarketViewProps) {
   ).length;
   const recommendedCount = recommendationCards.length;
   const topComparisonCard = filteredStudioCards[0];
+  const topComparisonDateLabel = topComparisonCard
+    ? formatAvailabilityDate(topComparisonCard.availability.nextAvailableDate)
+    : null;
 
   const regionHighlights = useMemo(() => {
     const counts = new Map<string, number>();
@@ -176,57 +181,6 @@ export default function MarketView({ activeSort }: MarketViewProps) {
     return `₩${formatter.format(minPrice)} - ₩${formatter.format(maxPrice)}`;
   }, [filteredStudioCards]);
 
-  const signalCards = [
-    {
-      label: '즉시 연결',
-      value: `${bookableCount}곳`,
-      description: '오늘 또는 내일 바로 문의 가능한 공방'
-    },
-    {
-      label: '응답 빠름',
-      value: `${fastResponseCount}곳`,
-      description: '빠른 대화를 기대할 수 있는 공간'
-    },
-    {
-      label: '지역 집중',
-      value: regionHighlights[0] ? `${regionHighlights[0].label} ${regionHighlights[0].count}곳` : '전체',
-      description: '지금 가장 많이 보이는 지역 흐름'
-    }
-  ];
-
-  const browseHighlights = [
-    { label: '정렬 리듬', value: activeSortLabel },
-    { label: '가격 범위', value: priceRangeLabel },
-    { label: '현재 1순위', value: topComparisonCard?.title ?? '후보 없음' }
-  ];
-
-  const compareMetrics = [
-    { label: '즉시 문의', value: `${bookableCount}곳` },
-    { label: '응답 빠름', value: `${fastResponseCount}곳` },
-    { label: '추천 큐레이션', value: `${recommendedCount}선` }
-  ];
-
-  const topComparisonDateLabel = topComparisonCard
-    ? formatAvailabilityDate(topComparisonCard.availability.nextAvailableDate)
-    : null;
-
-  const nextActionSteps = [
-    {
-      step: '01',
-      title: '무드 읽기',
-      description: 'Editor’s Pick과 추천 공방으로 오늘 맞는 공간 톤을 먼저 잡습니다.'
-    },
-    {
-      step: '02',
-      title: '조건 압축',
-      description: `${activeSortLabel} 기준과 가격 리듬을 함께 보며 후보를 빠르게 좁힙니다.`
-    },
-    {
-      step: '03',
-      title: '즉시 연결',
-      description: '가능 일정과 응답 속도를 확인하고 바로 문의 흐름으로 넘어갑니다.'
-    }
-  ];
   const topRegionLabel = regionHighlights[0]
     ? `${regionHighlights[0].label} ${regionHighlights[0].count}곳`
     : '전체 지역';
@@ -253,6 +207,89 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       signal: '예산 우선 브라우즈'
     }
   }[activeSort];
+
+  const signalCards: ProductStatGridItem[] = [
+    {
+      label: '즉시 연결',
+      value: `${bookableCount}곳`,
+      description: '오늘 또는 내일 바로 문의 가능한 공방',
+      emphasis: 'support'
+    },
+    {
+      label: '응답 빠름',
+      value: `${fastResponseCount}곳`,
+      description: '빠른 대화를 기대할 수 있는 공간',
+      emphasis: 'accent'
+    },
+    {
+      label: '지역 집중',
+      value: topRegionLabel,
+      description: '지금 가장 많이 보이는 지역 흐름'
+    }
+  ];
+
+  const browseHighlights: ProductStatGridItem[] = [
+    {
+      label: '정렬 리듬',
+      value: activeSortLabel,
+      description: sortStory.signal,
+      emphasis: 'support'
+    },
+    {
+      label: '가격 범위',
+      value: priceRangeLabel,
+      description: '오늘 브라우즈 중인 전체 공방 가격대'
+    },
+    {
+      label: '현재 1순위',
+      value: topComparisonCard?.title ?? '후보 없음',
+      description: topComparisonDateLabel ? `다음 가능일 ${topComparisonDateLabel}` : '대표 후보를 다시 정리합니다',
+      emphasis: 'warm'
+    }
+  ];
+
+  const compareMetrics: ProductStatGridItem[] = [
+    {
+      label: '즉시 문의',
+      value: `${bookableCount}곳`,
+      description: '오늘 빠르게 연락 가능한 후보',
+      emphasis: 'support'
+    },
+    {
+      label: '응답 빠름',
+      value: `${fastResponseCount}곳`,
+      description: '대화 템포가 좋은 공간'
+    },
+    {
+      label: '추천 큐레이션',
+      value: `${recommendedCount}선`,
+      description: '에디터가 먼저 추린 공방',
+      emphasis: 'accent'
+    }
+  ];
+  const compareSnapshot: ProductStatGridItem[] = compareMetrics.map(({ label, value, emphasis }) => ({
+    label,
+    value,
+    emphasis
+  }));
+
+  const nextActionSteps = [
+    {
+      step: '01',
+      title: '무드 읽기',
+      description: 'Editor’s Pick과 추천 공방으로 오늘 맞는 공간 톤을 먼저 잡습니다.'
+    },
+    {
+      step: '02',
+      title: '조건 압축',
+      description: `${activeSortLabel} 기준과 가격 리듬을 함께 보며 후보를 빠르게 좁힙니다.`
+    },
+    {
+      step: '03',
+      title: '즉시 연결',
+      description: '가능 일정과 응답 속도를 확인하고 바로 문의 흐름으로 넘어갑니다.'
+    }
+  ];
   const sortDeckItems = marketSortOptions.map((option) => {
     const href = option.id === 'recommended' ? '/market' : `/market?sort=${option.id}`;
 
@@ -316,14 +353,58 @@ export default function MarketView({ activeSort }: MarketViewProps) {
       hideHero
     >
       <section className={styles.overviewSection} aria-label="공방 쉐어 이용 가이드">
-        <div className={styles.overviewIntro}>
-          <span className={styles.overviewEyebrow}>Studio Share</span>
-          <h1 className={styles.overviewTitle}>공방을 찾는 사람과 공유하는 사람을 한 화면 안에서 연결했습니다</h1>
-          <p className={styles.overviewDescription}>
-            추천과 인기 흐름으로 공간 감도를 먼저 읽고, 아래에서 일정과 가격, 신뢰 신호를 바로 비교해
-            문의까지 이어가세요. 공방을 운영 중이라면 같은 리듬 안에서 등록 출발점도 곧바로 확인할 수
-            있습니다.
-          </p>
+        <ProductFeatureBand
+          tone="forest"
+          titleAs="h1"
+          eyebrow="Studio Share"
+          title="공방을 찾는 사람과 공유하는 사람을 한 화면 안에서 연결했습니다"
+          description={
+            <>
+              추천과 인기 흐름으로 공간 감도를 먼저 읽고, 아래에서 일정과 가격, 신뢰 신호를 바로
+              비교해 문의까지 이어가세요. 공방을 운영 중이라면 같은 리듬 안에서 등록 출발점도 곧바로
+              확인할 수 있습니다.
+            </>
+          }
+          meta={
+            <div className={styles.overviewPillRow} aria-label="공방 쉐어 요약">
+              <span className={styles.overviewPill}>현재 흐름 {activeSortLabel}</span>
+              <span className={styles.overviewPill}>추천 큐레이션 {recommendedCount}선</span>
+              <span className={styles.overviewPill}>{topRegionLabel}</span>
+            </div>
+          }
+          action={
+            <div className={styles.featureActionRow}>
+              <ProductAnchor
+                href="#studio-browser"
+                tone="forest"
+                variant="primary"
+                className={styles.featurePrimaryAction}
+              >
+                비교 스테이지로 이동
+              </ProductAnchor>
+              <ProductLink
+                href="/market/new"
+                tone="forest"
+                variant="secondary"
+                className={styles.featureSecondaryAction}
+                onClick={() => {
+                  emitMarketEvent('studio_owner_cta_click', { from: 'overview_band' });
+                }}
+              >
+                내 공방 등록
+              </ProductLink>
+            </div>
+          }
+          className={styles.overviewBand}
+          bodyClassName={styles.overviewBandBody}
+        >
+          <ProductStatGrid
+            items={signalCards}
+            columns={3}
+            size="sm"
+            ariaLabel="공방 쉐어 핵심 신호"
+            className={styles.overviewSignalGrid}
+          />
           <div className={styles.entryGrid}>
             <div className={styles.entryCard}>
               <span className={styles.entryBadge}>찾고 있어요</span>
@@ -347,19 +428,17 @@ export default function MarketView({ activeSort }: MarketViewProps) {
               <span className={styles.entryAction}>공방 등록 시작</span>
             </Link>
           </div>
-        </div>
+        </ProductFeatureBand>
       </section>
 
       <section className={styles.actionBarSection} aria-label="공방 탐색 신호">
-        <div className={styles.actionBar}>
-          <div className={styles.actionBarText}>
-            <span>Studio Dispatch</span>
-            <strong>오늘의 공방 탐색을 한 장의 편집본처럼 묶었습니다</strong>
-            <p>
-              추천 레일로 분위기를 읽고, 아래 브라우즈 스테이지에서 가격과 일정, 신뢰 신호를 한 번에
-              눌러보세요.
-            </p>
-            {regionHighlights.length > 0 ? (
+        <ProductFeatureBand
+          tone="forest"
+          eyebrow="Studio Dispatch"
+          title="오늘의 공방 탐색을 한 장의 편집본처럼 묶었습니다"
+          description="추천 레일로 분위기를 읽고, 아래 브라우즈 스테이지에서 가격과 일정, 신뢰 신호를 한 번에 눌러보세요."
+          meta={
+            regionHighlights.length > 0 ? (
               <div className={styles.browsePillRow} aria-label="많이 보이는 지역">
                 {regionHighlights.map((item) => (
                   <span key={item.label} className={styles.browsePill}>
@@ -367,31 +446,62 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                   </span>
                 ))}
               </div>
-            ) : null}
+            ) : undefined
+          }
+          action={
+            <div className={styles.featureActionRow}>
+              <ProductAnchor
+                href="#studio-browser"
+                tone="forest"
+                variant="primary"
+                className={styles.featurePrimaryAction}
+              >
+                비교 구간으로 이동
+              </ProductAnchor>
+              <ProductLink
+                href={topComparisonCard?.href ?? '/market'}
+                tone="forest"
+                variant="secondary"
+                className={styles.featureSecondaryAction}
+                onClick={() => {
+                  if (topComparisonCard) {
+                    emitMarketEvent('studio_card_click', {
+                      studioId: topComparisonCard.id,
+                      sectionType: 'list' as StudioSectionType
+                    });
+                  }
+                }}
+              >
+                프런트 러너 보기
+              </ProductLink>
+            </div>
+          }
+          className={styles.dispatchBand}
+          bodyClassName={styles.dispatchBandBody}
+        >
+          <div className={styles.dispatchGrid}>
+            <div className={styles.dispatchSurface}>
+              <span className={styles.dispatchSurfaceEyebrow}>Browse Lens</span>
+              <ProductStatGrid
+                items={browseHighlights}
+                columns={3}
+                size="sm"
+                ariaLabel="공방 브라우즈 렌즈"
+                className={styles.dispatchStatGrid}
+              />
+            </div>
+            <div className={styles.dispatchSurface}>
+              <span className={styles.dispatchSurfaceEyebrow}>Connection Cue</span>
+              <ProductStatGrid
+                items={compareMetrics}
+                columns={3}
+                size="sm"
+                ariaLabel="공방 연결 신호"
+                className={styles.dispatchStatGrid}
+              />
+            </div>
           </div>
-
-          <div className={styles.signalGrid} aria-label="공방 탐색 요약">
-            {signalCards.map((item) => (
-              <div key={item.label} className={styles.signalCard}>
-                <span className={styles.signalLabel}>{item.label}</span>
-                <strong>{item.value}</strong>
-                <p className={styles.signalCopy}>{item.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <ProductLink
-            href="/market/new"
-            tone="forest"
-            variant="primary"
-            className={styles.actionBarButton}
-            onClick={() => {
-              emitMarketEvent('studio_owner_cta_click', { from: 'top_bar' });
-            }}
-          >
-            내 공방 등록
-          </ProductLink>
-        </div>
+        </ProductFeatureBand>
       </section>
 
       <section className={styles.heroSection} aria-label="Editor Pick">
@@ -548,7 +658,7 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         </ol>
       </section>
 
-      <section className={styles.listSection} aria-label="공방 찾아보기">
+      <section id="studio-browser" className={styles.listSection} aria-label="공방 찾아보기">
         <ProductSectionHeader
           tone="forest"
           className={styles.sectionHeader}
@@ -570,14 +680,13 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                 </p>
               </div>
 
-              <div className={styles.browseStats} aria-label="공방 탐색 요약">
-                {browseHighlights.map((item) => (
-                  <div key={item.label}>
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </div>
-                ))}
-              </div>
+              <ProductStatGrid
+                items={browseHighlights}
+                columns={3}
+                size="sm"
+                ariaLabel="공방 탐색 요약"
+                className={styles.browseStats}
+              />
 
               <div className={styles.flowSteps} aria-label="공방 탐색 단계">
                 {nextActionSteps.map((item) => (
@@ -623,14 +732,13 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                     <span className={styles.stageHighlightSignal}>{topComparisonCard.availabilityLabel}</span>
                     <span className={styles.stageHighlightSignal}>{toInquiryHint(topComparisonCard)}</span>
                   </div>
-                  <div className={styles.stageHighlightMetrics}>
-                    {compareMetrics.map((item) => (
-                      <div key={item.label} className={styles.stageHighlightMetric}>
-                        <span>{item.label}</span>
-                        <strong>{item.value}</strong>
-                      </div>
-                    ))}
-                  </div>
+                  <ProductStatGrid
+                    items={compareSnapshot}
+                    columns={3}
+                    size="sm"
+                    ariaLabel="프런트 러너 비교 지표"
+                    className={styles.stageHighlightMetrics}
+                  />
                   <div className={styles.badgeRow}>
                     {topComparisonCard.trustBadges.map((badge) => (
                       <span
@@ -718,34 +826,45 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         />
 
         {filteredStudioCards.length === 0 ? (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyStateEyebrow}>No match yet</span>
-            <strong>지금 정렬에서는 바로 비교할 후보가 없습니다</strong>
-            <p>추천 흐름으로 돌아가거나, 내 공방 등록으로 새로운 연결 흐름을 시작해보세요.</p>
-            <div className={styles.emptyStateActions}>
-              <ProductLink
-                href="/market"
-                tone="forest"
-                variant="primary"
-                size="sm"
-                className={styles.emptyStatePrimaryAction}
-              >
-                추천 흐름으로 돌아가기
-              </ProductLink>
-              <ProductLink
-                href="/market/new"
-                tone="forest"
-                variant="secondary"
-                size="sm"
-                className={styles.emptyStateSecondaryAction}
-                onClick={() => {
-                  emitMarketEvent('studio_owner_cta_click', { from: 'empty_state' });
-                }}
-              >
-                내 공방 등록
-              </ProductLink>
-            </div>
-          </div>
+          <ProductFeatureBand
+            tone="forest"
+            compact
+            eyebrow="No match yet"
+            title="지금 정렬에서는 바로 비교할 후보가 없습니다"
+            description="추천 흐름으로 돌아가거나, 내 공방 등록으로 새로운 연결 흐름을 시작해보세요."
+            meta={
+              <div className={styles.emptyStateMeta}>
+                <span className={styles.emptyStatePill}>현재 정렬 {activeSortLabel}</span>
+                <span className={styles.emptyStatePill}>추천 큐레이션 {recommendedCount}선</span>
+              </div>
+            }
+            action={
+              <div className={styles.emptyStateActions}>
+                <ProductLink
+                  href="/market"
+                  tone="forest"
+                  variant="primary"
+                  size="sm"
+                  className={styles.emptyStatePrimaryAction}
+                >
+                  추천 흐름으로 돌아가기
+                </ProductLink>
+                <ProductLink
+                  href="/market/new"
+                  tone="forest"
+                  variant="secondary"
+                  size="sm"
+                  className={styles.emptyStateSecondaryAction}
+                  onClick={() => {
+                    emitMarketEvent('studio_owner_cta_click', { from: 'empty_state' });
+                  }}
+                >
+                  내 공방 등록
+                </ProductLink>
+              </div>
+            }
+            className={styles.emptyStateBand}
+          />
         ) : (
           <ul className={styles.cardGrid}>
             {filteredStudioCards.map((card) => (
