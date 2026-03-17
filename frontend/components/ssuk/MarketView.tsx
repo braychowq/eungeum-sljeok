@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
-import { ProductButton, ProductLink } from '../common/ProductControl';
+import { ProductLink } from '../common/ProductControl';
+import ProductRail from '../common/ProductRail';
+import productRailStyles from '../common/ProductRail.module.css';
 import ProductSectionHeader from '../common/ProductSectionHeader';
 import {
   marketCards,
@@ -26,14 +28,6 @@ type MarketViewProps = {
 type StudioSectionType = 'hero' | 'recommendation' | 'trending' | 'list';
 
 type MarketEventName = 'studio_card_click' | 'studio_owner_cta_click';
-
-type RailButtonsProps = {
-  label: string;
-  canScrollPrev: boolean;
-  canScrollNext: boolean;
-  onPrev: () => void;
-  onNext: () => void;
-};
 
 const trustBadgeLabel: Record<StudioTrustBadge, string> = {
   verified: '검증됨',
@@ -58,45 +52,6 @@ function emitMarketEvent(eventName: MarketEventName, payload: Record<string, unk
   if (process.env.NODE_ENV !== 'production') {
     console.info('[ssuk-market-analytics]', detail);
   }
-}
-
-function RailButtons({
-  label,
-  canScrollPrev,
-  canScrollNext,
-  onPrev,
-  onNext
-}: RailButtonsProps) {
-  return (
-    <div className={styles.railActions} aria-label={`${label} 이동`}>
-      <ProductButton
-        type="button"
-        tone="forest"
-        variant="secondary"
-        size="sm"
-        iconOnly
-        className={styles.railButton}
-        onClick={onPrev}
-        disabled={!canScrollPrev}
-        aria-label={`${label} 이전`}
-      >
-        &lt;
-      </ProductButton>
-      <ProductButton
-        type="button"
-        tone="forest"
-        variant="secondary"
-        size="sm"
-        iconOnly
-        className={styles.railButton}
-        onClick={onNext}
-        disabled={!canScrollNext}
-        aria-label={`${label} 다음`}
-      >
-        &gt;
-      </ProductButton>
-    </div>
-  );
 }
 
 function toInquiryHint(card: StudioListingCard) {
@@ -448,17 +403,19 @@ export default function MarketView({ activeSort }: MarketViewProps) {
           description="분위기와 운영 결이 선명한 공간부터 훑고, 아래 비교 구간으로 자연스럽게 이어지도록 첫 장면을 편집했습니다."
           compact
           action={
-            <RailButtons
+            <ProductRail
               label="Editor Pick"
+              summary={`${studioHeroPicks.length} scenes`}
               canScrollPrev={heroRail.canScrollPrev}
               canScrollNext={heroRail.canScrollNext}
               onPrev={heroRail.scrollPrev}
               onNext={heroRail.scrollNext}
+              className={styles.sectionRailControl}
             />
           }
         />
-        <ul ref={heroRail.railRef} className={`${styles.heroCarousel} ${styles.railTrack}`}>
-          {studioHeroPicks.map((pick) => (
+        <ul ref={heroRail.railRef} className={`${styles.heroCarousel} ${productRailStyles.track}`}>
+          {studioHeroPicks.map((pick, index) => (
             <li key={pick.id}>
               <Link
                 href={pick.href}
@@ -470,11 +427,15 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                   });
                 }}
               >
-                <img src={pick.imageUrl} alt={`${pick.title} 공방 큐레이션 배너`} loading="lazy" />
-                <div className={styles.heroOverlay}>
-                  <span>{pick.badge}</span>
+                <div className={styles.heroMedia}>
+                  <img src={pick.imageUrl} alt={`${pick.title} 공방 큐레이션 배너`} loading="lazy" />
+                  <span className={styles.heroFrameIndex}>{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <div className={styles.heroBody}>
+                  <span className={styles.heroBadge}>{pick.badge}</span>
                   <strong>{pick.title}</strong>
                   <p>{pick.subtitle}</p>
+                  <span className={styles.heroCue}>공방 상세 보기</span>
                 </div>
               </Link>
             </li>
@@ -491,16 +452,21 @@ export default function MarketView({ activeSort }: MarketViewProps) {
           description="가격과 분위기, 운영 조건의 균형이 좋은 공간을 먼저 압축해 빠르게 후보를 좁힙니다."
           compact
           action={
-            <RailButtons
+            <ProductRail
               label="추천 공방"
+              summary={`${recommendedCount} picks`}
               canScrollPrev={recommendationRail.canScrollPrev}
               canScrollNext={recommendationRail.canScrollNext}
               onPrev={recommendationRail.scrollPrev}
               onNext={recommendationRail.scrollNext}
+              className={styles.sectionRailControl}
             />
           }
         />
-        <ul ref={recommendationRail.railRef} className={`${styles.recommendList} ${styles.railTrack}`}>
+        <ul
+          ref={recommendationRail.railRef}
+          className={`${styles.recommendList} ${productRailStyles.track}`}
+        >
           {recommendationCards.map(({ item, card }) => (
             <li key={item.id}>
               <Link
@@ -539,16 +505,18 @@ export default function MarketView({ activeSort }: MarketViewProps) {
           description="지금 반응이 몰리는 공간과 일정 신호를 짧고 빠르게 훑을 수 있도록 속도감 있는 레일로 정리했습니다."
           compact
           action={
-            <RailButtons
+            <ProductRail
               label="인기 공방"
+              summary={`Top ${trendingCards.length}`}
               canScrollPrev={trendingRail.canScrollPrev}
               canScrollNext={trendingRail.canScrollNext}
               onPrev={trendingRail.scrollPrev}
               onNext={trendingRail.scrollNext}
+              className={styles.sectionRailControl}
             />
           }
         />
-        <ol ref={trendingRail.railRef} className={`${styles.trendingList} ${styles.railTrack}`}>
+        <ol ref={trendingRail.railRef} className={`${styles.trendingList} ${productRailStyles.track}`}>
           {trendingCards.map(({ item, card }) => (
             <li key={item.id}>
               <Link
@@ -650,6 +618,11 @@ export default function MarketView({ activeSort }: MarketViewProps) {
                     {topComparisonCard.locationLabel} · {topComparisonCard.capacityLabel} · 다음 가능일{' '}
                     {topComparisonDateLabel}
                   </p>
+                  <div className={styles.stageHighlightSignals}>
+                    <span className={styles.stageHighlightSignal}>{topComparisonCard.priceLabel}</span>
+                    <span className={styles.stageHighlightSignal}>{topComparisonCard.availabilityLabel}</span>
+                    <span className={styles.stageHighlightSignal}>{toInquiryHint(topComparisonCard)}</span>
+                  </div>
                   <div className={styles.stageHighlightMetrics}>
                     {compareMetrics.map((item) => (
                       <div key={item.label} className={styles.stageHighlightMetric}>

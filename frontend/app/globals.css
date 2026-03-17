@@ -186,7 +186,25 @@
   --product-panel-muted: var(--detail-muted);
   --product-panel-subtle: var(--detail-subtle);
   --product-panel-accent: var(--detail-accent-strong);
+  --product-panel-accent-soft: var(--detail-accent-soft);
   --product-panel-support: var(--detail-support-strong);
+  --product-panel-support-soft: var(--detail-support-soft);
+  --product-panel-warm-soft: var(--detail-warm-soft);
+  --product-panel-chip: rgba(255, 255, 255, 0.78);
+  --product-panel-chip-strong: rgba(255, 255, 255, 0.92);
+  --product-chip-shell:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(247, 240, 230, 0.82));
+  --product-chip-shell-strong:
+    radial-gradient(circle at top right, rgba(194, 154, 102, 0.16), transparent 40%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(245, 236, 224, 0.9));
+  --product-chip-line: rgba(29, 23, 17, 0.08);
+  --product-chip-line-strong: rgba(29, 23, 17, 0.16);
+  --product-chip-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  --product-chip-ink: var(--product-panel-ink);
+  --product-chip-muted: var(--product-panel-subtle);
+  --product-chip-accent: var(--product-panel-accent);
+  --product-chip-support: var(--product-panel-support);
+  --product-chip-warm: #8b542e;
   --home-shell: #fffaf4;
   --home-shell-strong: rgba(255, 250, 244, 0.94);
   --home-panel:
