@@ -7,18 +7,20 @@
   - `frontend/app/globals.css`
   - `frontend/components/common/ProductFeatureBand.tsx`
   - `frontend/components/common/ProductFeatureBand.module.css`
+  - `frontend/components/common/ProductStatGrid.tsx`
+  - `frontend/components/common/ProductStatGrid.module.css`
   - `frontend/components/ssuk/MarketView.tsx`
   - `frontend/components/ssuk/MarketView.module.css`
   - `frontend/docs/ux-redesign-log.md`
 - 핵심 시각 변화:
-  - `globals.css`에 `--product-stage-*` 토큰을 추가하고 `components/common`에 `ProductFeatureBand`를 도입해, 마켓 상단 안내/시그널/빈 상태가 화면 전용 마켓 박스가 아니라 같은 제품형 stage surface를 재사용하도록 묶었다
-  - `MarketView`의 overview, dispatch band, empty state를 모두 `ProductFeatureBand`로 교체하고 meta pill, CTA 배치, 반응형 제목 스케일을 공용 변수로 제어하도록 바꿔 상단 흐름이 개별 위젯 모음이 아니라 하나의 에디토리얼 제품 런웨이처럼 읽히게 정리했다
-  - 상단 entry card와 dispatch signal card도 `product-panel`/`product-chip` 계열로 다시 칠해 warm/support aura, 상단 accent rail, 깊은 라운드, pill 메타를 공유하게 만들어 이전의 회색 관리자형 안내 카드 질감을 크게 줄였다
+  - `globals.css`에 `--product-stage-*`와 `--product-stat-*` 토큰을 추가하고 `components/common`에 `ProductFeatureBand`, `ProductStatGrid`를 도입해, 마켓 상단 안내·시그널·빈 상태가 화면 전용 박스가 아니라 같은 제품형 stage/stat surface를 재사용하도록 묶었다
+  - `MarketView`의 overview, dispatch band, empty state는 모두 `ProductFeatureBand`로 정리하고, CTA 행에는 같은 제품 제어 계층을 넣어 상단 흐름이 개별 위젯 모음이 아니라 하나의 에디토리얼 런웨이처럼 읽히도록 재구성했다
+  - overview 신호, dispatch 요약, browse stage 요약, front-runner 비교 지표를 `ProductStatGrid`로 교체해 마켓 초반의 요약 카드가 더 이상 관리자형 개별 위젯처럼 보이지 않고, 같은 radius·shadow·emphasis 문법 안에서 이어지도록 통일했다
 - 빌드/검증 결과:
   - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
   - 결과: 성공
   - 추가 검증:
-    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductFeatureBand.tsx frontend/components/common/ProductFeatureBand.module.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css` 통과
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductFeatureBand.tsx frontend/components/common/ProductFeatureBand.module.css frontend/components/common/ProductStatGrid.tsx frontend/components/common/ProductStatGrid.module.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css frontend/docs/ux-redesign-log.md` 통과
   - 추가 검증:
     `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/ssuk/MarketView.tsx | sed 's/styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/ssuk/MarketView.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
   - 캡처/서버 검증:
@@ -26,16 +28,16 @@
     `frontend/node_modules/.bin/playwright` 없음
 - Git 반영 결과:
   - 시작 브랜치 확인: `main`
-  - `git pull --rebase --autostash origin main` 실패: `error: cannot open '.git/FETCH_HEAD': Operation not permitted`
-  - `git add` / `git commit` 실패: `fatal: Unable to create '/Users/guk/Documents/workspace/eungeun-sljeok/.git/index.lock': Operation not permitted`
+  - `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `a1aefe7` (`Rebuild market stage surfaces`) 생성
   - `git push origin main` 실패: `Could not resolve host: github.com`
-  - 결과적으로 이번 실행의 UX 변경은 작업 트리에 반영됐지만 sandbox의 `.git` 쓰기 차단과 DNS 제한 때문에 커밋/원격 push는 완료하지 못함
-- 커밋 해시: `생성 실패 - .git/index.lock 쓰기 차단`
-- 남은 가장 큰 UX 문제: `MarketView` 상단 band는 공용 stage surface로 정리됐지만 browse stage 하단의 `stageHighlight` / `priorityLane` / `studioCard`는 아직 화면 전용 카드 셸을 유지하고 있어, 목록 비교 구간까지 완전히 같은 공용 카드 계층으로 닫히지 않았다
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 push는 DNS 제한 때문에 완료하지 못함
+- 커밋 해시: `a1aefe7`
+- 남은 가장 큰 UX 문제: `MarketView` 상단 band와 요약 지표는 공용 stage/stat surface로 정리됐지만 browse stage 하단의 `stageHighlight` / `priorityLane` / `studioCard`는 아직 화면 전용 카드 셸을 유지하고 있어, 목록 비교 구간까지 완전히 같은 공용 카드 계층으로 닫히지 않았다
 - 다음 실행 우선순위 1~3:
   - `stageHighlight`, `priorityLaneItem`, `studioCard`를 공용 trust/detail card primitive 또는 토큰 계층으로 추출하기
-  - `ProductFeatureBand`를 홈/커뮤니티의 비슷한 summary·empty state surface로 확장해 공통 시스템 범위를 넓히기
-  - `.git` 쓰기 권한과 DNS 제한이 해소된 환경에서 누적 로컬 변경을 커밋·push하고 실제 화면 캡처를 재시도하기
+  - `ProductFeatureBand`, `ProductStatGrid`를 홈/커뮤니티의 비슷한 summary·empty state surface까지 확장해 공통 시스템 범위를 넓히기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 재시도하기
 
 ## 2026-03-17 12:34:30 KST
 - timestamp: 2026-03-17 12:34:30 KST
