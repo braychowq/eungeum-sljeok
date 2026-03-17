@@ -36,12 +36,11 @@
     `frontend/node_modules/.bin/playwright` 없음
 - Git 반영 결과:
   - 시작 브랜치 확인: `main`
-  - 작업 시작 전 `git pull --rebase origin main` 실패: `.git/FETCH_HEAD` 쓰기 권한 없음 (`Operation not permitted`)
-  - `git add ... && git commit -m "Rebuild home sequence framing"` 실패: `.git/index.lock` 생성 권한 없음 (`Operation not permitted`)
-  - `.git` 내부에 `touch` 쓰기 자체가 sandbox에서 차단됨을 확인
+  - 작업 시작 전 `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `46a9ca1` (`Rebuild home sequence framing`) 생성
   - `git push origin main` 실패: `Could not resolve host: github.com`
-  - 결과적으로 이번 실행의 UX 변경은 워크트리에 남았지만 `.git` 쓰기 제한과 DNS 제한 때문에 commit/push를 완료하지 못했다
-- 커밋 해시: `commit 생성 실패 (.git/index.lock: Operation not permitted)`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 DNS 제한 때문에 원격 push는 완료하지 못했다
+- 커밋 해시: `46a9ca1`
 - 남은 가장 큰 UX 문제: 홈 본문 도입부는 공용 프레임으로 정리됐지만 `CommunitySection`과 `InfoLibrarySection` 내부의 칩/서브헤더/푸터 액션은 아직 화면 전용 micro-chrome 비중이 높아, 섹션 내부까지 완전히 같은 공용 제품 문법으로 닫히지는 않았다
 - 다음 실행 우선순위 1~3:
   - `CommunitySection`과 `InfoLibrarySection`의 전용 chip/footer/subheader를 공용 micro primitive로 더 축소하기
