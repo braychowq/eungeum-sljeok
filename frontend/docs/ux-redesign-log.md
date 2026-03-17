@@ -26,8 +26,9 @@
 - Git 반영 결과:
   - 시작 브랜치 확인: `main`
   - 작업 시작 전 `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
-  - 이번 실행의 commit/push 최종 결과는 Git 단계 완료 후 최종 보고 기준으로 기록
-- 커밋 해시: Git 단계 완료 후 최종 보고 기준
+  - UX 변경 커밋 `dcac70c` (`Rebuild ssuk masthead runway`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+- 커밋 해시: `dcac70c`
 - 남은 가장 큰 UX 문제: browse/detail 쪽보다 작성 화면(`CommunityComposeView`, `MarketComposeView`, `ComposeWorkspace`)이 여전히 readiness score, step tray, sticky sidecard 중심이라 가장 강한 운영툴 인상을 남기고 있다
 - 다음 실행 우선순위 1~3:
   - `CommunityComposeView`, `MarketComposeView`, `ComposeWorkspace`를 draft-first publishing canvas로 다시 설계하기
