@@ -219,6 +219,10 @@ export default function BannerCarousel({
   const activeLabel = bannerLabels[activeIndex % bannerLabels.length] ?? bannerLabels[0];
   const activeNote = bannerNotes[activeIndex % bannerNotes.length] ?? bannerNotes[0];
   const activeTone = bannerToneMap[activeIndex % bannerToneMap.length] ?? bannerToneMap[0];
+  const activeProgress =
+    total > 0
+      ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
+      : '00 / 00';
 
   return (
     <section className={styles.section} aria-label="배너 롤링">
@@ -280,9 +284,10 @@ export default function BannerCarousel({
         description={activeNote}
         meta={
           <div className={styles.captionMetaRow}>
-            <span className={styles.captionMetaChip}>자동 롤링</span>
-            <span className={styles.captionMetaChip}>드래그 이동</span>
-            <span className={styles.captionMetaChip}>링크 오픈</span>
+            <span className={styles.captionMetaChip}>{activeProgress}</span>
+            <span className={styles.captionMetaNote}>
+              자동 롤링과 드래그 이동으로 둘러보는 이미지 스테이지
+            </span>
           </div>
         }
         action={
@@ -293,7 +298,7 @@ export default function BannerCarousel({
               variant="primary"
               className={styles.captionAction}
             >
-              지금 둘러보기
+              이 장면 이어보기
             </ProductAnchor>
           ) : null
         }

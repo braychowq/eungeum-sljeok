@@ -113,13 +113,13 @@
 }
 
 .captionBand {
-  --product-feature-padding: 20px 22px;
-  --product-feature-gap: 16px;
-  --product-feature-title-size: clamp(28px, 4vw, 40px);
-  --product-feature-title-max: 12ch;
-  --product-feature-description-max: 54ch;
-  --product-feature-description-size: 14px;
-  --product-feature-radius: 34px;
+  --product-feature-padding: 18px 20px;
+  --product-feature-gap: 14px;
+  --product-feature-title-size: clamp(24px, 4vw, 36px);
+  --product-feature-title-max: 11ch;
+  --product-feature-description-max: 48ch;
+  --product-feature-description-size: 13px;
+  --product-feature-radius: 30px;
   --feature-shell: var(--home-hero-shell);
   --feature-line: var(--home-hero-line);
   --feature-shadow: var(--home-hero-shadow-soft);
@@ -135,7 +135,8 @@
 .captionMetaRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 .captionMetaChip {
@@ -154,6 +155,12 @@
   letter-spacing: 0.14em;
   line-height: 1;
   text-transform: uppercase;
+}
+
+.captionMetaNote {
+  color: var(--home-hero-muted);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .captionAction {
@@ -212,7 +219,7 @@
 
   .captionBand {
     --product-feature-padding: 18px;
-    --product-feature-title-size: 30px;
+    --product-feature-title-size: 28px;
     --product-feature-radius: 28px;
   }
 

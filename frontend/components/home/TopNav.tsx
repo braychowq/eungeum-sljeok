@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 import { ProductLink } from '../common/ProductControl';
-import ProductFeatureBand from '../common/ProductFeatureBand';
 import { NavItem } from './types';
 import styles from './TopNav.module.css';
 
@@ -34,70 +33,61 @@ export default function TopNav({ items, freshCount }: TopNavProps) {
   const activeContext = activeItem
     ? routeContextMap[activeItem.id as keyof typeof routeContextMap]
     : undefined;
+  const liveLabel = `24h 새 대화 ${freshCount}개`;
 
   return (
     <header className={styles.header}>
-      <ProductFeatureBand
-        title="은금슬쩍"
-        titleAs="h2"
-        eyebrow="Atelier dispatch"
-        description="배우고, 연결하고, 판매까지 이어지는 silver atelier network"
-        meta={
-          <div className={styles.metaRow}>
-            <span className={styles.signalPill}>
-              <span className={styles.signalLabel}>Live</span>
-              <strong>오늘 반응 중인 대화 {freshCount}개</strong>
-            </span>
-            <span className={styles.signalPill}>
-              <span className={styles.signalLabel}>Now guiding</span>
-              <strong>{activeContext?.note ?? '오늘의 흐름을 먼저 고르는 홈 스테이지'}</strong>
-            </span>
-          </div>
-        }
-        action={
-          <div className={styles.actionRow}>
-            <nav className={styles.nav} aria-label="메인 네비게이션">
-              {items.map((item) => {
-                const active = isActive(item.href);
-                const routeContext = routeContextMap[item.id as keyof typeof routeContextMap];
+      <div className={styles.shell}>
+        <div className={styles.topRow}>
+          <div className={styles.brandBlock}>
+            <div className={styles.brandRow}>
+              <div className={styles.brandCopy}>
+                <span className={styles.brandEyebrow}>Silver atelier network</span>
+                <h2 className={styles.brand}>은금슬쩍</h2>
+              </div>
 
-                return (
-                  <ProductLink
-                    key={item.id}
-                    href={item.href}
-                    tone={active ? routeContext?.tone ?? 'neutral' : 'shell'}
-                    variant={active ? 'primary' : 'ghost'}
-                    selected={active}
-                    className={styles.navLink}
-                    aria-current={active ? 'page' : undefined}
-                  >
-                    <span className={styles.navEyebrow}>{routeContext?.eyebrow ?? 'Flow'}</span>
-                    <span className={styles.navLabel}>{item.label}</span>
-                    <span className={styles.navNote}>
-                      {routeContext?.note ?? '오늘의 흐름을 고르는 경로'}
-                    </span>
-                  </ProductLink>
-                );
-              })}
-            </nav>
+              <span className={styles.signalChip}>
+                <span className={styles.signalLabel}>Live</span>
+                <strong className={styles.signalValue}>{liveLabel}</strong>
+              </span>
+            </div>
 
-            <ProductLink
-              href="/community"
-              tone="warm"
-              variant="primary"
-              className={styles.alertLink}
-            >
-              <span className={styles.alertMeta}>Today&apos;s dispatch</span>
-              <strong className={styles.alertCount}>
-                {String(Math.min(freshCount, 99)).padStart(2, '0')}
-              </strong>
-              <span className={styles.alertNote}>새 글이 가장 먼저 쌓이는 대화 흐름</span>
-            </ProductLink>
+            <p className={styles.brandDescription}>
+              배우고, 연결하고, 판매까지 이어지는 silver atelier network
+            </p>
           </div>
-        }
-        compact
-        className={styles.headerBand}
-      />
+
+          <div className={styles.activePanel}>
+            <span className={styles.activeEyebrow}>{activeContext?.eyebrow ?? 'Home flow'}</span>
+            <strong className={styles.activeTitle}>{activeItem?.label ?? '슬쩍 커뮤니티'}</strong>
+            <p className={styles.activeNote}>
+              {activeContext?.note ?? '오늘의 흐름을 먼저 고르는 홈 스테이지'}
+            </p>
+          </div>
+        </div>
+
+        <nav className={styles.nav} aria-label="메인 네비게이션">
+          {items.map((item) => {
+            const active = isActive(item.href);
+            const routeContext = routeContextMap[item.id as keyof typeof routeContextMap];
+
+            return (
+              <ProductLink
+                key={item.id}
+                href={item.href}
+                tone={active ? routeContext?.tone ?? 'neutral' : 'shell'}
+                variant={active ? 'secondary' : 'ghost'}
+                selected={active}
+                className={styles.navTab}
+                aria-current={active ? 'page' : undefined}
+              >
+                <span className={styles.navTone}>{routeContext?.eyebrow ?? 'Flow'}</span>
+                <span className={styles.navLabel}>{item.label}</span>
+              </ProductLink>
+            );
+          })}
+        </nav>
+      </div>
     </header>
   );
 }

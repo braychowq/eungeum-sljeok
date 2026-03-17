@@ -50,9 +50,9 @@
 }
 
 .heroStage {
-  padding: 24px 28px 0;
+  padding: 20px 28px 0;
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .serviceHub {
@@ -482,6 +482,7 @@
 
   .heroStage {
     padding: 18px 18px 0;
+    gap: 12px;
   }
 
   .serviceHub {
@@ -510,7 +511,7 @@
 @media (max-width: 960px) {
   .heroStage {
     padding: 14px 14px 0;
-    gap: 14px;
+    gap: 10px;
   }
 
   .serviceHub {
