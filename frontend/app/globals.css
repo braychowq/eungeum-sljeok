@@ -192,6 +192,27 @@
   --product-panel-warm-soft: var(--detail-warm-soft);
   --product-panel-chip: rgba(255, 255, 255, 0.78);
   --product-panel-chip-strong: rgba(255, 255, 255, 0.92);
+  --product-editorial-shell:
+    radial-gradient(circle at top right, rgba(47, 95, 91, 0.14), transparent 34%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(243, 235, 224, 0.92));
+  --product-editorial-shell-strong:
+    radial-gradient(circle at top right, rgba(194, 154, 102, 0.18), transparent 34%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(241, 232, 220, 0.9));
+  --product-editorial-line: rgba(29, 23, 17, 0.08);
+  --product-editorial-line-strong: rgba(29, 23, 17, 0.18);
+  --product-editorial-shadow: 0 20px 42px rgba(28, 24, 20, 0.08);
+  --product-editorial-shadow-strong: 0 28px 56px rgba(28, 24, 20, 0.12);
+  --product-editorial-ink: var(--product-panel-ink);
+  --product-editorial-muted: var(--product-panel-muted);
+  --product-editorial-subtle: var(--product-panel-subtle);
+  --product-editorial-accent: var(--market-accent-strong);
+  --product-editorial-chip: rgba(255, 255, 255, 0.8);
+  --product-editorial-chip-strong:
+    radial-gradient(circle at top right, rgba(194, 154, 102, 0.16), transparent 40%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(245, 236, 224, 0.9));
+  --product-editorial-chip-line: rgba(29, 23, 17, 0.08);
+  --product-editorial-aura: rgba(47, 95, 91, 0.14);
+  --product-editorial-aura-soft: rgba(171, 96, 56, 0.12);
   --product-stage-shell:
     linear-gradient(156deg, rgba(255, 255, 255, 0.98), rgba(244, 236, 225, 0.88));
   --product-stage-line: rgba(29, 23, 17, 0.08);

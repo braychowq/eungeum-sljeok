@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
+import ProductEditorialCard from '../common/ProductEditorialCard';
 import ProductFeatureBand from '../common/ProductFeatureBand';
 import { ProductAnchor, ProductLink } from '../common/ProductControl';
 import ProductRail from '../common/ProductRail';
@@ -63,6 +64,16 @@ function toInquiryHint(card: StudioListingCard) {
 function formatAvailabilityDate(value: string) {
   const [, month, day] = value.split('-');
   return `${Number(month)}월 ${Number(day)}일`;
+}
+
+function toStudioNarrative(card: StudioListingCard) {
+  return `${card.locationLabel} · ${card.capacityLabel} · ${formatAvailabilityDate(card.availability.nextAvailableDate)}부터 일정 확인`;
+}
+
+function toShortlistNarrative(card: StudioListingCard) {
+  return `${card.capacityLabel} 기준 ${formatAvailabilityDate(card.availability.nextAvailableDate)}부터 ${
+    card.isBookable ? '즉시 문의' : '대기 요청'
+  } 흐름을 시작할 수 있습니다.`;
 }
 
 export default function MarketView({ activeSort }: MarketViewProps) {
@@ -400,7 +411,6 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         >
           <ProductStatGrid
             items={signalCards}
-            columns={3}
             size="sm"
             ariaLabel="공방 쉐어 핵심 신호"
             className={styles.overviewSignalGrid}
@@ -484,7 +494,6 @@ export default function MarketView({ activeSort }: MarketViewProps) {
               <span className={styles.dispatchSurfaceEyebrow}>Browse Lens</span>
               <ProductStatGrid
                 items={browseHighlights}
-                columns={3}
                 size="sm"
                 ariaLabel="공방 브라우즈 렌즈"
                 className={styles.dispatchStatGrid}
@@ -494,7 +503,6 @@ export default function MarketView({ activeSort }: MarketViewProps) {
               <span className={styles.dispatchSurfaceEyebrow}>Connection Cue</span>
               <ProductStatGrid
                 items={compareMetrics}
-                columns={3}
                 size="sm"
                 ariaLabel="공방 연결 신호"
                 className={styles.dispatchStatGrid}
@@ -669,20 +677,24 @@ export default function MarketView({ activeSort }: MarketViewProps) {
         />
 
         <div className={styles.browseStudio}>
-          <div className={styles.browseStage} aria-label="공방 탐색 스테이지">
-            <div className={styles.browseLead}>
-              <div className={styles.browseLeadText}>
-                <span className={styles.browseEyebrow}>Selection Brief</span>
-                <strong>{activeSortLabel} 기준으로 지금 연결하기 좋은 공방을 골라보세요</strong>
-                <p>
-                  위 큐레이션에서 분위기를 읽었다면, 여기서는 가격과 일정, 신뢰 신호를 함께 보며 실제로
-                  연결할 후보를 압축하면 됩니다.
-                </p>
+          <ProductFeatureBand
+            tone="forest"
+            eyebrow="Studio Browser"
+            title={`${activeSortLabel} 기준으로 지금 연결하기 좋은 공방을 골라보세요`}
+            description="위 큐레이션에서 분위기를 읽었다면, 여기서는 가격과 일정, 신뢰 신호를 함께 보며 실제로 연결할 후보를 압축하면 됩니다."
+            meta={
+              <div className={styles.browsePillRow}>
+                <span className={styles.browsePill}>현재 흐름 {activeSortLabel}</span>
+                <span className={styles.browsePill}>즉시 문의 {bookableCount}곳</span>
+                <span className={styles.browsePill}>핵심 지역 {topRegionLabel}</span>
               </div>
-
+            }
+            className={styles.browseBand}
+            bodyClassName={styles.browseBandBody}
+          >
+            <div className={styles.browseLead}>
               <ProductStatGrid
                 items={browseHighlights}
-                columns={3}
                 size="sm"
                 ariaLabel="공방 탐색 요약"
                 className={styles.browseStats}
@@ -702,94 +714,121 @@ export default function MarketView({ activeSort }: MarketViewProps) {
             </div>
 
             {topComparisonCard ? (
-              <Link
+              <ProductEditorialCard
                 href={topComparisonCard.href}
-                className={styles.stageHighlight}
+                tone="warm"
+                badge="Front Runner"
+                eyebrow="Lead Studio"
+                heading={topComparisonCard.title}
+                description={toStudioNarrative(topComparisonCard)}
+                media={
+                  <img
+                    src={topComparisonCard.imageUrl}
+                    alt={`${topComparisonCard.title} ${topComparisonCard.locationLabel} 대표 이미지`}
+                    loading="lazy"
+                  />
+                }
+                signals={
+                  <>
+                    <span className={styles.editorialSignal}>{topComparisonCard.priceLabel}</span>
+                    <span className={styles.editorialSignal}>{topComparisonCard.availabilityLabel}</span>
+                    <span className={styles.editorialSignal}>{toInquiryHint(topComparisonCard)}</span>
+                  </>
+                }
+                stats={
+                  <ProductStatGrid
+                    items={compareSnapshot}
+                    size="sm"
+                    ariaLabel="프런트 러너 비교 지표"
+                    className={styles.stageCardStats}
+                  />
+                }
+                footer={
+                  <div className={styles.cardFooterRow}>
+                    <div className={styles.badgeRow}>
+                      {topComparisonCard.trustBadges.map((badge) => (
+                        <span
+                          key={`highlight-${topComparisonCard.id}-${badge}`}
+                          className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}
+                        >
+                          {trustBadgeLabel[badge]}
+                        </span>
+                      ))}
+                    </div>
+                    <span className={styles.contactHint}>{toInquiryHint(topComparisonCard)}</span>
+                  </div>
+                }
+                className={styles.stageCard}
                 onClick={() => {
                   emitMarketEvent('studio_card_click', {
                     studioId: topComparisonCard.id,
                     sectionType: 'list' as StudioSectionType
                   });
                 }}
-              >
-                <div className={styles.stageHighlightMedia}>
-                  <img
-                    src={topComparisonCard.imageUrl}
-                    alt={`${topComparisonCard.title} ${topComparisonCard.locationLabel} 대표 이미지`}
-                    loading="lazy"
-                  />
-                  <span className={styles.stageHighlightBadge}>Front Runner</span>
-                </div>
-                <div className={styles.stageHighlightBody}>
-                  <span className={styles.compareEyebrow}>Lead Studio</span>
-                  <strong>{topComparisonCard.title}</strong>
-                  <p>
-                    {topComparisonCard.locationLabel} · {topComparisonCard.capacityLabel} · 다음 가능일{' '}
-                    {topComparisonDateLabel}
-                  </p>
-                  <div className={styles.stageHighlightSignals}>
-                    <span className={styles.stageHighlightSignal}>{topComparisonCard.priceLabel}</span>
-                    <span className={styles.stageHighlightSignal}>{topComparisonCard.availabilityLabel}</span>
-                    <span className={styles.stageHighlightSignal}>{toInquiryHint(topComparisonCard)}</span>
-                  </div>
-                  <ProductStatGrid
-                    items={compareSnapshot}
-                    columns={3}
-                    size="sm"
-                    ariaLabel="프런트 러너 비교 지표"
-                    className={styles.stageHighlightMetrics}
-                  />
-                  <div className={styles.badgeRow}>
-                    {topComparisonCard.trustBadges.map((badge) => (
-                      <span
-                        key={`highlight-${topComparisonCard.id}-${badge}`}
-                        className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}
-                      >
-                        {trustBadgeLabel[badge]}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
+              />
             ) : null}
-          </div>
+          </ProductFeatureBand>
 
-          <div className={styles.priorityPanel}>
-            <div className={styles.priorityPanelHeader}>
-              <span className={styles.priorityEyebrow}>Quick Shortlist</span>
-              <strong>바로 문의 넣기 좋은 후보</strong>
-              <p>예약 가능 여부와 응답 속도를 먼저 보고, 바로 연결하기 좋은 공방 세 곳을 압축했습니다.</p>
-            </div>
+          <ProductFeatureBand
+            tone="forest"
+            compact
+            eyebrow="Quick Shortlist"
+            title="바로 문의 넣기 좋은 후보"
+            description="예약 가능 여부와 응답 속도를 먼저 보고, 바로 연결하기 좋은 공방 세 곳을 압축했습니다."
+            meta={
+              <div className={styles.browsePillRow}>
+                <span className={styles.browsePill}>응답 빠름 {fastResponseCount}곳</span>
+                <span className={styles.browsePill}>우선 비교 {contactPriorityCards.length}선</span>
+              </div>
+            }
+            className={styles.priorityBand}
+            bodyClassName={styles.priorityBandBody}
+          >
             <ol className={styles.priorityLaneList}>
               {contactPriorityCards.map((card, index) => (
                 <li key={`priority-${card.id}`}>
-                  <Link
+                  <ProductEditorialCard
                     href={card.href}
-                    className={styles.priorityLaneItem}
+                    tone="forest"
+                    layout="text"
+                    compact
+                    badge={String(index + 1).padStart(2, '0')}
+                    eyebrow={card.locationLabel}
+                    heading={card.title}
+                    description={toShortlistNarrative(card)}
+                    signals={
+                      <>
+                        <span className={styles.editorialSignal}>{card.priceLabel}</span>
+                        <span className={styles.editorialSignal}>{card.availabilityLabel}</span>
+                      </>
+                    }
+                    footer={
+                      <div className={styles.cardFooterRow}>
+                        <div className={styles.badgeRow}>
+                          {card.trustBadges.map((badge) => (
+                            <span
+                              key={`priority-${card.id}-${badge}`}
+                              className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}
+                            >
+                              {trustBadgeLabel[badge]}
+                            </span>
+                          ))}
+                        </div>
+                        <span className={styles.contactHint}>{toInquiryHint(card)}</span>
+                      </div>
+                    }
+                    className={styles.priorityLaneCard}
                     onClick={() => {
                       emitMarketEvent('studio_card_click', {
                         studioId: card.id,
                         sectionType: 'list' as StudioSectionType
                       });
                     }}
-                  >
-                    <span className={styles.priorityLaneRank}>{String(index + 1).padStart(2, '0')}</span>
-                    <div className={styles.priorityLaneBody}>
-                      <strong>{card.title}</strong>
-                      <p>
-                        {card.locationLabel} · {card.capacityLabel}
-                      </p>
-                      <span>{card.availabilityLabel}</span>
-                    </div>
-                    <div className={styles.priorityLaneMeta}>
-                      <span className={styles.priorityLanePrice}>{card.priceLabel}</span>
-                      <span className={styles.priorityLaneStatus}>{toInquiryHint(card)}</span>
-                    </div>
-                  </Link>
+                  />
                 </li>
               ))}
             </ol>
-          </div>
+          </ProductFeatureBand>
         </div>
 
         <EditorialSelectionDeck
@@ -867,39 +906,53 @@ export default function MarketView({ activeSort }: MarketViewProps) {
           />
         ) : (
           <ul className={styles.cardGrid}>
-            {filteredStudioCards.map((card) => (
+            {filteredStudioCards.map((card, index) => (
               <li key={card.id}>
-                <Link
+                <ProductEditorialCard
                   href={card.href}
-                  className={styles.studioCard}
+                  tone={index === 0 ? 'warm' : 'forest'}
+                  layout={index === 0 ? 'split' : 'stacked'}
+                  compact={index !== 0}
+                  badge={String(index + 1).padStart(2, '0')}
+                  eyebrow={card.locationLabel}
+                  heading={card.title}
+                  description={toStudioNarrative(card)}
+                  media={
+                    <img
+                      src={card.imageUrl}
+                      alt={`${card.title} ${card.locationLabel} 공방 사진`}
+                      loading="lazy"
+                    />
+                  }
+                  signals={
+                    <>
+                      <span className={styles.editorialSignal}>{card.priceLabel}</span>
+                      <span className={styles.editorialSignal}>{card.availabilityLabel}</span>
+                    </>
+                  }
+                  footer={
+                    <div className={styles.cardFooterRow}>
+                      <div className={styles.badgeRow}>
+                        {card.trustBadges.map((badge) => (
+                          <span
+                            key={`${card.id}-${badge}`}
+                            className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}
+                          >
+                            {trustBadgeLabel[badge]}
+                          </span>
+                        ))}
+                      </div>
+                      <span className={styles.contactHint}>{toInquiryHint(card)}</span>
+                    </div>
+                  }
+                  className={`${styles.catalogueCard} ${index === 0 ? styles.catalogueFeaturedCard : ''}`}
                   onClick={() => {
                     emitMarketEvent('studio_card_click', {
                       studioId: card.id,
                       sectionType: 'list' as StudioSectionType
                     });
                   }}
-                >
-                  <img src={card.imageUrl} alt={`${card.title} ${card.locationLabel} 공방 사진`} loading="lazy" />
-                  <div className={styles.studioBody}>
-                    <strong>{card.title}</strong>
-                    <p className={styles.metaText}>
-                      {card.locationLabel} · {card.capacityLabel}
-                    </p>
-                    <p className={styles.priceText}>{card.priceLabel}</p>
-                    <p className={styles.availabilityText}>{card.availabilityLabel}</p>
-                    <div className={styles.badgeRow}>
-                      {card.trustBadges.map((badge) => (
-                        <span
-                          key={`${card.id}-${badge}`}
-                          className={`${styles.trustBadge} ${trustBadgeClass[badge]}`}
-                        >
-                          {trustBadgeLabel[badge]}
-                        </span>
-                      ))}
-                    </div>
-                    <span className={styles.contactHint}>{toInquiryHint(card)}</span>
-                  </div>
-                </Link>
+                />
               </li>
             ))}
           </ul>
