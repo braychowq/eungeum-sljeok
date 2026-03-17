@@ -10,8 +10,8 @@ export type ProductStatGridItem = {
 
 type ProductStatGridProps = {
   items: ProductStatGridItem[];
-  columns?: 1 | 2 | 3;
-  mobileColumns?: 1 | 2 | 3;
+  columns?: 1 | 2 | 3 | 4;
+  mobileColumns?: 1 | 2 | 3 | 4;
   size?: 'md' | 'sm';
   ariaLabel?: string;
   className?: string;

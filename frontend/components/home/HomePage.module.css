@@ -337,108 +337,72 @@
   gap: 28px;
 }
 
-.editorialSequenceLead {
-  position: relative;
-  overflow: hidden;
+.editorialSequenceBand {
+  --feature-shell: var(--home-section-shell);
+  --feature-line: var(--home-section-line);
+  --feature-shadow: var(--home-section-shadow);
+  --feature-ink: var(--home-sequence-ink);
+  --feature-muted: var(--home-sequence-muted);
+  --feature-accent: var(--home-stage-moss-strong);
+  --feature-chip-bg: var(--home-section-meta);
+  --feature-chip-border: var(--home-section-meta-line);
+  --feature-aura: rgba(36, 72, 67, 0.14);
+  --feature-aura-soft: rgba(202, 161, 111, 0.12);
+  --product-feature-padding: 30px;
+  --product-feature-gap: 20px;
+  --product-feature-radius: 38px;
+  --product-feature-title-size: clamp(40px, 4.8vw, 56px);
+  --product-feature-title-max: 14ch;
+  --product-feature-description-max: 60ch;
+}
+
+.editorialSequenceBandBody {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-  gap: 18px;
-  padding: 30px;
-  border-radius: 38px;
-  border: 1px solid var(--home-sequence-line);
-  background: var(--home-sequence-shell);
-  box-shadow: var(--home-sequence-shadow-soft);
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  gap: 14px;
+  align-items: stretch;
 }
 
-.editorialSequenceLead::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at top right, rgba(202, 161, 111, 0.18), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(36, 72, 67, 0.1), transparent 30%),
-    linear-gradient(120deg, rgba(255, 255, 255, 0.18), transparent 44%);
-  pointer-events: none;
-}
-
-.editorialSequenceHeader,
-.editorialSequenceStops {
-  position: relative;
-  z-index: 1;
-}
-
-.editorialSequenceHeader {
-  display: grid;
-  align-content: start;
-  gap: 18px;
-}
-
-.editorialSequenceEyebrowRow {
+.editorialSequenceMeta,
+.editorialSequenceActions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.editorialSequenceEyebrow,
-.editorialSequenceIssue {
-  display: inline-flex;
+.editorialSequencePill {
   min-height: 32px;
-  align-items: center;
   padding: 0 14px;
   border-radius: 999px;
+  border: 1px solid var(--home-section-meta-line);
+  background: var(--home-section-meta);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  color: var(--home-sequence-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.editorialSequenceEyebrow {
-  border: 1px solid var(--home-sequence-line);
-  background: rgba(255, 255, 255, 0.78);
-  color: var(--home-sequence-muted);
+.editorialSequenceLink {
+  min-width: 152px;
 }
 
-.editorialSequenceIssue {
-  background: var(--home-stage-moss-soft);
-  color: var(--home-stage-moss-strong);
-}
-
-.editorialSequenceHeader strong {
-  margin: 0;
-  max-width: 13ch;
-  color: var(--home-sequence-ink);
-  font-family: var(--font-logo);
-  font-size: clamp(36px, 4.6vw, 54px);
-  line-height: 0.92;
-  letter-spacing: -0.075em;
-}
-
-.editorialSequenceHeader p {
-  margin: 0;
-  max-width: 52ch;
-  color: var(--home-sequence-muted);
-  font-size: 14px;
-  line-height: 1.78;
-}
-
-.editorialSequenceStops {
+.editorialSequenceMemo {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.editorialSequenceStop {
-  display: grid;
+  gap: 16px;
   align-content: start;
-  gap: 8px;
-  padding: 18px;
-  border-radius: 24px;
+  padding: 22px;
+  border-radius: 30px;
   border: 1px solid var(--home-sequence-line);
   background: var(--home-sequence-card);
   box-shadow: var(--home-sequence-shadow-soft);
 }
 
-.editorialSequenceStop span {
+.editorialSequenceMemoEyebrow {
   color: var(--home-sequence-subtle);
   font-size: 10px;
   font-weight: 800;
@@ -446,18 +410,38 @@
   text-transform: uppercase;
 }
 
-.editorialSequenceStop strong {
-  color: var(--home-sequence-ink);
-  font-size: 19px;
-  line-height: 1.42;
-  letter-spacing: -0.05em;
-}
-
-.editorialSequenceStop p {
+.editorialSequenceMemoText {
   margin: 0;
   color: var(--home-sequence-muted);
-  font-size: 12px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.72;
+}
+
+.editorialSequenceStopRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.editorialSequenceStopChip {
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(36, 72, 67, 0.12);
+  background: rgba(36, 72, 67, 0.08);
+  color: var(--home-stage-moss-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.editorialSequenceGrid {
+  --product-stat-grid-gap: 12px;
+  --product-stat-card-min-height: 108px;
 }
 
 .editorialSequenceStack {
@@ -478,8 +462,8 @@
     --product-feature-title-size: clamp(32px, 4vw, 40px);
   }
 
-  .editorialSequenceHeader strong {
-    font-size: clamp(34px, 4.2vw, 48px);
+  .editorialSequenceBand {
+    --product-feature-title-size: clamp(36px, 4.4vw, 48px);
   }
 }
 
@@ -518,10 +502,8 @@
     gap: 24px;
   }
 
-  .editorialSequenceLead {
+  .editorialSequenceBandBody {
     grid-template-columns: 1fr;
-    padding: 24px;
-    border-radius: 32px;
   }
 }
 
@@ -586,30 +568,39 @@
     gap: 20px;
   }
 
-  .editorialSequenceLead {
-    padding: 22px;
-    border-radius: 28px;
+  .editorialSequenceBand {
+    --product-feature-padding: 22px;
+    --product-feature-gap: 16px;
+    --product-feature-radius: 28px;
+    --product-feature-title-size: 36px;
+    --product-feature-description-size: 13px;
   }
 
-  .editorialSequenceHeader strong {
-    max-width: none;
-    font-size: 38px;
+  .editorialSequenceActions {
+    width: 100%;
+    justify-content: flex-start;
   }
 
-  .editorialSequenceHeader p {
-    font-size: 13px;
-    line-height: 1.72;
+  .editorialSequenceLink {
+    min-width: 0;
   }
 
-  .editorialSequenceStops {
-    grid-template-columns: 1fr;
+  .editorialSequencePill {
+    min-height: 30px;
+    padding: 0 12px;
   }
 
-  .editorialSequenceStop {
+  .editorialSequenceGrid {
+    --product-stat-card-min-height: 96px;
+  }
+
+  .editorialSequenceMemo {
     padding: 16px;
+    border-radius: 24px;
   }
 
-  .editorialSequenceStop strong {
-    font-size: 18px;
+  .editorialSequenceMemoText {
+    font-size: 13px;
+    line-height: 1.68;
   }
 }

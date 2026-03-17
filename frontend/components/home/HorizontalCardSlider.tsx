@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import ProductEditorialCard from '../common/ProductEditorialCard';
+import ProductFeatureBand from '../common/ProductFeatureBand';
+import { ProductButton, ProductLink } from '../common/ProductControl';
+import ProductStatGrid from '../common/ProductStatGrid';
 import HomeSectionFrame from './HomeSectionFrame';
 import { SliderCard } from './types';
 import styles from './HorizontalCardSlider.module.css';
@@ -33,6 +36,8 @@ export default function HorizontalCardSlider({
   const trackRef = useRef<HTMLDivElement>(null);
   const featuredCard = cards[0];
   const frameTone = tone === 'market' ? 'gold' : 'moss';
+  const featureTone = tone === 'market' ? 'warm' : 'forest';
+  const collectionLabel = headerHref ? '전체 컬렉션 보기' : `신규 셀렉션 ${cards.length}건`;
 
   const slideBy = (direction: 'prev' | 'next') => {
     const track = trackRef.current;
@@ -60,46 +65,83 @@ export default function HorizontalCardSlider({
         }
         description={description ?? ''}
         aside={
-          <div className={styles.editorialMeta}>
-            <div className={styles.featuredCardSummary}>
-              <span className={styles.summaryLabel}>Featured now</span>
-              <strong>{featuredCard?.title ?? title}</strong>
-              <p>
-                {tone === 'studio'
-                  ? '조건과 분위기를 먼저 읽고 바로 공간 비교로 넘어갈 수 있게 묶었습니다.'
-                  : '재료와 도구를 장면처럼 훑고 바로 거래 흐름으로 이어지는 셀렉션입니다.'}
-              </p>
-              <div className={styles.summaryMeta}>
-                <div>
-                  <span>Selection</span>
-                  <strong>{cards.length}컷</strong>
-                </div>
-                <div>
-                  <span>Focus</span>
-                  <strong>{cardTag ?? title}</strong>
-                </div>
-              </div>
-            </div>
+          <ProductFeatureBand
+            eyebrow="Featured now"
+            title={featuredCard?.title ?? title}
+            description={
+              tone === 'studio'
+                ? '조건과 분위기를 먼저 읽고 바로 공간 비교로 넘어갈 수 있게 묶었습니다.'
+                : '재료와 도구를 장면처럼 훑고 바로 거래 흐름으로 이어지는 셀렉션입니다.'
+            }
+            tone={featureTone}
+            compact
+            className={styles.metaBand}
+            bodyClassName={styles.metaBandBody}
+          >
+            <ProductStatGrid
+              items={[
+                {
+                  label: 'Selection',
+                  value: `${cards.length}컷`,
+                  description: tone === 'studio' ? '비교할 수 있는 공간 흐름' : '이어볼 수 있는 거래 흐름',
+                  emphasis: tone === 'studio' ? 'support' : 'warm'
+                },
+                {
+                  label: 'Focus',
+                  value: cardTag ?? title,
+                  description: featuredCard?.title ?? title
+                }
+              ]}
+              columns={2}
+              mobileColumns={1}
+              size="sm"
+              ariaLabel={`${title} 셀렉션 요약`}
+              className={styles.metaGrid}
+            />
 
             <div className={styles.metaFooter}>
               {headerHref ? (
-                <Link href={headerHref} className={styles.collectionLink}>
-                  전체 컬렉션 보기
-                </Link>
+                <ProductLink
+                  href={headerHref}
+                  tone={featureTone}
+                  variant="secondary"
+                  size="sm"
+                  className={styles.collectionLink}
+                >
+                  {collectionLabel}
+                </ProductLink>
               ) : (
-                <span className={styles.collectionStatus}>신규 셀렉션 {cards.length}건</span>
+                <span className={styles.collectionStatus}>{collectionLabel}</span>
               )}
 
               <div className={styles.actions}>
-                <button type="button" onClick={() => slideBy('prev')} aria-label={`${title} 이전`}>
-                  &larr;
-                </button>
-                <button type="button" onClick={() => slideBy('next')} aria-label={`${title} 다음`}>
-                  &rarr;
-                </button>
+                <ProductButton
+                  type="button"
+                  tone={featureTone}
+                  variant="secondary"
+                  size="sm"
+                  iconOnly
+                  className={styles.actionButton}
+                  onClick={() => slideBy('prev')}
+                  aria-label={`${title} 이전`}
+                >
+                  ←
+                </ProductButton>
+                <ProductButton
+                  type="button"
+                  tone={featureTone}
+                  variant="secondary"
+                  size="sm"
+                  iconOnly
+                  className={styles.actionButton}
+                  onClick={() => slideBy('next')}
+                  aria-label={`${title} 다음`}
+                >
+                  →
+                </ProductButton>
               </div>
             </div>
-          </div>
+          </ProductFeatureBand>
         }
       >
         <div className={styles.track} ref={trackRef}>

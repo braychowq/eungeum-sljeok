@@ -12,9 +12,10 @@
 .headerTitle {
   color: var(--home-sequence-ink);
   font-family: var(--font-logo);
-  font-size: clamp(36px, 4vw, 48px);
-  line-height: 0.94;
-  letter-spacing: -0.065em;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
 }
 
 .headerLink:hover .headerTitle {
@@ -155,10 +156,6 @@
 }
 
 @media (max-width: 960px) {
-  .headerTitle {
-    font-size: 32px;
-  }
-
   .summaryGrid {
     --product-stat-columns: 1;
   }

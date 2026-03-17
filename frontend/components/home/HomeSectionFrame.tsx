@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import styles from './HomeSectionFrame.module.css';
 
 type HomeSectionFrameProps = {
@@ -22,23 +23,29 @@ export default function HomeSectionFrame({
 }: HomeSectionFrameProps) {
   return (
     <div className={styles.frame} data-tone={tone}>
-      <div className={styles.rail}>
-        <span className={styles.index}>{index}</span>
+      <div className={styles.intro}>
+        <span className={styles.sequenceWatermark} aria-hidden="true">
+          {index}
+        </span>
 
-        <div className={styles.copy}>
-          <span className={styles.eyebrow}>{eyebrow}</span>
+        <div className={styles.metaRow}>
+          <span className={styles.indexBadge}>Section {index}</span>
+          <span className={styles.metaNote}>home product stage</span>
+        </div>
 
-          <div className={styles.headingBlock}>
-            <div className={styles.title}>{title}</div>
-            <p>{description}</p>
-          </div>
+        <div className={styles.headerGrid}>
+          <ProductSectionHeader
+            eyebrow={eyebrow}
+            title={title}
+            description={description}
+            className={styles.sectionHeader}
+          />
+
+          {aside ? <div className={styles.aside}>{aside}</div> : null}
         </div>
       </div>
 
-      <div className={styles.main}>
-        {aside ? <div className={styles.aside}>{aside}</div> : null}
-        <div className={styles.content}>{children}</div>
-      </div>
+      <div className={styles.content}>{children}</div>
     </div>
   );
 }

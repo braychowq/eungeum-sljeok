@@ -2,9 +2,11 @@
   --frame-accent: var(--home-stage-clay);
   --frame-accent-strong: var(--home-stage-clay-strong);
   --frame-accent-soft: var(--home-stage-clay-soft);
+  --frame-shell: var(--home-section-shell);
+  --frame-line: var(--home-section-line);
+  --frame-shadow: var(--home-section-shadow);
   display: grid;
-  grid-template-columns: minmax(170px, 0.24fr) minmax(0, 0.76fr);
-  gap: 24px;
+  gap: 18px;
 }
 
 .frame[data-tone='moss'] {
@@ -19,68 +21,105 @@
   --frame-accent-soft: var(--home-stage-gold-soft);
 }
 
-.rail {
+.intro {
+  position: relative;
+  overflow: hidden;
   display: grid;
-  align-content: start;
   gap: 18px;
-  padding-right: 24px;
-  border-right: 1px solid var(--home-sequence-line);
+  padding: 28px 30px;
+  border-radius: 36px;
+  border: 1px solid var(--frame-line);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--frame-accent-soft) 94%, white), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.82), transparent 30%),
+    var(--frame-shell);
+  box-shadow: var(--frame-shadow);
 }
 
-.index {
-  color: var(--frame-accent-strong);
+.intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(132deg, rgba(255, 255, 255, 0.2), transparent 44%),
+    radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--frame-accent-soft) 52%, transparent), transparent 28%);
+  pointer-events: none;
+}
+
+.sequenceWatermark {
+  position: absolute;
+  top: 14px;
+  right: 22px;
+  color: color-mix(in srgb, var(--frame-accent-soft) 82%, white);
   font-family: var(--font-logo);
-  font-size: clamp(56px, 5vw, 78px);
-  line-height: 0.82;
-  letter-spacing: -0.08em;
+  font-size: clamp(92px, 9vw, 132px);
+  line-height: 0.78;
+  letter-spacing: -0.1em;
+  pointer-events: none;
 }
 
-.copy {
+.headerGrid,
+.metaRow {
+  position: relative;
+  z-index: 1;
+}
+
+.headerGrid {
   display: grid;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: 18px;
+  align-items: start;
 }
 
-.eyebrow {
-  display: inline-flex;
-  width: fit-content;
-  min-height: 30px;
-  align-items: center;
-  padding: 0 12px;
+.sectionHeader {
+  --product-section-title-size: clamp(40px, 5vw, 56px);
+  --product-section-title-size-compact: clamp(28px, 3.4vw, 36px);
+  --product-section-description-size: 14px;
+  --section-chip-bg: color-mix(in srgb, var(--frame-accent-soft) 86%, white);
+  --section-chip-border: color-mix(in srgb, var(--frame-accent) 18%, transparent);
+  --section-chip-ink: var(--frame-accent-strong);
+  --section-title-ink: var(--home-sequence-ink);
+  --section-description-ink: var(--home-sequence-muted);
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.indexBadge,
+.metaNote {
+  min-height: 32px;
+  padding: 0 14px;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--frame-accent) 18%, transparent);
-  background: color-mix(in srgb, var(--frame-accent-soft) 84%, white);
-  color: var(--frame-accent-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.headingBlock {
-  display: grid;
-  gap: 12px;
+.indexBadge {
+  border: 1px solid color-mix(in srgb, var(--frame-accent) 18%, transparent);
+  background: color-mix(in srgb, var(--frame-accent-soft) 88%, white);
+  color: var(--frame-accent-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
-.title {
-  min-width: 0;
-}
-
-.headingBlock p {
-  margin: 0;
+.metaNote {
+  border: 1px solid var(--home-section-meta-line);
+  background: var(--home-section-meta);
   color: var(--home-sequence-muted);
-  font-size: 14px;
-  line-height: 1.78;
-}
-
-.main {
-  min-width: 0;
-  display: grid;
-  gap: 18px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
 .aside {
-  width: min(100%, 460px);
-  justify-self: end;
+  min-width: 0;
+  display: grid;
+  align-content: start;
 }
 
 .content {
@@ -90,36 +129,48 @@
 }
 
 @media (max-width: 1080px) {
-  .frame {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .intro {
+    padding: 24px;
+    border-radius: 30px;
   }
 
-  .rail {
-    gap: 14px;
-    padding-right: 0;
-    padding-bottom: 18px;
-    border-right: none;
-    border-bottom: 1px solid var(--home-sequence-line);
+  .headerGrid {
+    grid-template-columns: 1fr;
   }
 
   .aside {
     width: 100%;
-    justify-self: stretch;
   }
 }
 
 @media (max-width: 960px) {
   .frame {
-    gap: 18px;
+    gap: 16px;
   }
 
-  .index {
-    font-size: 48px;
+  .intro {
+    padding: 18px;
+    border-radius: 26px;
   }
 
-  .headingBlock p {
-    font-size: 13px;
-    line-height: 1.72;
+  .sequenceWatermark {
+    top: 18px;
+    right: 16px;
+    font-size: 82px;
+  }
+
+  .sectionHeader {
+    --product-section-title-size: 32px;
+    --product-section-description-size: 13px;
+  }
+
+  .metaRow {
+    gap: 6px;
+  }
+
+  .indexBadge,
+  .metaNote {
+    min-height: 30px;
+    padding: 0 12px;
   }
 }

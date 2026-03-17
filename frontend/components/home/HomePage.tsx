@@ -179,28 +179,32 @@ export default function HomePage() {
       readoutValue: featuredMarketCard?.title ?? '새로운 판매 셀렉션'
     };
   });
-  const editorialSequenceStops = [
+  const editorialSequenceStats: ProductStatGridItem[] = [
     {
       label: 'Talk',
       value: `${freshCommunityCount}개의 새 대화`,
-      detail: latestCommunityPost?.title ?? '최근 커뮤니티 대화'
+      description: latestCommunityPost?.title ?? '최근 커뮤니티 대화',
+      emphasis: 'warm'
     },
     {
       label: 'Studio',
       value: `${studioCards.length}곳 공간 셀렉션`,
-      detail: featuredStudioCard?.title ?? '공방 쉐어 셀렉션'
+      description: featuredStudioCard?.title ?? '공방 쉐어 셀렉션',
+      emphasis: 'support'
     },
     {
       label: 'Market',
       value: `${marketCards.length}건 거래 흐름`,
-      detail: featuredMarketCard?.title ?? '판매 셀렉션'
+      description: featuredMarketCard?.title ?? '판매 셀렉션',
+      emphasis: 'accent'
     },
     {
       label: 'Archive',
       value: `${libraryEntries.length}개 자료 아카이브`,
-      detail: libraryEntries[0]?.title ?? '대표 가이드'
+      description: libraryEntries[0]?.title ?? '대표 가이드'
     }
-  ] as const;
+  ];
+  const editorialSequenceMeta = ['Edition 04', 'Talk / Studio / Market / Archive', 'Refined home flow'] as const;
 
   return (
     <main className={styles.page}>
@@ -404,30 +408,68 @@ export default function HomePage() {
         </section>
 
         <section className={styles.editorialSequence} aria-label="홈 큐레이션 시퀀스">
-          <div className={styles.editorialSequenceLead}>
-            <div className={styles.editorialSequenceHeader}>
-              <div className={styles.editorialSequenceEyebrowRow}>
-                <span className={styles.editorialSequenceEyebrow}>Home sequence</span>
-                <span className={styles.editorialSequenceIssue}>Edition 04</span>
+          <ProductFeatureBand
+            eyebrow="Home sequence"
+            title="질문, 공간, 판매, 자료를 같은 홈 리듬 안에서 이어봅니다"
+            description="홈 하단은 더 이상 기능별 박스를 나열하지 않고, 지금 바로 필요한 액션을 고르는 연속된 흐름으로 정리했습니다. 먼저 읽을 대화와 공간, 거래, 참고 자료가 같은 속도로 이어집니다."
+            tone="forest"
+            meta={
+              <div className={styles.editorialSequenceMeta}>
+                {editorialSequenceMeta.map((item) => (
+                  <span key={item} className={styles.editorialSequencePill}>
+                    {item}
+                  </span>
+                ))}
               </div>
-
-              <strong>질문, 공간, 판매, 자료를 하나의 편집 리듬으로 다시 엮었습니다</strong>
-              <p>
-                홈 하단은 더 이상 기능별 박스를 나열하지 않고, 지금 바로 필요한 액션을 고르는 연속된
-                흐름으로 정리했습니다. 먼저 읽을 대화와 공간, 거래, 참고 자료가 같은 속도로 이어집니다.
+            }
+            action={
+              <div className={styles.editorialSequenceActions}>
+                <ProductLink
+                  href="/community"
+                  tone="forest"
+                  variant="primary"
+                  className={styles.editorialSequenceLink}
+                >
+                  대화부터 보기
+                </ProductLink>
+                <ProductLink
+                  href="/community?tab=share"
+                  tone="shell"
+                  variant="secondary"
+                  className={styles.editorialSequenceLink}
+                >
+                  자료 아카이브 보기
+                </ProductLink>
+              </div>
+            }
+            className={styles.editorialSequenceBand}
+            bodyClassName={styles.editorialSequenceBandBody}
+          >
+            <div className={styles.editorialSequenceMemo}>
+              <span className={styles.editorialSequenceMemoEyebrow}>Runway guide</span>
+              <p className={styles.editorialSequenceMemoText}>
+                각 섹션은 같은 제품 크롬 위에서 시작하고, 바로 읽을 수 있는 요약 패널과 본문 액션을
+                한 리듬으로 엮었습니다. 필요한 단계 하나만 고르면 다음 화면으로 자연스럽게 이어집니다.
               </p>
+
+              <div className={styles.editorialSequenceStopRow}>
+                {editorialSequenceStats.map((item) => (
+                  <span key={item.label} className={styles.editorialSequenceStopChip}>
+                    {item.label}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <div className={styles.editorialSequenceStops}>
-              {editorialSequenceStops.map((item) => (
-                <div key={item.label} className={styles.editorialSequenceStop}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                  <p>{item.detail}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+            <ProductStatGrid
+              items={editorialSequenceStats}
+              columns={4}
+              mobileColumns={1}
+              size="sm"
+              ariaLabel="홈 큐레이션 시퀀스 요약"
+              className={styles.editorialSequenceGrid}
+            />
+          </ProductFeatureBand>
 
           <div className={styles.editorialSequenceStack}>
             <CommunitySection posts={communityPosts} />

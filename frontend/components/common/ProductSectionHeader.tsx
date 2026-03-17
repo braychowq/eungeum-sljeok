@@ -5,7 +5,7 @@ type ProductSectionHeaderTone = 'neutral' | 'warm' | 'forest';
 
 type ProductSectionHeaderProps = {
   eyebrow?: string;
-  title: string;
+  title: ReactNode;
   description?: string;
   action?: ReactNode;
   meta?: ReactNode;

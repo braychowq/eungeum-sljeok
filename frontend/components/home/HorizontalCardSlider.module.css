@@ -22,9 +22,10 @@
 .headerTitle {
   color: var(--home-sequence-ink);
   font-family: var(--font-logo);
-  font-size: clamp(36px, 4vw, 48px);
-  line-height: 0.94;
-  letter-spacing: -0.065em;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
 }
 
 .headerLink:hover .headerTitle {
@@ -32,82 +33,24 @@
   text-underline-offset: 6px;
 }
 
-.headerLink:focus-visible,
-.collectionLink:focus-visible,
-.actions button:focus-visible {
+.headerLink:focus-visible {
   outline: 2px solid var(--section-accent-strong);
   outline-offset: 3px;
 }
 
-.editorialMeta {
-  display: grid;
+.metaBand {
+  --product-feature-padding: 22px;
+  --product-feature-gap: 16px;
+  --product-feature-title-size: clamp(28px, 3.6vw, 36px);
+  --product-feature-title-max: 11ch;
+}
+
+.metaBandBody {
   gap: 14px;
 }
 
-.featuredCardSummary {
-  border-radius: 30px;
-  padding: 20px 22px;
-  border: 1px solid color-mix(in srgb, var(--section-accent) 18%, transparent);
-  background:
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.28), transparent 30%),
-    linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--section-accent-soft) 76%, white),
-      rgba(255, 255, 255, 0.8)
-    );
-  box-shadow: var(--home-sequence-shadow-soft);
-  display: grid;
-  gap: 12px;
-}
-
-.summaryLabel {
-  color: var(--home-sequence-subtle);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.featuredCardSummary > strong {
-  color: var(--home-sequence-ink);
-  font-size: 26px;
-  line-height: 1.18;
-  letter-spacing: -0.05em;
-}
-
-.featuredCardSummary > p {
-  margin: 0;
-  color: var(--home-sequence-muted);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.summaryMeta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.summaryMeta div {
-  display: grid;
-  gap: 6px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(29, 23, 17, 0.08);
-}
-
-.summaryMeta span {
-  color: var(--home-sequence-subtle);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.summaryMeta strong {
-  color: var(--home-sequence-ink);
-  font-size: 16px;
-  line-height: 1.38;
-  letter-spacing: -0.03em;
+.metaGrid {
+  --product-stat-grid-gap: 10px;
 }
 
 .metaFooter {
@@ -120,7 +63,7 @@
 
 .collectionLink,
 .collectionStatus {
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 16px;
   border-radius: 999px;
   display: inline-flex;
@@ -128,25 +71,17 @@
   justify-content: center;
   font-size: 12px;
   font-weight: 800;
-  text-decoration: none;
 }
 
 .collectionLink {
-  background: linear-gradient(135deg, var(--section-accent), var(--section-accent-strong));
-  color: #fff8f2;
-  box-shadow: 0 16px 28px color-mix(in srgb, var(--section-accent) 20%, transparent);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.collectionLink:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 18px 30px color-mix(in srgb, var(--section-accent) 24%, transparent);
+  white-space: nowrap;
 }
 
 .collectionStatus {
   color: var(--home-sequence-muted);
-  border: 1px solid var(--home-sequence-line);
-  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid var(--home-section-meta-line);
+  background: var(--home-section-meta);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
 .actions {
@@ -155,33 +90,15 @@
   margin-left: auto;
 }
 
-.actions button {
-  width: 46px;
-  height: 46px;
-  border: 1px solid var(--home-sequence-line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  color: var(--section-accent-strong);
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--home-sequence-shadow-soft);
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.actions button:hover {
-  border-color: var(--home-sequence-line-strong);
-  background: rgba(255, 255, 255, 0.96);
-  transform: translateY(-1px);
-  box-shadow: var(--home-sequence-shadow);
+.actionButton {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-radius: 14px;
+  --pc-shadow: none;
+  --pc-shadow-strong: 0 14px 24px rgba(28, 24, 20, 0.1);
 }
 
 .track {
@@ -284,13 +201,10 @@
 }
 
 @media (max-width: 960px) {
-  .headerTitle {
-    font-size: 32px;
-  }
-
-  .featuredCardSummary {
-    border-radius: 24px;
-    padding: 18px;
+  .metaBand {
+    --product-feature-padding: 18px;
+    --product-feature-radius: 24px;
+    --product-feature-title-size: 30px;
   }
 
   .track {
@@ -303,9 +217,11 @@
     margin-left: 0;
   }
 
-  .actions button {
-    width: 42px;
-    height: 42px;
+  .actionButton {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
   }
 
   .card {

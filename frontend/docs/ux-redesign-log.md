@@ -1,5 +1,53 @@
 # UX Redesign Log
 
+## 2026-03-17 18:32:56 KST
+- timestamp: 2026-03-17 18:32:56 KST
+- 이번 실행 목표: 홈 `editorialSequence` 진입부와 `HomeSectionFrame` 공용 프레임을 다시 짜서, 홈 본문 섹션 헤더에 남아 있던 전용 세로 레일/전용 메타 박스/전용 슬라이더 제어를 공용 제품 시스템으로 끌어올린다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductSectionHeader.tsx`
+  - `frontend/components/home/HomeSectionFrame.tsx`
+  - `frontend/components/home/HomeSectionFrame.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/components/home/HorizontalCardSlider.tsx`
+  - `frontend/components/home/HorizontalCardSlider.module.css`
+  - `frontend/components/home/CommunitySection.module.css`
+  - `frontend/components/home/InfoLibrarySection.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--home-section-*` 토큰을 추가해 홈 본문 섹션 도입부가 개별 화면 전용 박스가 아니라 같은 shell/meta 계층을 공유하도록 정리했다
+  - `ProductSectionHeader`는 `ReactNode` title을 받게 넓히고, `HomeSectionFrame`은 기존 번호 세로 레일 + 우측 aside 배치 대신 공용 section header 기반의 넓은 intro shell로 재구성해 커뮤니티/공방/마켓/자료 섹션이 같은 제품형 헤더 문법으로 시작하도록 바꿨다
+  - `HomePage`의 `editorialSequenceLead`는 전용 header/stops grid를 버리고 `ProductFeatureBand + ProductStatGrid + ProductLink` 조합으로 교체해 홈 허브 다음 런웨이가 별도 위젯 박스가 아니라 실제 탐색 stage처럼 읽히게 만들었다
+  - `HorizontalCardSlider`의 전용 요약 카드와 원형 버튼은 `ProductFeatureBand + ProductStatGrid + ProductButton` 조합으로 다시 짜고, 섹션 제목 타이포는 각 화면 모듈의 고정 크기를 걷어내 공용 header scale을 실제로 따르도록 정리했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductSectionHeader.tsx frontend/components/home/HomeSectionFrame.tsx frontend/components/home/HomeSectionFrame.module.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css frontend/components/home/HorizontalCardSlider.tsx frontend/components/home/HorizontalCardSlider.module.css frontend/components/home/CommunitySection.module.css frontend/components/home/InfoLibrarySection.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/HomePage.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/HomePage.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/HorizontalCardSlider.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/HorizontalCardSlider.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/HomeSectionFrame.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/HomeSectionFrame.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+    `frontend/node_modules/.bin/playwright` 없음
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - 작업 시작 전 `git pull --rebase origin main` 실패: `.git/FETCH_HEAD` 쓰기 권한 없음 (`Operation not permitted`)
+  - `git add ... && git commit -m "Rebuild home sequence framing"` 실패: `.git/index.lock` 생성 권한 없음 (`Operation not permitted`)
+  - `.git` 내부에 `touch` 쓰기 자체가 sandbox에서 차단됨을 확인
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경은 워크트리에 남았지만 `.git` 쓰기 제한과 DNS 제한 때문에 commit/push를 완료하지 못했다
+- 커밋 해시: `commit 생성 실패 (.git/index.lock: Operation not permitted)`
+- 남은 가장 큰 UX 문제: 홈 본문 도입부는 공용 프레임으로 정리됐지만 `CommunitySection`과 `InfoLibrarySection` 내부의 칩/서브헤더/푸터 액션은 아직 화면 전용 micro-chrome 비중이 높아, 섹션 내부까지 완전히 같은 공용 제품 문법으로 닫히지는 않았다
+- 다음 실행 우선순위 1~3:
+  - `CommunitySection`과 `InfoLibrarySection`의 전용 chip/footer/subheader를 공용 micro primitive로 더 축소하기
+  - 새 `home-section` 프레임 토큰을 `ssuk/community/market`의 섹션 인트로와 연결해 서비스 전반의 헤더 리듬을 맞추기
+  - `.git` 쓰기 제약과 DNS 제한이 없는 환경에서 누적 변경을 commit/push하고 실제 화면 캡처를 재시도하기
+
 ## 2026-03-17 17:31:36 KST
 - timestamp: 2026-03-17 17:31:36 KST
 - 이번 실행 목표: 홈 `serviceHub` 첫 런웨이를 공용 제품 밴드/스탯/링크 시스템으로 재구성해, hero 직후에 남아 있던 화면 전용 셸과 관리자형 신호 카드를 걷어낸다
