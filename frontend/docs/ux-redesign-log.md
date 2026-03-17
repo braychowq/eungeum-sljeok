@@ -1,5 +1,43 @@
 # UX Redesign Log
 
+## 2026-03-17 17:31:36 KST
+- timestamp: 2026-03-17 17:31:36 KST
+- 이번 실행 목표: 홈 `serviceHub` 첫 런웨이를 공용 제품 밴드/스탯/링크 시스템으로 재구성해, hero 직후에 남아 있던 화면 전용 셸과 관리자형 신호 카드를 걷어낸다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductStatGrid.tsx`
+  - `frontend/components/common/ProductStatGrid.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--home-dispatch-*` 토큰을 추가해 hero 다음 런웨이가 기존 hero/sequence와 분리된 임시 표면이 아니라, 같은 홈 제품 계층 안에서 읽히도록 정리했다
+  - `ProductStatGrid`에 `mobileColumns`를 추가해 공용 stat primitive가 데스크톱과 모바일에서 다른 열 수를 가질 수 있게 만들고, 홈 dispatch 신호 카드와 route 요약 카드가 더 이상 화면 전용 grid 구현에 의존하지 않도록 바꿨다
+  - `HomePage`의 `serviceHub`는 전용 `serviceHubLead`/`serviceHubSpotlight` 셸 대신 `ProductFeatureBand + ProductStatGrid + ProductEditorialCard + ProductLink` 조합으로 재조립해, 첫 본문 구간이 실제 사용자용 런웨이처럼 한 덩어리로 읽히게 만들었다
+  - route card 하단 요약도 전용 metric panel을 버리고 공용 `ProductStatGrid`로 교체해, 커뮤니티/공방/마켓의 시작 카드가 같은 정보 밀도와 반응형 규칙을 공유하도록 묶었다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/components/common/ProductStatGrid.tsx frontend/components/common/ProductStatGrid.module.css frontend/app/globals.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/HomePage.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/HomePage.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+    `frontend/node_modules/.bin/playwright` 없음
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - 작업 시작 전 `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `058b755` (`Rebuild home dispatch runway`) 생성
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 DNS 제한 때문에 원격 push는 완료하지 못했다
+- 커밋 해시: `058b755`
+- 남은 가장 큰 UX 문제: 홈 첫 런웨이는 공용 dispatch 문법으로 정리됐지만 바로 아래 `editorialSequenceLead`와 개별 섹션 헤더는 아직 홈 전용 셸 문법을 유지하고 있어, hero 이후 본문 전체가 완전히 같은 공통 시스템으로 닫히지는 않았다
+- 다음 실행 우선순위 1~3:
+  - `editorialSequenceLead`와 각 홈 섹션 시작 헤더를 dispatch 계층과 같은 공용 밴드/컨트롤 문법으로 다시 묶기
+  - `CommunityView`/`MarketView`의 남은 전용 list/header 셸을 같은 공용 control/stat/card 레이어로 더 정리하기
+  - `.git` 쓰기 제한과 DNS 제한이 없는 환경에서 누적 변경을 커밋/푸시하고 실제 화면 캡처를 재시도하기
+
 ## 2026-03-17 16:37:12 KST
 - timestamp: 2026-03-17 16:37:12 KST
 - 이번 실행 목표: 홈 상단 `TopNav`와 `BannerCarousel`을 하나의 hero stage로 다시 묶고, 캐러셀 제어를 공용 pager primitive로 추출해 첫 진입 상단의 관리자형 카드/버튼 질감을 제거한다
