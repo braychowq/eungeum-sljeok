@@ -11,6 +11,7 @@ export type ProductStatGridItem = {
 type ProductStatGridProps = {
   items: ProductStatGridItem[];
   columns?: 1 | 2 | 3;
+  mobileColumns?: 1 | 2 | 3;
   size?: 'md' | 'sm';
   ariaLabel?: string;
   className?: string;
@@ -30,6 +31,7 @@ const emphasisClassName: Record<NonNullable<ProductStatGridItem['emphasis']>, st
 export default function ProductStatGrid({
   items,
   columns = 3,
+  mobileColumns = columns,
   size = 'md',
   ariaLabel,
   className
@@ -38,7 +40,12 @@ export default function ProductStatGrid({
     <div
       className={cn(styles.grid, size === 'sm' ? styles.sizeSm : styles.sizeMd, className)}
       aria-label={ariaLabel}
-      style={{ '--product-stat-columns': columns } as CSSProperties}
+      style={
+        {
+          '--product-stat-columns': columns,
+          '--product-stat-columns-mobile': mobileColumns
+        } as CSSProperties
+      }
     >
       {items.map((item, index) => (
         <article

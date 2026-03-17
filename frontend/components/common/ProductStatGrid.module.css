@@ -95,3 +95,10 @@
   --stat-shadow: var(--product-stat-shadow-strong);
   --stat-label: var(--product-chip-warm);
 }
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns:
+      repeat(var(--product-stat-columns-mobile, var(--product-stat-columns, 3)), minmax(0, 1fr));
+  }
+}

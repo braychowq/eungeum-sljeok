@@ -357,6 +357,30 @@
   --home-sequence-ink: #191410;
   --home-sequence-muted: #6f665f;
   --home-sequence-subtle: #9e9388;
+  --home-dispatch-shell:
+    radial-gradient(circle at top right, rgba(202, 161, 111, 0.18), transparent 30%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.98), rgba(246, 238, 227, 0.92));
+  --home-dispatch-shell-soft:
+    radial-gradient(circle at top right, rgba(202, 161, 111, 0.14), transparent 32%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.94), rgba(247, 240, 231, 0.86));
+  --home-dispatch-line: rgba(29, 23, 17, 0.08);
+  --home-dispatch-shadow: 0 28px 58px rgba(28, 24, 20, 0.1);
+  --home-dispatch-shadow-soft: 0 18px 36px rgba(28, 24, 20, 0.08);
+  --home-dispatch-chip:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 240, 231, 0.84));
+  --home-dispatch-chip-strong:
+    radial-gradient(circle at top right, rgba(194, 154, 102, 0.14), transparent 40%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(245, 236, 224, 0.9));
+  --home-dispatch-chip-line: rgba(29, 23, 17, 0.08);
+  --home-dispatch-muted: #75695d;
+  --home-dispatch-accent: #8d4021;
+  --home-dispatch-aura: rgba(202, 161, 111, 0.18);
+  --home-dispatch-aura-soft: rgba(36, 72, 67, 0.12);
+  --home-dispatch-note:
+    linear-gradient(160deg, rgba(26, 40, 38, 0.98), rgba(61, 82, 77, 0.94));
+  --home-dispatch-note-line: rgba(255, 248, 242, 0.14);
+  --home-dispatch-note-ink: #fff8f2;
+  --home-dispatch-note-muted: rgba(255, 248, 242, 0.76);
   --home-story-chip:
     linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 240, 231, 0.82));
   --home-story-chip-strong:

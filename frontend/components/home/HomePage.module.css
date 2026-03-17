@@ -68,307 +68,83 @@
   align-items: stretch;
 }
 
-.serviceHubLead,
-.serviceHubSpotlight,
-.serviceHubRouteCard {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--home-stage-line);
-  box-shadow: var(--home-stage-shadow-soft);
+.serviceHubBand {
+  --feature-shell: var(--home-dispatch-shell);
+  --feature-line: var(--home-dispatch-line);
+  --feature-shadow: var(--home-dispatch-shadow);
+  --feature-ink: var(--home-ink);
+  --feature-muted: var(--home-muted);
+  --feature-accent: var(--home-dispatch-accent);
+  --feature-chip-bg: var(--home-dispatch-chip);
+  --feature-chip-border: var(--home-dispatch-chip-line);
+  --feature-aura: var(--home-dispatch-aura);
+  --feature-aura-soft: var(--home-dispatch-aura-soft);
+  --product-feature-padding: 32px;
+  --product-feature-gap: 22px;
+  --product-feature-radius: 40px;
+  --product-feature-title-size: clamp(46px, 5.6vw, 72px);
+  --product-feature-title-max: 10.5ch;
+  --product-feature-description-size: 15px;
+  --product-feature-description-max: 56ch;
+  min-height: 100%;
 }
 
-.serviceHubLead {
-  display: grid;
-  gap: 24px;
-  align-content: start;
-  min-width: 0;
-  padding: 34px;
-  border-radius: 40px;
-  background:
-    radial-gradient(circle at top right, rgba(202, 161, 111, 0.16), transparent 30%),
-    radial-gradient(circle at bottom left, rgba(36, 72, 67, 0.1), transparent 28%),
-    var(--home-stage);
-}
-
-.serviceHubLead::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 46%),
-    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.2), transparent 32%);
-  pointer-events: none;
-}
-
-.serviceHubCopy {
-  position: relative;
-  z-index: 1;
-  display: grid;
+.serviceHubBandBody {
   gap: 18px;
 }
 
-.serviceHubEyebrow {
-  display: inline-flex;
-  width: fit-content;
-  min-height: 32px;
-  align-items: center;
-  padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid var(--home-stage-line);
-  background: var(--home-stage-chip);
-  color: var(--home-muted);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.serviceHubCopy h1 {
-  margin: 0;
-  max-width: 10.5ch;
-  color: var(--home-ink);
-  font-family: var(--font-logo);
-  font-size: clamp(50px, 6vw, 80px);
-  line-height: 0.9;
-  letter-spacing: -0.08em;
-}
-
-.serviceHubCopy p {
-  margin: 0;
-  max-width: 54ch;
-  color: var(--home-muted);
-  font-size: 15px;
-  line-height: 1.84;
-}
-
-.serviceHubActionRow {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.serviceHubPrimaryLink,
-.serviceHubGhostLink {
-  text-decoration: none;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.serviceHubPrimaryLink,
-.serviceHubGhostLink {
-  min-height: 50px;
-  padding: 0 20px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-
-.serviceHubPrimaryLink {
-  color: var(--home-stage-ink-inverse);
-  background: linear-gradient(135deg, var(--home-stage-clay), var(--home-stage-clay-strong));
-  box-shadow: 0 18px 32px rgba(186, 107, 66, 0.18);
-}
-
-.serviceHubGhostLink {
-  color: var(--home-ink);
-  border: 1px solid var(--home-stage-line);
-  background: rgba(255, 255, 255, 0.72);
-}
-
-.serviceHubSignalRail {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.serviceHubSignalCard {
-  min-width: 0;
-  display: grid;
-  gap: 8px;
-  padding: 18px;
-  border-radius: 24px;
-  border: 1px solid var(--home-stage-line);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.68)),
-    rgba(255, 255, 255, 0.76);
-}
-
-.serviceHubSignalCard span {
-  color: var(--home-subtle);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.serviceHubSignalCard strong {
-  color: var(--home-ink);
-  font-size: 17px;
-  line-height: 1.44;
-  letter-spacing: -0.04em;
-}
-
-.serviceHubSignalCard p {
-  margin: 0;
-  color: var(--home-muted);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.serviceHubSpotlight {
-  display: grid;
-  min-height: 100%;
-  border-radius: 40px;
-  background: var(--home-stage-strong);
-  color: var(--home-stage-ink-inverse);
-}
-
-.serviceHubSpotlightMedia {
-  position: absolute;
-  inset: 0;
-}
-
-.serviceHubSpotlightImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.42;
-  filter: saturate(0.88) contrast(0.92);
-}
-
-.serviceHubSpotlightOverlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(16, 24, 23, 0.18), rgba(16, 24, 23, 0.74)),
-    radial-gradient(circle at top right, rgba(255, 248, 241, 0.16), transparent 26%);
-}
-
-.serviceHubSpotlightBody {
-  position: relative;
-  z-index: 1;
-  min-height: 100%;
-  padding: 30px;
-  display: grid;
-  align-content: end;
-  gap: 18px;
-}
-
-.serviceHubSpotlightBody strong {
-  margin: 0;
-  max-width: 10ch;
-  font-family: var(--font-logo);
-  font-size: clamp(36px, 4vw, 50px);
-  line-height: 0.96;
-  letter-spacing: -0.07em;
-}
-
-.serviceHubSpotlightBody p {
-  margin: 0;
-  max-width: 32ch;
-  color: rgba(255, 248, 241, 0.82);
-  font-size: 14px;
-  line-height: 1.72;
-}
-
-.serviceHubSpotlightGrid {
-  display: grid;
-  gap: 10px;
-}
-
-.serviceHubSpotlightItem {
-  display: grid;
-  gap: 6px;
-  padding: 14px 16px;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 248, 241, 0.14);
-  background: rgba(255, 248, 241, 0.08);
-}
-
-.serviceHubSpotlightItem span {
-  color: rgba(255, 248, 241, 0.62);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.serviceHubSpotlightItem strong {
-  max-width: none;
-  font-family: inherit;
-  font-size: 15px;
-  line-height: 1.48;
-  letter-spacing: -0.03em;
-}
-
-.serviceHubRouteGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.serviceHubRouteEditorial {
-  --product-editorial-padding: 24px;
-  --product-editorial-gap: 16px;
-  --product-editorial-title-size: clamp(30px, 3.2vw, 36px);
-  --product-editorial-radius: 32px;
-  min-height: 100%;
-}
-
-.serviceHubRouteBody {
-  gap: 16px;
-}
-
-.serviceHubRouteMetricGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.serviceHubRouteMetricPanel {
-  min-width: 0;
-  display: grid;
-  gap: 8px;
-  padding: 16px;
-  border-radius: 22px;
-  border: 1px solid var(--product-chip-line);
-  background: var(--product-chip-shell-strong);
-  box-shadow: var(--product-chip-shadow);
-}
-
-.serviceHubRouteMetricPanel span {
-  color: var(--home-subtle);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.serviceHubRouteMetricPanel strong {
-  color: var(--home-ink);
-  font-size: 18px;
-  line-height: 1.42;
-  letter-spacing: -0.04em;
-}
-
+.serviceHubBandMeta,
+.serviceHubDispatchTagRow,
+.serviceHubSpotlightSignalRow,
 .serviceHubRouteTagRow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
+.serviceHubLinkRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.serviceHubLink {
+  min-width: 150px;
+}
+
+.serviceHubSignalGrid,
+.serviceHubSpotlightStats,
+.serviceHubRouteStats {
+  --product-stat-grid-gap: 10px;
+}
+
+.serviceHubSignalGrid {
+  --product-stat-grid-gap: 12px;
+  --product-stat-card-min-height: 108px;
+}
+
+.serviceHubSpotlightStats,
+.serviceHubRouteStats {
+  --product-stat-card-min-height: 96px;
+}
+
+.serviceHubDispatchBody {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.serviceHubDispatchStatWrap {
+  display: grid;
+  gap: 12px;
+}
+
+.serviceHubMetaPill,
+.routeDeckMeta,
+.serviceHubDispatchTag,
+.serviceHubSpotlightSignal,
 .serviceHubRouteTag,
 .serviceHubRouteAction {
   min-height: 30px;
@@ -383,14 +159,156 @@
   text-transform: uppercase;
 }
 
+.serviceHubMetaPill,
+.routeDeckMeta,
+.serviceHubDispatchTag,
 .serviceHubRouteTag {
-  border: 1px solid var(--product-chip-line);
-  background: var(--product-chip-shell);
-  color: var(--home-muted);
+  border: 1px solid var(--home-dispatch-chip-line);
+  background: var(--home-dispatch-chip);
   box-shadow: var(--product-chip-shadow);
+  color: var(--home-dispatch-muted);
 }
 
-.serviceHubRouteFooter {
+.serviceHubDispatchNoteCard {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 30px;
+  border: 1px solid var(--home-dispatch-note-line);
+  background: var(--home-dispatch-note);
+  box-shadow: 0 24px 44px rgba(21, 29, 27, 0.16);
+}
+
+.serviceHubDispatchNoteHeader {
+  display: grid;
+  gap: 8px;
+}
+
+.serviceHubDispatchNoteEyebrow {
+  color: var(--home-dispatch-note-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.serviceHubDispatchNoteList {
+  display: grid;
+  gap: 10px;
+}
+
+.serviceHubDispatchNoteItem {
+  display: grid;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--home-dispatch-note-line);
+}
+
+.serviceHubDispatchNoteItem span {
+  color: var(--home-dispatch-note-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.serviceHubDispatchNoteItem strong {
+  color: var(--home-dispatch-note-ink);
+  font-size: 15px;
+  line-height: 1.48;
+  letter-spacing: -0.04em;
+}
+
+.serviceHubDispatchNote {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--home-dispatch-note-muted);
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.serviceHubSpotlightCard {
+  --product-editorial-padding: 24px;
+  --product-editorial-gap: 16px;
+  --product-editorial-title-size: clamp(34px, 4vw, 46px);
+  --product-editorial-media-height: 264px;
+  --product-editorial-radius: 36px;
+  min-height: 100%;
+}
+
+.serviceHubSpotlightMedia {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.serviceHubSpotlightImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.88) contrast(0.94);
+}
+
+.serviceHubSpotlightOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 40%, rgba(247, 240, 229, 0.18) 100%),
+    linear-gradient(128deg, rgba(255, 255, 255, 0.12), transparent 48%);
+}
+
+.serviceHubSpotlightBody,
+.serviceHubRouteBody {
+  gap: 14px;
+}
+
+.serviceHubSpotlightSignal {
+  border: 1px solid var(--home-dispatch-chip-line);
+  background: var(--home-dispatch-chip-strong);
+  box-shadow: var(--product-chip-shadow);
+  color: var(--home-dispatch-accent);
+}
+
+.routeDeck {
+  --feature-shell: var(--home-dispatch-shell-soft);
+  --feature-line: var(--home-dispatch-line);
+  --feature-shadow: var(--home-dispatch-shadow-soft);
+  --feature-ink: var(--home-ink);
+  --feature-muted: var(--home-muted);
+  --feature-accent: var(--home-dispatch-accent);
+  --feature-chip-bg: var(--home-dispatch-chip);
+  --feature-chip-border: var(--home-dispatch-chip-line);
+  --feature-aura: rgba(202, 161, 111, 0.14);
+  --feature-aura-soft: rgba(36, 72, 67, 0.08);
+  --product-feature-padding: 28px;
+  --product-feature-gap: 18px;
+  --product-feature-radius: 36px;
+  --product-feature-title-size: clamp(34px, 4vw, 44px);
+  --product-feature-title-max: 12ch;
+}
+
+.routeDeckBody {
+  gap: 18px;
+}
+
+.serviceHubRouteGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.serviceHubRouteEditorial {
+  --product-editorial-padding: 22px;
+  --product-editorial-gap: 14px;
+  --product-editorial-title-size: clamp(28px, 3vw, 34px);
+  --product-editorial-radius: 32px;
+  min-height: 100%;
+}
+
+.serviceHubRouteFooter,
+.serviceHubSpotlightFooter {
   width: 100%;
   display: flex;
   align-items: flex-end;
@@ -407,21 +325,10 @@
 }
 
 .serviceHubRouteAction {
-  color: var(--product-chip-support);
-  border: 1px solid var(--product-chip-line);
-  background: var(--product-chip-shell-strong);
+  color: var(--home-dispatch-accent);
+  border: 1px solid var(--home-dispatch-chip-line);
+  background: var(--home-dispatch-chip-strong);
   box-shadow: var(--product-chip-shadow);
-}
-
-.serviceHubPrimaryLink:hover,
-.serviceHubGhostLink:hover {
-  transform: translateY(-2px);
-}
-
-.serviceHubPrimaryLink:focus-visible,
-.serviceHubGhostLink:focus-visible {
-  outline: 2px solid var(--home-stage-clay-strong);
-  outline-offset: 3px;
 }
 
 .editorialSequence {
@@ -563,8 +470,12 @@
     width: min(1100px, 100%);
   }
 
-  .serviceHubCopy h1 {
-    font-size: clamp(44px, 5.5vw, 70px);
+  .serviceHubBand {
+    --product-feature-title-size: clamp(42px, 5.2vw, 64px);
+  }
+
+  .routeDeck {
+    --product-feature-title-size: clamp(32px, 4vw, 40px);
   }
 
   .editorialSequenceHeader strong {
@@ -598,6 +509,10 @@
     grid-template-columns: 1fr;
   }
 
+  .serviceHubDispatchBody {
+    grid-template-columns: 1fr;
+  }
+
   .editorialSequence {
     padding: 0 18px;
     gap: 24px;
@@ -620,43 +535,38 @@
     padding: 0 14px;
   }
 
-  .serviceHubLead,
-  .serviceHubSpotlight,
-  .serviceHubRouteEditorial {
-    border-radius: 28px;
+  .serviceHubBand {
+    --product-feature-padding: 22px;
+    --product-feature-gap: 18px;
+    --product-feature-radius: 28px;
+    --product-feature-title-size: 42px;
+    --product-feature-description-size: 14px;
   }
 
-  .serviceHubLead {
-    padding: 22px;
-    gap: 18px;
+  .serviceHubLinkRow {
+    width: 100%;
+    justify-content: flex-start;
   }
 
-  .serviceHubCopy h1 {
-    max-width: 10ch;
-    font-size: 42px;
+  .serviceHubLink {
+    min-width: 0;
   }
 
-  .serviceHubCopy p {
-    font-size: 14px;
-    line-height: 1.72;
+  .serviceHubDispatchNoteCard {
+    padding: 18px;
+    border-radius: 24px;
   }
 
-  .serviceHubPrimaryLink,
-  .serviceHubGhostLink {
-    min-height: 46px;
-    padding: 0 16px;
+  .serviceHubSpotlightCard {
+    --product-editorial-padding: 20px;
+    --product-editorial-title-size: 32px;
+    --product-editorial-media-height: 224px;
   }
 
-  .serviceHubSignalRail {
-    grid-template-columns: 1fr;
-  }
-
-  .serviceHubSpotlightBody {
-    padding: 22px;
-  }
-
-  .serviceHubSpotlightBody strong {
-    font-size: 34px;
+  .routeDeck {
+    --product-feature-padding: 22px;
+    --product-feature-radius: 28px;
+    --product-feature-title-size: 34px;
   }
 
   .serviceHubRouteEditorial {
@@ -665,11 +575,8 @@
     --product-editorial-radius: 28px;
   }
 
-  .serviceHubRouteMetricGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .serviceHubRouteFooter {
+  .serviceHubRouteFooter,
+  .serviceHubSpotlightFooter {
     align-items: flex-start;
     flex-direction: column;
   }
