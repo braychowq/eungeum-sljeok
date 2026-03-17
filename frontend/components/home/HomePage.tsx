@@ -156,9 +156,10 @@ export default function HomePage() {
       <div className={styles.pageGlow} aria-hidden="true" />
 
       <div className={styles.container}>
-        <TopNav items={navItems} freshCount={freshCommunityCount} />
-
-        <BannerCarousel items={bannerItems} />
+        <section className={styles.heroStage} aria-label="홈 상단 스테이지">
+          <TopNav items={navItems} freshCount={freshCommunityCount} />
+          <BannerCarousel items={bannerItems} />
+        </section>
 
         <section className={styles.serviceHub} aria-label="슬쩍 서비스 허브">
           <div className={styles.serviceHubRunway}>

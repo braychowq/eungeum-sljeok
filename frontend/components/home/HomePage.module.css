@@ -49,6 +49,12 @@
   z-index: 1;
 }
 
+.heroStage {
+  padding: 24px 28px 0;
+  display: grid;
+  gap: 18px;
+}
+
 .serviceHub {
   padding: 0 28px;
   display: grid;
@@ -579,6 +585,10 @@
     border-radius: 30px;
   }
 
+  .heroStage {
+    padding: 18px 18px 0;
+  }
+
   .serviceHub {
     padding: 0 18px;
   }
@@ -601,6 +611,11 @@
 }
 
 @media (max-width: 960px) {
+  .heroStage {
+    padding: 14px 14px 0;
+    gap: 14px;
+  }
+
   .serviceHub {
     padding: 0 14px;
   }

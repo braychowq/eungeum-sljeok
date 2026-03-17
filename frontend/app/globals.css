@@ -318,6 +318,33 @@
   --home-stage-moss-soft: rgba(33, 73, 66, 0.14);
   --home-stage-gold: #c89a64;
   --home-stage-gold-soft: rgba(200, 154, 100, 0.16);
+  --home-hero-shell:
+    radial-gradient(circle at top right, rgba(202, 161, 111, 0.16), transparent 30%),
+    linear-gradient(156deg, rgba(255, 255, 255, 0.98), rgba(244, 236, 224, 0.9));
+  --home-hero-shell-strong:
+    radial-gradient(circle at top right, rgba(200, 154, 100, 0.18), transparent 28%),
+    linear-gradient(156deg, rgba(25, 39, 36, 0.98), rgba(63, 84, 79, 0.94));
+  --home-hero-panel:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 239, 229, 0.84));
+  --home-hero-line: rgba(28, 24, 20, 0.08);
+  --home-hero-line-strong: rgba(28, 24, 20, 0.16);
+  --home-hero-shadow: 0 28px 60px rgba(28, 24, 20, 0.1);
+  --home-hero-shadow-soft: 0 16px 32px rgba(28, 24, 20, 0.08);
+  --home-hero-chip:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(247, 240, 230, 0.82));
+  --home-hero-chip-strong:
+    radial-gradient(circle at top right, rgba(202, 161, 111, 0.14), transparent 40%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(246, 237, 226, 0.9));
+  --home-hero-ink: #191410;
+  --home-hero-muted: #6f665f;
+  --home-hero-subtle: #9c9185;
+  --home-hero-ink-inverse: #fff8f2;
+  --home-hero-muted-inverse: rgba(255, 248, 242, 0.8);
+  --home-hero-clay: #b45a32;
+  --home-hero-clay-strong: #8d4021;
+  --home-hero-moss: #244843;
+  --home-hero-moss-strong: #173430;
+  --home-hero-gold-soft: rgba(202, 161, 111, 0.14);
   --home-sequence-shell:
     linear-gradient(148deg, rgba(255, 255, 255, 0.96), rgba(245, 238, 228, 0.88));
   --home-sequence-panel:
