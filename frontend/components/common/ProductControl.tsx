@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ComponentProps, ReactNode } from 'react';
 import Link from 'next/link';
 import styles from './ProductControl.module.css';
 
@@ -12,11 +12,14 @@ type ProductControlSharedProps = {
   variant?: ProductControlVariant;
   size?: ProductControlSize;
   iconOnly?: boolean;
+  selected?: boolean;
   className?: string;
 };
 
 export type ProductLinkProps = Omit<ComponentProps<typeof Link>, 'className'> &
   ProductControlSharedProps;
+
+export type ProductAnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & ProductControlSharedProps;
 
 export type ProductButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   ProductControlSharedProps;
@@ -48,6 +51,7 @@ function getClassName({
   variant = 'primary',
   size = 'md',
   iconOnly = false,
+  selected = false,
   className
 }: Omit<ProductControlSharedProps, 'children'>) {
   return cn(
@@ -56,6 +60,7 @@ function getClassName({
     variantClassName[variant],
     sizeClassName[size],
     iconOnly && styles.iconOnly,
+    selected && styles.selected,
     className
   );
 }
@@ -65,6 +70,7 @@ export function ProductLink({
   variant = 'primary',
   size = 'md',
   iconOnly = false,
+  selected = false,
   className,
   children,
   ...props
@@ -72,10 +78,30 @@ export function ProductLink({
   return (
     <Link
       {...props}
-      className={getClassName({ tone, variant, size, iconOnly, className })}
+      className={getClassName({ tone, variant, size, iconOnly, selected, className })}
     >
       {children}
     </Link>
+  );
+}
+
+export function ProductAnchor({
+  tone = 'neutral',
+  variant = 'primary',
+  size = 'md',
+  iconOnly = false,
+  selected = false,
+  className,
+  children,
+  ...props
+}: ProductAnchorProps) {
+  return (
+    <a
+      {...props}
+      className={getClassName({ tone, variant, size, iconOnly, selected, className })}
+    >
+      {children}
+    </a>
   );
 }
 
@@ -84,6 +110,7 @@ export function ProductButton({
   variant = 'secondary',
   size = 'md',
   iconOnly = false,
+  selected = false,
   className,
   children,
   ...props
@@ -91,7 +118,7 @@ export function ProductButton({
   return (
     <button
       {...props}
-      className={getClassName({ tone, variant, size, iconOnly, className })}
+      className={getClassName({ tone, variant, size, iconOnly, selected, className })}
     >
       {children}
     </button>

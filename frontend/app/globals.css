@@ -329,7 +329,9 @@
   --product-section-title-size-compact: clamp(22px, 3.2vw, 28px);
   --product-section-description-size: 13px;
   --product-choice-padding: 18px;
+  --product-choice-padding-sm: 14px;
   --product-choice-radius: 26px;
+  --product-choice-radius-sm: 22px;
   --product-choice-border: var(--control-border);
   --product-choice-border-strong: var(--control-active-border);
   --product-choice-shell:
@@ -345,12 +347,16 @@
     0 22px 40px rgba(28, 24, 20, 0.12);
   --product-choice-focus-ring: var(--control-focus-ring);
   --product-choice-eyebrow-size: 11px;
+  --product-choice-eyebrow-size-sm: 10px;
   --product-choice-eyebrow-ink: var(--compose-accent-strong);
   --product-choice-title-size: 16px;
+  --product-choice-title-size-sm: 14px;
   --product-choice-title-ink: var(--control-ink);
   --product-choice-description-size: 12px;
+  --product-choice-description-size-sm: 11px;
   --product-choice-description-ink: var(--control-muted);
   --product-choice-metric-size: 24px;
+  --product-choice-metric-size-sm: 20px;
   --product-field-padding: 18px;
   --product-field-padding-compact: 16px;
   --product-field-radius: 28px;

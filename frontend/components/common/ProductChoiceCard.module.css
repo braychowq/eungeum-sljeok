@@ -14,7 +14,8 @@
     transform var(--motion-emphasized),
     box-shadow var(--motion-emphasized),
     border-color var(--motion-emphasized),
-    background-color var(--motion-emphasized);
+    background-color var(--motion-emphasized),
+    color var(--motion-emphasized);
 }
 
 .card:hover:not(:disabled) {
@@ -52,6 +53,26 @@
   gap: 10px;
 }
 
+.sizeMd {
+  padding: var(--product-choice-padding);
+  border-radius: var(--product-choice-radius);
+}
+
+.sizeSm {
+  padding: var(--product-choice-padding-sm);
+  border-radius: var(--product-choice-radius-sm);
+  gap: 6px;
+}
+
+.sizeSm.default {
+  min-height: 96px;
+}
+
+.sizeSm.metric {
+  min-height: 90px;
+  gap: 8px;
+}
+
 .eyebrow {
   color: var(--product-choice-eyebrow-ink);
   font-size: var(--product-choice-eyebrow-size);
@@ -78,6 +99,22 @@
 .metric .title {
   font-size: 13px;
   line-height: 1.46;
+}
+
+.sizeSm .eyebrow {
+  font-size: var(--product-choice-eyebrow-size-sm);
+}
+
+.sizeSm.metric .eyebrow {
+  font-size: var(--product-choice-metric-size-sm);
+}
+
+.sizeSm .title {
+  font-size: var(--product-choice-title-size-sm);
+}
+
+.sizeSm .description {
+  font-size: var(--product-choice-description-size-sm);
 }
 
 .description {

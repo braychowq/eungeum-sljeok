@@ -7,6 +7,7 @@ type ProductChoiceCardProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   description?: ReactNode;
   selected?: boolean;
   variant?: 'default' | 'metric';
+  size?: 'md' | 'sm';
   className?: string;
 };
 
@@ -14,12 +15,18 @@ function cn(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(' ');
 }
 
+const sizeClassName = {
+  md: styles.sizeMd,
+  sm: styles.sizeSm
+};
+
 export default function ProductChoiceCard({
   eyebrow,
   title,
   description,
   selected = false,
   variant = 'default',
+  size = 'md',
   className,
   type = 'button',
   ...props
@@ -28,7 +35,13 @@ export default function ProductChoiceCard({
     <button
       {...props}
       type={type}
-      className={cn(styles.card, styles[variant], selected && styles.selected, className)}
+      className={cn(
+        styles.card,
+        styles[variant],
+        sizeClassName[size],
+        selected && styles.selected,
+        className
+      )}
     >
       {eyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
       <strong className={styles.title}>{title}</strong>

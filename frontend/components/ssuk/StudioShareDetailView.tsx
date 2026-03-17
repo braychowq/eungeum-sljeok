@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ProductButton } from '../common/ProductControl';
+import ProductChoiceCard from '../common/ProductChoiceCard';
+import { ProductAnchor, ProductButton, ProductLink } from '../common/ProductControl';
 import ProductSectionHeader from '../common/ProductSectionHeader';
 import { type StudioTrustBadge } from './mockData';
 import TwoMenuShell from './TwoMenuShell';
@@ -86,6 +87,12 @@ const minUnitLabelMap: Record<StudioShareDetail['minUnit'], string> = {
   hour: '시간',
   day: '일',
   week: '주'
+};
+
+const bookingUnitDescriptionMap: Record<PriceUnit, string> = {
+  day: '짧은 테스트 작업이나 하루 집중 제작에 적합해요.',
+  week: '프로젝트 단위 몰입 제작과 장비 적응에 좋아요.',
+  month: '상시 작업 루틴이나 클래스 운영까지 염두에 둔 선택이에요.'
 };
 
 const studioDetails: Record<string, StudioShareDetail> = {
@@ -267,6 +274,7 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
 
   const statusLabel = studio.status === 'open' ? '쉐어중' : '마감';
   const primaryCtaLabel = studio.status === 'open' ? '즉시 문의' : '대기 요청';
+  const selectedUnitLabel = unitLabelMap[selectedUnit];
   const trustItems = [
     { key: 'verified', label: '본인 인증', value: '운영자 인증 완료' },
     { key: 'policy', label: '계약 정책', value: studio.contractPolicyLabel },
@@ -287,10 +295,17 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
     { id: 'contact', label: '문의 메일', value: studio.email, href: `mailto:${studio.email}` }
   ];
   const bookingFacts = [
+    { id: 'unit', label: '선택 단위', value: `${selectedUnitLabel} 단위` },
+    { id: 'available', label: '다음 가능일', value: formatDate(studio.nextAvailableDate) },
     { id: 'refund', label: '환불 정책', value: studio.refundPolicyLabel },
-    { id: 'contract', label: '계약 정책', value: studio.contractPolicyLabel },
     { id: 'response', label: '응답 속도', value: studio.responseLabel }
   ];
+  const bookingUnitOptions = (Object.keys(unitLabelMap) as PriceUnit[]).map((unit) => ({
+    id: unit,
+    priceText: `₩${formatKrw(studio.priceByUnit[unit])}`,
+    title: `${unitLabelMap[unit]} 단위`,
+    description: bookingUnitDescriptionMap[unit]
+  }));
 
   const priceText = useMemo(
     () => `₩${formatKrw(studio.priceByUnit[selectedUnit])} / ${unitLabelMap[selectedUnit]}`,
@@ -440,25 +455,52 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
           </div>
 
           <aside className={styles.bookingCard} aria-label="문의 카드">
-            <span className={styles.bookingEyebrow}>Booking signal</span>
-            <div className={styles.unitRow} role="tablist" aria-label="가격 단위 선택">
-              {(Object.keys(unitLabelMap) as PriceUnit[]).map((unit) => (
-                <button
-                  key={unit}
-                  type="button"
-                  className={selectedUnit === unit ? styles.unitButtonActive : styles.unitButton}
-                  onClick={() => setSelectedUnit(unit)}
-                  role="tab"
-                  aria-selected={selectedUnit === unit}
+            <div className={styles.bookingLead}>
+              <div className={styles.bookingLeadCopy}>
+                <span className={styles.bookingEyebrow}>Booking signal</span>
+                <strong className={styles.bookingPrice} aria-live="polite">
+                  {priceText}
+                </strong>
+                <p className={styles.bookingCaption}>
+                  {formatDate(studio.nextAvailableDate)}부터 이용 가능하며, {studio.responseLabel} 문의 응답을 제공합니다.
+                </p>
+              </div>
+
+              <div className={styles.bookingStatusStrip}>
+                <span
+                  className={`${styles.bookingStatusBadge} ${studio.status === 'open' ? styles.bookingStatusOpen : styles.bookingStatusClosed}`}
                 >
-                  {unitLabelMap[unit]}
-                </button>
-              ))}
+                  {statusLabel}
+                </span>
+                <span className={styles.bookingStatusNote}>
+                  {studio.status === 'open'
+                    ? '지금 바로 문의해 운영 톤과 장비 사용 범위를 확인할 수 있어요.'
+                    : '지금은 마감 상태지만 대기 요청으로 다음 가능 회차를 먼저 잡을 수 있어요.'}
+                </span>
+              </div>
             </div>
-            <strong className={styles.bookingPrice}>{priceText}</strong>
-            <p className={styles.bookingCaption}>
-              {formatDate(studio.nextAvailableDate)}부터 이용 가능하며, {studio.responseLabel} 문의 응답을 제공합니다.
-            </p>
+
+            <div className={styles.unitDeck} role="radiogroup" aria-label="가격 단위 선택">
+              {bookingUnitOptions.map((option) => {
+                const isSelected = selectedUnit === option.id;
+
+                return (
+                  <ProductChoiceCard
+                    key={option.id}
+                    variant="metric"
+                    size="sm"
+                    className={styles.unitCard}
+                    eyebrow={option.priceText}
+                    title={option.title}
+                    description={option.description}
+                    selected={isSelected}
+                    onClick={() => setSelectedUnit(option.id)}
+                    role="radio"
+                    aria-checked={isSelected}
+                  />
+                );
+              })}
+            </div>
 
             <dl className={styles.bookingFacts}>
               {bookingFacts.map((item) => (
@@ -470,33 +512,40 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             </dl>
 
             <div className={styles.bookingActions}>
-              <a
+              <ProductAnchor
                 href={inquiryHref}
-                className={styles.primaryCta}
+                tone="forest"
+                variant="primary"
+                className={styles.bookingPrimaryAction}
                 onClick={() => {
                   handleInquiryClick('lead_card');
                 }}
               >
                 {primaryCtaLabel}
-              </a>
-              <button
+              </ProductAnchor>
+              <ProductButton
                 type="button"
-                className={`${styles.secondaryCta} ${saved ? styles.secondaryCtaActive : ''}`}
+                tone="warm"
+                variant="secondary"
+                selected={saved}
+                className={styles.bookingSecondaryAction}
                 onClick={toggleSaved}
               >
                 {saved ? '저장됨' : '저장'}
-              </button>
+              </ProductButton>
             </div>
 
-            <Link
+            <ProductLink
               href="/market/new"
+              tone="neutral"
+              variant="ghost"
               className={styles.ownerLink}
               onClick={() => {
                 emitStudioEvent('studio_owner_cta_click', { from: 'detail' });
               }}
             >
               내 공방 쉐어 등록하기
-            </Link>
+            </ProductLink>
           </aside>
         </section>
 
@@ -750,22 +799,36 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
 
         <div className={styles.stickyBar}>
           <div className={styles.stickyInner}>
-            <a
-              href={inquiryHref}
-              className={styles.primaryCta}
-              onClick={() => {
-                handleInquiryClick('detail_sticky');
-              }}
-            >
-              {primaryCtaLabel}
-            </a>
-            <button
-              type="button"
-              className={`${styles.secondaryCta} ${saved ? styles.secondaryCtaActive : ''}`}
-              onClick={toggleSaved}
-            >
-              {saved ? '저장됨' : '저장'}
-            </button>
+            <div className={styles.stickySummary}>
+              <span className={styles.stickyEyebrow}>Selected rhythm</span>
+              <strong>{priceText}</strong>
+              <p>
+                {selectedUnitLabel} 단위 선택 · {formatDate(studio.nextAvailableDate)}부터 문의 가능
+              </p>
+            </div>
+            <div className={styles.stickyActions}>
+              <ProductAnchor
+                href={inquiryHref}
+                tone="forest"
+                variant="primary"
+                className={styles.stickyPrimaryAction}
+                onClick={() => {
+                  handleInquiryClick('detail_sticky');
+                }}
+              >
+                {primaryCtaLabel}
+              </ProductAnchor>
+              <ProductButton
+                type="button"
+                tone="warm"
+                variant="secondary"
+                selected={saved}
+                className={styles.stickySecondaryAction}
+                onClick={toggleSaved}
+              >
+                {saved ? '저장됨' : '저장'}
+              </ProductButton>
+            </div>
           </div>
         </div>
 
