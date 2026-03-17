@@ -1,5 +1,39 @@
 # UX Redesign Log
 
+## 2026-03-17 11:29:57 KST
+- timestamp: 2026-03-17 11:29:57 KST
+- 이번 실행 목표: `StudioShareDetailView` 후반부에 남아 있던 전용 rail 버튼/트랙과 반복 카드 셸을 공용 제품 레일 시스템으로 끌어올려 상세 화면의 마지막 관리자형 인터랙션 질감을 제거한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductRail.tsx`
+  - `frontend/components/common/ProductRail.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.tsx`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--product-rail-*`, `--product-panel-*` 토큰을 추가하고 `components/common`에 `ProductRail`을 도입해, 상세 화면 rail 이동 제어와 track 간격 규칙을 화면 전용 구현이 아니라 공용 제품 문법으로 분리했다
+  - `StudioShareDetailView`의 갤러리/현장 정보/운영 정책/장비/리뷰·문의 섹션이 모두 `ProductRail` 요약 컨트롤과 공통 track를 쓰도록 바뀌어, 후반부 인터랙션이 더 이상 작은 관리자형 화살표 버튼 묶음으로 보이지 않게 정리됐다
+  - 정보/정책/지표/문의 카드와 장비 카드에는 새 `product-panel` 표면을 적용해 상단 라인, 칩형 메타, 깊은 라운드, 따뜻한 그라디언트가 있는 에디토리얼 카드 계층으로 재구성했고, 썸네일 rail도 같은 패널 문법에 맞춰 상세 화면 전체 리듬을 통일했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductRail.tsx frontend/components/common/ProductRail.module.css frontend/components/ssuk/StudioShareDetailView.tsx frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `1b607a5` (`Rebuild studio detail rail system`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 push는 DNS 제한 때문에 완료하지 못함
+- 커밋 해시: `1b607a5`
+- 남은 가장 큰 UX 문제: `StudioShareDetailView`는 공용 rail 시스템으로 정리됐지만 `MarketView`의 hero/recommendation/trending rail과 trust/highlight 카드가 아직 화면 전용 rail 버튼/트랙과 표면을 유지하고 있어, 탐색 화면 전반이 같은 제품 시스템으로 완전히 닫히지 않음
+- 다음 실행 우선순위 1~3:
+  - `ProductRail`을 `MarketView`의 hero/recommendation/trending rail에 적용해 중복 rail 버튼/track 스타일을 제거하기
+  - `MarketView`와 `CommunityPostDetailView`에 공유 가능한 detail surface / trust badge primitive를 추출해 카드 셸을 더 줄이기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 다시 시도하기
+
 ## 2026-03-17 10:31:28 KST
 - timestamp: 2026-03-17 10:31:28 KST
 - 이번 실행 목표: `StudioShareDetailView`에 남아 있던 예약 단위 토글과 CTA 중복 제어를 공용 제품 제어 시스템으로 끌어올려, 상세 화면의 마지막 관리자형 인터랙션 잔재를 걷어낸다
