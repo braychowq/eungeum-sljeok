@@ -1,5 +1,39 @@
 # UX Redesign Log
 
+## 2026-03-17 20:32:47 KST
+- timestamp: 2026-03-17 20:32:47 KST
+- 이번 실행 목표: `ssuk/community`와 `ssuk/market`이 공통으로 쓰는 상단 셸을 홈 masthead 계열 토큰으로 다시 묶고, 커뮤니티 첫 인트로를 공용 제품 컴포넌트 기반 opening stage로 재구성한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/ssuk/TwoMenuShell.tsx`
+  - `frontend/components/ssuk/TwoMenuShell.module.css`
+  - `frontend/components/ssuk/CommunityView.tsx`
+  - `frontend/components/ssuk/CommunityView.module.css`
+- 핵심 시각 변화:
+  - `globals.css`에 `--ssuk-masthead-*` 토큰을 추가해 `community/market` 공용 상단 크롬이 기존 compose/detail 계열 패널을 재활용하지 않고 별도 masthead 표면, 칩, 라인, 그림자 계층을 공유하도록 정리했다
+  - `TwoMenuShell`은 기존 highlight tile/route pill/운영형 메타 밴드를 걷어내고 브랜드 블록 + 얇은 라우트 탭 + 단일 route card + cue chip 조합으로 다시 짜서 두 메뉴 상단이 대시보드 헤더보다 제품 runway처럼 읽히게 바꿨다
+  - `contextStrip`도 cue chip, ledger card, dark aside stage 조합으로 재구성해 `community`와 `market` 첫 화면이 같은 제품 문법으로 시작되도록 정리했다
+  - `CommunityView`의 첫 인트로는 전용 hero stat box를 버리고 `ProductFeatureBand + ProductEditorialCard + ProductStatGrid` 조합으로 교체해, 공지/인기/작성 흐름이 관리자형 신호판이 아니라 실제 대화 오프닝 stage처럼 보이도록 바꿨다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/ssuk/TwoMenuShell.tsx frontend/components/ssuk/TwoMenuShell.module.css frontend/components/ssuk/CommunityView.tsx frontend/components/ssuk/CommunityView.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg --no-filename -o "styles\\.[A-Za-z0-9_]+" frontend/components/ssuk/TwoMenuShell.tsx frontend/components/ssuk/CommunityView.tsx | sed 's/.*styles\\.//' | sort -u) <(rg --no-filename -o '^\\.[A-Za-z0-9_-]+' frontend/components/ssuk/TwoMenuShell.module.css frontend/components/ssuk/CommunityView.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - 작업 시작 전 `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - 이번 실행의 commit/push 최종 결과는 Git 단계 완료 후 최종 보고 기준으로 기록
+- 커밋 해시: Git 단계 완료 후 최종 보고 기준
+- 남은 가장 큰 UX 문제: browse/detail 쪽보다 작성 화면(`CommunityComposeView`, `MarketComposeView`, `ComposeWorkspace`)이 여전히 readiness score, step tray, sticky sidecard 중심이라 가장 강한 운영툴 인상을 남기고 있다
+- 다음 실행 우선순위 1~3:
+  - `CommunityComposeView`, `MarketComposeView`, `ComposeWorkspace`를 draft-first publishing canvas로 다시 설계하기
+  - compose 전용 `ProductField` / `ProductChoiceCard` / `ProductSectionHeader` quiet variant를 추가해 작성 화면의 설정 패널 질감을 걷어내기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 다시 시도하기
+
 ## 2026-03-17 19:31:01 KST
 - timestamp: 2026-03-17 19:31:01 KST
 - 이번 실행 목표: 홈 상단 `TopNav`와 `BannerCarousel` 캡션을 재구성해, 첫 진입에서 가장 강하게 남아 있던 운영 패널형 헤더 인상을 걷어내고 이미지 중심 masthead stage로 다시 묶는다

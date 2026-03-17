@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import EditorialSelectionDeck from '../common/EditorialSelectionDeck';
+import ProductEditorialCard from '../common/ProductEditorialCard';
+import ProductFeatureBand from '../common/ProductFeatureBand';
 import { ProductLink } from '../common/ProductControl';
 import ProductSectionHeader from '../common/ProductSectionHeader';
+import ProductStatGrid, { type ProductStatGridItem } from '../common/ProductStatGrid';
 import {
   communityNotices,
   communityPopular,
@@ -113,6 +116,12 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
       note: `${posts.length}개 글이 지금 이 흐름 안에서 살아 움직이고 있습니다.`
     }
   ];
+  const overviewSignalCards: ProductStatGridItem[] = overviewStats.map((stat, index) => ({
+    label: stat.label,
+    value: stat.value,
+    description: stat.note,
+    emphasis: index === 1 ? 'warm' : index === 2 ? 'support' : 'default'
+  }));
   const feedEntries = posts.map((post, index) => ({
     ...post,
     lane: feedLaneLabels[index] ?? 'Keep Reading',
@@ -120,6 +129,11 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
       feedLaneDescriptions[activeTab][index] ??
       '메이커들의 최근 흐름을 빠르게 따라잡기 좋은 대화입니다.'
   }));
+  const heroLeadHref = activeLeadPost?.href ?? composeHref;
+  const heroLeadTitle = activeLeadPost?.title ?? composeGuide.title;
+  const heroLeadDescription = activeLeadPost
+    ? `${composeGuide.description} 지금은 이 글이 가장 먼저 읽힙니다.`
+    : `${activeTabLabel} 흐름의 첫 대화를 준비하고 있습니다.`;
 
   const selectionSignals = [
     {
@@ -161,29 +175,25 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
       ctaHref={composeHref}
     >
       <section className={styles.heroSection} aria-label="커뮤니티 소개">
-        <div className={styles.heroBand}>
-          <div className={styles.heroCopy}>
-            <span className={styles.heroEyebrow}>Maker Conversation</span>
-            <h1 className={styles.heroTitle}>막히는 작업은 묻고, 쓸모 있는 정보는 바로 이어지는 대화 흐름</h1>
-            <p className={styles.heroDescription}>
+        <ProductFeatureBand
+          tone="warm"
+          titleAs="h1"
+          eyebrow="Maker Conversation"
+          title="막히는 작업은 묻고, 쓸모 있는 정보는 바로 이어지는 대화 흐름"
+          description={
+            <>
               운영 공지와 인기 글을 먼저 훑은 뒤, 지금 필요한 방으로 들어가세요. 질문을 해결하고,
               실무 자료를 저장하고, 가벼운 작업 근황까지 같은 호흡으로 이어지는 커뮤니티입니다.
-            </p>
+            </>
+          }
+          meta={
             <div className={styles.heroPills}>
               <span>공지 {communityNotices.length}</span>
               <span>인기 {communityPopular.length}</span>
               <span>{activeTabLabel} 집중 보기</span>
             </div>
-          </div>
-
-          <div className={styles.heroSignals} aria-label="커뮤니티 요약 신호">
-            {overviewStats.map((stat) => (
-              <div key={stat.label} className={styles.heroSignalCard}>
-                <span>{stat.label}</span>
-                <strong>{stat.value}</strong>
-                <p>{stat.note}</p>
-              </div>
-            ))}
+          }
+          action={
             <ProductLink
               href={composeHref}
               tone="warm"
@@ -192,8 +202,69 @@ export default function CommunityView({ activeTab }: CommunityViewProps) {
             >
               {composeGuide.ctaLabel}
             </ProductLink>
+          }
+          className={styles.heroBand}
+          bodyClassName={styles.heroBandBody}
+        >
+          <ProductEditorialCard
+            href={heroLeadHref}
+            tone="warm"
+            layout="text"
+            badge="Start Here"
+            eyebrow={`${activeTabLabel} 흐름`}
+            heading={heroLeadTitle}
+            description={heroLeadDescription}
+            signals={
+              <div className={styles.heroLeadSignals}>
+                <span>{activeLeadPost?.meta ?? latestMeta}</span>
+                <span>{composeGuide.prompts.join(' · ')}</span>
+              </div>
+            }
+            footer={<span className={styles.heroLeadFooter}>지금 가장 먼저 읽을 대화</span>}
+            className={styles.heroLeadCard}
+          />
+
+          <div className={styles.heroSideColumn}>
+            <ProductStatGrid
+              items={overviewSignalCards}
+              columns={1}
+              mobileColumns={1}
+              size="sm"
+              ariaLabel="커뮤니티 요약 신호"
+              className={styles.heroStats}
+            />
+
+            <ProductEditorialCard
+              as="div"
+              tone="neutral"
+              layout="text"
+              badge="Write Cue"
+              eyebrow={`${activeTabLabel}에서 이렇게 시작`}
+              heading={composeGuide.title}
+              description={composeGuide.description}
+              signals={
+                <div className={styles.heroComposeSignals}>
+                  {composeGuide.prompts.map((prompt) => (
+                    <span key={prompt}>{prompt}</span>
+                  ))}
+                </div>
+              }
+              footer={
+                <div className={styles.heroComposeActions}>
+                  <ProductLink
+                    href={`/community?tab=${activeTab}`}
+                    tone="warm"
+                    variant="secondary"
+                    className={styles.heroSecondaryAction}
+                  >
+                    {activeTabLabel} 둘러보기
+                  </ProductLink>
+                </div>
+              }
+              className={styles.heroComposeCard}
+            />
           </div>
-        </div>
+        </ProductFeatureBand>
       </section>
 
       <section className={styles.boardSection} aria-label="지금 확인할 글">

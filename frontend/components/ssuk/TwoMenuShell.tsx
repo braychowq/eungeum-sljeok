@@ -95,10 +95,8 @@ export default function TwoMenuShell({
   const story = shellStory[activeMenu];
   const leadDescription = subtitle ?? story.contextDescription;
   const actionTone = isMarket ? 'forest' : 'shell';
-  const headerHighlights = [
-    { label: story.statusLabel, value: story.statusValue },
-    ...story.highlights.map((item) => ({ label: item.label, value: item.title }))
-  ];
+  const routeHighlight = { label: story.statusLabel, value: story.statusValue };
+  const headerCueItems = story.highlights.map((item) => item.title);
 
   return (
     <main className={`${styles.page} ${isMarket ? styles.marketPage : ''}`}>
@@ -114,6 +112,14 @@ export default function TwoMenuShell({
               <span className={styles.headerCopyEyebrow}>{story.contextEyebrow}</span>
               <strong className={styles.headerCopyTitle}>{title}</strong>
               <p className={styles.headerCopyDescription}>{leadDescription}</p>
+
+              <div className={styles.headerCueRow} aria-label={`${title} 키워드`}>
+                {headerCueItems.map((item) => (
+                  <span key={`${activeMenu}-${item}`} className={styles.headerCue}>
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -139,13 +145,10 @@ export default function TwoMenuShell({
             </nav>
 
             <div className={styles.utilityCluster}>
-              <div className={styles.headerHighlightRow} aria-label={`${title} 빠른 신호`}>
-                {headerHighlights.map((item) => (
-                  <div key={`${activeMenu}-${item.label}`} className={styles.headerHighlight}>
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </div>
-                ))}
+              <div className={styles.headerRouteCard} aria-label={`${title} 빠른 신호`}>
+                <span className={styles.headerRouteLabel}>{routeHighlight.label}</span>
+                <strong>{routeHighlight.value}</strong>
+                <p>{story.headerDescription}</p>
               </div>
 
               {showHeaderAction ? (
@@ -160,7 +163,10 @@ export default function TwoMenuShell({
               ) : (
                 <div className={styles.alertButton}>
                   <span className={styles.alertDot} aria-hidden="true" />
-                  {story.headerDescription}
+                  <span className={styles.alertCopy}>
+                    <strong>{story.highlights[0]?.title}</strong>
+                    <span>{story.headerDescription}</span>
+                  </span>
                 </div>
               )}
             </div>
@@ -169,10 +175,21 @@ export default function TwoMenuShell({
 
         {hideHero ? (
           <section className={styles.contextStrip} aria-label={`${title} 페이지 소개`}>
-            <div className={styles.contextCopy}>
+            <div className={styles.contextLead}>
               <span className={styles.contextEyebrow}>{story.contextEyebrow}</span>
               <strong>{title}</strong>
               <p>{leadDescription}</p>
+
+              <div className={styles.contextCueRow}>
+                <span className={`${styles.contextCue} ${styles.contextCueActive}`}>
+                  {routeHighlight.value}
+                </span>
+                {headerCueItems.map((item) => (
+                  <span key={`${activeMenu}-context-${item}`} className={styles.contextCue}>
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className={styles.contextSignals}>
@@ -184,16 +201,22 @@ export default function TwoMenuShell({
               ))}
             </div>
 
-            {!hideCta ? (
-              <ProductLink
-                href={ctaHref}
-                tone={actionTone}
-                variant="primary"
-                className={styles.contextAction}
-              >
-                {ctaLabel}
-              </ProductLink>
-            ) : null}
+            <div className={styles.contextAside}>
+              <span className={styles.contextAsideLabel}>{routeHighlight.label}</span>
+              <strong>{routeHighlight.value}</strong>
+              <p>{story.heroDescription}</p>
+
+              {!hideCta ? (
+                <ProductLink
+                  href={ctaHref}
+                  tone={actionTone}
+                  variant="primary"
+                  className={styles.contextAction}
+                >
+                  {ctaLabel}
+                </ProductLink>
+              ) : null}
+            </div>
           </section>
         ) : (
           <section className={styles.heroBox} aria-label={`${title} 소개`}>
