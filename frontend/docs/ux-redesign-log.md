@@ -1,5 +1,38 @@
 # UX Redesign Log
 
+## 2026-03-17 12:34:30 KST
+- timestamp: 2026-03-17 12:34:30 KST
+- 이번 실행 목표: `MarketView`의 hero/recommendation/trending rail과 front runner 하이라이트를 공용 제품 rail·panel 문법으로 끌어올려, 공방 탐색 첫인상에서 남아 있던 관리자형 레일 질감을 제거한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--product-panel-accent-soft`, `--product-panel-support-soft`, `--product-panel-warm-soft`, `--product-panel-chip*`, `--product-chip*` 토큰을 추가해 마켓 상단 rail, badge, price chip이 같은 공용 제품 표면 계층을 재사용하도록 묶었다
+  - `MarketView`의 hero/recommendation/trending 섹션은 화면 전용 prev/next 버튼과 전용 rail track를 버리고 `ProductRail` + 공용 track 변수 기반으로 교체해, 상단 큐레이션 레일이 상세 화면과 같은 제품형 탐색 제어를 쓰도록 정리했다
+  - hero 카드는 어두운 오버레이 배너에서 이미지 + 에디토리얼 본문 패널 구조로 바뀌었고, front runner 하이라이트·shortlist lane·신뢰 배지·가격/상태 칩도 모두 같은 `product-panel`/`product-chip` 문법으로 재설계돼 탐색 첫인상이 훨씬 덜 관리자형으로 읽히게 됐다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css` 통과
+  - 캡처/서버 검증:
+    `frontend/node_modules/.bin/playwright` 없음
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `0d1df08` (`Rebuild market editorial rails`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 push는 DNS 제한 때문에 완료하지 못함
+- 커밋 해시: `0d1df08`
+- 남은 가장 큰 UX 문제: `MarketView`의 rail과 highlight는 공용 제품 패널로 정리됐지만 overview/action bar와 empty state는 아직 마켓 전용 배경/칩 문법을 유지하고 있어, 첫 화면 상단과 나머지 카드 시스템이 완전히 하나의 공용 레이어로 닫히지 않음
+- 다음 실행 우선순위 1~3:
+  - `MarketView`의 overview/action bar/empty state를 공용 `product-panel`/`product-chip` 계층으로 추가 정리하기
+  - `CommunityPostDetailView`와 `MarketView` 목록 카드가 공유할 trust/detail surface primitive를 `components/common`으로 추출하기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 재시도하기
+
 ## 2026-03-17 11:29:57 KST
 - timestamp: 2026-03-17 11:29:57 KST
 - 이번 실행 목표: `StudioShareDetailView` 후반부에 남아 있던 전용 rail 버튼/트랙과 반복 카드 셸을 공용 제품 레일 시스템으로 끌어올려 상세 화면의 마지막 관리자형 인터랙션 질감을 제거한다
