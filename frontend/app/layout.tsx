@@ -4,7 +4,14 @@ import './globals.css';
 
 const atelierSans = localFont({
   src: '../node_modules/next/dist/next-devtools/server/font/geist-latin-ext.woff2',
-  variable: '--font-atelier-sans',
+  variable: '--font-sans',
+  display: 'swap',
+  weight: '100 900'
+});
+
+const atelierDisplay = localFont({
+  src: '../node_modules/next/dist/next-devtools/server/font/geist-latin-ext.woff2',
+  variable: '--font-display',
   display: 'swap',
   weight: '100 900'
 });
@@ -20,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={atelierSans.variable}>
+    <html lang="ko" className={`${atelierSans.variable} ${atelierDisplay.variable}`}>
       <body>{children}</body>
     </html>
   );

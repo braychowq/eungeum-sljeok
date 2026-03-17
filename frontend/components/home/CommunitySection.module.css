@@ -29,6 +29,21 @@
   outline-offset: 3px;
 }
 
+.metricBand {
+  --product-feature-padding: 22px;
+  --product-feature-gap: 16px;
+  --product-feature-title-size: clamp(30px, 3.8vw, 38px);
+  --product-feature-title-max: 11ch;
+}
+
+.metricBandBody {
+  gap: 12px;
+}
+
+.metricGrid {
+  --product-stat-grid-gap: 10px;
+}
+
 .metricCard {
   border-radius: 28px;
   padding: 20px 22px;
@@ -95,6 +110,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.filterChip {
+  gap: 10px;
+}
+
+.filterCount {
+  color: var(--home-sequence-subtle);
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .filterLink {
@@ -242,6 +267,10 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.04em;
+}
+
+.leadStatGrid {
+  --product-stat-grid-gap: 10px;
 }
 
 .cardFooter {

@@ -82,6 +82,7 @@
   margin: 0;
   max-width: var(--product-feature-title-max, 15ch);
   color: var(--feature-ink);
+  font-family: var(--font-logo);
   font-size: var(--product-feature-title-size, clamp(30px, 5vw, 42px));
   line-height: 0.96;
   letter-spacing: -0.06em;

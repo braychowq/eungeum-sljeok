@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
+import ProductEditorialCard from '../common/ProductEditorialCard';
 import HomeSectionFrame from './HomeSectionFrame';
 import { SliderCard } from './types';
 import styles from './HorizontalCardSlider.module.css';
@@ -103,19 +104,38 @@ export default function HorizontalCardSlider({
       >
         <div className={styles.track} ref={trackRef}>
           {cards.map((card, index) => (
-            <Link key={card.id} className={styles.card} href={card.href}>
-              <div className={styles.imageArea}>
-                <img src={card.imageUrl} alt={card.imageAlt} loading={index === 0 ? 'eager' : 'lazy'} />
-                <span className={styles.cardIndex}>{String(index + 1).padStart(2, '0')}</span>
-              </div>
-              <div className={styles.cardBody}>
-                <div className={styles.cardMeta}>
-                  {cardTag ? <span className={styles.cardTag}>{cardTag}</span> : null}
+            <ProductEditorialCard
+              key={card.id}
+              href={card.href}
+              tone={tone === 'market' ? 'warm' : 'forest'}
+              compact
+              media={
+                <div className={styles.imageArea}>
+                  <img
+                    src={card.imageUrl}
+                    alt={card.imageAlt}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              }
+              badge={String(index + 1).padStart(2, '0')}
+              eyebrow={cardTag ?? title}
+              heading={<span className={styles.cardTitle}>{card.title}</span>}
+              description={
+                tone === 'studio'
+                  ? '조건과 분위기를 먼저 읽고 바로 공간 비교로 이어지는 셀렉션입니다.'
+                  : '재료와 도구를 장면처럼 훑고 바로 거래 흐름으로 넘어가는 셀렉션입니다.'
+              }
+              footer={
+                <div className={styles.cardFooter}>
+                  <span className={styles.cardNote}>
+                    {tone === 'studio' ? '공방 셀렉션' : '거래 셀렉션'}
+                  </span>
                   <span className={styles.cardHint}>자세히 보기</span>
                 </div>
-                <h4>{card.title}</h4>
-              </div>
-            </Link>
+              }
+              className={styles.card}
+            />
           ))}
         </div>
       </HomeSectionFrame>
