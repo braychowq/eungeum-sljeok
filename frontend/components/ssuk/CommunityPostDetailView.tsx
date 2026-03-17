@@ -1,4 +1,8 @@
 import Link from 'next/link';
+import ProductChoiceCard from '../common/ProductChoiceCard';
+import { ProductButton } from '../common/ProductControl';
+import ProductField from '../common/ProductField';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import TwoMenuShell from './TwoMenuShell';
 import { communityPosts } from './mockData';
 import styles from './CommunityPostDetailView.module.css';
@@ -203,11 +207,13 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
 
         <section className={styles.storySection} aria-label="본문과 재료 요약">
           <div className={styles.storyMain}>
-            <div className={styles.sectionLead}>
-              <span className={styles.sectionEyebrow}>Story line</span>
-              <h2>본문</h2>
-              <p>질문이 생긴 맥락과 현재 시도한 기준값을 한 번에 읽을 수 있습니다.</p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Story line"
+              title="본문"
+              description="질문이 생긴 맥락과 현재 시도한 기준값을 한 번에 읽을 수 있습니다."
+              compact
+              className={styles.sectionHeader}
+            />
 
             <div className={styles.paragraphs}>
               {post.body.map((line) => (
@@ -238,40 +244,55 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
         </section>
 
         <section className={styles.actionSection} aria-label="게시글 반응과 댓글">
-          <div className={styles.sectionLead}>
-            <span className={styles.sectionEyebrow}>Response dock</span>
-            <h2>반응과 댓글을 한 흐름으로</h2>
-            <p>공감 버튼과 한 줄 댓글 입력을 같은 도크에 묶어 바로 대화를 이어갈 수 있게 정리했습니다.</p>
-          </div>
+          <ProductSectionHeader
+            eyebrow="Response dock"
+            title="반응과 댓글을 한 흐름으로"
+            description="공감 버튼과 한 줄 댓글 입력을 같은 도크에 묶어 바로 대화를 이어갈 수 있게 정리했습니다."
+            compact
+            className={styles.sectionHeader}
+          />
 
           <div className={styles.responseLayout}>
             <div className={styles.actionGrid}>
               {reactionButtons.map((action) => (
-                <button key={action.id} type="button" className={styles.actionButton}>
-                  <span>{action.value}</span>
-                  <strong>{action.label}</strong>
-                </button>
+                <ProductChoiceCard
+                  key={action.id}
+                  className={styles.actionCard}
+                  variant="metric"
+                  eyebrow={action.value}
+                  title={action.label}
+                />
               ))}
             </div>
 
             <div className={styles.commentComposer}>
-              <label className={styles.commentField}>
-                <span>의견 남기기</span>
-                <input type="text" placeholder="대화에 보탤 기준값이나 경험을 짧게 남겨보세요." />
-              </label>
-              <button type="button" className={styles.commentSubmit}>
+              <ProductField
+                compact
+                label="의견 남기기"
+                caption="대화에 보탤 기준값이나 경험을 짧게 남겨보세요."
+                className={styles.commentField}
+                placeholder="짧은 경험이나 기준값을 남겨보세요."
+              />
+              <ProductButton
+                type="button"
+                tone="warm"
+                variant="primary"
+                className={styles.commentSubmit}
+              >
                 댓글 남기기
-              </button>
+              </ProductButton>
             </div>
           </div>
         </section>
 
         <section className={styles.commentSection} aria-label="댓글">
-          <div className={styles.sectionLead}>
-            <span className={styles.sectionEyebrow}>Maker replies</span>
-            <h2>댓글 {post.commentCount}</h2>
-            <p>지금 이어지는 대화 흐름과 실전 피드백을 빠르게 훑어볼 수 있습니다.</p>
-          </div>
+          <ProductSectionHeader
+            eyebrow="Maker replies"
+            title={`댓글 ${post.commentCount}`}
+            description="지금 이어지는 대화 흐름과 실전 피드백을 빠르게 훑어볼 수 있습니다."
+            compact
+            className={styles.sectionHeader}
+          />
 
           <ul className={styles.commentList}>
             {sampleComments.map((comment) => (
@@ -287,11 +308,13 @@ export default function CommunityPostDetailView({ postId }: CommunityPostDetailV
         </section>
 
         <section className={styles.relatedSection} aria-label="앞뒤 게시글">
-          <div className={styles.sectionLead}>
-            <span className={styles.sectionEyebrow}>Continue reading</span>
-            <h2>이전/다음 게시글</h2>
-            <p>같은 카테고리의 흐름을 끊지 않고 이어서 읽을 수 있도록 정리했습니다.</p>
-          </div>
+          <ProductSectionHeader
+            eyebrow="Continue reading"
+            title="이전/다음 게시글"
+            description="같은 카테고리의 흐름을 끊지 않고 이어서 읽을 수 있도록 정리했습니다."
+            compact
+            className={styles.sectionHeader}
+          />
 
           <div className={styles.relatedGrid}>
             {relatedPosts.map((item) => (

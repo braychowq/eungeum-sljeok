@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import ProductChoiceCard from '../common/ProductChoiceCard';
+import ProductField from '../common/ProductField';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import TwoMenuShell from './TwoMenuShell';
 import styles from './ComposeWorkspace.module.css';
 import {
@@ -144,48 +147,44 @@ export default function MarketComposeView() {
       <div className={styles.workspaceGrid}>
         <div className={styles.mainColumn}>
           <section className={styles.sectionCard} aria-label="소개 템플릿 선택">
-            <div className={styles.sectionHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Step 1</span>
-                <h3 className={styles.sectionTitle}>운영 방식에 맞는 소개 템플릿 고르기</h3>
-              </div>
-              <p className={styles.sectionDescription}>
-                하루 쉐어, 고정 입주, 클래스 겸용처럼 문의 성격에 맞는 템플릿을 먼저 고르면 기본 문장이
-                바로 맞춰집니다.
-              </p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Step 1"
+              title="운영 방식에 맞는 소개 템플릿 고르기"
+              description="하루 쉐어, 고정 입주, 클래스 겸용처럼 문의 성격에 맞는 템플릿을 먼저 고르면 기본 문장이 바로 맞춰집니다."
+              titleAs="h3"
+              compact
+              className={styles.marketSectionHeader}
+            />
 
             <div className={styles.templateGrid}>
               {marketComposeGuide.templates.map((template) => {
                 const isSelected = template.id === draft.selectedTemplateId;
 
                 return (
-                  <button
+                  <ProductChoiceCard
                     key={template.id}
-                    type="button"
-                    className={`${styles.templateButton} ${isSelected ? styles.templateButtonActive : ''}`}
+                    className={styles.marketChoiceCard}
+                    eyebrow="Template"
+                    title={template.label}
+                    description={template.description}
+                    selected={isSelected}
                     onClick={() => applyTemplatePreset(template.id)}
                     aria-pressed={isSelected}
-                  >
-                    <span>{template.label}</span>
-                    <strong>{template.description}</strong>
-                  </button>
+                  />
                 );
               })}
             </div>
           </section>
 
           <section className={styles.sectionCard} aria-label="공방 등록 정보 작성">
-            <div className={styles.sectionHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Step 2</span>
-                <h3 className={styles.sectionTitle}>문의 전에 필요한 핵심 조건 채우기</h3>
-              </div>
-              <p className={styles.sectionDescription}>
-                위치, 가격, 시간표만이 아니라 공간의 분위기와 사용 경험이 함께 보이도록 입력 흐름을
-                구성했습니다.
-              </p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Step 2"
+              title="문의 전에 필요한 핵심 조건 채우기"
+              description="위치, 가격, 시간표만이 아니라 공간의 분위기와 사용 경험이 함께 보이도록 입력 흐름을 구성했습니다."
+              titleAs="h3"
+              compact
+              className={styles.marketSectionHeader}
+            />
 
             <div className={styles.fieldPromptGrid}>
               <div className={styles.fieldPrompt}>
@@ -206,146 +205,115 @@ export default function MarketComposeView() {
             </div>
 
             <div className={styles.fieldGrid}>
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>등록 제목</span>
-                  <span className={styles.fieldCaption}>공방 이름과 한 줄 분위기가 함께 보이게 적어주세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.title}
-                  onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))}
-                  placeholder={marketComposeGuide.titlePlaceholder}
-                />
-              </label>
+              <ProductField
+                label="등록 제목"
+                caption="공방 이름과 한 줄 분위기가 함께 보이게 적어주세요."
+                className={styles.marketComposeField}
+                value={draft.title}
+                onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))}
+                placeholder={marketComposeGuide.titlePlaceholder}
+              />
 
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>지역 / 접근성</span>
-                  <span className={styles.fieldCaption}>지하철, 도보 시간, 주변 맥락까지 짧게 보여주세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.region}
-                  onChange={(event) => setDraft((current) => ({ ...current, region: event.target.value }))}
-                  placeholder="예: 성수 · 서울숲 도보 8분"
-                />
-              </label>
+              <ProductField
+                label="지역 / 접근성"
+                caption="지하철, 도보 시간, 주변 맥락까지 짧게 보여주세요."
+                className={styles.marketComposeField}
+                value={draft.region}
+                onChange={(event) => setDraft((current) => ({ ...current, region: event.target.value }))}
+                placeholder="예: 성수 · 서울숲 도보 8분"
+              />
 
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>이용 가능 시간</span>
-                  <span className={styles.fieldCaption}>문의 전에 바로 판단할 수 있게 운영 리듬을 적어주세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.availability}
-                  onChange={(event) =>
-                    setDraft((current) => ({ ...current, availability: event.target.value }))
-                  }
-                  placeholder="예: 평일 11:00-19:00"
-                />
-              </label>
+              <ProductField
+                label="이용 가능 시간"
+                caption="문의 전에 바로 판단할 수 있게 운영 리듬을 적어주세요."
+                className={styles.marketComposeField}
+                value={draft.availability}
+                onChange={(event) =>
+                  setDraft((current) => ({ ...current, availability: event.target.value }))
+                }
+                placeholder="예: 평일 11:00-19:00"
+              />
 
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>가격 / 최소 이용 단위</span>
-                  <span className={styles.fieldCaption}>왕복 문의를 줄이도록 최소 기준을 분명하게 적어주세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.priceLabel}
-                  onChange={(event) =>
-                    setDraft((current) => ({ ...current, priceLabel: event.target.value }))
-                  }
-                  placeholder="예: 1일 85,000원"
-                />
-              </label>
+              <ProductField
+                label="가격 / 최소 이용 단위"
+                caption="왕복 문의를 줄이도록 최소 기준을 분명하게 적어주세요."
+                className={styles.marketComposeField}
+                value={draft.priceLabel}
+                onChange={(event) =>
+                  setDraft((current) => ({ ...current, priceLabel: event.target.value }))
+                }
+                placeholder="예: 1일 85,000원"
+              />
 
-              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>공간 소개</span>
-                  <span className={styles.fieldCaption}>누가 어떤 순간에 이 공간을 쓰면 좋은지부터 설명해주세요.</span>
-                </div>
-                <textarea
-                  className={styles.textArea}
-                  value={draft.summary}
-                  onChange={(event) => setDraft((current) => ({ ...current, summary: event.target.value }))}
-                  placeholder="이 공간이 누구에게 잘 맞는지, 어떤 분위기인지 적어보세요."
-                />
-              </label>
+              <ProductField
+                kind="textarea"
+                className={`${styles.marketComposeField} ${styles.fieldBlockWide}`}
+                label="공간 소개"
+                caption="누가 어떤 순간에 이 공간을 쓰면 좋은지부터 설명해주세요."
+                value={draft.summary}
+                onChange={(event) => setDraft((current) => ({ ...current, summary: event.target.value }))}
+                placeholder="이 공간이 누구에게 잘 맞는지, 어떤 분위기인지 적어보세요."
+              />
 
-              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>하이라이트</span>
-                  <span className={styles.fieldCaption}>채광, 공구, 좌석, 촬영 존처럼 눈에 띄는 요소를 먼저 적어주세요.</span>
-                </div>
-                <textarea
-                  className={styles.textArea}
-                  value={draft.highlights}
-                  onChange={(event) =>
-                    setDraft((current) => ({ ...current, highlights: event.target.value }))
-                  }
-                  placeholder="예: 채광, 기본 공구, 클래스 좌석, 촬영 존"
-                />
-                <p className={styles.fieldHint}>쉼표로 나열해도 좋고, 장비/좌석/촬영 요소를 짧게 적어도 충분합니다.</p>
-              </label>
+              <ProductField
+                kind="textarea"
+                className={`${styles.marketComposeField} ${styles.fieldBlockWide}`}
+                label="하이라이트"
+                caption="채광, 공구, 좌석, 촬영 존처럼 눈에 띄는 요소를 먼저 적어주세요."
+                hint="쉼표로 나열해도 좋고, 장비/좌석/촬영 요소를 짧게 적어도 충분합니다."
+                value={draft.highlights}
+                onChange={(event) =>
+                  setDraft((current) => ({ ...current, highlights: event.target.value }))
+                }
+                placeholder="예: 채광, 기본 공구, 클래스 좌석, 촬영 존"
+              />
 
-              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>운영 메모</span>
-                  <span className={styles.fieldCaption}>응답 방식, 안내 톤, 주의사항을 사용자가 이해하기 쉽게 적어주세요.</span>
-                </div>
-                <textarea
-                  className={styles.textArea}
-                  value={draft.hostNote}
-                  onChange={(event) => setDraft((current) => ({ ...current, hostNote: event.target.value }))}
-                  placeholder="문의 전에 알려주고 싶은 운영 원칙이나 안내를 적어보세요."
-                />
-              </label>
+              <ProductField
+                kind="textarea"
+                className={`${styles.marketComposeField} ${styles.fieldBlockWide}`}
+                label="운영 메모"
+                caption="응답 방식, 안내 톤, 주의사항을 사용자가 이해하기 쉽게 적어주세요."
+                value={draft.hostNote}
+                onChange={(event) => setDraft((current) => ({ ...current, hostNote: event.target.value }))}
+                placeholder="문의 전에 알려주고 싶은 운영 원칙이나 안내를 적어보세요."
+              />
 
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>태그</span>
-                  <span className={styles.fieldCaption}>지역, 공간 성격, 사용 장면을 쉼표로 정리해보세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.tags}
-                  onChange={(event) => setDraft((current) => ({ ...current, tags: event.target.value }))}
-                  placeholder="쉼표로 구분해 적어주세요."
-                />
-              </label>
+              <ProductField
+                label="태그"
+                caption="지역, 공간 성격, 사용 장면을 쉼표로 정리해보세요."
+                className={styles.marketComposeField}
+                value={draft.tags}
+                onChange={(event) => setDraft((current) => ({ ...current, tags: event.target.value }))}
+                placeholder="쉼표로 구분해 적어주세요."
+              />
             </div>
           </section>
 
           <section className={styles.sectionCard} aria-label="등록 전 체크리스트">
-            <div className={styles.sectionHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Step 3</span>
-                <h3 className={styles.sectionTitle}>문의 전환을 위한 신뢰 체크리스트</h3>
-              </div>
-              <p className={styles.sectionDescription}>
-                등록 화면이 상품 관리 화면처럼 보이지 않도록, 사용자가 실제로 궁금해하는 조건을 먼저
-                정리하는 항목들입니다.
-              </p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Step 3"
+              title="문의 전환을 위한 신뢰 체크리스트"
+              description="등록 화면이 상품 관리 화면처럼 보이지 않도록, 사용자가 실제로 궁금해하는 조건을 먼저 정리하는 항목들입니다."
+              titleAs="h3"
+              compact
+              className={styles.marketSectionHeader}
+            />
 
             <div className={styles.checklistGrid}>
               {marketComposeGuide.checklist.map((item) => {
                 const isChecked = draft.completedChecklistIds.includes(item.id);
 
                 return (
-                  <button
+                  <ProductChoiceCard
                     key={item.id}
-                    type="button"
-                    className={`${styles.checklistButton} ${isChecked ? styles.checklistButtonActive : ''}`}
+                    className={styles.marketChoiceCard}
+                    eyebrow={isChecked ? 'Checked' : 'Checklist'}
+                    title={item.label}
+                    description={item.description}
+                    selected={isChecked}
                     onClick={() => toggleChecklistItem(item.id)}
                     aria-pressed={isChecked}
-                  >
-                    <strong>{item.label}</strong>
-                    <span>{item.description}</span>
-                  </button>
+                  />
                 );
               })}
             </div>

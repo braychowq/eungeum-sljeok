@@ -74,8 +74,7 @@
 
 .overviewDescription,
 .sectionDescription,
-.sideDescription,
-.fieldHint {
+.sideDescription {
   margin: 0;
   color: var(--compose-muted);
   font-size: 14px;
@@ -216,8 +215,21 @@
 }
 
 .sectionHeader {
-  display: grid;
-  gap: 12px;
+  min-width: 0;
+  --section-chip-bg: rgba(255, 255, 255, 0.84);
+  --section-chip-border: var(--compose-line);
+  --section-chip-ink: var(--compose-accent-strong);
+  --section-title-ink: var(--compose-ink);
+  --section-description-ink: var(--compose-muted);
+}
+
+.marketSectionHeader {
+  min-width: 0;
+  --section-chip-bg: rgba(47, 95, 91, 0.08);
+  --section-chip-border: rgba(33, 77, 73, 0.14);
+  --section-chip-ink: var(--market-accent-strong);
+  --section-title-ink: var(--market-text);
+  --section-description-ink: var(--market-text-secondary);
 }
 
 .sectionTitle,
@@ -284,9 +296,6 @@
 .tabButton:focus-visible,
 .templateButton:focus-visible,
 .checklistButton:focus-visible,
-.textInput:focus-visible,
-.textArea:focus-visible,
-.selectInput:focus-visible,
 .primaryAction:focus-visible,
 .secondaryAction:focus-visible {
   outline: none;
@@ -362,78 +371,54 @@
   gap: 14px;
 }
 
-.fieldBlock {
-  display: grid;
-  gap: 12px;
-  padding: 16px 18px 18px;
-  border-radius: 28px;
-  border: 1px solid var(--control-border);
-  background: var(--control-surface-tint);
-  box-shadow: var(--compose-shadow-soft);
+.communityChoiceCard {
+  --product-choice-border-strong: rgba(141, 64, 33, 0.22);
+  --product-choice-shell-active:
+    radial-gradient(circle at top right, rgba(180, 90, 50, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 235, 223, 0.94));
+  --product-choice-eyebrow-ink: var(--compose-accent-strong);
+  --product-choice-title-ink: var(--compose-ink);
+  --product-choice-description-ink: var(--compose-muted);
+}
+
+.marketChoiceCard {
+  --product-choice-border-strong: rgba(33, 77, 73, 0.22);
+  --product-choice-shell-active:
+    radial-gradient(circle at top right, rgba(47, 95, 91, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 242, 237, 0.94));
+  --product-choice-eyebrow-ink: var(--market-accent-strong);
+  --product-choice-title-ink: var(--market-text);
+  --product-choice-description-ink: var(--market-text-secondary);
+}
+
+.communityField {
+  --product-field-surface:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 238, 227, 0.88));
+  --product-field-surface-compact:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 240, 231, 0.92));
+  --product-field-label-bg: rgba(180, 90, 50, 0.1);
+  --product-field-label-border: rgba(141, 64, 33, 0.16);
+  --product-field-label-ink: var(--compose-accent-strong);
+  --product-field-caption-ink: var(--compose-muted);
+  --product-field-hint-ink: var(--compose-subtle);
+  --product-field-shadow: 0 16px 30px rgba(28, 24, 20, 0.08);
+}
+
+.marketComposeField {
+  --product-field-surface:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(240, 245, 242, 0.88));
+  --product-field-surface-compact:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 247, 244, 0.92));
+  --product-field-label-bg: rgba(47, 95, 91, 0.1);
+  --product-field-label-border: rgba(33, 77, 73, 0.16);
+  --product-field-label-ink: var(--market-accent-strong);
+  --product-field-caption-ink: var(--market-text-secondary);
+  --product-field-hint-ink: var(--market-text-secondary);
+  --product-field-shadow: 0 16px 30px rgba(21, 29, 27, 0.08);
 }
 
 .fieldBlockWide {
   grid-column: 1 / -1;
-}
-
-.fieldHeader {
-  display: grid;
-  gap: 6px;
-}
-
-.fieldLabel {
-  color: var(--compose-ink);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-
-.fieldCaption {
-  color: var(--compose-muted);
-  font-size: 12px;
-  line-height: 1.55;
-}
-
-.textInput,
-.textArea,
-.selectInput {
-  width: 100%;
-  border: 1px solid transparent;
-  border-radius: var(--control-radius-md);
-  background: var(--control-surface-strong);
-  padding: 16px 18px;
-  color: var(--control-ink);
-  box-shadow:
-    inset 0 0 0 1px var(--control-border),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  font: inherit;
-  transition:
-    border-color var(--motion-emphasized),
-    box-shadow var(--motion-emphasized),
-    background-color var(--motion-emphasized);
-}
-
-.textInput,
-.selectInput {
-  min-height: var(--control-height);
-}
-
-.selectInput {
-  appearance: none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--compose-muted) 50%),
-    linear-gradient(135deg, var(--compose-muted) 50%, transparent 50%);
-  background-position:
-    calc(100% - 20px) calc(50% - 2px),
-    calc(100% - 14px) calc(50% - 2px);
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-  padding-right: 38px;
-}
-
-.textArea {
-  min-height: 156px;
-  resize: vertical;
 }
 
 .noteList {
@@ -777,7 +762,6 @@
   .tabButton,
   .templateButton,
   .checklistButton,
-  .fieldBlock,
   .fieldPrompt {
     border-radius: 20px;
     padding: 16px;
@@ -785,11 +769,5 @@
 
   .previewTitle {
     font-size: 26px;
-  }
-
-  .textInput,
-  .textArea,
-  .selectInput {
-    border-radius: 16px;
   }
 }

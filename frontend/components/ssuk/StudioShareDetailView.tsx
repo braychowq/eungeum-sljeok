@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ProductButton } from '../common/ProductControl';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import { type StudioTrustBadge } from './mockData';
 import TwoMenuShell from './TwoMenuShell';
 import { useHorizontalRail } from './useHorizontalRail';
@@ -500,19 +501,22 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.gallerySection} aria-label="공방 이미지 갤러리">
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionHeadingGroup}>
-              <span className={styles.sectionEyebrow}>Space cut</span>
-              <h2 className={styles.sectionTitle}>공간을 먼저 느껴보세요</h2>
-            </div>
-            <RailButtons
-              label="공방 이미지"
-              canScrollPrev={thumbnailRail.canScrollPrev}
-              canScrollNext={thumbnailRail.canScrollNext}
-              onPrev={thumbnailRail.scrollPrev}
-              onNext={thumbnailRail.scrollNext}
-            />
-          </div>
+          <ProductSectionHeader
+            eyebrow="Space cut"
+            title="공간을 먼저 느껴보세요"
+            description="작업대 배치, 채광, 동선 감도를 먼저 훑고 지금 찾는 공간 결인지 빠르게 판단할 수 있게 구성했습니다."
+            compact
+            className={styles.sectionHeader}
+            action={
+              <RailButtons
+                label="공방 이미지"
+                canScrollPrev={thumbnailRail.canScrollPrev}
+                canScrollNext={thumbnailRail.canScrollNext}
+                onPrev={thumbnailRail.scrollPrev}
+                onNext={thumbnailRail.scrollNext}
+              />
+            }
+          />
 
           <div
             className={styles.mainImageFrame}
@@ -544,12 +548,30 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
                 <span>좌우 이동 버튼과 썸네일로 다른 공간 컷을 확인하세요.</span>
               </div>
               <div className={styles.imageNavButtons}>
-                <button type="button" onClick={goToPrevImage} aria-label="이전 이미지">
+                <ProductButton
+                  type="button"
+                  tone="neutral"
+                  variant="secondary"
+                  size="sm"
+                  iconOnly
+                  className={styles.imageNavButton}
+                  onClick={goToPrevImage}
+                  aria-label="이전 이미지"
+                >
                   &lt;
-                </button>
-                <button type="button" onClick={goToNextImage} aria-label="다음 이미지">
+                </ProductButton>
+                <ProductButton
+                  type="button"
+                  tone="neutral"
+                  variant="secondary"
+                  size="sm"
+                  iconOnly
+                  className={styles.imageNavButton}
+                  onClick={goToNextImage}
+                  aria-label="다음 이미지"
+                >
                   &gt;
-                </button>
+                </ProductButton>
               </div>
             </div>
           </div>
@@ -571,19 +593,22 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.infoSection} aria-label="핵심 정보">
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionHeadingGroup}>
-              <span className={styles.sectionEyebrow}>Field notes</span>
-              <h2 className={styles.sectionTitle}>현장 정보</h2>
-            </div>
-            <RailButtons
-              label="현장 정보"
-              canScrollPrev={infoRail.canScrollPrev}
-              canScrollNext={infoRail.canScrollNext}
-              onPrev={infoRail.scrollPrev}
-              onNext={infoRail.scrollNext}
-            />
-          </div>
+          <ProductSectionHeader
+            eyebrow="Field notes"
+            title="현장 정보"
+            description="위치, 가능일, 연락 수단처럼 문의 전에 바로 판단해야 할 기준을 카드처럼 모았습니다."
+            compact
+            className={styles.sectionHeader}
+            action={
+              <RailButtons
+                label="현장 정보"
+                canScrollPrev={infoRail.canScrollPrev}
+                canScrollNext={infoRail.canScrollNext}
+                onPrev={infoRail.scrollPrev}
+                onNext={infoRail.scrollNext}
+              />
+            }
+          />
           <dl ref={infoRail.railRef} className={`${styles.infoGrid} ${styles.railTrack}`}>
             {overviewCards.map((item) => (
               <div key={item.id} className={styles.infoCard}>
@@ -595,19 +620,22 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.trustSection} aria-label="신뢰 및 정책 정보">
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionHeadingGroup}>
-              <span className={styles.sectionEyebrow}>Trust layer</span>
-              <h2 className={styles.sectionTitle}>운영 정책</h2>
-            </div>
-            <RailButtons
-              label="운영 정책"
-              canScrollPrev={trustRail.canScrollPrev}
-              canScrollNext={trustRail.canScrollNext}
-              onPrev={trustRail.scrollPrev}
-              onNext={trustRail.scrollNext}
-            />
-          </div>
+          <ProductSectionHeader
+            eyebrow="Trust layer"
+            title="운영 정책"
+            description="계약, 환불, 응답 정책을 눌러 읽지 않아도 한 흐름으로 비교할 수 있게 정리했습니다."
+            compact
+            className={styles.sectionHeader}
+            action={
+              <RailButtons
+                label="운영 정책"
+                canScrollPrev={trustRail.canScrollPrev}
+                canScrollNext={trustRail.canScrollNext}
+                onPrev={trustRail.scrollPrev}
+                onNext={trustRail.scrollNext}
+              />
+            }
+          />
           <ul ref={trustRail.railRef} className={`${styles.trustList} ${styles.railTrack}`}>
             {trustItems.map((item) => (
               <li key={item.key} className={styles.trustItem}>
@@ -619,10 +647,13 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.descriptionSection} aria-label="공간 설명">
-          <div className={styles.sectionHeadingGroup}>
-            <span className={styles.sectionEyebrow}>Studio narrative</span>
-            <h2 className={styles.sectionTitle}>공간 설명</h2>
-          </div>
+          <ProductSectionHeader
+            eyebrow="Studio narrative"
+            title="공간 설명"
+            description="운영자가 직접 적은 설명을 요약 카드 뒤에 숨기지 않고 읽기 흐름 중심으로 배치했습니다."
+            compact
+            className={styles.sectionHeader}
+          />
           <div className={styles.descriptionBody}>
             {studio.description.map((line) => (
               <p key={line}>{line}</p>
@@ -631,19 +662,22 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.equipmentSection} aria-label="장비 및 시설">
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionHeadingGroup}>
-              <span className={styles.sectionEyebrow}>Available tools</span>
-              <h2 className={styles.sectionTitle}>장비 및 시설</h2>
-            </div>
-            <RailButtons
-              label="장비 및 시설"
-              canScrollPrev={equipmentRail.canScrollPrev}
-              canScrollNext={equipmentRail.canScrollNext}
-              onPrev={equipmentRail.scrollPrev}
-              onNext={equipmentRail.scrollNext}
-            />
-          </div>
+          <ProductSectionHeader
+            eyebrow="Available tools"
+            title="장비 및 시설"
+            description="실제로 쓰게 될 장비와 시설 범위를 빠르게 비교하고, 공간 적합성을 바로 가늠할 수 있습니다."
+            compact
+            className={styles.sectionHeader}
+            action={
+              <RailButtons
+                label="장비 및 시설"
+                canScrollPrev={equipmentRail.canScrollPrev}
+                canScrollNext={equipmentRail.canScrollNext}
+                onPrev={equipmentRail.scrollPrev}
+                onNext={equipmentRail.scrollNext}
+              />
+            }
+          />
           <ul ref={equipmentRail.railRef} className={`${styles.equipmentList} ${styles.railTrack}`}>
             {studio.equipments.map((equipment) => (
               <li key={equipment} className={styles.equipmentItem}>
@@ -654,12 +688,13 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
         </section>
 
         <section className={styles.socialSection} aria-label="리뷰 및 문의 요약">
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionHeadingGroup}>
-              <span className={styles.sectionEyebrow}>Market pulse</span>
-              <h2 className={styles.sectionTitle}>리뷰/문의 요약</h2>
-            </div>
-          </div>
+          <ProductSectionHeader
+            eyebrow="Market pulse"
+            title="리뷰/문의 요약"
+            description="평점, 문의량, 최근 질문까지 묶어 이 공간이 현재 어떤 반응을 받고 있는지 한 번에 보여줍니다."
+            compact
+            className={styles.sectionHeader}
+          />
 
           <div className={styles.socialBlock}>
             <div className={styles.subsectionHeader}>

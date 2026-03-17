@@ -145,7 +145,6 @@
 }
 
 .panelEyebrow,
-.sectionEyebrow,
 .resourceLabel,
 .relatedLabel {
   color: rgba(255, 247, 241, 0.68);
@@ -200,7 +199,6 @@
 
 .backLink:focus-visible,
 .actionButton:focus-visible,
-.commentSubmit:focus-visible,
 .relatedCard a:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
@@ -218,28 +216,13 @@
   gap: 16px;
 }
 
-.sectionLead {
-  display: grid;
-  gap: 8px;
-}
-
-.sectionEyebrow {
-  color: var(--detail-subtle);
-}
-
-.sectionLead h2 {
-  margin: 0;
-  font-size: 28px;
-  line-height: 1.04;
-  letter-spacing: -0.05em;
-}
-
-.sectionLead p {
-  margin: 0;
-  max-width: 52ch;
-  color: var(--detail-muted);
-  font-size: 14px;
-  line-height: 1.7;
+.sectionHeader {
+  min-width: 0;
+  --section-chip-bg: rgba(180, 90, 50, 0.1);
+  --section-chip-border: rgba(141, 64, 33, 0.14);
+  --section-chip-ink: var(--detail-accent-strong);
+  --section-title-ink: var(--detail-ink);
+  --section-description-ink: var(--detail-muted);
 }
 
 .paragraphs {
@@ -327,6 +310,17 @@
   gap: 10px;
 }
 
+.actionCard {
+  min-height: 96px;
+  --product-choice-border-strong: rgba(141, 64, 33, 0.22);
+  --product-choice-shell-active:
+    radial-gradient(circle at top right, rgba(180, 90, 50, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 235, 223, 0.94));
+  --product-choice-eyebrow-ink: var(--detail-accent-strong);
+  --product-choice-title-ink: var(--detail-ink);
+  --product-choice-description-ink: var(--detail-muted);
+}
+
 .actionButton {
   min-height: 92px;
   border: 1px solid var(--control-border);
@@ -373,60 +367,31 @@
   border-radius: 30px;
   padding: 18px;
   background:
-    radial-gradient(circle at top right, rgba(180, 90, 50, 0.12), transparent 34%),
-    var(--detail-panel);
-  border: 1px solid var(--control-border);
-  box-shadow: var(--control-shadow-rest);
+    radial-gradient(circle at top right, rgba(202, 161, 111, 0.12), transparent 32%),
+    radial-gradient(circle at bottom left, rgba(36, 72, 67, 0.12), transparent 28%),
+    var(--dock-shell);
+  border: 1px solid var(--dock-line);
+  box-shadow: var(--dock-shadow);
   display: grid;
-  gap: 12px;
+  gap: 14px;
   align-content: start;
 }
 
 .commentField {
-  display: grid;
-  gap: 8px;
-}
-
-.commentField span {
-  color: var(--detail-subtle);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.commentField input {
-  min-height: var(--control-height);
-  border: 1px solid transparent;
-  border-radius: var(--control-radius-md);
-  background: var(--control-surface-strong);
-  padding: 0 16px;
-  font-size: 14px;
-  color: var(--detail-ink);
-  box-shadow:
-    inset 0 0 0 1px var(--control-border),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition:
-    box-shadow var(--motion-emphasized),
-    border-color var(--motion-emphasized),
-    background-color var(--motion-emphasized);
-}
-
-.commentField input:focus-visible {
-  outline: none;
-  box-shadow: var(--control-focus-ring), inset 0 0 0 1px var(--control-active-border);
+  --product-field-surface:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 241, 232, 0.9));
+  --product-field-surface-compact:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 243, 235, 0.92));
+  --product-field-label-bg: rgba(180, 90, 50, 0.1);
+  --product-field-label-border: rgba(141, 64, 33, 0.14);
+  --product-field-label-ink: var(--detail-accent-strong);
+  --product-field-caption-ink: var(--detail-muted);
+  --product-field-hint-ink: var(--detail-subtle);
+  --product-field-shadow: 0 14px 26px rgba(28, 24, 20, 0.08);
 }
 
 .commentSubmit {
-  min-height: var(--control-height);
-  border: 1px solid transparent;
-  border-radius: var(--control-radius-pill);
-  background: var(--control-primary-gradient-support);
-  color: #fff7f1;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: var(--button-primary-shadow);
+  justify-self: start;
 }
 
 .commentList {
@@ -559,9 +524,5 @@
 
   .commentSubmit {
     width: 100%;
-  }
-
-  .sectionLead h2 {
-    font-size: 24px;
   }
 }

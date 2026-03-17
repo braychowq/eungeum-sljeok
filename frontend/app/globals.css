@@ -328,6 +328,62 @@
   --product-section-title-size: clamp(26px, 4vw, 32px);
   --product-section-title-size-compact: clamp(22px, 3.2vw, 28px);
   --product-section-description-size: 13px;
+  --product-choice-padding: 18px;
+  --product-choice-radius: 26px;
+  --product-choice-border: var(--control-border);
+  --product-choice-border-strong: var(--control-active-border);
+  --product-choice-shell:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 240, 230, 0.84));
+  --product-choice-shell-active:
+    radial-gradient(circle at top right, rgba(180, 90, 50, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 235, 223, 0.94));
+  --product-choice-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 16px 30px rgba(28, 24, 20, 0.08);
+  --product-choice-shadow-strong:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 22px 40px rgba(28, 24, 20, 0.12);
+  --product-choice-focus-ring: var(--control-focus-ring);
+  --product-choice-eyebrow-size: 11px;
+  --product-choice-eyebrow-ink: var(--compose-accent-strong);
+  --product-choice-title-size: 16px;
+  --product-choice-title-ink: var(--control-ink);
+  --product-choice-description-size: 12px;
+  --product-choice-description-ink: var(--control-muted);
+  --product-choice-metric-size: 24px;
+  --product-field-padding: 18px;
+  --product-field-padding-compact: 16px;
+  --product-field-radius: 28px;
+  --product-field-radius-compact: 24px;
+  --product-field-label-height: 28px;
+  --product-field-label-padding: 0 12px;
+  --product-field-label-radius: 999px;
+  --product-field-label-font-size: 10px;
+  --product-field-label-font-weight: 800;
+  --product-field-caption-size: 12px;
+  --product-field-caption-line-height: 1.58;
+  --product-field-hint-size: 12px;
+  --product-field-control-radius: var(--control-radius-md);
+  --product-field-control-padding: 16px 18px;
+  --product-field-control-height: var(--control-height);
+  --product-field-control-min-height: 156px;
+  --product-field-surface: var(--control-surface-tint);
+  --product-field-surface-compact:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 240, 230, 0.9));
+  --product-field-border: var(--control-border);
+  --product-field-border-strong: var(--control-active-border);
+  --product-field-label-bg: rgba(255, 255, 255, 0.74);
+  --product-field-label-border: rgba(28, 24, 20, 0.08);
+  --product-field-label-ink: var(--control-subtle);
+  --product-field-caption-ink: var(--control-muted);
+  --product-field-hint-ink: var(--control-muted);
+  --product-field-control-bg: var(--control-surface-strong);
+  --product-field-control-border: var(--control-border);
+  --product-field-control-ink: var(--control-ink);
+  --product-field-control-placeholder: rgba(111, 102, 95, 0.82);
+  --product-field-shadow: var(--control-shadow-rest);
+  --product-field-shadow-focus: var(--control-shadow-hover);
+  --product-field-focus-ring: var(--control-focus-ring);
   --control-height: 54px;
   --control-height-sm: 42px;
   --control-radius-pill: 999px;

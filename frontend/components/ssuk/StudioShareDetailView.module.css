@@ -372,32 +372,13 @@
 
 .sectionHeader {
   min-width: 0;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.sectionHeadingGroup {
-  min-width: 0;
-  display: grid;
-  gap: 8px;
-}
-
-.sectionEyebrow {
-  color: var(--detail-accent);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.sectionTitle {
-  margin: 0;
-  color: var(--detail-ink);
-  font-size: clamp(30px, 4.2vw, 40px);
-  line-height: 0.98;
-  letter-spacing: -0.05em;
+  --section-chip-bg: rgba(47, 95, 91, 0.08);
+  --section-chip-border: rgba(33, 77, 73, 0.14);
+  --section-chip-ink: var(--market-accent-strong);
+  --section-title-ink: var(--detail-ink);
+  --section-description-ink: var(--detail-muted);
+  --product-section-title-size-compact: clamp(30px, 4.2vw, 40px);
+  --product-section-description-size: 14px;
 }
 
 .railActions {
@@ -444,7 +425,6 @@
 .unitButtonActive:focus-visible,
 .primaryCta:focus-visible,
 .secondaryCta:focus-visible,
-.imageNavButtons button:focus-visible,
 .thumbnailRow button:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
@@ -502,23 +482,13 @@
   align-items: center;
 }
 
-.imageNavButtons button {
+.imageNavButton {
   width: 36px;
   height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
   border-radius: 12px;
-  border: 1px solid var(--detail-line);
-  background: var(--detail-card);
-  color: var(--detail-ink);
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.imageNavButtons button:hover {
-  transform: translateY(-1px);
-  border-color: var(--detail-line-strong);
 }
 
 .thumbnailRow {
@@ -897,8 +867,8 @@
     gap: 10px;
   }
 
-  .sectionTitle {
-    font-size: clamp(24px, 7.6vw, 32px);
+  .sectionHeader {
+    --product-section-title-size-compact: clamp(24px, 7.6vw, 32px);
   }
 
   .imageMeta span {

@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import ProductChoiceCard from '../common/ProductChoiceCard';
+import ProductField from '../common/ProductField';
+import ProductSectionHeader from '../common/ProductSectionHeader';
 import { communityTabs, type CommunityTabId } from './mockData';
 import TwoMenuShell from './TwoMenuShell';
 import {
@@ -137,15 +140,14 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
       <div className={styles.workspaceGrid}>
         <div className={styles.mainColumn}>
           <section className={styles.sectionCard} aria-label="주제 선택">
-            <div className={styles.sectionHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Step 1</span>
-                <h3 className={styles.sectionTitle}>어떤 분위기의 글을 쓸지 고르기</h3>
-              </div>
-              <p className={styles.sectionDescription}>
-                커뮤니티 탭과 템플릿을 함께 바꾸면 문장 구조와 체크리스트가 즉시 맞춰집니다.
-              </p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Step 1"
+              title="어떤 분위기의 글을 쓸지 고르기"
+              description="커뮤니티 탭과 템플릿을 함께 바꾸면 문장 구조와 체크리스트가 즉시 맞춰집니다."
+              titleAs="h3"
+              compact
+              className={styles.sectionHeader}
+            />
 
             <div className={styles.tabGrid}>
               {communityTabs.map((tab) => {
@@ -153,17 +155,16 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
                 const isActive = tab.id === draft.activeTab;
 
                 return (
-                  <button
+                  <ProductChoiceCard
                     key={tab.id}
-                    type="button"
-                    className={`${styles.tabButton} ${isActive ? styles.tabButtonActive : ''}`}
+                    className={styles.communityChoiceCard}
+                    eyebrow={tab.label}
+                    title={tabGuide.intro}
+                    description={tabGuide.boardPulse}
+                    selected={isActive}
                     onClick={() => applyDraftPreset(tab.id)}
                     aria-pressed={isActive}
-                  >
-                    <span className={styles.tabLabel}>{tab.label}</span>
-                    <strong>{tabGuide.intro}</strong>
-                    <span className={styles.tabMeta}>{tabGuide.boardPulse}</span>
-                  </button>
+                  />
                 );
               })}
             </div>
@@ -173,31 +174,30 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
                 const isSelected = template.id === draft.selectedTemplateId;
 
                 return (
-                  <button
+                  <ProductChoiceCard
                     key={template.id}
-                    type="button"
-                    className={`${styles.templateButton} ${isSelected ? styles.templateButtonActive : ''}`}
+                    className={styles.communityChoiceCard}
+                    eyebrow="Template"
+                    title={template.label}
+                    description={template.description}
+                    selected={isSelected}
                     onClick={() => applyDraftPreset(draft.activeTab, template.id)}
                     aria-pressed={isSelected}
-                  >
-                    <span>{template.label}</span>
-                    <strong>{template.description}</strong>
-                  </button>
+                  />
                 );
               })}
             </div>
           </section>
 
           <section className={styles.sectionCard} aria-label="글 내용 작성">
-            <div className={styles.sectionHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Step 2</span>
-                <h3 className={styles.sectionTitle}>핵심 정보 먼저 채우기</h3>
-              </div>
-              <p className={styles.sectionDescription}>
-                제목, 상황, 시도한 내용, 받고 싶은 답변까지 한 번에 정리하면 읽히는 속도가 달라집니다.
-              </p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Step 2"
+              title="핵심 정보 먼저 채우기"
+              description="제목, 상황, 시도한 내용, 받고 싶은 답변까지 한 번에 정리하면 읽히는 속도가 달라집니다."
+              titleAs="h3"
+              compact
+              className={styles.sectionHeader}
+            />
 
             <div className={styles.fieldPromptGrid}>
               <div className={styles.fieldPrompt}>
@@ -218,99 +218,81 @@ export default function CommunityComposeView({ initialTab }: CommunityComposeVie
             </div>
 
             <div className={styles.fieldGrid}>
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>제목</span>
-                  <span className={styles.fieldCaption}>질문이나 공유 목적이 첫눈에 보이게 적어주세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.title}
-                  onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))}
-                  placeholder={guide.titlePlaceholder}
-                />
-              </label>
+              <ProductField
+                label="제목"
+                caption="질문이나 공유 목적이 첫눈에 보이게 적어주세요."
+                className={styles.communityField}
+                value={draft.title}
+                onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))}
+                placeholder={guide.titlePlaceholder}
+              />
 
-              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>첫 문장</span>
-                  <span className={styles.fieldCaption}>지금의 상황과 맥락을 2~3문장 안에서 잡아주세요.</span>
-                </div>
-                <textarea
-                  className={styles.textArea}
-                  value={draft.context}
-                  onChange={(event) => setDraft((current) => ({ ...current, context: event.target.value }))}
-                  placeholder="지금 겪는 상황이나 공유하려는 맥락을 먼저 적어보세요."
-                />
-              </label>
+              <ProductField
+                kind="textarea"
+                className={`${styles.communityField} ${styles.fieldBlockWide}`}
+                label="첫 문장"
+                caption="지금의 상황과 맥락을 2~3문장 안에서 잡아주세요."
+                value={draft.context}
+                onChange={(event) => setDraft((current) => ({ ...current, context: event.target.value }))}
+                placeholder="지금 겪는 상황이나 공유하려는 맥락을 먼저 적어보세요."
+              />
 
-              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>본문 핵심</span>
-                  <span className={styles.fieldCaption}>이미 시도한 방법, 조건값, 핵심 포인트를 중심으로 적어주세요.</span>
-                </div>
-                <textarea
-                  className={styles.textArea}
-                  value={draft.details}
-                  onChange={(event) => setDraft((current) => ({ ...current, details: event.target.value }))}
-                  placeholder="이미 시도한 것, 핵심 포인트, 독자가 꼭 알아야 할 조건을 적어주세요."
-                />
-              </label>
+              <ProductField
+                kind="textarea"
+                className={`${styles.communityField} ${styles.fieldBlockWide}`}
+                label="본문 핵심"
+                caption="이미 시도한 방법, 조건값, 핵심 포인트를 중심으로 적어주세요."
+                value={draft.details}
+                onChange={(event) => setDraft((current) => ({ ...current, details: event.target.value }))}
+                placeholder="이미 시도한 것, 핵심 포인트, 독자가 꼭 알아야 할 조건을 적어주세요."
+              />
 
-              <label className={`${styles.fieldBlock} ${styles.fieldBlockWide}`}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>마지막 한 줄</span>
-                  <span className={styles.fieldCaption}>받고 싶은 피드백이나 이어질 질문으로 글을 마무리하세요.</span>
-                </div>
-                <textarea
-                  className={styles.textArea}
-                  value={draft.request}
-                  onChange={(event) => setDraft((current) => ({ ...current, request: event.target.value }))}
-                  placeholder="받고 싶은 피드백이나 이어질 질문을 적어보세요."
-                />
-              </label>
+              <ProductField
+                kind="textarea"
+                className={`${styles.communityField} ${styles.fieldBlockWide}`}
+                label="마지막 한 줄"
+                caption="받고 싶은 피드백이나 이어질 질문으로 글을 마무리하세요."
+                value={draft.request}
+                onChange={(event) => setDraft((current) => ({ ...current, request: event.target.value }))}
+                placeholder="받고 싶은 피드백이나 이어질 질문을 적어보세요."
+              />
 
-              <label className={styles.fieldBlock}>
-                <div className={styles.fieldHeader}>
-                  <span className={styles.fieldLabel}>태그</span>
-                  <span className={styles.fieldCaption}>검색보다 대화 맥락을 돕는 단어를 쉼표로 적어주세요.</span>
-                </div>
-                <input
-                  className={styles.textInput}
-                  value={draft.tags}
-                  onChange={(event) => setDraft((current) => ({ ...current, tags: event.target.value }))}
-                  placeholder="쉼표로 구분해 적어주세요."
-                />
-              </label>
+              <ProductField
+                label="태그"
+                caption="검색보다 대화 맥락을 돕는 단어를 쉼표로 적어주세요."
+                className={styles.communityField}
+                value={draft.tags}
+                onChange={(event) => setDraft((current) => ({ ...current, tags: event.target.value }))}
+                placeholder="쉼표로 구분해 적어주세요."
+              />
             </div>
           </section>
 
           <section className={styles.sectionCard} aria-label="게시 전 체크리스트">
-            <div className={styles.sectionHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Step 3</span>
-                <h3 className={styles.sectionTitle}>신뢰 체크리스트 확인</h3>
-              </div>
-              <p className={styles.sectionDescription}>
-                운영 기준과 독자 이해도를 동시에 맞추기 위한 최소 확인 항목입니다.
-              </p>
-            </div>
+            <ProductSectionHeader
+              eyebrow="Step 3"
+              title="신뢰 체크리스트 확인"
+              description="운영 기준과 독자 이해도를 동시에 맞추기 위한 최소 확인 항목입니다."
+              titleAs="h3"
+              compact
+              className={styles.sectionHeader}
+            />
 
             <div className={styles.checklistGrid}>
               {guide.checklist.map((item) => {
                 const isChecked = draft.completedChecklistIds.includes(item.id);
 
                 return (
-                  <button
+                  <ProductChoiceCard
                     key={item.id}
-                    type="button"
-                    className={`${styles.checklistButton} ${isChecked ? styles.checklistButtonActive : ''}`}
+                    className={styles.communityChoiceCard}
+                    eyebrow={isChecked ? 'Checked' : 'Checklist'}
+                    title={item.label}
+                    description={item.description}
+                    selected={isChecked}
                     onClick={() => toggleChecklistItem(item.id)}
                     aria-pressed={isChecked}
-                  >
-                    <strong>{item.label}</strong>
-                    <span>{item.description}</span>
-                  </button>
+                  />
                 );
               })}
             </div>

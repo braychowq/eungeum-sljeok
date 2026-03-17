@@ -1,0 +1,99 @@
+.card {
+  min-width: 0;
+  padding: var(--product-choice-padding);
+  border: 1px solid var(--product-choice-border);
+  border-radius: var(--product-choice-radius);
+  background: var(--product-choice-shell);
+  color: var(--product-choice-title-ink);
+  text-align: left;
+  display: grid;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: var(--product-choice-shadow);
+  transition:
+    transform var(--motion-emphasized),
+    box-shadow var(--motion-emphasized),
+    border-color var(--motion-emphasized),
+    background-color var(--motion-emphasized);
+}
+
+.card:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--product-choice-border-strong);
+  box-shadow: var(--product-choice-shadow-strong);
+}
+
+.card:focus-visible {
+  outline: none;
+  box-shadow: var(--product-choice-focus-ring), var(--product-choice-shadow-strong);
+}
+
+.card:disabled {
+  cursor: default;
+  opacity: 0.42;
+  transform: none;
+  box-shadow: none;
+}
+
+.selected {
+  border-color: var(--product-choice-border-strong);
+  background: var(--product-choice-shell-active);
+  box-shadow: var(--product-choice-shadow-strong);
+}
+
+.default {
+  min-height: 118px;
+  align-content: start;
+}
+
+.metric {
+  min-height: 98px;
+  align-content: center;
+  gap: 10px;
+}
+
+.eyebrow {
+  color: var(--product-choice-eyebrow-ink);
+  font-size: var(--product-choice-eyebrow-size);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.metric .eyebrow {
+  font-size: var(--product-choice-metric-size);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+  text-transform: none;
+}
+
+.title {
+  color: var(--product-choice-title-ink);
+  font-size: var(--product-choice-title-size);
+  line-height: 1.42;
+  letter-spacing: -0.02em;
+}
+
+.metric .title {
+  font-size: 13px;
+  line-height: 1.46;
+}
+
+.description {
+  color: var(--product-choice-description-ink);
+  font-size: var(--product-choice-description-size);
+  line-height: 1.58;
+}
+
+@media (max-width: 900px) {
+  .card {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .default,
+  .metric {
+    min-height: auto;
+  }
+}
