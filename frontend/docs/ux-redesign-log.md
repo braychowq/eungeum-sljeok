@@ -1,5 +1,50 @@
 # UX Redesign Log
 
+## 2026-03-17 16:37:12 KST
+- timestamp: 2026-03-17 16:37:12 KST
+- 이번 실행 목표: 홈 상단 `TopNav`와 `BannerCarousel`을 하나의 hero stage로 다시 묶고, 캐러셀 제어를 공용 pager primitive로 추출해 첫 진입 상단의 관리자형 카드/버튼 질감을 제거한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductPager.tsx`
+  - `frontend/components/common/ProductPager.module.css`
+  - `frontend/components/home/TopNav.tsx`
+  - `frontend/components/home/TopNav.module.css`
+  - `frontend/components/home/BannerCarousel.tsx`
+  - `frontend/components/home/BannerCarousel.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--home-hero-*` 토큰을 추가해 상단 masthead, 배너 shell, pager가 같은 hero 표면/라인/잉크 계층을 공유하도록 정리했다
+  - `TopNav`는 숫자 카드형 메뉴 그리드와 별도 알림 박스를 버리고, 공용 `ProductLink` 기반의 sticky masthead로 재구성해 브랜드, 오늘의 흐름 신호, 라우트 이동이 더 제품형 chrome처럼 읽히게 바꿨다
+  - `BannerCarousel`은 텍스트 오버레이 중심 배너를 걷어내고 이미지 stage + dark editorial side panel 구조로 재설계했으며, 배너 이동 제어는 새 `ProductPager`로 분리해 상단 캐러셀 control 문법을 공용 시스템으로 끌어올렸다
+  - `HomePage`는 `TopNav`와 `BannerCarousel`을 `heroStage`로 묶어 첫 화면 상단이 개별 위젯이 아니라 하나의 런칭 stage처럼 이어지도록 정리했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductPager.tsx frontend/components/common/ProductPager.module.css frontend/components/home/TopNav.tsx frontend/components/home/TopNav.module.css frontend/components/home/BannerCarousel.tsx frontend/components/home/BannerCarousel.module.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/BannerCarousel.tsx | sed 's/.*styles\\.//' | grep -vE '^(columnGap|gap)$' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/BannerCarousel.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/TopNav.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/TopNav.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/common/ProductPager.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/common/ProductPager.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `622f210` (`Rebuild home top-stage chrome`) 생성
+  - 첫 `git push origin main` 실패: `Could not resolve host: github.com`
+  - 원격 DNS 제한 때문에 이번 실행의 커밋은 로컬 `main`에만 반영됐고, 로그 커밋 후 push를 다시 시도할 예정
+- 커밋 해시: `622f210`
+- 남은 가장 큰 UX 문제: 홈 상단 hero는 새 masthead + image stage + pager 언어로 정리됐지만 바로 이어지는 `serviceHubLead`/`serviceHubSpotlight`는 아직 별도의 홈 전용 셸과 신호 카드 문법을 크게 유지해, hero에서 본문으로 넘어가는 첫 리듬이 완전히 같은 시스템으로 닫히지 않았다
+- 다음 실행 우선순위 1~3:
+  - `serviceHubLead`와 `serviceHubSpotlight`를 `ProductFeatureBand`/`ProductStatGrid` 중심으로 재구성해 hero 이후 첫 콘텐츠 런웨이를 같은 시스템으로 묶기
+  - `ProductPager`와 새 hero control 언어를 `HorizontalCardSlider`와 다른 rail 계열로 확장해 화면별 전용 캐러셀 제어를 더 줄이기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 다시 시도하기
+
 ## 2026-03-17 15:36:55 KST
 - timestamp: 2026-03-17 15:36:55 KST
 - 이번 실행 목표: `HorizontalCardSlider`와 `InfoLibrarySection`을 공용 editorial card/band 시스템으로 재구성하고, 홈 타이포 토큰을 다시 serif headline + loaded sans 조합으로 정리해 홈 하단의 화면 전용 카드 셸을 줄인다

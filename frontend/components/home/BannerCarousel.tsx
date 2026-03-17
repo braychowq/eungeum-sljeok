@@ -1,7 +1,14 @@
 'use client';
 
-import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from 'react';
+import {
+  type PointerEvent as ReactPointerEvent,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState
+} from 'react';
 import { ProductAnchor } from '../common/ProductControl';
+import ProductFeatureBand from '../common/ProductFeatureBand';
 import ProductPager from '../common/ProductPager';
 import { BannerItem } from './types';
 import styles from './BannerCarousel.module.css';
@@ -11,15 +18,20 @@ type BannerCarouselProps = {
   autoplayMs?: number;
 };
 
+const bannerLabels = ['Community pick', 'Studio share', 'Market edit'] as const;
+const bannerNotes = [
+  '오늘 가장 먼저 열어볼 메이커 무드를 이미지 중심으로 추린 커뮤니티 에디션입니다.',
+  '공방 쉐어와 현장 리듬을 연결하는 장면만 골라 홈 상단에서 먼저 보여줍니다.',
+  '판매와 셀렉션 흐름을 제품다운 톤으로 읽게 만드는 마켓 이미지 큐레이션입니다.'
+] as const;
+const bannerToneMap = ['warm', 'forest', 'neutral'] as const;
+
 export default function BannerCarousel({
   items,
   autoplayMs = 4500
 }: BannerCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const total = items.length;
-  const bannerLabels = ['Community pick', 'Studio share', 'Market edit'];
-  const activeItem = total > 0 ? items[activeIndex] : undefined;
-  const activeBannerLabel = bannerLabels[activeIndex % bannerLabels.length] ?? 'Featured dispatch';
   const viewportRef = useRef<HTMLDivElement>(null);
   const scrollLockRef = useRef(false);
   const dragStateRef = useRef<{
@@ -48,8 +60,8 @@ export default function BannerCarousel({
     const firstCard = viewport.querySelector<HTMLElement>('[data-display-index="0"]');
     if (!firstCard) return;
 
-    const styles = window.getComputedStyle(viewport);
-    const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
+    const computedStyles = window.getComputedStyle(viewport);
+    const gap = Number.parseFloat(computedStyles.columnGap || computedStyles.gap || '0');
     const cardWidth = firstCard.offsetWidth;
     const left = Math.max(0, displayIndex * (cardWidth + gap));
 
@@ -70,8 +82,8 @@ export default function BannerCarousel({
     const firstCard = viewport.querySelector<HTMLElement>('[data-display-index="0"]');
     if (!firstCard) return;
 
-    const styles = window.getComputedStyle(viewport);
-    const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
+    const computedStyles = window.getComputedStyle(viewport);
+    const gap = Number.parseFloat(computedStyles.columnGap || computedStyles.gap || '0');
     const cardWidth = firstCard.offsetWidth;
     const rawDisplayIndex = viewport.scrollLeft / (cardWidth + gap);
     const displayIndex = Math.round(rawDisplayIndex);
@@ -101,6 +113,7 @@ export default function BannerCarousel({
 
   useEffect(() => {
     if (total <= 1) return;
+
     const raf = window.requestAnimationFrame(() => {
       const viewport = viewportRef.current;
       if (!viewport) return;
@@ -108,15 +121,17 @@ export default function BannerCarousel({
       const firstCard = viewport.querySelector<HTMLElement>('[data-display-index="0"]');
       if (!firstCard) return;
 
-      const styles = window.getComputedStyle(viewport);
-      const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
+      const computedStyles = window.getComputedStyle(viewport);
+      const gap = Number.parseFloat(computedStyles.columnGap || computedStyles.gap || '0');
       viewport.scrollTo({ left: firstCard.offsetWidth + gap, behavior: 'auto' });
     });
+
     return () => window.cancelAnimationFrame(raf);
   }, [total]);
 
   const goToIndex = (index: number) => {
     if (total <= 0) return;
+
     const normalized = ((index % total) + total) % total;
     setActiveIndex(normalized);
     scrollToDisplayIndex(total > 1 ? normalized + 1 : normalized);
@@ -124,18 +139,21 @@ export default function BannerCarousel({
 
   const handlePrev = () => goToIndex(activeIndex - 1);
   const handleNext = () => goToIndex(activeIndex + 1);
+  const autoAdvance = useEffectEvent(() => {
+    const next = (activeIndex + 1) % total;
+    setActiveIndex(next);
+    scrollToDisplayIndex(total > 1 ? next + 1 : next);
+  });
 
   useEffect(() => {
     if (total <= 1) return undefined;
 
     const timer = window.setInterval(() => {
-      const next = (activeIndex + 1) % total;
-      setActiveIndex(next);
-      scrollToDisplayIndex(total > 1 ? next + 1 : next);
+      autoAdvance();
     }, autoplayMs);
 
     return () => window.clearInterval(timer);
-  }, [activeIndex, autoplayMs, total]);
+  }, [autoplayMs, total]);
 
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.pointerType !== 'mouse' || event.button !== 0) {
@@ -173,7 +191,7 @@ export default function BannerCarousel({
     event.preventDefault();
   };
 
-  const endPointerDrag = (event?: ReactPointerEvent<HTMLDivElement>) => {
+  const endPointerDrag = () => {
     const dragState = dragStateRef.current;
     if (!dragState.active) {
       return;
@@ -197,108 +215,106 @@ export default function BannerCarousel({
     }
   };
 
+  const activeItem = items[activeIndex];
+  const activeLabel = bannerLabels[activeIndex % bannerLabels.length] ?? bannerLabels[0];
+  const activeNote = bannerNotes[activeIndex % bannerNotes.length] ?? bannerNotes[0];
+  const activeTone = bannerToneMap[activeIndex % bannerToneMap.length] ?? bannerToneMap[0];
+
   return (
     <section className={styles.section} aria-label="배너 롤링">
-      <div className={styles.stage}>
-        <div className={styles.mediaShell}>
-          <div
-            ref={viewportRef}
-            className={`${styles.viewport} ${isDragging ? styles.dragging : ''}`}
-            onScroll={handleScroll}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={endPointerDrag}
-            onPointerCancel={endPointerDrag}
-            aria-label="배너 스와이프 영역"
-          >
-            {displayItems.map((item, displayIndex) => {
-              const realIndex =
-                total <= 1 ? displayIndex : (displayIndex - 1 + total) % total;
+      <div
+        ref={viewportRef}
+        className={`${styles.viewport} ${isDragging ? styles.dragging : ''}`}
+        onScroll={handleScroll}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endPointerDrag}
+        onPointerCancel={endPointerDrag}
+        aria-label="배너 스와이프 영역"
+      >
+        {displayItems.map((item, displayIndex) => {
+          const realIndex = total <= 1 ? displayIndex : (displayIndex - 1 + total) % total;
 
-              return (
-                <a
-                  key={`${item.id}-${displayIndex}`}
-                  data-display-index={displayIndex}
-                  className={styles.card}
-                  href={item.href}
-                  aria-label={`${item.title} 바로가기`}
-                  onClickCapture={(event) => {
-                    if (dragStateRef.current.moved) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      dragStateRef.current.moved = false;
-                    }
-                  }}
-                >
-                  <img
-                    src={item.imageUrl}
-                    alt={item.imageAlt}
-                    loading={realIndex === activeIndex ? 'eager' : 'lazy'}
-                    draggable={false}
-                  />
-
-                  <div className={styles.cardChrome}>
-                    <span className={styles.cardKicker}>
-                      {bannerLabels[realIndex % bannerLabels.length]}
-                    </span>
-                    <span className={styles.cardLabel}>{String(realIndex + 1).padStart(2, '0')}</span>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-
-        <aside className={styles.infoPanel} aria-label="현재 배너 소개">
-          <span className={styles.infoEyebrow}>This hour&apos;s edit</span>
-          <strong className={styles.infoTitle}>{activeItem?.title ?? '이번 큐레이션'}</strong>
-          <p className={styles.infoText}>
-            {activeItem?.subtitle ??
-              '오늘의 질문, 공간 탐색, 판매 흐름을 하나의 이미지 디스패치로 엮었습니다.'}
-          </p>
-
-          <div className={styles.infoRail}>
-            <div className={styles.infoChip}>
-              <span>focus</span>
-              <strong>{activeBannerLabel}</strong>
-            </div>
-            <div className={styles.infoChip}>
-              <span>rolling</span>
-              <strong>{autoplayMs / 1000}s cadence</strong>
-            </div>
-          </div>
-
-          {activeItem ? (
-            <ProductAnchor
-              href={activeItem.href}
-              tone="shell"
-              variant="primary"
-              className={styles.infoLink}
+          return (
+            <a
+              key={`${item.id}-${displayIndex}`}
+              data-display-index={displayIndex}
+              className={styles.card}
+              href={item.href}
+              aria-label={`${item.subtitle} 바로가기`}
+              onClickCapture={(event) => {
+                if (dragStateRef.current.moved) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  dragStateRef.current.moved = false;
+                }
+              }}
             >
-              현재 이미지 열기
-            </ProductAnchor>
-          ) : null}
-        </aside>
+              <img
+                src={item.imageUrl}
+                alt={item.imageAlt}
+                loading={realIndex === activeIndex ? 'eager' : 'lazy'}
+                draggable={false}
+              />
+
+              <div className={styles.cardBadgeRow}>
+                <span className={styles.cardKicker}>
+                  {bannerLabels[realIndex % bannerLabels.length]}
+                </span>
+                <span className={styles.cardLabel}>#{String(realIndex + 1).padStart(2, '0')}</span>
+              </div>
+
+              <span className={styles.cardArrow} aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          );
+        })}
       </div>
 
-      <ProductPager
-        label="배너"
-        activeIndex={activeIndex}
-        total={total}
-        summary={
-          activeItem
-            ? `${activeBannerLabel} · ${activeItem.title}`
-            : '오늘의 메인 이미지 큐레이션'
+      <ProductFeatureBand
+        tone={activeTone}
+        compact
+        eyebrow={activeLabel}
+        title={activeItem?.subtitle ?? '오늘의 이미지 큐레이션'}
+        description={activeNote}
+        meta={
+          <div className={styles.captionMetaRow}>
+            <span className={styles.captionMetaChip}>자동 롤링</span>
+            <span className={styles.captionMetaChip}>드래그 이동</span>
+            <span className={styles.captionMetaChip}>링크 오픈</span>
+          </div>
         }
-        items={items.map((item, index) => ({
-          id: item.id,
-          srLabel: `${index + 1}번 배너 ${item.title}`
-        }))}
-        onPrev={handlePrev}
-        onNext={handleNext}
-        onSelect={goToIndex}
-        className={styles.pager}
-      />
+        action={
+          activeItem ? (
+            <ProductAnchor
+              href={activeItem.href}
+              tone="warm"
+              variant="primary"
+              className={styles.captionAction}
+            >
+              지금 둘러보기
+            </ProductAnchor>
+          ) : null
+        }
+        className={styles.captionBand}
+        bodyClassName={styles.captionBody}
+      >
+        <ProductPager
+          label="배너"
+          activeIndex={activeIndex}
+          total={total}
+          summary={activeItem?.imageAlt ?? activeNote}
+          items={items.map((item) => ({
+            id: item.id,
+            srLabel: `${item.subtitle} 배너`
+          }))}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onSelect={goToIndex}
+          className={styles.pager}
+        />
+      </ProductFeatureBand>
     </section>
   );
 }
