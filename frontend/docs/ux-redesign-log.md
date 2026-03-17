@@ -1,5 +1,47 @@
 # UX Redesign Log
 
+## 2026-03-17 09:35:59 KST
+- timestamp: 2026-03-17 09:35:59 KST
+- 이번 실행 목표: `ComposeWorkspace`와 상세 화면에 남아 있던 입력/선택 표면을 공용 필드·선택 카드 시스템으로 끌어올려, 폼과 반응 도크의 관리자형 질감을 더 강하게 걷어낸다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductChoiceCard.tsx`
+  - `frontend/components/common/ProductChoiceCard.module.css`
+  - `frontend/components/common/ProductField.tsx`
+  - `frontend/components/common/ProductField.module.css`
+  - `frontend/components/ssuk/CommunityComposeView.tsx`
+  - `frontend/components/ssuk/MarketComposeView.tsx`
+  - `frontend/components/ssuk/ComposeWorkspace.module.css`
+  - `frontend/components/ssuk/CommunityPostDetailView.tsx`
+  - `frontend/components/ssuk/CommunityPostDetailView.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.tsx`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--product-field-*`, `--product-choice-*` 의미 토큰을 정리하고 `components/common`에 `ProductField`, `ProductChoiceCard`를 추가해 입력/선택 표면의 패딩, 라벨 칩, 캡션, 포커스, 강조 상태를 공용 시스템으로 묶었다
+  - `components/common`에 `ProductChoiceCard`를 추가해 템플릿/체크리스트/반응 카드가 화면별 버튼 묶음이 아니라 같은 선택 카드 계층을 쓰도록 바꿨고, `CommunityComposeView`와 `MarketComposeView`의 탭/템플릿/체크리스트가 더 에디토리얼한 제품형 선택 표면으로 읽히게 정리했다
+  - `CommunityPostDetailView`는 `ProductSectionHeader`로 본문/반응/댓글/이전·다음 섹션 헤더를 통일하고, 댓글 작성 도크도 `ProductField + ProductButton` 조합으로 바꾸는 동시에 반응 카드까지 `ProductChoiceCard`로 맞춰 상세 화면의 반응 흐름이 공용 제어 언어와 이어지게 정리했다
+  - `StudioShareDetailView`는 갤러리/정보/정책/장비/리뷰 섹션 헤더를 `ProductSectionHeader`에 맞추고 이미지 오버레이 내비도 `ProductButton`으로 교체해, 상세 화면의 상단 이후 리듬과 보조 제어도 같은 공용 시스템에 연결했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductChoiceCard.tsx frontend/components/common/ProductChoiceCard.module.css frontend/components/common/ProductField.tsx frontend/components/common/ProductField.module.css frontend/components/ssuk/CommunityComposeView.tsx frontend/components/ssuk/MarketComposeView.tsx frontend/components/ssuk/ComposeWorkspace.module.css frontend/components/ssuk/CommunityPostDetailView.tsx frontend/components/ssuk/CommunityPostDetailView.module.css frontend/components/ssuk/StudioShareDetailView.tsx frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `eda7b91` (`Extract shared ssuk field language`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 UX 변경은 로컬 `main` 커밋까지 반영됐지만 원격 push는 DNS 제한 때문에 완료하지 못함
+- 커밋 해시: `eda7b91`
+- 남은 가장 큰 UX 문제: 입력/선택 카드와 섹션 헤더는 공용화됐지만 `StudioShareDetailView`의 예약 단위 토글, 예약 카드 CTA, 하단 sticky CTA는 아직 화면 전용 버튼/토글 구현으로 남아 있어 상세 화면의 제어 언어가 완전히 한 시스템으로 닫히지 않음
+- 다음 실행 우선순위 1~3:
+  - `StudioShareDetailView`의 예약 단위 토글과 CTA를 공용 선택/제어 컴포넌트로 추출해 상세 액션 표면까지 시스템화하기
+  - 홈/`ssuk` 양쪽의 상태 배지와 보조 액션까지 이번 `ProductChoiceCard`/`ProductField` 계층과 맞물리도록 더 넓게 확장하기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 다시 시도하기
+
 ## 2026-03-17 08:37:33 KST
 - timestamp: 2026-03-17 08:37:33 KST
 - 이번 실행 목표: `TwoMenuShell` 드리프트를 복구하고, 반복되던 CTA/보조 버튼을 공용 제어 컴포넌트로 끌어올려 `ssuk` 목록 셸의 상단 크롬과 액션 문법을 한 시스템으로 묶는다
