@@ -1,5 +1,42 @@
 # UX Redesign Log
 
+## 2026-03-17 10:31:28 KST
+- timestamp: 2026-03-17 10:31:28 KST
+- 이번 실행 목표: `StudioShareDetailView`에 남아 있던 예약 단위 토글과 CTA 중복 제어를 공용 제품 제어 시스템으로 끌어올려, 상세 화면의 마지막 관리자형 인터랙션 잔재를 걷어낸다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductControl.tsx`
+  - `frontend/components/common/ProductControl.module.css`
+  - `frontend/components/common/ProductChoiceCard.tsx`
+  - `frontend/components/common/ProductChoiceCard.module.css`
+  - `frontend/components/ssuk/StudioShareDetailView.tsx`
+  - `frontend/components/ssuk/StudioShareDetailView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `ProductControl`에 anchor 지원과 selected 상태를 추가하고, `ProductChoiceCard`에는 compact size 토큰을 연결해 CTA와 선택 카드가 상세 화면 전용 클래스가 아니라 같은 공용 제어 문법을 쓰도록 확장했다
+  - `StudioShareDetailView`의 예약 카드에서 짧은 탭 버튼을 걷어내고 `가격 + 이용 리듬`이 함께 읽히는 metric 선택 카드 덱으로 바꿔, 가격 단위 선택이 관리자형 필터가 아니라 제품형 예약 스테이지처럼 보이도록 재구성했다
+  - 문의/저장/등록 액션은 공용 control로 교체하고, 하단 sticky bar에는 현재 선택 단위와 가격 요약을 함께 보여주는 action dock을 넣어 데스크톱과 모바일 모두에서 같은 예약 흐름이 이어지게 정리했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductControl.tsx frontend/components/common/ProductControl.module.css frontend/components/common/ProductChoiceCard.tsx frontend/components/common/ProductChoiceCard.module.css frontend/components/ssuk/StudioShareDetailView.tsx frontend/components/ssuk/StudioShareDetailView.module.css` 통과
+  - 캡처/서버 검증:
+    `node_modules/.bin/playwright` 없음
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase --autostash origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `8b8b812` (`Rebuild studio share booking controls`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+  - 결과적으로 이번 실행의 UX 변경 커밋은 로컬 `main`에 반영됐지만 원격 push는 DNS 제한 때문에 완료하지 못함
+- 커밋 해시: `8b8b812`
+- 남은 가장 큰 UX 문제: `StudioShareDetailView`의 예약 액션은 정리됐지만 갤러리/정보/리뷰 rail은 아직 화면 전용 prev/next 제어와 카드 셸을 반복하고 있어, 상세 화면 후반부 상호작용 문법이 완전히 공용 시스템으로 닫히지 않음
+- 다음 실행 우선순위 1~3:
+  - `useHorizontalRail` 기반 공통 `ProductRail` 계층을 추출해 갤러리/정책/리뷰 rail의 전용 제어를 줄이기
+  - `signalCard`, `infoCard`, `trustItem`, `statCard`, `inquiryItem`에 반복되는 detail card 셸을 공용 card primitive 또는 토큰으로 정리하기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 다시 시도하기
+
 ## 2026-03-17 09:35:59 KST
 - timestamp: 2026-03-17 09:35:59 KST
 - 이번 실행 목표: `ComposeWorkspace`와 상세 화면에 남아 있던 입력/선택 표면을 공용 필드·선택 카드 시스템으로 끌어올려, 폼과 반응 도크의 관리자형 질감을 더 강하게 걷어낸다
