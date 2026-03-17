@@ -1,5 +1,43 @@
 # UX Redesign Log
 
+## 2026-03-17 19:31:01 KST
+- timestamp: 2026-03-17 19:31:01 KST
+- 이번 실행 목표: 홈 상단 `TopNav`와 `BannerCarousel` 캡션을 재구성해, 첫 진입에서 가장 강하게 남아 있던 운영 패널형 헤더 인상을 걷어내고 이미지 중심 masthead stage로 다시 묶는다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/home/TopNav.tsx`
+  - `frontend/components/home/TopNav.module.css`
+  - `frontend/components/home/BannerCarousel.tsx`
+  - `frontend/components/home/BannerCarousel.module.css`
+  - `frontend/components/home/HomePage.module.css`
+- 핵심 시각 변화:
+  - `globals.css`에 `--home-masthead-*` 토큰을 추가해 홈 상단 sticky chrome이 기존 hero panel 재탕이 아니라 전용 masthead 표면과 칩 계층을 공유하도록 정리했다
+  - `TopNav`는 큰 feature band, 운영 상태 pill, 숫자 alert tile을 버리고 브랜드 블록 + 단일 live chip + active route summary + 얇은 route tab 조합으로 재구성해 첫 화면이 대시보드가 아니라 제품형 진입부처럼 읽히게 바꿨다
+  - `BannerCarousel`은 캡션 메타를 진행 번호 + 짧은 행동 문장으로 축소하고 CTA 라벨을 장면 중심으로 바꿔, 제어판성보다 이미지 큐레이션 stage 인상이 먼저 오도록 정리했다
+  - `HomePage`의 hero stage 간격도 함께 줄여 상단 masthead와 배너가 서로 다른 위젯이 아니라 하나의 연속된 런웨이처럼 붙도록 다듬었다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/home/TopNav.tsx frontend/components/home/TopNav.module.css frontend/components/home/BannerCarousel.tsx frontend/components/home/BannerCarousel.module.css frontend/components/home/HomePage.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/TopNav.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/TopNav.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/BannerCarousel.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/BannerCarousel.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - 작업 시작 전 `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `4721a94` (`Refine home masthead stage`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+- 커밋 해시: `4721a94`
+- 남은 가장 큰 UX 문제: 홈 상단 masthead는 얇아졌지만 `CommunitySection`과 `InfoLibrarySection` 내부의 칩/푸터/서브헤더는 아직 화면 전용 micro-chrome이 남아 있어, 홈 전체가 완전히 같은 제품 문법으로 닫히지는 않는다
+- 다음 실행 우선순위 1~3:
+  - `CommunitySection`과 `InfoLibrarySection`의 전용 chip/footer/subheader를 공용 micro primitive로 더 축소하기
+  - 새 `home-masthead` 토큰과 tab 리듬을 `ssuk/community/market` 상단 chrome에도 확장해 서비스 전체의 첫 인상 밀도를 맞추기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋과 이번 masthead 변경을 `origin/main`으로 push하고 화면 캡처를 재시도하기
+
 ## 2026-03-17 18:32:56 KST
 - timestamp: 2026-03-17 18:32:56 KST
 - 이번 실행 목표: 홈 `editorialSequence` 진입부와 `HomeSectionFrame` 공용 프레임을 다시 짜서, 홈 본문 섹션 헤더에 남아 있던 전용 세로 레일/전용 메타 박스/전용 슬라이더 제어를 공용 제품 시스템으로 끌어올린다
