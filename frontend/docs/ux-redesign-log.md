@@ -1,5 +1,43 @@
 # UX Redesign Log
 
+## 2026-03-17 14:35:13 KST
+- timestamp: 2026-03-17 14:35:13 KST
+- 이번 실행 목표: `MarketView`의 browse stage/quick shortlist/catalogue card를 공용 editorial card 문법으로 재설계해, 마켓 하단에 남아 있던 전용 관리자형 카드 셸을 제거한다
+- 실제 수정 파일:
+  - `frontend/app/globals.css`
+  - `frontend/components/common/ProductEditorialCard.tsx`
+  - `frontend/components/common/ProductEditorialCard.module.css`
+  - `frontend/components/ssuk/MarketView.tsx`
+  - `frontend/components/ssuk/MarketView.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `globals.css`에 `--product-editorial-*` 토큰을 추가하고 `components/common`에 `ProductEditorialCard`를 도입해, 이미지 리드 카드/텍스트 카드/분할형 카드를 같은 editorial surface 계층으로 재사용할 수 있게 정리했다
+  - `MarketView`의 browse stage는 전용 box shell을 버리고 `ProductFeatureBand + ProductEditorialCard` 조합으로 재구성해, 요약 지표·단계 카드·front runner가 하나의 제품형 편집면처럼 읽히게 바꿨다
+  - quick shortlist와 catalogue grid도 같은 editorial card primitive로 교체해 순위 배지, 가격/일정 시그널, 신뢰 배지, 문의 힌트가 모두 같은 인터랙션 문법과 반경/그림자/칩 계층을 공유하게 만들었다
+  - `ProductStatGrid`의 inline column 지정도 걷어내 모바일에서 overview/dispatch/browse/front-runner stat grid가 실제로 1열로 접히도록 회귀를 함께 정리했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/globals.css frontend/components/common/ProductEditorialCard.tsx frontend/components/common/ProductEditorialCard.module.css frontend/components/ssuk/MarketView.tsx frontend/components/ssuk/MarketView.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/common/ProductEditorialCard.tsx | sed 's/styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/common/ProductEditorialCard.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/ssuk/MarketView.tsx | sed 's/styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/ssuk/MarketView.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `be96249` (`Rebuild market editorial browse cards`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+- 커밋 해시: `be96249`
+- 남은 가장 큰 UX 문제: `MarketView` 하단 카드 계층은 제품형 editorial surface로 정리됐지만 홈/커뮤니티 영역은 아직 이 card primitive를 충분히 공유하지 않아, 첫 진입부터 서비스 전체가 하나의 제품처럼 읽히는 일관성이 부족하다
+- 다음 실행 우선순위 1~3:
+  - `ProductEditorialCard`를 홈/커뮤니티의 highlight/list card로 확장해 서비스 전반의 카드 언어를 통일하기
+  - `next/font` 기반 실제 제품 폰트 스택으로 전환해 현재의 정적 fallback 조합을 걷어내기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 재시도하기
+
 ## 2026-03-17 13:32:38 KST
 - timestamp: 2026-03-17 13:32:38 KST
 - 이번 실행 목표: `MarketView`의 overview/action bar/empty state를 공용 제품 band 문법으로 재구성해, 마켓 첫 화면에 남아 있던 전용 관리자형 표면과 CTA 묶음을 걷어낸다
