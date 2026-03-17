@@ -1,0 +1,101 @@
+.control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 6px 6px 12px;
+  border: 1px solid var(--product-rail-line);
+  border-radius: 999px;
+  background: var(--product-rail-shell);
+  box-shadow: var(--product-rail-shadow);
+}
+
+.summary {
+  min-width: 0;
+  color: var(--product-rail-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.button {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 14px;
+  --pc-surface: rgba(255, 255, 255, 0.84);
+  --pc-surface-strong: rgba(255, 255, 255, 0.98);
+  --pc-border: var(--product-rail-line);
+  --pc-border-strong: var(--product-rail-line-strong);
+  --pc-text: var(--product-rail-ink);
+  --pc-shadow: none;
+  --pc-shadow-strong: 0 12px 22px rgba(28, 24, 20, 0.1);
+  --pc-focus: var(--focus-ring);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--product-rail-shell-strong);
+}
+
+.button:disabled {
+  opacity: 0.34;
+}
+
+.track {
+  list-style: none;
+  margin: var(--product-rail-track-margin, 14px 0 0);
+  padding: 0 0 var(--product-rail-track-padding, 8px);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--product-rail-column-width, minmax(220px, 270px));
+  gap: var(--product-rail-gap, 12px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track > li,
+.track > div,
+.track > article {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 900px) {
+  .control {
+    padding-left: 10px;
+  }
+
+  .summary {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 560px) {
+  .control {
+    padding: 5px;
+  }
+
+  .summary {
+    display: none;
+  }
+
+  .track {
+    grid-auto-columns: var(--product-rail-column-width-sm, minmax(180px, 220px));
+  }
+}

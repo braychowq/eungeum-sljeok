@@ -163,6 +163,30 @@
   --detail-radius-xl: 34px;
   --detail-radius-lg: 26px;
   --detail-radius-md: 18px;
+  --product-rail-shell:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(244, 236, 225, 0.82));
+  --product-rail-shell-strong:
+    linear-gradient(152deg, rgba(255, 255, 255, 0.96), rgba(243, 232, 219, 0.88));
+  --product-rail-line: rgba(29, 23, 17, 0.08);
+  --product-rail-line-strong: rgba(29, 23, 17, 0.18);
+  --product-rail-ink: var(--detail-ink);
+  --product-rail-muted: var(--detail-subtle);
+  --product-rail-shadow: 0 16px 34px rgba(28, 24, 20, 0.08);
+  --product-rail-shadow-strong: 0 22px 42px rgba(28, 24, 20, 0.1);
+  --product-panel-shell:
+    linear-gradient(158deg, rgba(255, 255, 255, 0.96), rgba(245, 238, 228, 0.86));
+  --product-panel-shell-strong:
+    radial-gradient(circle at top right, rgba(194, 154, 102, 0.16), transparent 34%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(241, 232, 220, 0.9));
+  --product-panel-line: rgba(29, 23, 17, 0.08);
+  --product-panel-line-strong: rgba(29, 23, 17, 0.18);
+  --product-panel-shadow: 0 18px 38px rgba(28, 24, 20, 0.08);
+  --product-panel-shadow-strong: 0 24px 48px rgba(28, 24, 20, 0.1);
+  --product-panel-ink: var(--detail-ink);
+  --product-panel-muted: var(--detail-muted);
+  --product-panel-subtle: var(--detail-subtle);
+  --product-panel-accent: var(--detail-accent-strong);
+  --product-panel-support: var(--detail-support-strong);
   --home-shell: #fffaf4;
   --home-shell-strong: rgba(255, 250, 244, 0.94);
   --home-panel:

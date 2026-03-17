@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ProductChoiceCard from '../common/ProductChoiceCard';
 import { ProductAnchor, ProductButton, ProductLink } from '../common/ProductControl';
+import ProductRail from '../common/ProductRail';
+import productRailStyles from '../common/ProductRail.module.css';
 import ProductSectionHeader from '../common/ProductSectionHeader';
 import { type StudioTrustBadge } from './mockData';
 import TwoMenuShell from './TwoMenuShell';
@@ -56,14 +58,6 @@ type StudioEventName =
   | 'studio_contact_click'
   | 'studio_save_click'
   | 'studio_owner_cta_click';
-
-type RailButtonsProps = {
-  label: string;
-  canScrollPrev: boolean;
-  canScrollNext: boolean;
-  onPrev: () => void;
-  onNext: () => void;
-};
 
 const trustBadgeLabel: Record<StudioTrustBadge, string> = {
   verified: '검증됨',
@@ -223,45 +217,6 @@ function emitStudioEvent(eventName: StudioEventName, payload: Record<string, unk
   if (process.env.NODE_ENV !== 'production') {
     console.info('[ssuk-market-analytics]', detail);
   }
-}
-
-function RailButtons({
-  label,
-  canScrollPrev,
-  canScrollNext,
-  onPrev,
-  onNext
-}: RailButtonsProps) {
-  return (
-    <div className={styles.railActions} aria-label={`${label} 이동`}>
-      <ProductButton
-        type="button"
-        tone="neutral"
-        variant="secondary"
-        size="sm"
-        iconOnly
-        className={styles.railButton}
-        onClick={onPrev}
-        disabled={!canScrollPrev}
-        aria-label={`${label} 이전`}
-      >
-        &lt;
-      </ProductButton>
-      <ProductButton
-        type="button"
-        tone="neutral"
-        variant="secondary"
-        size="sm"
-        iconOnly
-        className={styles.railButton}
-        onClick={onNext}
-        disabled={!canScrollNext}
-        aria-label={`${label} 다음`}
-      >
-        &gt;
-      </ProductButton>
-    </div>
-  );
 }
 
 export default function StudioShareDetailView({ studioId }: StudioShareDetailViewProps) {
@@ -557,12 +512,14 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             compact
             className={styles.sectionHeader}
             action={
-              <RailButtons
+              <ProductRail
                 label="공방 이미지"
+                summary={`${currentImageIndex + 1}/${studio.images.length} 컷`}
                 canScrollPrev={thumbnailRail.canScrollPrev}
                 canScrollNext={thumbnailRail.canScrollNext}
                 onPrev={thumbnailRail.scrollPrev}
                 onNext={thumbnailRail.scrollNext}
+                className={styles.sectionRailControl}
               />
             }
           />
@@ -625,7 +582,7 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             </div>
           </div>
 
-          <ul ref={thumbnailRail.railRef} className={`${styles.thumbnailRow} ${styles.railTrack}`}>
+          <ul ref={thumbnailRail.railRef} className={`${styles.thumbnailRow} ${productRailStyles.track}`}>
             {studio.images.map((image, index) => (
               <li key={`${studio.id}-${index}`}>
                 <button
@@ -649,16 +606,18 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             compact
             className={styles.sectionHeader}
             action={
-              <RailButtons
+              <ProductRail
                 label="현장 정보"
+                summary={`${overviewCards.length}개 노트`}
                 canScrollPrev={infoRail.canScrollPrev}
                 canScrollNext={infoRail.canScrollNext}
                 onPrev={infoRail.scrollPrev}
                 onNext={infoRail.scrollNext}
+                className={styles.sectionRailControl}
               />
             }
           />
-          <dl ref={infoRail.railRef} className={`${styles.infoGrid} ${styles.railTrack}`}>
+          <dl ref={infoRail.railRef} className={`${styles.infoGrid} ${productRailStyles.track}`}>
             {overviewCards.map((item) => (
               <div key={item.id} className={styles.infoCard}>
                 <dt>{item.label}</dt>
@@ -676,16 +635,18 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             compact
             className={styles.sectionHeader}
             action={
-              <RailButtons
+              <ProductRail
                 label="운영 정책"
+                summary={`${trustItems.length}개 레이어`}
                 canScrollPrev={trustRail.canScrollPrev}
                 canScrollNext={trustRail.canScrollNext}
                 onPrev={trustRail.scrollPrev}
                 onNext={trustRail.scrollNext}
+                className={styles.sectionRailControl}
               />
             }
           />
-          <ul ref={trustRail.railRef} className={`${styles.trustList} ${styles.railTrack}`}>
+          <ul ref={trustRail.railRef} className={`${styles.trustList} ${productRailStyles.track}`}>
             {trustItems.map((item) => (
               <li key={item.key} className={styles.trustItem}>
                 <span className={styles.trustKey}>{item.label}</span>
@@ -718,16 +679,18 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
             compact
             className={styles.sectionHeader}
             action={
-              <RailButtons
+              <ProductRail
                 label="장비 및 시설"
+                summary={`${studio.equipments.length}개 도구`}
                 canScrollPrev={equipmentRail.canScrollPrev}
                 canScrollNext={equipmentRail.canScrollNext}
                 onPrev={equipmentRail.scrollPrev}
                 onNext={equipmentRail.scrollNext}
+                className={styles.sectionRailControl}
               />
             }
           />
-          <ul ref={equipmentRail.railRef} className={`${styles.equipmentList} ${styles.railTrack}`}>
+          <ul ref={equipmentRail.railRef} className={`${styles.equipmentList} ${productRailStyles.track}`}>
             {studio.equipments.map((equipment) => (
               <li key={equipment} className={styles.equipmentItem}>
                 {equipment}
@@ -748,15 +711,17 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
           <div className={styles.socialBlock}>
             <div className={styles.subsectionHeader}>
               <p className={styles.subsectionLabel}>요약 지표</p>
-              <RailButtons
+              <ProductRail
                 label="요약 지표"
+                summary="3개 지표"
                 canScrollPrev={statsRail.canScrollPrev}
                 canScrollNext={statsRail.canScrollNext}
                 onPrev={statsRail.scrollPrev}
                 onNext={statsRail.scrollNext}
+                className={styles.subsectionRailControl}
               />
             </div>
-            <div ref={statsRail.railRef} className={`${styles.socialStats} ${styles.railTrack}`}>
+            <div ref={statsRail.railRef} className={`${styles.socialStats} ${productRailStyles.track}`}>
               <article className={styles.statCard}>
                 <strong>{studio.reviewScore.toFixed(1)}</strong>
                 <span>평점</span>
@@ -775,15 +740,17 @@ export default function StudioShareDetailView({ studioId }: StudioShareDetailVie
           <div className={styles.socialBlock}>
             <div className={styles.subsectionHeader}>
               <p className={styles.subsectionLabel}>최근 문의</p>
-              <RailButtons
+              <ProductRail
                 label="최근 문의"
+                summary={`${studio.recentInquiries.length}개 미리보기`}
                 canScrollPrev={inquiryRail.canScrollPrev}
                 canScrollNext={inquiryRail.canScrollNext}
                 onPrev={inquiryRail.scrollPrev}
                 onNext={inquiryRail.scrollNext}
+                className={styles.subsectionRailControl}
               />
             </div>
-            <ul ref={inquiryRail.railRef} className={`${styles.inquiryList} ${styles.railTrack}`}>
+            <ul ref={inquiryRail.railRef} className={`${styles.inquiryList} ${productRailStyles.track}`}>
               {studio.recentInquiries.map((inquiry) => (
                 <li key={inquiry.id} className={styles.inquiryItem}>
                   <div>
