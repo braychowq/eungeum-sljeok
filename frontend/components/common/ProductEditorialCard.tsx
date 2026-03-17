@@ -1,11 +1,11 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, HTMLAttributes, ReactNode } from 'react';
 import Link from 'next/link';
 import styles from './ProductEditorialCard.module.css';
 
 type ProductEditorialCardTone = 'neutral' | 'warm' | 'forest';
 type ProductEditorialCardLayout = 'stacked' | 'split' | 'text';
 
-type ProductEditorialCardProps = Omit<ComponentProps<typeof Link>, 'className' | 'media'> & {
+type ProductEditorialCardSharedProps = {
   tone?: ProductEditorialCardTone;
   layout?: ProductEditorialCardLayout;
   compact?: boolean;
@@ -20,6 +20,19 @@ type ProductEditorialCardProps = Omit<ComponentProps<typeof Link>, 'className' |
   className?: string;
   bodyClassName?: string;
 };
+
+type ProductEditorialCardLinkProps = ProductEditorialCardSharedProps &
+  Omit<ComponentProps<typeof Link>, 'children' | 'className' | 'media'> & {
+    href: ComponentProps<typeof Link>['href'];
+  };
+
+type ProductEditorialCardPanelProps = ProductEditorialCardSharedProps &
+  Omit<HTMLAttributes<HTMLElement>, 'children' | 'className'> & {
+    as?: 'article' | 'div' | 'section';
+    href?: undefined;
+  };
+
+type ProductEditorialCardProps = ProductEditorialCardLinkProps | ProductEditorialCardPanelProps;
 
 function cn(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(' ');
@@ -54,18 +67,16 @@ export default function ProductEditorialCard({
   ...props
 }: ProductEditorialCardProps) {
   const hasMedia = Boolean(media);
+  const cardClassName = cn(
+    styles.card,
+    toneClassName[tone],
+    layoutClassName[layout],
+    compact && styles.compact,
+    className
+  );
 
-  return (
-    <Link
-      {...props}
-      className={cn(
-        styles.card,
-        toneClassName[tone],
-        layoutClassName[layout],
-        compact && styles.compact,
-        className
-      )}
-    >
+  const content = (
+    <>
       {hasMedia ? (
         <div className={styles.media}>
           {media}
@@ -86,6 +97,22 @@ export default function ProductEditorialCard({
         {stats ? <div className={styles.stats}>{stats}</div> : null}
         {footer ? <div className={styles.footer}>{footer}</div> : null}
       </div>
-    </Link>
+    </>
+  );
+
+  if ('href' in props && props.href !== undefined) {
+    return (
+      <Link {...props} className={cardClassName}>
+        {content}
+      </Link>
+    );
+  }
+
+  const { as: Panel = 'article', ...panelProps } = props;
+
+  return (
+    <Panel {...panelProps} className={cardClassName}>
+      {content}
+    </Panel>
   );
 }

@@ -3,6 +3,7 @@ import BannerCarousel from './BannerCarousel';
 import CommunitySection from './CommunitySection';
 import HorizontalCardSlider from './HorizontalCardSlider';
 import MobileBottomSheet from '../common/MobileBottomSheet';
+import ProductEditorialCard from '../common/ProductEditorialCard';
 import SiteFooter from '../common/SiteFooter';
 import {
   bannerItems,
@@ -57,6 +58,12 @@ const serviceHubCards = [
     note: '마지막 거래 액션까지 닫는 단계'
   }
 ] as const;
+
+const routeToneMap = {
+  community: 'warm',
+  studio: 'forest',
+  market: 'neutral'
+} as const;
 
 export default function HomePage() {
   const freshCommunityCount = communityPosts.filter((post) => post.publishedHoursAgo <= 24).length;
@@ -220,41 +227,46 @@ export default function HomePage() {
 
           <div className={styles.serviceHubRouteGrid}>
             {dispatchCards.map((card) => (
-              <Link
+              <ProductEditorialCard
                 key={card.id}
                 href={card.href}
-                className={styles.serviceHubRouteCard}
-                data-route={card.id}
-              >
-                <div className={styles.serviceHubRouteTop}>
-                  <div className={styles.serviceHubRouteIdentity}>
-                    <span className={styles.serviceHubRouteStep}>{card.step}</span>
-                    <span className={styles.serviceHubRouteEyebrow}>{card.eyebrow}</span>
+                tone={routeToneMap[card.id]}
+                layout="text"
+                compact
+                badge={card.step}
+                eyebrow={card.eyebrow}
+                heading={card.title}
+                description={card.description}
+                signals={
+                  <div className={styles.serviceHubRouteMetricGrid}>
+                    <div className={styles.serviceHubRouteMetricPanel}>
+                      <span>Current signal</span>
+                      <strong>{card.metric}</strong>
+                    </div>
+                    <div className={styles.serviceHubRouteMetricPanel}>
+                      <span>{card.readoutLabel}</span>
+                      <strong>{card.readoutValue}</strong>
+                    </div>
                   </div>
-                  <span className={styles.serviceHubRouteMetric}>{card.metric}</span>
-                </div>
-
-                <strong>{card.title}</strong>
-                <p>{card.description}</p>
-
-                <div className={styles.serviceHubRouteReadout}>
-                  <span>{card.readoutLabel}</span>
-                  <strong>{card.readoutValue}</strong>
-                </div>
-
-                <div className={styles.serviceHubRouteTags}>
-                  {card.tags.map((tag) => (
-                    <span key={tag} className={styles.serviceHubRouteTag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className={styles.serviceHubRouteFooter}>
-                  <span>{card.note}</span>
-                  <span className={styles.serviceHubRouteAction}>{card.ctaLabel}</span>
-                </div>
-              </Link>
+                }
+                stats={
+                  <div className={styles.serviceHubRouteTagRow}>
+                    {card.tags.map((tag) => (
+                      <span key={tag} className={styles.serviceHubRouteTag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                }
+                footer={
+                  <div className={styles.serviceHubRouteFooter}>
+                    <span className={styles.serviceHubRouteNote}>{card.note}</span>
+                    <span className={styles.serviceHubRouteAction}>{card.ctaLabel}</span>
+                  </div>
+                }
+                className={styles.serviceHubRouteEditorial}
+                bodyClassName={styles.serviceHubRouteBody}
+              />
             ))}
           </div>
         </section>

@@ -144,8 +144,7 @@
 }
 
 .serviceHubPrimaryLink,
-.serviceHubGhostLink,
-.serviceHubRouteCard {
+.serviceHubGhostLink {
   text-decoration: none;
   transition:
     transform 0.2s ease,
@@ -314,143 +313,36 @@
   gap: 14px;
 }
 
-.serviceHubRouteCard {
-  --route-accent: var(--home-stage-clay);
-  --route-accent-strong: var(--home-stage-clay-strong);
-  --route-accent-soft: var(--home-stage-clay-soft);
+.serviceHubRouteEditorial {
+  --product-editorial-padding: 24px;
+  --product-editorial-gap: 16px;
+  --product-editorial-title-size: clamp(30px, 3.2vw, 36px);
+  --product-editorial-radius: 32px;
+  min-height: 100%;
+}
+
+.serviceHubRouteBody {
+  gap: 16px;
+}
+
+.serviceHubRouteMetricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.serviceHubRouteMetricPanel {
   min-width: 0;
   display: grid;
-  align-content: start;
-  gap: 16px;
-  padding: 24px;
-  border-radius: 32px;
-  color: var(--home-ink);
-  background:
-    radial-gradient(circle at top right, rgba(202, 161, 111, 0.14), transparent 28%),
-    linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(247, 239, 230, 0.76)),
-    rgba(255, 255, 255, 0.82);
-}
-
-.serviceHubRouteCard[data-route="studio"] {
-  --route-accent: var(--home-stage-moss);
-  --route-accent-strong: var(--home-stage-moss-strong);
-  --route-accent-soft: var(--home-stage-moss-soft);
-}
-
-.serviceHubRouteCard[data-route="market"] {
-  --route-accent: #8e6840;
-  --route-accent-strong: #664622;
-  --route-accent-soft: var(--home-stage-gold-soft);
-}
-
-.serviceHubRouteCard::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 48%),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--route-accent) 10%, transparent), transparent 28%);
-  pointer-events: none;
-}
-
-.serviceHubRouteTop,
-.serviceHubRouteReadout,
-.serviceHubRouteFooter {
-  position: relative;
-  z-index: 1;
-}
-
-.serviceHubRouteTop {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.serviceHubRouteIdentity {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.serviceHubRouteStep,
-.serviceHubRouteEyebrow,
-.serviceHubRouteMetric,
-.serviceHubRouteTag,
-.serviceHubRouteAction {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.serviceHubRouteStep {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 16px;
-  background: var(--route-accent-soft);
-  color: var(--route-accent-strong);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
-.serviceHubRouteEyebrow,
-.serviceHubRouteMetric,
-.serviceHubRouteTag,
-.serviceHubRouteAction {
-  min-height: 30px;
-  padding: 0 12px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.serviceHubRouteEyebrow {
-  border: 1px solid var(--home-stage-line);
-  background: rgba(255, 255, 255, 0.84);
-  color: var(--home-muted);
-}
-
-.serviceHubRouteMetric {
-  color: var(--route-accent-strong);
-  background: var(--route-accent-soft);
-}
-
-.serviceHubRouteCard > strong {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  font-size: 30px;
-  line-height: 1.06;
-  letter-spacing: -0.06em;
-  font-family: var(--font-logo);
-}
-
-.serviceHubRouteCard > p {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  color: var(--home-muted);
-  font-size: 13px;
-  line-height: 1.72;
-}
-
-.serviceHubRouteReadout {
-  display: grid;
   gap: 8px;
-  padding: 18px;
-  border-radius: 24px;
-  border: 1px solid var(--home-stage-line);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.66)),
-    rgba(255, 255, 255, 0.76);
+  padding: 16px;
+  border-radius: 22px;
+  border: 1px solid var(--product-chip-line);
+  background: var(--product-chip-shell-strong);
+  box-shadow: var(--product-chip-shadow);
 }
 
-.serviceHubRouteReadout span {
+.serviceHubRouteMetricPanel span {
   color: var(--home-subtle);
   font-size: 10px;
   font-weight: 800;
@@ -458,36 +350,50 @@
   text-transform: uppercase;
 }
 
-.serviceHubRouteReadout strong {
+.serviceHubRouteMetricPanel strong {
   color: var(--home-ink);
   font-size: 18px;
-  line-height: 1.46;
+  line-height: 1.42;
   letter-spacing: -0.04em;
 }
 
-.serviceHubRouteTags {
-  position: relative;
-  z-index: 1;
+.serviceHubRouteTagRow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
+.serviceHubRouteTag,
+.serviceHubRouteAction {
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .serviceHubRouteTag {
+  border: 1px solid var(--product-chip-line);
+  background: var(--product-chip-shell);
   color: var(--home-muted);
-  border: 1px solid var(--home-stage-line);
-  background: rgba(255, 255, 255, 0.84);
+  box-shadow: var(--product-chip-shadow);
 }
 
 .serviceHubRouteFooter {
+  width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.serviceHubRouteFooter > span:first-child {
+.serviceHubRouteNote {
   color: var(--home-subtle);
   font-size: 11px;
   font-weight: 700;
@@ -495,24 +401,19 @@
 }
 
 .serviceHubRouteAction {
-  color: var(--route-accent-strong);
-  background: var(--route-accent-soft);
+  color: var(--product-chip-support);
+  border: 1px solid var(--product-chip-line);
+  background: var(--product-chip-shell-strong);
+  box-shadow: var(--product-chip-shadow);
 }
 
 .serviceHubPrimaryLink:hover,
-.serviceHubGhostLink:hover,
-.serviceHubRouteCard:hover {
+.serviceHubGhostLink:hover {
   transform: translateY(-2px);
 }
 
-.serviceHubRouteCard:hover {
-  border-color: var(--home-stage-line-strong);
-  box-shadow: var(--home-stage-shadow);
-}
-
 .serviceHubPrimaryLink:focus-visible,
-.serviceHubGhostLink:focus-visible,
-.serviceHubRouteCard:focus-visible {
+.serviceHubGhostLink:focus-visible {
   outline: 2px solid var(--home-stage-clay-strong);
   outline-offset: 3px;
 }
@@ -706,7 +607,7 @@
 
   .serviceHubLead,
   .serviceHubSpotlight,
-  .serviceHubRouteCard {
+  .serviceHubRouteEditorial {
     border-radius: 28px;
   }
 
@@ -743,15 +644,16 @@
     font-size: 34px;
   }
 
-  .serviceHubRouteCard {
-    padding: 20px;
+  .serviceHubRouteEditorial {
+    --product-editorial-padding: 20px;
+    --product-editorial-title-size: 28px;
+    --product-editorial-radius: 28px;
   }
 
-  .serviceHubRouteCard > strong {
-    font-size: 28px;
+  .serviceHubRouteMetricGrid {
+    grid-template-columns: 1fr;
   }
 
-  .serviceHubRouteTop,
   .serviceHubRouteFooter {
     align-items: flex-start;
     flex-direction: column;

@@ -152,7 +152,9 @@
 
 .heading {
   color: var(--editorial-ink);
+  font-family: var(--font-logo);
   font-size: var(--product-editorial-title-size, clamp(24px, 3.8vw, 30px));
+  font-weight: 700;
   line-height: 0.98;
   letter-spacing: -0.055em;
 }
