@@ -1,5 +1,45 @@
 # UX Redesign Log
 
+## 2026-03-17 15:34:22 KST
+- timestamp: 2026-03-17 15:34:22 KST
+- 이번 실행 목표: 홈 `serviceHub` 라우트 카드와 `CommunitySection` 인기글 surface를 공용 editorial card 시스템으로 재설계해, 홈 첫인상과 커뮤니티 pulse 구간에 남아 있던 화면 전용 관리자형 카드 셸을 걷어낸다
+- 실제 수정 파일:
+  - `frontend/app/layout.tsx`
+  - `frontend/components/common/ProductEditorialCard.tsx`
+  - `frontend/components/common/ProductEditorialCard.module.css`
+  - `frontend/components/home/HomePage.tsx`
+  - `frontend/components/home/HomePage.module.css`
+  - `frontend/components/home/CommunitySection.tsx`
+  - `frontend/components/home/CommunitySection.module.css`
+  - `frontend/docs/ux-redesign-log.md`
+- 핵심 시각 변화:
+  - `ProductEditorialCard`를 링크형 카드뿐 아니라 액션을 담는 패널형 surface까지 처리하게 넓혀, 홈과 커뮤니티가 같은 editorial shell과 chip/stats/footer 문법을 공유할 수 있게 만들었다
+  - `HomePage`의 서비스 허브 라우트 카드 3종은 전용 top/readout/tag/footer 셸을 버리고 `ProductEditorialCard` 기반 route card로 재구성해, 홈 첫 화면의 경로 선택이 개별 위젯 모음이 아니라 같은 제품형 편집면으로 읽히게 바꿨다
+  - `CommunitySection`의 리드 인기글과 side list도 같은 card primitive로 교체하고 CTA는 `ProductLink`로 묶어, 커뮤니티 pulse 구간이 관리자형 리스트/박스가 아니라 제품형 에디토리얼 카드 흐름으로 이어지게 정리했다
+  - `layout.tsx`는 `next/font/local` 기반 `Geist` 변수 폰트로 전환해 기존 정적 시스템 스택 의존을 줄이고, 홈과 공용 editorial heading의 인상을 실제 제품 폰트로 통일했다
+- 빌드/검증 결과:
+  - `cd /Users/guk/Documents/workspace/eungeun-sljeok/frontend && npm run build`
+  - 결과: 성공
+  - 추가 검증:
+    `git diff --check -- frontend/app/layout.tsx frontend/components/common/ProductEditorialCard.tsx frontend/components/common/ProductEditorialCard.module.css frontend/components/home/HomePage.tsx frontend/components/home/HomePage.module.css frontend/components/home/CommunitySection.tsx frontend/components/home/CommunitySection.module.css` 통과
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/HomePage.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/HomePage.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 추가 검증:
+    `comm -23 <(rg -o "styles\\.[A-Za-z0-9_]+" frontend/components/home/CommunitySection.tsx | sed 's/.*styles\\.//' | sort -u) <(rg -o '^\\.[A-Za-z0-9_-]+' frontend/components/home/CommunitySection.module.css | sed 's/^\\.//' | sort -u)` 결과 없음
+  - 캡처/서버 검증:
+    `npm run start -- --hostname 127.0.0.1 --port 3007` 실패 (`listen EPERM`)
+- Git 반영 결과:
+  - 시작 브랜치 확인: `main`
+  - `git pull --rebase origin main` 실패: `Could not resolve host: github.com`
+  - UX 변경 커밋 `728d0d7` (`Rebuild home editorial cards`) 생성
+  - `git push origin main` 실패: `Could not resolve host: github.com`
+- 커밋 해시: `728d0d7`
+- 남은 가장 큰 UX 문제: 홈 상단 서비스 허브와 커뮤니티 pulse는 공용 editorial surface로 정리됐지만 `HorizontalCardSlider`와 `InfoLibrarySection`은 아직 홈 전용 카드 셸을 유지하고 있어, 홈 하단까지 완전히 같은 제품형 카드 언어로 닫히지 않았다
+- 다음 실행 우선순위 1~3:
+  - `HorizontalCardSlider`의 featured summary/card rail을 `ProductEditorialCard` 또는 같은 editorial rail primitive로 교체하기
+  - `InfoLibrarySection` featured/list row도 같은 공용 card/control 계층으로 정리해 홈 하단 아카이브 문법을 통일하기
+  - DNS 제한이 없는 환경에서 누적 로컬 `main` 커밋을 `origin/main`으로 push하고 실제 화면 캡처를 재시도하기
+
 ## 2026-03-17 14:35:13 KST
 - timestamp: 2026-03-17 14:35:13 KST
 - 이번 실행 목표: `MarketView`의 browse stage/quick shortlist/catalogue card를 공용 editorial card 문법으로 재설계해, 마켓 하단에 남아 있던 전용 관리자형 카드 셸을 제거한다
