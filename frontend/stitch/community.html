@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>은금슬쩍 | 커뮤니티</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d0c5af",
+              "surface-tint": "#735c00",
+              "surface-container-lowest": "#ffffff",
+              "primary": "#735c00",
+              "on-tertiary-fixed-variant": "#474747",
+              "surface-container": "#efeeec",
+              "on-secondary-fixed-variant": "#464747",
+              "outline": "#7f7663",
+              "on-primary-fixed": "#241a00",
+              "on-surface-variant": "#4d4635",
+              "surface-container-high": "#e9e8e6",
+              "primary-container": "#d4af37",
+              "on-secondary-container": "#626363",
+              "surface-bright": "#faf9f7",
+              "inverse-primary": "#e9c349",
+              "on-error": "#ffffff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#dadad8",
+              "tertiary-fixed-dim": "#c8c6c5",
+              "surface": "#faf9f7",
+              "inverse-surface": "#2f3130",
+              "background": "#faf9f7",
+              "surface-container-low": "#f4f3f1",
+              "on-tertiary-fixed": "#1b1c1c",
+              "on-tertiary-container": "#454545",
+              "on-secondary-fixed": "#1a1c1c",
+              "on-surface": "#1a1c1b",
+              "on-primary-container": "#554300",
+              "surface-variant": "#e3e2e0",
+              "error": "#ba1a1a",
+              "inverse-on-surface": "#f1f1ef",
+              "tertiary-fixed": "#e4e2e1",
+              "on-primary-fixed-variant": "#574500",
+              "secondary-fixed-dim": "#c6c6c6",
+              "error-container": "#ffdad6",
+              "tertiary": "#5f5e5e",
+              "surface-container-highest": "#e3e2e0",
+              "on-primary": "#ffffff",
+              "primary-fixed": "#ffe088",
+              "on-error-container": "#93000a",
+              "tertiary-container": "#b4b2b2",
+              "secondary-fixed": "#e3e2e2",
+              "secondary": "#5d5e5f",
+              "secondary-container": "#e0dfdf",
+              "on-tertiary": "#ffffff",
+              "on-background": "#1a1c1b",
+              "primary-fixed-dim": "#e9c349"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #faf9f7;
+            color: #1a1c1b;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Noto Serif', serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7] dark:bg-[#1a1c1b] opacity-80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-10 py-6 max-w-[1440px] mx-auto w-full">
+<div class="font-serif text-2xl tracking-tighter text-[#1a1c1b] dark:text-[#faf9f7]">은금슬쩍</div>
+<nav class="hidden md:flex gap-12">
+<a class="font-sans text-xs uppercase tracking-widest text-[#735c00] dark:text-[#d4af37] border-b border-[#d4af37] pb-1" href="#">커뮤니티</a>
+<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">스튜디오 공유</a>
+<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">마이 페이지</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="bg-[#f4f3f1] dark:bg-[#2a2c2b] h-[1px] w-full"></div>
+</header>
+<main class="pt-32 pb-20 max-w-[1440px] mx-auto px-6 md:px-20">
+<!-- Page Header & Filters -->
+<section class="mb-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="max-w-2xl">
+<h1 class="text-6xl md:text-8xl font-headline tracking-tighter mb-6">커뮤니티</h1>
+<p class="text-outline font-body text-lg max-w-lg leading-relaxed">공예 뒤에 숨겨진 이야기들을 만나보세요. 디자이너들의 작업 과정과 특별한 작품을 공유하는 공간입니다.</p>
+</div>
+<div class="flex flex-wrap gap-4 items-center">
+<div class="relative group">
+<select class="appearance-none bg-surface-container-low border-none rounded-full px-8 py-3 pr-12 text-sm font-label uppercase tracking-widest focus:ring-1 focus:ring-primary-container cursor-pointer transition-all">
+<option>카테고리: 전체</option>
+<option>디자이너 스토리</option>
+<option>마켓</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-outline text-sm">expand_more</span>
+</div>
+<div class="relative group w-full md:w-64">
+<input class="w-full bg-surface-container-low border-none rounded-full px-8 py-3 text-sm font-label focus:ring-1 focus:ring-primary-container transition-all" placeholder="이야기 검색..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Feed Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+<!-- Featured Story (Asymmetric Large) -->
+<article class="md:col-span-8 group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6 aspect-[16/9]">
+<img alt="Designer at work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close-up of an artisan's weathered hands meticulously polishing a gold ring in a sunlit wooden studio workshop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHMcD2SimYlmVjrsDM76m0tB2rgP7RfgRjFH1CrznTrCJsYnSNxzrW9e6YUyYLr4ng2en8qbnaobsMCXdlY2MehInceqAEnqFVw2o_98hTYt-i3vpLMfgMIk0ykYEWK8JN9L9XCwWhIf0eNexkEY1_LNU_1cuA7wVnHSjqLvzptkDZdy3-P3pQqNiKtUJ-lixHEVWy63OCJIerw-W2nquPsBKkIG_583hN_YuROtIyEBx8hl2_hwF0ZZ7VIDDdnrhN9My5TPk4fac"/>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-label uppercase tracking-[0.2em] rounded-full">디자이너 스토리</span>
+<span class="text-[10px] text-outline tracking-widest uppercase">2024년 3월 14일</span>
+</div>
+<h2 class="text-4xl font-headline mb-4 group-hover:text-primary transition-colors">불완전의 연금술: 민서의 실버 시리즈</h2>
+<p class="text-outline font-body leading-relaxed max-w-2xl">현대 주얼리에서 와비사비의 아름다움을 탐구합니다. 민서는 그녀의 최신 컬렉션에서 자연스러운 질감과 가공되지 않은 마감을 수용하는 과정에 대해 이야기합니다...</p>
+<button class="mt-6 flex items-center gap-2 text-primary font-label text-xs uppercase tracking-widest border-b border-primary/20 hover:border-primary transition-all pb-1">
+                    더 보기 <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</article>
+<!-- Marketplace Highlight (Side Col) -->
+<aside class="md:col-span-4 space-y-12">
+<div class="p-8 bg-surface-container-low rounded-xl">
+<h3 class="font-headline text-xl mb-6">새로 올라온 상품</h3>
+<div class="space-y-8">
+<!-- Product 1 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-24 h-24 overflow-hidden rounded-lg bg-white shrink-0">
+<img alt="Gold Earrings" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Minimalist geometric gold earrings resting on a piece of raw sandstone with soft side lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiQvD_8MQI5rswT3wE4yDNmwDsqsZJomgdIxnTNhFW-etHjNbgx7cOhbeAG5-n62MtKYxoOjmKx0rqZFJ5bmwC_Pa9gLOWsbEa7aQ-5sEV4cqUrZQciy3vLt5D94dBYIjXF0z8aih_R1ytlecyb7yRhZL8sZYzoX93ufaKQTo6H758DiD8GrbrdzBinvr7HZR5JmzkqA442svLbLxhsYBVtmi6G2LWp3EnP5QVDxORJZHMToAPCvQ7afcWLkMb4dj3k3coektDdDs"/>
+</div>
+<div>
+<h4 class="font-body font-medium text-sm mb-1 group-hover:text-primary transition-colors">오닉스 드롭 이어링</h4>
+<p class="text-[10px] text-outline tracking-widest uppercase mb-2">작가: 스튜디오 K</p>
+<span class="text-primary font-label text-sm">₩185,000</span>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-24 h-24 overflow-hidden rounded-lg bg-white shrink-0">
+<img alt="Pearl Necklace" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Dainty silver chain necklace with a pearl pendant on a soft cream silk background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARmS0FAWc2F7xNqvQvtGEMqq8ICJUgoInE4-5IJTFGtyjHDHyGwWFt2ckxfbD5dBEEcJi3RYQxSGZqgJPqtaQ0FzFOMBMIrNu-k6miysnzLQbLO72uAJ2Fyx9xZMulBJj8EO2BE3Hi9D2zyMCuFLwrUHx2I_Wl4oKOOfBarosBgAaSVn16egbK7ZAOYytRD0rG4QMH38XC4mJYM6vtqEdUv2aD_8D0Lb3ZdCb8mXMPK4dffF9uChMStkRumP9O_TaVJQdtpZ5BxP0"/>
+</div>
+<div>
+<h4 class="font-body font-medium text-sm mb-1 group-hover:text-primary transition-colors">조각 진주 체인</h4>
+<p class="text-[10px] text-outline tracking-widest uppercase mb-2">작가: 루나 실</p>
+<span class="text-primary font-label text-sm">₩240,000</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-4 border border-outline/20 rounded-full font-label text-[10px] uppercase tracking-widest hover:bg-white transition-all">전체 상품 보기</button>
+</div>
+</aside>
+<!-- Secondary Story Row -->
+<article class="md:col-span-6 group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6 aspect-[4/3]">
+<img alt="Sketching process" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close-up of a designer sketching jewelry designs on vintage paper with a brass mechanical pencil next to gemstones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvdVBYxRx2GEcdVrlHGmxCv9YY7Zn1dqhPg0WtZ10Pz74i97uq3A2hqM0fEiDMif3LJtRn297a_CiHRPLoE95xqIquvKonn0CnEK_ULyOWqoOL_fYxsA6l81K57W4ltPiiot36UkINEmBxiplMSIwoabCPlP1hdPrPtuHMWdJ-QEi-1FmMzXoGPXduVMYpYWpUyM0gQq83Z4nGzvyTr2M8J6k3TsnTZpUwe4dIpZpZMVpYWoljO4_42j89ONL0oiL2yH5i3GJxS9k"/>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-label uppercase tracking-[0.2em] rounded-full">저널</span>
+<span class="text-[10px] text-outline tracking-widest uppercase">2024년 3월 12일</span>
+</div>
+<h3 class="text-2xl font-headline mb-3 group-hover:text-primary transition-colors">한국 전통 매듭의 기원을 찾아서</h3>
+<p class="text-sm text-outline font-body leading-relaxed">현대 주얼리 제작자들이 세대를 잇기 위해 '매듭' 기술을 현대적인 금속 공예에 어떻게 통합하고 있는지 알아봅니다.</p>
+</article>
+<article class="md:col-span-6 group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6 aspect-[4/3]">
+<img alt="Gems selection" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Selection of raw semi-precious stones including aquamarine and amethyst in a small ceramic dish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx1bNrUlP1Dajx5o4-eLD-dtcTFchEGEjdD8u1N77PpmC4SwOAh-y9-QulLwMcbt8SpGS2odeusHx2faHfj0rEZXUbxls9Gv9B9ZEhkk2kycZvCo7axkllnM0oWmhQVFYj7AZxFcaWo4vzYRIoqkE7WZ6Gwn7vBYNdbxchpMdsrgaB1WYRdNO96CipmoT60VICxxcvKfXjBmaTq3Xrs_k30YherjEYxzYitwOQS8nYg5bhUjpdLcK1wnc4s27hdEMuOEcMR_4gWBQ"/>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-label uppercase tracking-[0.2em] rounded-full">마켓</span>
+<span class="text-[10px] text-outline tracking-widest uppercase">2024년 3월 10일</span>
+</div>
+<h3 class="text-2xl font-headline mb-3 group-hover:text-primary transition-colors">봄맞이 원석 경매: 큐레이션 셀렉션</h3>
+<p class="text-sm text-outline font-body leading-relaxed">이번 주말 마켓에 출시될 희귀한 컷팅 스톤들을 미리 확인해보세요. 스튜디오 공유 회원 독점 공개입니다.</p>
+</article>
+<!-- Wide Marketplace Banner -->
+<section class="md:col-span-12 mt-12">
+<div class="relative overflow-hidden rounded-3xl bg-[#efeeec] min-h-[400px] flex items-center p-12 md:p-24">
+<div class="relative z-10 max-w-md">
+<span class="font-label text-xs uppercase tracking-[0.3em] text-primary mb-4 block">신규 컬렉션</span>
+<h2 class="text-5xl font-headline mb-6">미니멀 스테이트먼트 컬렉션</h2>
+<p class="text-outline mb-8 leading-relaxed">한반도 전역의 독립 공예가들이 수작업으로 제작했습니다. 조형적인 형태에 집중한 한정 수량 작품들입니다.</p>
+<button class="px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-label text-[10px] uppercase tracking-widest hover:shadow-lg transition-all">마켓 구매하기</button>
+</div>
+<div class="absolute right-0 top-0 h-full w-1/2 hidden md:block">
+<img alt="Collection Preview" class="w-full h-full object-cover" data-alt="Elegant jewelry display with gold necklaces draped over sculptural white plaster busts in a gallery setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByNkff4uqDMrrAIgABiJi63HMVpTOblL3NKkx4nqylygK8fqfl536npMnn-qtD2TTSf-FEk5xfa2zoCgDeTcyOoF-2dYqbBh60ul4E_tTzgPsNOyYUqBemUvO_kyqS2A6utVoXnsauUep584PqDmFKqR0Fl0sLj5i4SUjxQ2UpKBOISa0nhIrnMo3WUlBpv3SaPanZQSEbhTeN01_0wqDnXyzxeFZnSGkLmyYck7sOVDoqnK_l8mrPOJcNHFFIrbwV2InN0tqnSo8"/>
+<div class="absolute inset-0 bg-gradient-to-r from-[#efeeec] via-[#efeeec]/20 to-transparent"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- Load More Section -->
+<div class="mt-24 text-center">
+<button class="inline-flex items-center gap-4 text-outline font-label text-xs uppercase tracking-widest hover:text-on-background transition-colors">
+<div class="h-[1px] w-12 bg-outline-variant/30"></div>
+                더 많은 이야기 보기
+                <div class="h-[1px] w-12 bg-outline-variant/30"></div>
+</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-[#d0c5af]/20 bg-[#f4f3f1] dark:bg-[#121413]">
+<div class="flex flex-col md:flex-row justify-between items-center px-20 py-16 w-full mt-20 gap-8 max-w-[1440px] mx-auto">
+<div class="font-serif text-lg text-[#1a1c1b] dark:text-[#faf9f7]">은금슬쩍</div>
+<div class="flex gap-10">
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all" href="#">저널</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all" href="#">작가들</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all" href="#">배송 정보</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all" href="#">법적 고지</a>
+</div>
+<p class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2024 은금슬쩍. 큐레이션 아틀리에.</p>
+</div>
+</footer>
+<!-- Floating Action Button for community engagement -->
+<div class="fixed bottom-10 right-10 z-50">
+<button class="w-16 h-16 rounded-full bg-primary shadow-xl flex items-center justify-center text-white hover:scale-110 transition-transform active:scale-95 group">
+<span class="material-symbols-outlined text-2xl" data-icon="edit">edit</span>
+<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>
+</button>
+</div>
+</body></html>

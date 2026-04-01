@@ -13,6 +13,8 @@ frontend/.turbo/
 
 # Backend
 backend/target/
+.m2home/
+.m2repo/
 
 # Logs
 *.log

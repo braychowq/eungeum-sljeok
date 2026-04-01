@@ -1,24 +1,9 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import './globals.css';
 
-const atelierSans = localFont({
-  src: '../node_modules/next/dist/next-devtools/server/font/geist-latin-ext.woff2',
-  variable: '--font-sans',
-  display: 'swap',
-  weight: '100 900'
-});
-
-const atelierDisplay = localFont({
-  src: '../node_modules/next/dist/next-devtools/server/font/geist-latin-ext.woff2',
-  variable: '--font-display',
-  display: 'swap',
-  weight: '100 900'
-});
-
 export const metadata: Metadata = {
-  title: 'eungeum-sljeok Frontend',
-  description: 'Railway monorepo frontend'
+  title: '은금슬쩍',
+  description: '주얼리 메이커를 위한 큐레이션 아틀리에'
 };
 
 export default function RootLayout({
@@ -27,7 +12,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${atelierSans.variable} ${atelierDisplay.variable}`}>
+    <html lang="ko">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

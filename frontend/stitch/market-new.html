@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "outline-variant": "#d0c5af",
+            "surface-tint": "#735c00",
+            "surface-container-lowest": "#ffffff",
+            "primary": "#735c00",
+            "on-tertiary-fixed-variant": "#474747",
+            "surface-container": "#efeeec",
+            "on-secondary-fixed-variant": "#464747",
+            "outline": "#7f7663",
+            "on-primary-fixed": "#241a00",
+            "on-surface-variant": "#4d4635",
+            "surface-container-high": "#e9e8e6",
+            "primary-container": "#d4af37",
+            "on-secondary-container": "#626363",
+            "surface-bright": "#faf9f7",
+            "inverse-primary": "#e9c349",
+            "on-error": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#dadad8",
+            "tertiary-fixed-dim": "#c8c6c5",
+            "surface": "#faf9f7",
+            "inverse-surface": "#2f3130",
+            "background": "#faf9f7",
+            "surface-container-low": "#f4f3f1",
+            "on-tertiary-fixed": "#1b1c1c",
+            "on-tertiary-container": "#454545",
+            "on-secondary-fixed": "#1a1c1c",
+            "on-surface": "#1a1c1b",
+            "on-primary-container": "#554300",
+            "surface-variant": "#e3e2e0",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f1f1ef",
+            "tertiary-fixed": "#e4e2e1",
+            "on-primary-fixed-variant": "#574500",
+            "secondary-fixed-dim": "#c6c6c6",
+            "error-container": "#ffdad6",
+            "tertiary": "#5f5e5e",
+            "surface-container-highest": "#e3e2e0",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#ffe088",
+            "on-error-container": "#93000a",
+            "tertiary-container": "#b4b2b2",
+            "secondary-fixed": "#e3e2e2",
+            "secondary": "#5d5e5f",
+            "secondary-container": "#e0dfdf",
+            "on-tertiary": "#ffffff",
+            "on-background": "#1a1c1b",
+            "primary-fixed-dim": "#e9c349"
+          },
+          fontFamily: {
+            "headline": ["Noto Serif"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1.5rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #d0c5af;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#faf9f7] dark:bg-[#1a1c1b] opacity-80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-10 py-6 max-w-[1440px] mx-auto w-full">
+<div class="font-serif text-2xl tracking-tighter text-[#1a1c1b] dark:text-[#faf9f7]">은금슬쩍</div>
+<div class="hidden md:flex items-center gap-12">
+<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">Community</a>
+<a class="font-sans text-xs uppercase tracking-widest text-[#735c00] dark:text-[#d4af37] border-b border-[#d4af37] pb-1" href="#">Studio Share</a>
+<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">My Page</a>
+</div>
+<div class="flex items-center gap-6 text-[#735c00] dark:text-[#d4af37]">
+<button class="material-symbols-outlined hover:scale-95 transition-transform duration-200">search</button>
+<button class="material-symbols-outlined hover:scale-95 transition-transform duration-200">shopping_bag</button>
+</div>
+</div>
+<div class="bg-[#f4f3f1] dark:bg-[#2a2c2b] h-[1px] w-full"></div>
+</nav>
+<main class="pt-32 pb-20 px-6 max-w-[1200px] mx-auto">
+<!-- Header Section -->
+<header class="mb-20 text-center md:text-left">
+<h1 class="font-headline text-5xl md:text-7xl tracking-tight text-on-surface mb-4">스튜디오 공유하기</h1>
+<p class="font-body text-outline max-w-2xl leading-relaxed">
+        동료 작가들을 당신의 공간으로 초대하세요. 주얼리 워크숍을 등록하고 전문 도구들을 공유하며 공예 커뮤니티를 키워나가 보세요.
+      </p>
+</header>
+<!-- Main Form Grid -->
+<form class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+<!-- Left Column: Visuals & Branding -->
+<div class="lg:col-span-5 space-y-12">
+<div class="relative aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden group">
+<img alt="Artisan workshop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Minimalist sun-drenched jewelry studio with wooden workbench, organized metal tools, and delicate silver pieces in soft afternoon light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEzu9NcaKNx0iy3TiY6PEm9LOEwZKs8Z3_p0315mvGmU-vUONwy787zqgOeyMb4g06BCskzE3UL06xLo1mGhpm4mFvv1Syu4NaFx1ocH9FFytYEHbz0OXN2PwR7W5ljuEXKDTkQJ3Y3jfJmO0-0ilxppG20v85HT5yjOhx2TfN59qvRZXbtkYKBB5juB2PfkVmyDlrLm6WaHpnc6k6UAr9XbSh2t-USqVobKGiCr_PH1nIXsn80eWdRcmcYLcRn_suBFVL5Un8OzU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/40 to-transparent"></div>
+<div class="absolute bottom-8 left-8 text-white">
+<span class="font-sans text-[10px] uppercase tracking-[0.3em] block mb-2 opacity-80">Workspace Inspiration</span>
+<p class="font-headline text-2xl">Create a sanctuary for creation.</p>
+</div>
+</div>
+<div class="p-8 bg-surface-container-low rounded-xl space-y-6">
+<h3 class="font-headline text-xl text-primary">사진 가이드라인</h3>
+<ul class="space-y-4 text-sm text-outline leading-relaxed">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+              자연광에서 촬영한 고해상도 이미지
+            </li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+              보유한 전문 도구(토치, 모루 등)를 보여주세요
+            </li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+              작업 동선과 안전 시설을 강조해주세요
+            </li>
+</ul>
+</div>
+</div>
+<!-- Right Column: Form Inputs -->
+<div class="lg:col-span-7 space-y-16">
+<!-- Section: Basic Info -->
+<section class="space-y-8">
+<div class="border-b border-outline-variant/30 pb-4">
+<h2 class="font-headline text-2xl tracking-tight">스튜디오 정보</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="md:col-span-2 group">
+<label class="block font-sans text-[10px] uppercase tracking-widest text-outline mb-2 group-focus-within:text-primary transition-colors">스튜디오 명칭</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/50 focus:border-primary focus:ring-0 px-0 py-3 font-body text-lg transition-all placeholder:text-outline-variant/60" placeholder="예: 은빛 동굴 아틀리에" type="text"/>
+</div>
+<div class="md:col-span-2 group">
+<label class="block font-sans text-[10px] uppercase tracking-widest text-outline mb-2 group-focus-within:text-primary transition-colors">위치</label>
+<div class="relative">
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/50 focus:border-primary focus:ring-0 px-0 py-3 font-body text-lg transition-all placeholder:text-outline-variant/60" placeholder="서울시 강남구 신사동 123-4" type="text"/>
+<span class="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/50">location_on</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Description -->
+<section class="space-y-8">
+<div class="border-b border-outline-variant/30 pb-4">
+<h2 class="font-headline text-2xl tracking-tight">스토리</h2>
+</div>
+<div class="group">
+<label class="block font-sans text-[10px] uppercase tracking-widest text-outline mb-2 group-focus-within:text-primary transition-colors">설명</label>
+<textarea class="w-full bg-surface-container-low rounded-xl border-0 focus:ring-1 focus:ring-primary p-6 font-body leading-relaxed text-on-surface transition-all placeholder:text-outline-variant/60" placeholder="스튜디오의 분위기, 보유 장비, 그리고 어떤 분들에게 적합한 공간인지 설명해주세요..." rows="4"></textarea>
+</div>
+</section>
+<!-- Section: Amenities -->
+<section class="space-y-8">
+<div class="border-b border-outline-variant/30 pb-4">
+<h2 class="font-headline text-2xl tracking-tight">장비 및 편의시설</h2>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-body text-sm text-on-surface group-hover:text-primary transition-colors">납땜 스테이션</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-body text-sm text-on-surface group-hover:text-primary transition-colors">연마 선반</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-body text-sm text-on-surface group-hover:text-primary transition-colors">롤링 밀</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-body text-sm text-on-surface group-hover:text-primary transition-colors">초음파 세척기</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-body text-sm text-on-surface group-hover:text-primary transition-colors">레이저 용접기</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-body text-sm text-on-surface group-hover:text-primary transition-colors">3D 프린터</span>
+</label>
+</div>
+</section>
+<!-- Section: Media -->
+<section class="space-y-8">
+<div class="border-b border-outline-variant/30 pb-4">
+<h2 class="font-headline text-2xl tracking-tight">비주얼 쇼케이스</h2>
+</div>
+<div class="border-2 border-dashed border-outline-variant/30 rounded-xl p-12 text-center hover:border-primary/40 transition-colors group cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-primary transition-colors mb-4">add_a_photo</span>
+<p class="font-body text-sm text-outline">스튜디오 사진을 끌어다 놓으세요 또는 <span class="text-primary font-medium">직접 선택</span></p>
+<p class="text-[10px] uppercase tracking-widest text-outline-variant mt-2">최대 10개 이미지 • JPG, PNG, WEBP</p>
+</div>
+</section>
+<!-- Section: Pricing & Contact -->
+<section class="space-y-8">
+<div class="border-b border-outline-variant/30 pb-4">
+<h2 class="font-headline text-2xl tracking-tight">조건 및 연락처</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div class="group">
+<label class="block font-sans text-[10px] uppercase tracking-widest text-outline mb-2 group-focus-within:text-primary transition-colors">일일 대여료 (원)</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/50 focus:border-primary focus:ring-0 px-0 py-3 font-body text-lg transition-all" placeholder="50,000" type="number"/>
+</div>
+<div class="group">
+<label class="block font-sans text-[10px] uppercase tracking-widest text-outline mb-2 group-focus-within:text-primary transition-colors">연락처</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/50 focus:border-primary focus:ring-0 px-0 py-3 font-body text-lg transition-all" placeholder="010-1234-5678" type="tel"/>
+</div>
+</div>
+</section>
+<!-- Submit Button -->
+<div class="pt-8 flex justify-end">
+<button class="relative group bg-gradient-to-r from-primary to-primary-container text-on-primary px-12 py-5 rounded-full font-sans text-xs uppercase tracking-[0.2em] font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 active:scale-95" type="submit">
+            스튜디오 등록 완료
+            <div class="absolute inset-0 rounded-full border border-white/20 scale-105 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all"></div>
+</button>
+</div>
+</div>
+</form>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-[#d0c5af]/20 bg-[#f4f3f1] dark:bg-[#121413]">
+<div class="flex flex-col md:flex-row justify-between items-center px-20 py-16 w-full mt-20 gap-8">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="font-serif text-lg text-[#1a1c1b] dark:text-[#faf9f7]">은금슬쩍</div>
+<p class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2024 은금슬쩍. The Curated Atelier.</p>
+</div>
+<div class="flex gap-10">
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-colors" href="#">Journal</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-colors" href="#">Artisans</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-colors" href="#">Shipping</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-colors" href="#">Legal</a>
+</div>
+</div>
+</footer>
+</body></html>

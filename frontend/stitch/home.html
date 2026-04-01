@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary": "#5f5e5e",
+              "on-primary-fixed-variant": "#574500",
+              "primary-container": "#d4af37",
+              "outline-variant": "#d0c5af",
+              "tertiary-fixed-dim": "#c8c6c5",
+              "on-secondary-fixed-variant": "#464747",
+              "surface-dim": "#dadad8",
+              "primary-fixed": "#ffe088",
+              "surface-bright": "#faf9f7",
+              "secondary-fixed-dim": "#c6c6c6",
+              "on-primary-fixed": "#241a00",
+              "on-primary": "#ffffff",
+              "surface-container-highest": "#e3e2e0",
+              "secondary-container": "#e0dfdf",
+              "surface-tint": "#735c00",
+              "surface-container-low": "#f4f3f1",
+              "on-tertiary-fixed-variant": "#474747",
+              "surface-container": "#efeeec",
+              "secondary-fixed": "#e3e2e2",
+              "on-error": "#ffffff",
+              "outline": "#7f7663",
+              "background": "#faf9f7",
+              "on-secondary-fixed": "#1a1c1c",
+              "on-surface": "#1a1c1b",
+              "on-secondary": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-background": "#1a1c1b",
+              "surface": "#faf9f7",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2f3130",
+              "inverse-on-surface": "#f1f1ef",
+              "primary-fixed-dim": "#e9c349",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#1b1c1c",
+              "error-container": "#ffdad6",
+              "tertiary-fixed": "#e4e2e1",
+              "surface-variant": "#e3e2e0",
+              "primary": "#735c00",
+              "tertiary-container": "#b4b2b2",
+              "secondary": "#5d5e5f",
+              "on-tertiary-container": "#454545",
+              "on-primary-container": "#554300",
+              "on-secondary-container": "#626363",
+              "surface-container-high": "#e9e8e6",
+              "on-surface-variant": "#4d4635",
+              "inverse-primary": "#e9c349",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-8 py-6 max-w-[1440px] left-1/2 -translate-x-1/2 z-50 bg-[#faf9f7] dark:bg-stone-900/80 backdrop-blur-md">
+<div class="text-2xl font-serif font-bold text-[#1a1c1b] dark:text-[#faf9f7] tracking-tighter">은금슬쩍</div>
+<nav class="hidden md:flex items-center gap-12">
+<a class="text-[#735c00] dark:text-[#d4af37] border-b border-[#735c00] dark:border-[#d4af37] pb-1 font-medium text-xs tracking-widest uppercase" href="#">커뮤니티</a>
+<a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-xs tracking-widest uppercase" href="#">스튜디오 공유</a>
+<a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-xs tracking-widest uppercase" href="#">마이페이지</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out transition-all">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out transition-all">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative w-full h-[870px] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 flex items-center">
+<div class="grid grid-cols-1 md:grid-cols-2 w-full h-full">
+<div class="flex flex-col justify-center px-12 md:px-24 z-10 order-2 md:order-1">
+<span class="text-primary font-label tracking-[0.3em] uppercase text-xs mb-6">Established Artisan Platform</span>
+<h1 class="font-headline text-5xl md:text-7xl leading-tight text-on-surface mb-8 max-w-xl">
+                            진귀한 <span class="italic text-primary">금속</span>과 뜨거운 열정이 만나는 곳
+                        </h1>
+<p class="text-on-surface-variant font-light text-lg mb-12 max-w-md leading-relaxed">
+                            독립 주얼리 디자이너들의 정교한 공예와 이야기를 만나보세요.
+                        </p>
+<div class="flex gap-4">
+<button class="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-xs tracking-widest uppercase hover:opacity-90 transition-all shadow-lg shadow-primary/10">
+                                컬렉션 보기
+                            </button>
+<button class="px-8 py-4 rounded-full border border-outline text-on-surface font-label text-xs tracking-widest uppercase hover:bg-surface-container transition-all">
+                                스튜디오 보기
+                            </button>
+</div>
+</div>
+<div class="relative h-full order-1 md:order-2">
+<img alt="Jewelry Workbench" class="w-full h-full object-cover" data-alt="Close-up of a high-end jewelry artisan workbench with gold dust, delicate tools, and a half-finished ring under warm soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDGDtQFxiTikcRdf2owT_U5q9YV2ZP1V9cCDgOzeSrqgb7otLw21CcGPo_VxNbrmA3gs-rVec9ru0dlI0X6t40oUZtpUb6GNZaKlMEYTX4CgWIdQRiBgwx1SUUkTPpqjmZJC9QvgOYObFfvOGqfSdlpRnOZdP8YJCBkyCkAqy7wOjUE-Jwmn4Df-1lsCq8_xyNczcSZplpvXciEXcjGVN12jwt_3fG21xVqmfinQCI_-zONT4Z3_KGhtNbuvEemKKhXJ8NF-cJzGM"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent hidden md:block"></div>
+</div>
+</div>
+</div>
+<!-- Hero Pagination Dots -->
+<div class="absolute bottom-12 left-12 md:left-24 flex gap-4">
+<div class="w-12 h-[2px] bg-primary"></div>
+<div class="w-12 h-[2px] bg-outline-variant opacity-30"></div>
+<div class="w-12 h-[2px] bg-outline-variant opacity-30"></div>
+</div>
+</section>
+<!-- Studio Sharing Section -->
+<section class="py-32 bg-surface">
+<div class="max-w-[1440px] mx-auto px-8">
+<div class="flex justify-between items-end mb-16">
+<div>
+<h2 class="font-headline text-4xl text-on-surface mb-4">당신의 작업실을 찾아보세요</h2>
+<p class="text-on-surface-variant font-light">독립 작가들을 위한 설비와 창의적인 작업 환경이 마련되어 있습니다.</p>
+</div>
+<button class="group flex items-center gap-3 px-6 py-3 rounded-full border border-outline hover:border-primary transition-all duration-300">
+<span class="text-on-surface font-label text-xs tracking-widest uppercase group-hover:text-primary">스튜디오 등록</span>
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+<div class="flex gap-8 overflow-x-auto hide-scrollbar pb-12 snap-x">
+<!-- Studio Card 1 -->
+<div class="min-w-[400px] snap-start">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 group">
+<div class="relative h-72 overflow-hidden">
+<img alt="Studio Seongsu" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Interior of a minimalist sun-drenched jewelry studio in Seongsu with industrial windows, wooden workbenches, and organized silver tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFCt-BvFnPFd9rY7ae0M64S2iW4JTOOQ90aq2JTQi7FjwUENEAnxPZ4LCfqgXywjo15l42hNBgdGL_vt94IXk-M6QJdn0NJoqcHb-_O1eIBcwiF_HeflRfm6ptZ5ZnTw9LN277_PAWMw7iiMlOko5j-hCYIiQgQQSNSIpzvt-OYPDayfvko8SbJWAkyNKkui8IKzQz1pFIURBSDN06luJFsfwxs-qGaIdOk3YZ5d9W2elHg_20sE6vfYK_3VC9dIY5CVBxt5Ho7kU"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-label uppercase tracking-widest">성수동</div>
+</div>
+<div class="p-8">
+<h3 class="font-headline text-xl mb-2">더 크루시블 컬렉티브</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">프리미엄 주조 설비와 고속 광택 작업대가 포함되어 있습니다.</p>
+<div class="flex justify-between items-center pt-4 border-t border-surface-container">
+<span class="font-label text-xs tracking-widest uppercase opacity-60">월</span>
+<span class="font-headline text-lg text-primary">₩450,000 ~</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Studio Card 2 -->
+<div class="min-w-[400px] snap-start">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 group">
+<div class="relative h-72 overflow-hidden">
+<img alt="Studio Hannam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Elegant jewelry atelier interior with neutral tones, marble tables, and professional task lighting in a high-end neighborhood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2fAofQ2eAG0KwJz-TeNRoFslIR_E6Ta5_U3nmgQ2PiFILoN3e3u9SR9mc9tzOuM_A8QFlLyBAdsXWh8CS9qUkQ0KOVV3B8mUPcjVXbclimz8a3qQ6ogIGb3mW6yocQ77B4pRpErJiH0RxLs6Ph27bbrA7fsbicTpmzGsUlLmDjiR3LUTEguFfVujMUabSuql5PznNlp9n2S-VwkLRVsAShWf3bBKgNch1yP2rDCibAu_oB7zPT9qPKtclGXwU1FlD0XYQjK87z-s"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-label uppercase tracking-widest">한남동</div>
+</div>
+<div class="p-8">
+<h3 class="font-headline text-xl mb-2">오키드 아틀리에</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">개인 사물함과 연중무휴 24시간 보안 시스템을 제공합니다.</p>
+<div class="flex justify-between items-center pt-4 border-t border-surface-container">
+<span class="font-label text-xs tracking-widest uppercase opacity-60">월</span>
+<span class="font-headline text-lg text-primary">₩620,000 ~</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Studio Card 3 -->
+<div class="min-w-[400px] snap-start">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 group">
+<div class="relative h-72 overflow-hidden">
+<img alt="Studio Yeonhui" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Cozy creative space with plants, organized gem cases, and traditional jewelry making tools in a peaceful quiet neighborhood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUfsdPcaK4Aeh4EfE7LHYgNmJmPz01eoBJW8JjqXN_ljAWb3dI5xcGqHh-RP1tl530GP9sY7_Kv50IpYfKrCXgw3Q6o6Er_wWfS5IfWUsPAbNFatpA1Q0vwQQ5w7r5ZWP7ioBeXDuG2xqCwYdB775D1586AzsCWIuMP3rXKynvJssBrPBQpycWQdOGSS-YXeE75Z4YjcZiGl4LHUMn-8kS7iffXjUiSwyC2r8EnUrTrAqeaMS8XIdTQOr4B3JP4Uihk5k-roNoxJg"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-label uppercase tracking-widest">연희동</div>
+</div>
+<div class="p-8">
+<h3 class="font-headline text-xl mb-2">플로라 &amp; 파우나 길드</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">영감을 공유하는 보드와 커뮤니티 중심의 원석 소싱 기회를 제공합니다.</p>
+<div class="flex justify-between items-center pt-4 border-t border-surface-container">
+<span class="font-label text-xs tracking-widest uppercase opacity-60">월</span>
+<span class="font-headline text-lg text-primary">₩380,000 ~</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Section -->
+<section class="py-32 bg-surface-container-low">
+<div class="max-w-4xl mx-auto px-8">
+<div class="text-center mb-20">
+<span class="text-primary font-label tracking-[0.3em] uppercase text-xs">Knowledge Exchange</span>
+<h2 class="font-headline text-4xl text-on-surface mt-4">디자이너 톡 &amp; 마켓</h2>
+</div>
+<div class="space-y-4">
+<!-- Community Item 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="post thumbnail" class="w-full h-full object-cover" data-alt="A small detailed photo of a silver pendant with a raw emerald stone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARxzaywP2r2RsFlShSeJGD0z8CL6viYfytQzJRHHOOfxE32OjF-LbS9s3CR52rG8IrhhfOuWEBdxS0ESIpIXmH6R-4TDwhtEVTl39KKU7V2ljD_JV5wND0GRxTtLysgnxxn-odCzyAq_349621TavLZlPkwPRWYt1tioGcZUbEp0eAy12ewivowFEQir5zDFQVXS7lSogpnUPEAO_p9NGOsuy-yHluwqh8mYMEVzRLXWh9fEhko7XGba2VpRmFXyifT8B0CDiXMTQ"/>
+</div>
+<div class="flex-grow">
+<span class="text-[10px] font-label text-primary uppercase tracking-widest mb-1 block">자재 정보</span>
+<h4 class="font-medium text-on-surface text-lg">서울에서 믿을만한 사파이어 공급처가 있을까요?</h4>
+<p class="text-sm text-on-surface-variant font-light mt-1">최근 종로 시장에 스리랑카산 원석 보러 가신 분 계신가요?</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-outline">favorite</span>
+<span class="text-[10px] mt-1 font-label">24</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-outline">chat_bubble</span>
+<span class="text-[10px] mt-1 font-label">8</span>
+</div>
+</div>
+</div>
+<!-- Community Item 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="post thumbnail" class="w-full h-full object-cover" data-alt="Close up of a torch being used to solder a gold ring band" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFxwXwcSwb8ynsZBD7Z-6O8U1XyJtjUbiNTiUuJ3kvOE1viSl0GKUgwi1Do3tKVQyEKHSpV5iD1wkim4IcpVBwUfM-D5msfKK8qysyD1r1LXjySECvYRrre-TAZyyz2EZgV7WkSulNYqVLUdljETqskGPKbMDONmNL1fU0M48miPqycx789r0vY6zGTZ6-RkTk6PoxLuWdGilPqgf4jTE11hz3o3a-1AxVEJc_bmUBxgKywPc4w8TYLyKBylN6nxipktA3pWMxtqw"/>
+</div>
+<div class="flex-grow">
+<span class="text-[10px] font-label text-secondary uppercase tracking-widest mb-1 block">마켓</span>
+<h4 class="font-medium text-on-surface text-lg">[판매] 중고 롤링 밀 - 더스톤 (상태 양호)</h4>
+<p class="text-sm text-on-surface-variant font-light mt-1">작업실 장비 업그레이드로 인해 판매합니다. 마포구 직거래 선호합니다.</p>
+</div>
+<div class="flex gap-4 items-center text-primary">
+<span class="material-symbols-outlined">send</span>
+</div>
+</div>
+<!-- Community Item 3 (Small variation) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer">
+<div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center text-outline-variant flex-shrink-0">
+<span class="material-symbols-outlined text-4xl">text_snippet</span>
+</div>
+<div class="flex-grow">
+<span class="text-[10px] font-label text-primary uppercase tracking-widest mb-1 block">법률 &amp; 비즈니스</span>
+<h4 class="font-medium text-on-surface text-lg">커스텀 주문 계약서 템플릿</h4>
+<p class="text-sm text-on-surface-variant font-light mt-1">디자인 분쟁으로부터 작가와 고객을 보호하기 위한 서식입니다.</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-outline">favorite</span>
+<span class="text-[10px] mt-1 font-label">156</span>
+</div>
+</div>
+</div>
+<!-- Community Item 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="post thumbnail" class="w-full h-full object-cover" data-alt="A minimalist earring display with pearl drops on a stone background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGNX-LoLLxngp66RI0VCyexs7QkYZ-J0alSNwzWhpTyAuVQia_9a9fDYutLw5T99p6gxFMpkJ1URGxQ6Fnv2ky9vN5g1YabzcceaxWJwMv2oznTHTaLwlK6w7kihz-vQ-6TgBTFdPLBWm0p7vy0tUBUMyHA9u-Jq104L3BCukXEz31YVB64-Z8INBxlc1EVNhYasfZr0K1P_DhjuWRXwqDULbEkUn_9E8vz3unL3_pCHydmSSRSjHGawkZ5bMhDI1bvNK79a33LTE"/>
+</div>
+<div class="flex-grow">
+<span class="text-[10px] font-label text-primary uppercase tracking-widest mb-1 block">전시</span>
+<h4 class="font-medium text-on-surface text-lg">다가오는 '실버 &amp; 솔레스' 단체전 안내</h4>
+<p class="text-sm text-on-surface-variant font-light mt-1">올해 연말 결산 전시에 참여하실 작가님들을 모집합니다.</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-outline" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="text-[10px] mt-1 font-label">312</span>
+</div>
+</div>
+</div>
+<button class="w-full py-6 text-on-surface-variant font-label text-[10px] tracking-[0.4em] uppercase hover:text-primary transition-colors">
+                        전체 토론 보기
+                    </button>
+</div>
+</div>
+</section>
+<!-- CTA Newsletter Section -->
+<section class="py-32 px-8">
+<div class="max-w-[1440px] mx-auto bg-primary-container/10 rounded-3xl p-16 md:p-32 text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full -ml-48 -mb-48"></div>
+<h2 class="font-headline text-4xl md:text-5xl mb-8">이너 서클에 가입하세요</h2>
+<p class="text-on-surface-variant max-w-lg mx-auto mb-12 font-light">작가 워크숍 독점 초대, 시장 소식, 그리고 새로운 스튜디오 오픈 소식을 받아보세요.</p>
+<div class="max-w-md mx-auto flex gap-4">
+<input class="flex-grow bg-white border-none rounded-full px-8 py-4 focus:ring-1 focus:ring-primary text-sm" placeholder="이메일 주소" type="email"/>
+<button class="px-8 py-4 bg-on-background text-white rounded-full font-label text-xs tracking-widest uppercase hover:bg-primary transition-all">구독하기</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f4f3f1] dark:bg-stone-950 py-20 px-8">
+<div class="max-w-[1440px] mx-auto w-full flex flex-col md:flex-row justify-between items-start gap-12">
+<div>
+<div class="font-serif text-xl text-[#1a1c1b] dark:text-[#faf9f7] mb-6">은금슬쩍</div>
+<p class="text-[#1a1c1b] dark:text-stone-400 text-sm max-w-xs leading-relaxed font-light">
+                    순은과 금을 다루는 독립 작가들을 위한 큐레이션 아틀리에입니다. 느림의 미학, 의도된 디자인, 그리고 아름다움을 지향합니다.
+                </p>
+</div>
+<div class="grid grid-cols-2 gap-x-24 gap-y-4">
+<a class="text-[#1a1c1b] dark:text-stone-400 text-xs font-body hover:underline decoration-[#d4af37] underline-offset-4 fade-in transition-all" href="#">회사 소개</a>
+<a class="text-[#1a1c1b] dark:text-stone-400 text-xs font-body hover:underline decoration-[#d4af37] underline-offset-4 fade-in transition-all" href="#">작가 문의</a>
+<a class="text-[#1a1c1b] dark:text-stone-400 text-xs font-body hover:underline decoration-[#d4af37] underline-offset-4 fade-in transition-all" href="#">이용약관</a>
+<a class="text-[#1a1c1b] dark:text-stone-400 text-xs font-body hover:underline decoration-[#d4af37] underline-offset-4 fade-in transition-all" href="#">개인정보처리방침</a>
+</div>
+<div class="flex gap-6">
+<span class="material-symbols-outlined text-[#735c00] cursor-pointer">language</span>
+<span class="material-symbols-outlined text-[#735c00] cursor-pointer">share</span>
+</div>
+</div>
+<div class="max-w-[1440px] mx-auto border-t border-surface-container-high mt-16 pt-8 text-[10px] text-stone-400 tracking-widest uppercase">
+            © 2024 은금슬쩍. The Curated Atelier.
+        </div>
+</footer>
+</body></html>

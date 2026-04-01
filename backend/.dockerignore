@@ -1,6 +1,0 @@
-.git
-.gitignore
-target
-README.md
-Dockerfile
-*.log
