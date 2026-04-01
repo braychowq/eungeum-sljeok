@@ -358,22 +358,30 @@
 
             let activeIndex = 0;
             let intervalId;
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let pointerStartX = 0;
-            let pointerEndX = 0;
-            const swipeThreshold = 48;
+            let isDragging = false;
+            let dragStartX = 0;
+            let currentDeltaX = 0;
 
-            const setActive = (nextIndex) => {
-                activeIndex = nextIndex;
-                track.style.transform = `translateX(-${activeIndex * 100}%)`;
+            const updateDots = () => {
                 dots.forEach((dot, index) => {
                     dot.classList.toggle('is-active', index === activeIndex);
                 });
             };
 
-            const goNext = () => setActive((activeIndex + 1) % slides.length);
-            const goPrev = () => setActive((activeIndex - 1 + slides.length) % slides.length);
+            const snapTo = (nextIndex) => {
+                activeIndex = nextIndex;
+                track.style.transition = 'transform 0.7s ease';
+                track.style.transform = `translate3d(-${activeIndex * 100}%, 0, 0)`;
+                updateDots();
+            };
+
+            const applyDragPosition = (deltaX) => {
+                track.style.transition = 'none';
+                track.style.transform = `translate3d(calc(${-activeIndex * 100}% + ${deltaX}px), 0, 0)`;
+            };
+
+            const goNext = () => snapTo((activeIndex + 1) % slides.length);
+            const goPrev = () => snapTo((activeIndex - 1 + slides.length) % slides.length);
 
             const startAutoSlide = () => {
                 clearInterval(intervalId);
@@ -384,44 +392,74 @@
 
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
-                    setActive(index);
+                    snapTo(index);
                     startAutoSlide();
                 });
             });
 
+            const beginDrag = (clientX) => {
+                isDragging = true;
+                dragStartX = clientX;
+                currentDeltaX = 0;
+                clearInterval(intervalId);
+            };
+
+            const moveDrag = (clientX) => {
+                if (!isDragging) return;
+                currentDeltaX = clientX - dragStartX;
+                applyDragPosition(currentDeltaX);
+            };
+
+            const endDrag = () => {
+                if (!isDragging) return;
+
+                isDragging = false;
+
+                const sliderWidth = slider.clientWidth || 1;
+                const swipeThreshold = Math.min(120, sliderWidth * 0.18);
+
+                if (currentDeltaX <= -swipeThreshold) {
+                    goNext();
+                } else if (currentDeltaX >= swipeThreshold) {
+                    goPrev();
+                } else {
+                    snapTo(activeIndex);
+                }
+
+                startAutoSlide();
+            };
+
             slider.addEventListener('touchstart', (event) => {
-                touchStartX = event.changedTouches[0].clientX;
+                beginDrag(event.touches[0].clientX);
             }, { passive: true });
 
-            slider.addEventListener('touchend', (event) => {
-                touchEndX = event.changedTouches[0].clientX;
-                const deltaX = touchStartX - touchEndX;
-                if (Math.abs(deltaX) < swipeThreshold) return;
-                if (deltaX > 0) {
-                    goNext();
-                } else {
-                    goPrev();
-                }
-                startAutoSlide();
+            slider.addEventListener('touchmove', (event) => {
+                moveDrag(event.touches[0].clientX);
             }, { passive: true });
+
+            slider.addEventListener('touchend', endDrag, { passive: true });
+            slider.addEventListener('touchcancel', endDrag, { passive: true });
 
             slider.addEventListener('pointerdown', (event) => {
-                pointerStartX = event.clientX;
+                if (event.pointerType !== 'mouse') return;
+                beginDrag(event.clientX);
+            });
+
+            slider.addEventListener('pointermove', (event) => {
+                if (event.pointerType !== 'mouse') return;
+                moveDrag(event.clientX);
             });
 
             slider.addEventListener('pointerup', (event) => {
-                pointerEndX = event.clientX;
-                const deltaX = pointerStartX - pointerEndX;
-                if (Math.abs(deltaX) < swipeThreshold) return;
-                if (deltaX > 0) {
-                    goNext();
-                } else {
-                    goPrev();
-                }
-                startAutoSlide();
+                if (event.pointerType !== 'mouse') return;
+                endDrag();
             });
 
-            setActive(0);
+            slider.addEventListener('pointerleave', () => {
+                endDrag();
+            });
+
+            snapTo(0);
             startAutoSlide();
         })();
     </script>
