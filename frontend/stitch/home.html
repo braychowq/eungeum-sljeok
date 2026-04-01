@@ -110,6 +110,15 @@
             background: #735c00;
             opacity: 1;
         }
+        [data-auth-member] {
+            display: none;
+        }
+        body.is-logged-in [data-auth-guest] {
+            display: none !important;
+        }
+        body.is-logged-in [data-auth-member] {
+            display: inline-flex !important;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
@@ -120,6 +129,10 @@
 <a class="text-[#735c00] dark:text-[#d4af37] border-b border-[#735c00] dark:border-[#d4af37] pb-1 font-medium text-[11px] tracking-[0.18em] uppercase" href="#">커뮤니티</a>
 <a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-[11px] tracking-[0.18em] uppercase" href="#">공방 공유</a>
 </nav>
+<div class="md:hidden flex items-center">
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="#">로그인</a>
+<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="#">마이페이지</a>
+</div>
 <nav class="hidden md:flex items-center gap-12">
 <a class="text-[#735c00] dark:text-[#d4af37] border-b border-[#735c00] dark:border-[#d4af37] pb-1 font-medium text-xs tracking-widest uppercase" href="#">커뮤니티</a>
 <a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-xs tracking-widest uppercase" href="#">공방 공유</a>

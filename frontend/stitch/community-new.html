@@ -77,6 +77,15 @@
         }
         .serif-display { font-family: 'Noto Serif', serif; }
         .sans-label { font-family: 'Inter', sans-serif; }
+        [data-auth-member] {
+            display: none;
+        }
+        body.is-logged-in [data-auth-guest] {
+            display: none !important;
+        }
+        body.is-logged-in [data-auth-member] {
+            display: inline-flex !important;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background font-body antialiased">
@@ -88,6 +97,10 @@
 <a class="text-[#735c00] dark:text-[#d4af37] border-b border-[#735c00] dark:border-[#d4af37] pb-1 font-medium text-[11px] tracking-[0.18em] uppercase" href="/community">커뮤니티</a>
 <a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-[11px] tracking-[0.18em] uppercase" href="/market">공방 공유</a>
 </nav>
+<div class="md:hidden flex items-center">
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="#">로그인</a>
+<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="#">마이페이지</a>
+</div>
 <nav class="hidden md:flex items-center space-x-12">
 <a class="font-sans text-xs uppercase tracking-widest text-[#735c00] dark:text-[#d4af37] border-b border-[#d4af37] pb-1" href="/community">커뮤니티</a>
 <a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="/market">공방 공유</a>
