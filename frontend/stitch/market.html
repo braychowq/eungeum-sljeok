@@ -94,6 +94,93 @@
         body.is-logged-in [data-auth-member] {
             display: inline-flex !important;
         }
+        .market-layout-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(127, 118, 99, 0.18);
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            color: #4d4635;
+            background: rgba(255, 255, 255, 0.72);
+        }
+        .market-layout-toggle.is-active {
+            background: #735c00;
+            color: #ffffff;
+            border-color: #735c00;
+            box-shadow: 0 10px 25px rgba(115, 92, 0, 0.18);
+        }
+        @media (max-width: 767px) {
+            [data-market-grid] {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 1rem;
+                align-items: start;
+            }
+            [data-market-grid][data-mobile-layout="1"] {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 1.5rem;
+            }
+            [data-market-grid] > article {
+                max-width: none !important;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-image {
+                margin-bottom: 0.9rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-copy {
+                padding-left: 0;
+                padding-right: 0;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-title {
+                font-size: 1rem;
+                line-height: 1.45rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-price {
+                font-size: 0.95rem;
+                line-height: 1.4rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-summary {
+                font-size: 0.75rem;
+                line-height: 1.35;
+                margin-bottom: 0.75rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-tags {
+                gap: 0.3rem;
+                margin-bottom: 0.9rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-tags span {
+                font-size: 9px;
+                padding: 0.2rem 0.45rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] .market-card-button {
+                padding-top: 0.7rem;
+                padding-bottom: 0.7rem;
+                font-size: 10px;
+                letter-spacing: 0.12em;
+            }
+            [data-market-grid][data-mobile-layout="2"] [data-market-cta] {
+                padding: 1.5rem 1rem;
+                min-height: 100%;
+            }
+            [data-market-grid][data-mobile-layout="2"] [data-market-cta] h3 {
+                font-size: 1rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] [data-market-cta] p {
+                font-size: 0.75rem;
+                line-height: 1.4;
+            }
+            [data-market-grid][data-mobile-layout="2"] [data-market-cta] .w-16 {
+                width: 3rem;
+                height: 3rem;
+                margin-bottom: 1rem;
+            }
+            [data-market-grid][data-mobile-layout="2"] [data-market-cta] .text-3xl {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
@@ -145,60 +232,73 @@
 </button>
 </div>
 </div>
+<div class="mt-6 flex md:hidden items-center justify-end gap-2">
+<span class="text-[10px] tracking-[0.16em] uppercase text-outline">모바일 보기</span>
+<div class="inline-flex items-center gap-2">
+<button aria-pressed="true" class="market-layout-toggle is-active" data-market-layout-toggle="2" type="button">
+<span class="material-symbols-outlined" style="font-size: 16px;">grid_view</span>
+<span>2열</span>
+</button>
+<button aria-pressed="false" class="market-layout-toggle" data-market-layout-toggle="1" type="button">
+<span class="material-symbols-outlined" style="font-size: 16px;">view_agenda</span>
+<span>1열</span>
+</button>
+</div>
+</div>
 </section>
 <!-- Listing Grid -->
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center" data-market-grid="" data-mobile-layout="2">
 <!-- Studio Card 1 -->
-<article class="group w-full max-w-[360px]">
-<a class="block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/maison-de-lartiste">
+<article class="group w-full max-w-[360px]" data-market-card="">
+<a class="market-card-image block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/maison-de-lartiste">
 <img alt="Studio Interior" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" data-alt="Minimalist jewelry studio with warm wooden tables, bright natural light from large windows, and organized metalworking tools in a clean workshop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3rg3F2p-W5Vfxw7-FTEux-_7G6FtrAgMUcjrQ15Qa7BQ6cUxwBKakk89QWwobbTWSKlRnFs1BBIbE__CZCp9pYf3kHjZLQiIOFleCZoV3HDXbvxpjxHg_e-moBufkgRZAgneaH1vxRWjcW-glX4crTiTV3Dclx30yG50IKlimWl7fndpDvMtTDRvyd4SmCATywwUXxpyeAIdwm_05U3nNYIFjISpnoFvwCZxG7QUWjCZxh4jzwwF1p_7rEbEnLpBgct00kz6Gm1Y"/>
 <div class="absolute top-4 left-4 flex gap-2">
 <span class="px-3 py-1 bg-surface-container-lowest/90 backdrop-blur text-[10px] uppercase tracking-widest font-semibold rounded-full">서촌</span>
 </div>
 </a>
-<div class="px-2">
+<div class="market-card-copy px-2">
 <div class="flex justify-between items-start mb-2">
-<h3 class="font-headline text-2xl text-on-surface"><a href="/market/studio/maison-de-lartiste">Maison de L'Artiste</a></h3>
-<span class="text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩450,000</span>
+<h3 class="market-card-title font-headline text-2xl text-on-surface"><a href="/market/studio/maison-de-lartiste">Maison de L'Artiste</a></h3>
+<span class="market-card-price text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩450,000</span>
 </div>
-<p class="text-sm text-on-surface-variant font-light mb-4 line-clamp-2">전통적인 왁스 카빙과 은공예에 집중할 수 있는 조용하고 햇살 가득한 2층 스튜디오입니다.</p>
-<div class="flex flex-wrap gap-2 mb-6">
+<p class="market-card-summary text-sm text-on-surface-variant font-light mb-4 line-clamp-2">전통적인 왁스 카빙과 은공예에 집중할 수 있는 조용하고 햇살 가득한 2층 스튜디오입니다.</p>
+<div class="market-card-tags flex flex-wrap gap-2 mb-6">
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">연마기</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">가마</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">와이파이</span>
 </div>
-<a class="block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/maison-de-lartiste">
+<a class="market-card-button block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/maison-de-lartiste">
                     작가에게 문의하기
                 </a>
 </div>
 </article>
 <!-- Studio Card 2 -->
-<article class="group w-full max-w-[360px]">
-<a class="block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/the-forge-collective">
+<article class="group w-full max-w-[360px]" data-market-card="">
+<a class="market-card-image block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/the-forge-collective">
 <img alt="Studio Interior" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" data-alt="Industrial chic workshop space with exposed brick walls, vintage metal stools, and professional jewelry benches under soft pendant lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoS1F5DlOtIZaawuruVX2_fQqugectv32be0hyYWf77M7N1sfPcWdejYVDtzd4-HypdmAGLO7CCTLQ8PFyFcf0hD8ZS6vzoILMTaZksEHCNo3P47MTn6Em6qoYhgC0LsM_15MLHgg_m1IgHi3qVFo8Pit11-jKQK5oYNH-3JI3qfDLLdIDKaNVsRBMpMObcoivXrBu7EryGi9rSM7WOnNttBimV12GHWSAFnC9uUXit8DTOfbeHiJ7q0ILlu6yOtgN1ob6jymnWRQ"/>
 <div class="absolute top-4 left-4 flex gap-2">
 <span class="px-3 py-1 bg-surface-container-lowest/90 backdrop-blur text-[10px] uppercase tracking-widest font-semibold rounded-full">성수동</span>
 </div>
 </a>
-<div class="px-2">
+<div class="market-card-copy px-2">
 <div class="flex justify-between items-start mb-2">
-<h3 class="font-headline text-2xl text-on-surface"><a href="/market/studio/the-forge-collective">The Forge Collective</a></h3>
-<span class="text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩620,000</span>
+<h3 class="market-card-title font-headline text-2xl text-on-surface"><a href="/market/studio/the-forge-collective">The Forge Collective</a></h3>
+<span class="market-card-price text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩620,000</span>
 </div>
-<p class="text-sm text-on-surface-variant font-light mb-4 line-clamp-2">네 명의 마스터 주얼러가 공유하는 고급 산업용 공간입니다. 무거운 금속 작업을 위한 설비가 완비되어 있습니다.</p>
-<div class="flex flex-wrap gap-2 mb-6">
+<p class="market-card-summary text-sm text-on-surface-variant font-light mb-4 line-clamp-2">네 명의 마스터 주얼러가 공유하는 고급 산업용 공간입니다. 무거운 금속 작업을 위한 설비가 완비되어 있습니다.</p>
+<div class="market-card-tags flex flex-wrap gap-2 mb-6">
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">롤링 밀</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">레이저 용접기</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">24시간 이용 가능</span>
 </div>
-<a class="block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/the-forge-collective">
+<a class="market-card-button block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/the-forge-collective">
                     작가에게 문의하기
                 </a>
 </div>
 </article>
 <!-- Studio Card 3 -->
-<article class="group w-full max-w-[360px]">
-<a class="block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/silent-earth">
+<article class="group w-full max-w-[360px]" data-market-card="">
+<a class="market-card-image block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/silent-earth">
 <img alt="Studio Interior" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" data-alt="Modern high-ceiling studio with white walls, curated art pieces, and specialized jewelry desks overlooking a quiet city garden." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn_ThTR4-Dogo3ToH5j6gjVhWcvyomGk5dXkPanGGa4zG8vqQUvteIeYqh9os8avXy7AXt79gIN02CtphjYpCi9LXYni67eK6QcxV-xws7SxnuftldpGeeIzwjNaoJYzuiwOpVgNmHQXQqDFzmfgsTm6csC312zEUaKotrFs5FYz1y7yZ7x8558AZNVJIVrDqjR6zr4hqxHAHd4HwYdnafvOE7k_a_8tO9hMZIs3Z6_FpygCXOP251qnZMp-Jspt9E4308Pajk_b0"/>
 <div class="absolute top-4 left-4 flex gap-2">
 <span class="px-3 py-1 bg-surface-container-lowest/90 backdrop-blur text-[10px] uppercase tracking-widest font-semibold rounded-full">한남</span>
@@ -207,72 +307,72 @@
 <span class="px-3 py-1 bg-primary text-on-primary text-[10px] uppercase tracking-widest font-bold rounded-full">New</span>
 </div>
 </a>
-<div class="px-2">
+<div class="market-card-copy px-2">
 <div class="flex justify-between items-start mb-2">
-<h3 class="font-headline text-2xl text-on-surface"><a href="/market/studio/silent-earth">Ivory Atelier</a></h3>
-<span class="text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩580,000</span>
+<h3 class="market-card-title font-headline text-2xl text-on-surface"><a href="/market/studio/silent-earth">Ivory Atelier</a></h3>
+<span class="market-card-price text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩580,000</span>
 </div>
-<p class="text-sm text-on-surface-variant font-light mb-4 line-clamp-2">하이엔드 파인 주얼리와 스톤 세팅에 집중하는 디자이너들을 위한 부티크 공유 스튜디오입니다.</p>
-<div class="flex flex-wrap gap-2 mb-6">
+<p class="market-card-summary text-sm text-on-surface-variant font-light mb-4 line-clamp-2">하이엔드 파인 주얼리와 스톤 세팅에 집중하는 디자이너들을 위한 부티크 공유 스튜디오입니다.</p>
+<div class="market-card-tags flex flex-wrap gap-2 mb-6">
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">현미경</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">커피 바</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">보관함</span>
 </div>
-<a class="block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/silent-earth">
+<a class="market-card-button block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/silent-earth">
                     작가에게 문의하기
                 </a>
 </div>
 </article>
 <!-- Studio Card 4 -->
-<article class="group w-full max-w-[360px]">
-<a class="block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/stone-and-fire">
+<article class="group w-full max-w-[360px]" data-market-card="">
+<a class="market-card-image block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/stone-and-fire">
 <img alt="Studio Interior" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" data-alt="Close up of a wooden jeweler's bench with intricate tools, filings of gold, and a warm desk lamp creating a cozy, productive atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChTI_mK8WffSw2aGsFzBDTJrDiq7CgFdPHDAQfcL-ISafOPgzDiv6zL9DpsVpgxg8DSLjH38Ed1PHX1Uf-8dzTiTFr7YIWfrIbI5FfhpyBAFIFWLBW4cNyjpUH3yg3KywkiwuOU0YMxHhSMVnXSwYSh8jZvTjD4Y6ZUvOgf2eH26nqwI-4ZhAgYsQp-uko2L0uq3svfvfyRuTVulS_8g_sozZkbxEppcxrXZCT9c2WSucNtwFuZcx1VOJq-t5Ae0IpK1g74xvHdJQ"/>
 <div class="absolute top-4 left-4 flex gap-2">
 <span class="px-3 py-1 bg-surface-container-lowest/90 backdrop-blur text-[10px] uppercase tracking-widest font-semibold rounded-full">익선</span>
 </div>
 </a>
-<div class="px-2">
+<div class="market-card-copy px-2">
 <div class="flex justify-between items-start mb-2">
-<h3 class="font-headline text-2xl text-on-surface"><a href="/market/studio/stone-and-fire">Vintage Goldsmiths</a></h3>
-<span class="text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩380,000</span>
+<h3 class="market-card-title font-headline text-2xl text-on-surface"><a href="/market/studio/stone-and-fire">Vintage Goldsmiths</a></h3>
+<span class="market-card-price text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩380,000</span>
 </div>
-<p class="text-sm text-on-surface-variant font-light mb-4 line-clamp-2">매력적인 한옥 스타일의 워크숍 공간입니다. 역사적인 분위기를 찾는 개인 디자이너에게 완벽한 장소입니다.</p>
-<div class="flex flex-wrap gap-2 mb-6">
+<p class="market-card-summary text-sm text-on-surface-variant font-light mb-4 line-clamp-2">매력적인 한옥 스타일의 워크숍 공간입니다. 역사적인 분위기를 찾는 개인 디자이너에게 완벽한 장소입니다.</p>
+<div class="market-card-tags flex flex-wrap gap-2 mb-6">
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">수공구</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">쇼룸</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">정숙 구역</span>
 </div>
-<a class="block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/stone-and-fire">
+<a class="market-card-button block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/stone-and-fire">
                     작가에게 문의하기
                 </a>
 </div>
 </article>
 <!-- Studio Card 5 -->
-<article class="group w-full max-w-[360px]">
-<a class="block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/atelier-sora">
+<article class="group w-full max-w-[360px]" data-market-card="">
+<a class="market-card-image block relative aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-surface-container-low" href="/market/studio/atelier-sora">
 <img alt="Studio Interior" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" data-alt="Wide shot of a clean, white-walled studio with minimalist aesthetics, dedicated desks for multiple artisans, and a large communal area." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOsYicUmEdzVboEct9j1Vu2Ij26mj0xFw_hNY54m0q6dQcC9lqhtNBlqclGz1rhX3AWmuMHSEjb2jqEeRh45g-lhgYOop02WbSthhVdHqXxZ06JgzjhDp2hKGN9duBhmPlWuJrZNQ1pjb-v230QVIFgizhA5QMx_gBi1H9mlfYDQmyNtnAiBCO7mhyu8rKy9BfngfuJTS0m28fxE-3RTHOpfplPXLoES0S719BwbiKFC5NQMj16cEoYvaTTdr2vzIztBZ59bdA96w"/>
 <div class="absolute top-4 left-4 flex gap-2">
 <span class="px-3 py-1 bg-surface-container-lowest/90 backdrop-blur text-[10px] uppercase tracking-widest font-semibold rounded-full">연남</span>
 </div>
 </a>
-<div class="px-2">
+<div class="market-card-copy px-2">
 <div class="flex justify-between items-start mb-2">
-<h3 class="font-headline text-2xl text-on-surface"><a href="/market/studio/atelier-sora">Pure Studio</a></h3>
-<span class="text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩420,000</span>
+<h3 class="market-card-title font-headline text-2xl text-on-surface"><a href="/market/studio/atelier-sora">Pure Studio</a></h3>
+<span class="market-card-price text-primary font-medium tracking-tight"><span class="text-[10px] text-outline font-normal uppercase mr-1">월</span>₩420,000</span>
 </div>
-<p class="text-sm text-on-surface-variant font-light mb-4 line-clamp-2">대형 개인 사물함과 SNS용 사진 촬영 부스를 갖춘 현대적이고 밝은 작업 공간입니다.</p>
-<div class="flex flex-wrap gap-2 mb-6">
+<p class="market-card-summary text-sm text-on-surface-variant font-light mb-4 line-clamp-2">대형 개인 사물함과 SNS용 사진 촬영 부스를 갖춘 현대적이고 밝은 작업 공간입니다.</p>
+<div class="market-card-tags flex flex-wrap gap-2 mb-6">
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">포토 부스</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">보관함</span>
 <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] rounded-full">초음파 세척기</span>
 </div>
-<a class="block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/atelier-sora">
+<a class="market-card-button block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/atelier-sora">
                     작가에게 문의하기
                 </a>
 </div>
 </article>
 <!-- Studio Card 6 (Empty State / Call to Action) -->
-<article class="flex flex-col items-center justify-center w-full max-w-[360px] p-12 border-2 border-dashed border-outline-variant/30 rounded-xl bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group cursor-pointer">
+<article class="flex flex-col items-center justify-center w-full max-w-[360px] p-12 border-2 border-dashed border-outline-variant/30 rounded-xl bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group cursor-pointer" data-market-cta="">
 <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-primary text-3xl">add</span>
 </div>
@@ -303,4 +403,46 @@
 <span class="material-symbols-outlined">add</span>
 </button>
 </div>
+<script>
+    (() => {
+        const grid = document.querySelector('[data-market-grid]');
+        const buttons = Array.from(document.querySelectorAll('[data-market-layout-toggle]'));
+
+        if (!grid || buttons.length === 0) {
+            return;
+        }
+
+        const applyLayout = (layout) => {
+            const nextLayout = layout === '1' ? '1' : '2';
+            grid.dataset.mobileLayout = nextLayout;
+
+            buttons.forEach((button) => {
+                const isActive = button.dataset.marketLayoutToggle === nextLayout;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+
+            try {
+                localStorage.setItem('marketMobileLayout', nextLayout);
+            } catch (error) {
+                console.warn('Unable to persist market layout preference.', error);
+            }
+        };
+
+        let initialLayout = '2';
+        try {
+            initialLayout = localStorage.getItem('marketMobileLayout') === '1' ? '1' : '2';
+        } catch (error) {
+            initialLayout = '2';
+        }
+
+        applyLayout(initialLayout);
+
+        buttons.forEach((button) => {
+            button.addEventListener('click', () => {
+                applyLayout(button.dataset.marketLayoutToggle || '2');
+            });
+        });
+    })();
+</script>
 </body></html>
