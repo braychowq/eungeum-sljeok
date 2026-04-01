@@ -92,6 +92,32 @@
         body.is-logged-in [data-auth-member] {
             display: inline-flex !important;
         }
+        .community-filter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(175, 179, 174, 0.2);
+            background: #edeeea;
+            color: #2f3430;
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+        .community-filter:hover {
+            border-color: #5f5e5e;
+        }
+        .community-filter.is-active {
+            background: #5f5e5e;
+            border-color: #5f5e5e;
+            color: #ffffff;
+        }
+        [data-community-empty][hidden] {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background min-h-screen">
@@ -133,10 +159,10 @@
 </div>
 <div class="flex flex-col md:items-end gap-4 w-full md:w-auto">
 <div class="flex flex-wrap gap-3">
-<button class="px-5 py-3 rounded-full bg-primary text-white text-sm font-label tracking-widest uppercase">전체</button>
-<button class="px-5 py-3 rounded-full bg-surface-container-low border border-outline-variant/20 text-sm font-label tracking-widest uppercase text-on-surface hover:border-primary transition-colors">아무말</button>
-<button class="px-5 py-3 rounded-full bg-surface-container-low border border-outline-variant/20 text-sm font-label tracking-widest uppercase text-on-surface hover:border-primary transition-colors">Q/A</button>
-<button class="px-5 py-3 rounded-full bg-surface-container-low border border-outline-variant/20 text-sm font-label tracking-widest uppercase text-on-surface hover:border-primary transition-colors">장터</button>
+<button class="community-filter is-active" data-category-filter="all" type="button">전체</button>
+<button class="community-filter" data-category-filter="free" type="button">아무말</button>
+<button class="community-filter" data-category-filter="qa" type="button">Q/A</button>
+<button class="community-filter" data-category-filter="market" type="button">장터</button>
 </div>
 <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
 <div class="relative group w-full md:w-72">
@@ -159,7 +185,7 @@
 <span>댓글</span>
 </div>
 <div class="divide-y divide-outline-variant/10">
-<article class="px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors">
+<article class="community-post px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors" data-post-category="free">
 <div class="grid md:grid-cols-[110px_minmax(0,1fr)_120px_110px_70px_70px] gap-4 md:gap-6 items-start md:items-center">
 <div><span class="inline-flex px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-label uppercase tracking-[0.2em]">아무말</span></div>
 <div class="min-w-0">
@@ -175,7 +201,7 @@
 <div class="hidden md:block text-sm text-on-surface-variant">14</div>
 </div>
 </article>
-<article class="px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors">
+<article class="community-post px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors" data-post-category="qa">
 <div class="grid md:grid-cols-[110px_minmax(0,1fr)_120px_110px_70px_70px] gap-4 md:gap-6 items-start md:items-center">
 <div><span class="inline-flex px-3 py-1 rounded-full bg-surface-container-high text-on-surface text-[10px] font-label uppercase tracking-[0.2em]">Q/A</span></div>
 <div class="min-w-0">
@@ -191,7 +217,7 @@
 <div class="hidden md:block text-sm text-on-surface-variant">22</div>
 </div>
 </article>
-<article class="px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors">
+<article class="community-post px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors" data-post-category="market">
 <div class="grid md:grid-cols-[110px_minmax(0,1fr)_120px_110px_70px_70px] gap-4 md:gap-6 items-start md:items-center">
 <div><span class="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-label uppercase tracking-[0.2em]">장터</span></div>
 <div class="min-w-0">
@@ -207,7 +233,7 @@
 <div class="hidden md:block text-sm text-on-surface-variant">6</div>
 </div>
 </article>
-<article class="px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors">
+<article class="community-post px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors" data-post-category="free">
 <div class="grid md:grid-cols-[110px_minmax(0,1fr)_120px_110px_70px_70px] gap-4 md:gap-6 items-start md:items-center">
 <div><span class="inline-flex px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-label uppercase tracking-[0.2em]">아무말</span></div>
 <div class="min-w-0">
@@ -223,7 +249,7 @@
 <div class="hidden md:block text-sm text-on-surface-variant">11</div>
 </div>
 </article>
-<article class="px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors">
+<article class="community-post px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors" data-post-category="qa">
 <div class="grid md:grid-cols-[110px_minmax(0,1fr)_120px_110px_70px_70px] gap-4 md:gap-6 items-start md:items-center">
 <div><span class="inline-flex px-3 py-1 rounded-full bg-surface-container-high text-on-surface text-[10px] font-label uppercase tracking-[0.2em]">Q/A</span></div>
 <div class="min-w-0">
@@ -239,7 +265,7 @@
 <div class="hidden md:block text-sm text-on-surface-variant">8</div>
 </div>
 </article>
-<article class="px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors">
+<article class="community-post px-6 md:px-8 py-6 hover:bg-surface-container-low/40 transition-colors" data-post-category="market">
 <div class="grid md:grid-cols-[110px_minmax(0,1fr)_120px_110px_70px_70px] gap-4 md:gap-6 items-start md:items-center">
 <div><span class="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-label uppercase tracking-[0.2em]">장터</span></div>
 <div class="min-w-0">
@@ -255,6 +281,10 @@
 <div class="hidden md:block text-sm text-on-surface-variant">3</div>
 </div>
 </article>
+</div>
+<div class="px-6 md:px-8 py-16 text-center text-outline" data-community-empty="" hidden="">
+<p class="font-headline text-2xl text-on-surface mb-3">해당 카테고리 게시글이 없어요</p>
+<p class="text-sm">다른 카테고리를 선택하거나 첫 글을 남겨보세요.</p>
 </div>
 </section>
 <!-- Load More Section -->
@@ -286,4 +316,44 @@
 <span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>
 </button>
 </div>
+<script>
+        (() => {
+            const filterButtons = Array.from(document.querySelectorAll('[data-category-filter]'));
+            const posts = Array.from(document.querySelectorAll('.community-post'));
+            const emptyState = document.querySelector('[data-community-empty]');
+
+            if (!filterButtons.length || !posts.length) return;
+
+            const setActiveButton = (activeCategory) => {
+                filterButtons.forEach((button) => {
+                    const isActive = button.dataset.categoryFilter === activeCategory;
+                    button.classList.toggle('is-active', isActive);
+                });
+            };
+
+            const applyFilter = (category) => {
+                let visibleCount = 0;
+
+                posts.forEach((post) => {
+                    const isVisible = category === 'all' || post.dataset.postCategory === category;
+                    post.hidden = !isVisible;
+                    if (isVisible) visibleCount += 1;
+                });
+
+                if (emptyState) {
+                    emptyState.hidden = visibleCount !== 0;
+                }
+
+                setActiveButton(category);
+            };
+
+            filterButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    applyFilter(button.dataset.categoryFilter || 'all');
+                });
+            });
+
+            applyFilter('all');
+        })();
+    </script>
 </body></html>
