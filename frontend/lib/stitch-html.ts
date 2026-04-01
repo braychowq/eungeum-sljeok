@@ -1,21 +1,30 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-type TemplateName = 'home' | 'market' | 'market-new' | 'community' | 'community-new';
+type TemplateName =
+  | 'home'
+  | 'market'
+  | 'market-new'
+  | 'market-detail'
+  | 'market-registration-mobile'
+  | 'community'
+  | 'community-new';
 
 const templateFiles: Record<TemplateName, string> = {
   home: 'home.html',
   market: 'market.html',
   'market-new': 'market-new.html',
+  'market-detail': 'market-detail.html',
+  'market-registration-mobile': 'market-registration-mobile.html',
   community: 'community.html',
   'community-new': 'community-new.html'
 };
 
 const commonReplacements: Array<[string, string]> = [
   ['href="#">커뮤니티</a>', 'href="/community">커뮤니티</a>'],
-  ['href="#">Community</a>', 'href="/community">Community</a>'],
+  ['href="#">Community</a>', 'href="/community">커뮤니티</a>'],
   ['href="#">공방 공유</a>', 'href="/market">공방 공유</a>'],
-  ['href="#">Studio Share</a>', 'href="/market">Studio Share</a>'],
+  ['href="#">Studio Share</a>', 'href="/market">공방 공유</a>'],
   ['href="#">은금슬쩍</a>', 'href="/">은금슬쩍</a>']
 ];
 
@@ -41,6 +50,8 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
     ['</article>\n</section>', '</a>\n</section>']
   ],
   'market-new': [],
+  'market-detail': [],
+  'market-registration-mobile': [],
   community: [
     [
       `<button class="mt-6 flex items-center gap-2 text-primary font-label text-xs uppercase tracking-widest border-b border-primary/20 hover:border-primary transition-all pb-1">`,

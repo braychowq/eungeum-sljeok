@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed": "#f3dfc8",
+              "surface-container-low": "#f4f4f0",
+              "secondary-fixed-dim": "#e5d1ba",
+              "on-secondary": "#fff8f2",
+              "on-surface": "#2f3430",
+              "secondary": "#6b5d4a",
+              "primary-dim": "#535252",
+              "on-primary-container": "#525151",
+              "on-tertiary-container": "#605b51",
+              "inverse-surface": "#0d0f0d",
+              "primary-fixed": "#e5e2e1",
+              "surface-container": "#edeeea",
+              "error-dim": "#5c1202",
+              "outline": "#777c77",
+              "surface-bright": "#faf9f6",
+              "on-secondary-fixed": "#4a3d2c",
+              "surface-dim": "#d6dbd5",
+              "on-primary": "#faf7f6",
+              "on-primary-fixed": "#403f3f",
+              "outline-variant": "#afb3ae",
+              "tertiary-fixed": "#faf3e5",
+              "error-container": "#fe8b70",
+              "on-primary-fixed-variant": "#5c5b5b",
+              "surface-container-highest": "#e0e4de",
+              "surface-container-high": "#e6e9e4",
+              "on-tertiary-fixed-variant": "#6a665b",
+              "on-surface-variant": "#5c605c",
+              "background": "#faf9f6",
+              "on-tertiary": "#fff8ed",
+              "surface-tint": "#5f5e5e",
+              "tertiary-fixed-dim": "#ece4d7",
+              "surface-variant": "#e0e4de",
+              "tertiary": "#635f54",
+              "on-error": "#fff7f6",
+              "primary-fixed-dim": "#d6d4d3",
+              "on-secondary-container": "#5d503e",
+              "on-error-container": "#742410",
+              "inverse-primary": "#ffffff",
+              "on-tertiary-fixed": "#4d4940",
+              "secondary-container": "#f3dfc8",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#faf3e5",
+              "on-background": "#2f3430",
+              "tertiary-dim": "#575349",
+              "primary-container": "#e5e2e1",
+              "inverse-on-surface": "#9d9d9a",
+              "primary": "#5f5e5e",
+              "on-secondary-fixed-variant": "#675947",
+              "secondary-dim": "#5f513f",
+              "error": "#9e422c",
+              "surface": "#faf9f6"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body {
+            background-color: #faf9f6;
+            color: #2f3430;
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .serif { font-family: 'Noto Serif', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top App Bar (Shared Component) -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f6]/80 dark:bg-stone-900/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<a class="text-[#5f5e5e] hover:opacity-70 transition-opacity duration-300 active:scale-95" href="/market">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</a>
+<h1 class="text-lg font-['Noto_Serif'] italic tracking-widest text-[#2f3430] dark:text-stone-100"><a href="/">은금슬쩍</a></h1>
+<button class="text-[#5f5e5e] hover:opacity-70 transition-opacity duration-300 active:scale-95">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</header>
+<main class="pt-[68px] pb-32">
+<!-- Hero Image Gallery (Asymmetric Editorial Layout) -->
+<section class="px-6 mb-12">
+<div class="flex flex-col gap-4">
+<div class="w-full aspect-[4/5] overflow-hidden rounded-xl">
+<img alt="Ceramic studio detail" class="w-full h-full object-cover" data-alt="Close-up of a potter's hands shaping raw clay on a wooden wheel in a sunlit minimalist studio with warm textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJPp2ZmlzB4lenjnYuK8e6btqEhjwR6GLR-rFhoQ02k2RGxOMGhZrvPVYZRTKDKjnS18wb0fyaNeLAoGq8g38-NtU_YS6_Ti_6RxBMntE2ORfqQxVqxT96qbJBC1pLhOmkBHp7fWLTOwh_jRVwjsSy0Oq2-QV9u4x-rG-u-IPF2k1Hyvh9JYWxvXc3wjsqXRdnI7UFHOsNsdEcKqCj3G-YFVuTVMaU42JBRn-DRtB3DKbcNR3s6sXsWhYEt8FflySi23FAuchXVzE"/>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar">
+<div class="min-w-[70%] aspect-square overflow-hidden rounded-xl bg-surface-container">
+<img alt="Workshop space" class="w-full h-full object-cover" data-alt="Interior of a quiet Seongsu-dong ceramic studio with large windows, wooden tables, and rows of unfinished pottery on shelves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE4Q6a293ZJNF1xGTdcaVqTmX2AbYegyqITfMIlHqs_iUF9ESZplKw2Eg_eWj67zhpeRwfUX07J4OWHkIZrQYH60GatkWTnjWHd_TbQcHK-7yxk5rFvCW4lwwZNcwHSHewflrPo_vhrwumueIJEM3_MnWZP7o9WbKVbfxFoLKCRMRTWXviIFrA8VggWPXyTulohr9pKpBhOE2rr9nZ85zHGXGTlysnT6-QJBPrV8AM0NbNGxI4nL1l8l35S3RESpmKOCh-UfzCeT0"/>
+</div>
+<div class="min-w-[70%] aspect-square overflow-hidden rounded-xl bg-surface-container">
+<img alt="Pottery details" class="w-full h-full object-cover" data-alt="Meticulously arranged ceramic tools and bowls on a textured stone countertop with soft shadows and neutral tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-nhEpKxrMBXiWVczhKhtV7mC6LBButmKnWuD4zhjx-uHwOYVc0DoTgPxMZUNzqwOcYzyNeaGHKBxbfT_qk9Cppa_CxmetKAUq7kS4J9Irh046fwKlSLlR9iGdcDSDr6U4l6-QrV0ELDXNKm1SSJzBF73Q92y8h4yqz9tQfMAQD4bZGFpWoUS8eVwmzT3o_pfgdNPVwpVgqa8f8iO-P4pdGMgYfgKRiR9OZaBcY0qfx5nTTqcTQJrny3FHlo_7YFheRI2AVfgaeTg"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Header Content -->
+<section class="px-6 mb-12">
+<div class="flex flex-col gap-2">
+<span class="font-label text-[10px] tracking-[0.2em] uppercase text-secondary font-bold">서울 성수동</span>
+<h2 class="font-headline text-3xl leading-tight tracking-tight text-on-surface">고요한 흙의 시간:<br/>핸드빌딩 &amp; 물레 공방</h2>
+</div>
+</section>
+<!-- Space Overview -->
+<section class="px-6 mb-16">
+<div class="bg-surface-container-low p-8 rounded-xl flex flex-col gap-6">
+<h3 class="font-headline text-xl text-on-surface">공방 소개</h3>
+<p class="font-body text-body-md leading-relaxed text-on-surface-variant">
+                    성수 한복판에 자리한 이 공방은 흙의 질감과 손의 감각에 집중하고 싶은 분들을 위한 조용한 작업실입니다. 자연광과 우드 톤 가구, 정갈한 동선 속에서 핸드빌딩과 물레 작업에 몰입할 수 있도록 구성했습니다.
+                </p>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4 pt-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="groups">groups</span>
+<div>
+<p class="text-[11px] uppercase tracking-widest font-bold text-outline">정원</p>
+<p class="text-sm font-medium">최대 4명</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<div>
+<p class="text-[11px] uppercase tracking-widest font-bold text-outline">이용 시간</p>
+<p class="text-sm font-medium">120분</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Amenities -->
+<section class="px-6 mb-16">
+<h3 class="font-headline text-xl mb-8 text-on-surface">제공 장비</h3>
+<div class="grid grid-cols-1 gap-8">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="cyclone">cyclone</span>
+</div>
+<span class="font-body text-sm font-medium">전동 물레</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-outline">전문 장비</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="table_rows">table_rows</span>
+</div>
+<span class="font-body text-sm font-medium">오크 작업 테이블</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-outline">넉넉한 작업면</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="checkroom">checkroom</span>
+</div>
+<span class="font-body text-sm font-medium">린넨 앞치마</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-outline">제공 포함</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="landscape">landscape</span>
+</div>
+<span class="font-body text-sm font-medium">백자용 카올린 점토</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-outline">재료 포함</span>
+</div>
+</div>
+</section>
+<!-- Host Profile -->
+<section class="px-6 mb-16">
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/10 rounded-xl">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-container">
+<img alt="Host Profile" class="w-full h-full object-cover" data-alt="Portrait of a Korean ceramic artist in a linen shirt, smiling gently in her sunlit studio workshop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRbRZ06yai0_wNmqzWe95VSwFgbpORGY98T9ksQCS390grbLDOegCqjqzM6HOp99uo1v19Dh56AFfgN93ecEIAUegp8ka_Yvu2Hn0NRkz6JFyEtFhYxua0CbLYCNZElzMxIZzVAk5nMh7gXP7HR0yZNr74qub231j8EQDJIo2lB2qTy4JxCUh7QtTiF8rsFpEMCAPrjuiQ9W37PaqbCShQGfVyuaAS6RKXK3IUokekP_UnRLEh3leNCC-ydI3yTWOMjyIek7enTIM"/>
+</div>
+<div>
+<h4 class="font-headline text-lg text-on-surface">Jiwoo Kim</h4>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined !text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[10px] uppercase tracking-widest font-bold">공방 호스트</span>
+</div>
+</div>
+</div>
+<p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-6">
+                    "작업의 결과물에는 만드는 사람의 리듬과 온도가 남는다고 믿어요. 이 공간에서는 흙을 통해 자기만의 속도와 손맛을 찾을 수 있도록 안내합니다."
+                </p>
+<div class="flex items-center gap-6 pt-6 border-t border-outline-variant/10">
+<div>
+<p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">후기</p>
+<p class="text-sm font-bold">128개</p>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">평점</p>
+<p class="text-sm font-bold flex items-center gap-1">4.98 <span class="material-symbols-outlined !text-xs text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Booking Actions (Floating Mobile Bar Placeholder Logic) -->
+<div class="fixed bottom-0 left-0 w-full bg-[#faf9f6]/90 backdrop-blur-xl z-50 px-6 py-4 flex items-center justify-between border-t border-outline-variant/5">
+<div class="flex flex-col">
+<span class="font-label text-[10px] tracking-widest text-outline uppercase">1인 기준</span>
+<span class="font-headline text-xl text-on-surface">₩85,000</span>
+</div>
+<button class="bg-primary hover:bg-primary-dim text-on-primary px-10 py-4 rounded-lg font-body font-bold text-sm transition-all duration-300 active:scale-95 shadow-lg shadow-primary/10">
+                예약 문의하기
+            </button>
+</div>
+</main>
+<!-- Navigation suppressed per logic for sub-page -->
+<!-- But following the shared component logic for BottomNavBar on MOBILE if it were a top-level -->
+<!-- Here I will not render it to prioritize the 'Book' sticky bar as this is a Details Task-Focused page -->
+</body></html>

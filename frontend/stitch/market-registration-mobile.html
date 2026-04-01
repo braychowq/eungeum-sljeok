@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .serif-headline {
+            font-family: 'Noto Serif', serif;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #afb3ae33;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed": "#f3dfc8",
+              "surface-container-low": "#f4f4f0",
+              "secondary-fixed-dim": "#e5d1ba",
+              "on-secondary": "#fff8f2",
+              "on-surface": "#2f3430",
+              "secondary": "#6b5d4a",
+              "primary-dim": "#535252",
+              "on-primary-container": "#525151",
+              "on-tertiary-container": "#605b51",
+              "inverse-surface": "#0d0f0d",
+              "primary-fixed": "#e5e2e1",
+              "surface-container": "#edeeea",
+              "error-dim": "#5c1202",
+              "outline": "#777c77",
+              "surface-bright": "#faf9f6",
+              "on-secondary-fixed": "#4a3d2c",
+              "surface-dim": "#d6dbd5",
+              "on-primary": "#faf7f6",
+              "on-primary-fixed": "#403f3f",
+              "outline-variant": "#afb3ae",
+              "tertiary-fixed": "#faf3e5",
+              "error-container": "#fe8b70",
+              "on-primary-fixed-variant": "#5c5b5b",
+              "surface-container-highest": "#e0e4de",
+              "surface-container-high": "#e6e9e4",
+              "on-tertiary-fixed-variant": "#6a665b",
+              "on-surface-variant": "#5c605c",
+              "background": "#faf9f6",
+              "on-tertiary": "#fff8ed",
+              "surface-tint": "#5f5e5e",
+              "tertiary-fixed-dim": "#ece4d7",
+              "surface-variant": "#e0e4de",
+              "tertiary": "#635f54",
+              "on-error": "#fff7f6",
+              "primary-fixed-dim": "#d6d4d3",
+              "on-secondary-container": "#5d503e",
+              "on-error-container": "#742410",
+              "inverse-primary": "#ffffff",
+              "on-tertiary-fixed": "#4d4940",
+              "secondary-container": "#f3dfc8",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#faf3e5",
+              "on-background": "#2f3430",
+              "tertiary-dim": "#575349",
+              "primary-container": "#e5e2e1",
+              "inverse-on-surface": "#9d9d9a",
+              "primary": "#5f5e5e",
+              "on-secondary-fixed-variant": "#675947",
+              "secondary-dim": "#5f513f",
+              "error": "#9e422c",
+              "surface": "#faf9f6"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f6]/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<a class="hover:opacity-70 transition-opacity duration-300 active:scale-95" href="/market">
+<span class="material-symbols-outlined text-[#5f5e5e]" data-icon="close">close</span>
+</a>
+<h1 class="text-lg font-['Noto_Serif'] italic tracking-widest text-[#2f3430]"><a href="/">은금슬쩍</a></h1>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<main class="pt-20 px-6 max-w-lg mx-auto">
+<!-- Hero Title -->
+<section class="mb-10">
+<span class="inline-block font-label text-[10px] font-bold uppercase tracking-[0.1em] text-secondary mb-2">공방 등록</span>
+<h2 class="font-headline text-3xl leading-tight tracking-tight text-on-surface">당신의 공방을<br/>소개해보세요.</h2>
+<p class="font-body text-sm text-on-surface-variant mt-3 leading-relaxed">공유하고 싶은 가치와 공간의 이야기를 들려주세요. 고요한 창작의 시간을 다른 이들과 나눕니다.</p>
+</section>
+<form class="space-y-12">
+<!-- Photo Upload Section -->
+<section>
+<h3 class="font-headline text-lg mb-4 flex items-center gap-2">
+                    공간 이미지
+                    <span class="text-[10px] font-label bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">REQUIRED</span>
+</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="aspect-square bg-surface-container-low rounded-lg flex flex-col items-center justify-center border border-dashed border-outline-variant/30 group hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary mb-2" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] font-label text-outline-variant">사진 추가</span>
+</div>
+<!-- Sample Image Slots -->
+<div class="aspect-square relative rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Minimalist pottery studio with natural wooden shelves and soft sunlight filtering through a large window" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXpPsFkUZVB8UPeCGiShdeGZPrEUTFc9KGuptcJi4yZROMIchCM6Cat9q-fZqoHAdtBhhuMAMRWfBrH9vgeRctC3BmsA5SeO05Uoza5zS78b2TgR6q3Hqu8AN2LCkJ4sPfo_Nr-FxAStudsWpIu2gnvI45g7uhBnAcOA3q50pu09rJkk1P-47XF-Imsn1snIcqp7Adup41HpxUUN7hqvERQy73N8NNJyYGIJeJvkGTY5Sa8pFCNyCg5Dk1VX1bcJyq6QdVFS-YKWo"/>
+<button class="absolute top-2 right-2 bg-on-surface/20 backdrop-blur-sm p-1 rounded-full text-white">
+<span class="material-symbols-outlined text-xs" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<p class="text-[11px] text-on-surface-variant/60 mt-3 font-body">최대 5장의 고해상도 이미지를 권장합니다. (JPG, PNG)</p>
+</section>
+<!-- Space Basic Info -->
+<section class="space-y-6">
+<div>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">공방 이름</label>
+<input class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50" placeholder="공방 이름을 입력해주세요" type="text"/>
+</div>
+<div>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">카테고리</label>
+<div class="flex flex-wrap gap-2">
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-full text-xs font-medium transition-colors" type="button">도예</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">목공</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">가죽</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">직조</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">향수</button>
+</div>
+</div>
+</section>
+<!-- Description -->
+<section>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">소개</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-md px-4 py-4 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50 resize-none" placeholder="공간의 철학이나 작업실의 분위기를 설명해주세요." rows="5"></textarea>
+</section>
+<!-- Availability & Price -->
+<section class="grid grid-cols-2 gap-6">
+<div>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">시간당 가격</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-10 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="0" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-label text-on-surface-variant">KRW</span>
+</div>
+</div>
+<div>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">수용 인원</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-10 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="1" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-label text-on-surface-variant">PERSONS</span>
+</div>
+</div>
+</section>
+<!-- Tools List -->
+<section>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-4">장비 및 편의시설</label>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="water_drop">water_drop</span>
+<span class="text-sm font-medium">수전 시설</span>
+</div>
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="wifi">wifi</span>
+<span class="text-sm font-medium">고속 와이파이</span>
+</div>
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="electric_bolt">electric_bolt</span>
+<span class="text-sm font-medium">전기 가마</span>
+</div>
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+</div>
+<button class="w-full py-3 flex items-center justify-center gap-2 text-[10px] font-label font-bold text-outline-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined !text-sm" data-icon="add">add</span>
+                        직접 추가하기
+                    </button>
+</div>
+</section>
+<!-- Location -->
+<section>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">위치</label>
+<div class="relative mb-3">
+<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-12 py-3 text-sm focus:ring-0 cursor-pointer" placeholder="도로명 주소를 입력해주세요" readonly="" type="text"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+</div>
+<div class="h-40 bg-surface-container rounded-lg overflow-hidden grayscale opacity-60">
+<!-- Placeholder for Map -->
+<div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&amp;w=800&amp;auto=format&amp;fit=crop')] bg-center bg-cover" data-alt="Abstract textured top-down view of a city street map grid in a minimal monochrome style" data-location="Seoul" style=""></div>
+</div>
+</section>
+<!-- Bottom Action -->
+<div class="pt-6">
+<button class="w-full bg-primary text-on-primary py-4 rounded-md font-bold text-sm tracking-widest hover:bg-primary-dim transition-colors duration-300 shadow-xl shadow-primary/10" type="submit">
+                    공방 등록하기
+                </button>
+<p class="text-center text-[10px] font-label text-outline-variant mt-6 uppercase tracking-widest">등록 시 은금슬쩍 운영 가이드에 동의한 것으로 간주됩니다</p>
+</div>
+</form>
+</main>
+<!-- BottomNavBar (Hidden on desktop via design shell logic, though this is mobile-focused) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 pb-safe bg-[#faf9f6]/90 backdrop-blur-xl z-50 rounded-t-xl shadow-[0_-10px_30px_rgba(47,52,48,0.03)] md:hidden">
+<a class="flex flex-col items-center justify-center text-[#5f5e5e]/40 hover:text-[#5f5e5e] transition-colors cursor-pointer" href="/">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-[0.1em] mt-1">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2f3430] pb-1 border-b-2 border-[#5f5e5e] translate-y-[-2px] transition-all duration-300" href="/market">
+<span class="material-symbols-outlined" data-icon="handyman">handyman</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-[0.1em] mt-1">공방</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5f5e5e]/40 hover:text-[#5f5e5e] transition-colors cursor-pointer" href="/community">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-[0.1em] mt-1">커뮤니티</span>
+ </a>
+<div class="flex flex-col items-center justify-center text-[#5f5e5e]/40 hover:text-[#5f5e5e] transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-[0.1em] mt-1">프로필</span>
+</div>
+</nav>
+</body></html>
