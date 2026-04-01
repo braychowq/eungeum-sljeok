@@ -44,7 +44,7 @@ public final class SampleData {
             "market-1",
             "마켓",
             "봄맞이 원석 경매: 큐레이션 셀렉션",
-            "이번 주말 마켓에 출시될 희귀한 컷팅 스톤들을 미리 확인해보세요. 스튜디오 공유 회원 독점 공개입니다.",
+            "이번 주말 마켓에 출시될 희귀한 컷팅 스톤들을 미리 확인해보세요. 공방 공유 회원 독점 공개입니다.",
             "2024년 3월 10일",
             "https://lh3.googleusercontent.com/aida-public/AB6AXuBx1bNrUlP1Dajx5o4-eLD-dtcTFchEGEjdD8u1N77PpmC4SwOAh-y9-QulLwMcbt8SpGS2odeusHx2faHfj0rEZXUbxls9Gv9B9ZEhkk2kycZvCo7axkllnM0oWmhQVFYj7AZxFcaWo4vzYRIoqkE7WZ6Gwn7vBYNdbxchpMdsrgaB1WYRdNO96CipmoT60VICxxcvKfXjBmaTq3Xrs_k30YherjEYxzYitwOQS8nYg5bhUjpdLcK1wnc4s27hdEMuOEcMR_4gWBQ"
         )

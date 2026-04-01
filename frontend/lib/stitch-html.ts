@@ -14,7 +14,7 @@ const templateFiles: Record<TemplateName, string> = {
 const commonReplacements: Array<[string, string]> = [
   ['href="#">커뮤니티</a>', 'href="/community">커뮤니티</a>'],
   ['href="#">Community</a>', 'href="/community">Community</a>'],
-  ['href="#">스튜디오 공유</a>', 'href="/market">스튜디오 공유</a>'],
+  ['href="#">공방 공유</a>', 'href="/market">공방 공유</a>'],
   ['href="#">Studio Share</a>', 'href="/market">Studio Share</a>'],
   ['href="#">은금슬쩍</a>', 'href="/">은금슬쩍</a>']
 ];
