@@ -65,7 +65,7 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
 };
 
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
-  return replacements.reduce((result, [from, to]) => result.replace(from, to), html);
+  return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
 
 export function renderStitchHtml(template: TemplateName) {
