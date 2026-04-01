@@ -78,6 +78,33 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(1.03);
+            transition: opacity 0.9s ease, transform 1.4s ease;
+        }
+        .hero-slide.is-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-dot {
+            width: 48px;
+            height: 2px;
+            background: #d0c5af;
+            opacity: 0.35;
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+        }
+        .hero-dot.is-active {
+            background: #735c00;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
@@ -104,37 +131,24 @@
 </header>
 <main class="pt-24">
 <!-- Hero Section -->
-<section class="relative w-full h-[870px] overflow-hidden bg-surface-container-low">
-<div class="absolute inset-0 flex items-center">
-<div class="grid grid-cols-1 md:grid-cols-2 w-full h-full">
-<div class="flex flex-col justify-center px-12 md:px-24 z-10 order-2 md:order-1">
-<span class="text-primary font-label tracking-[0.3em] uppercase text-xs mb-6">Established Artisan Platform</span>
-<h1 class="font-headline text-5xl md:text-7xl leading-tight text-on-surface mb-8 max-w-xl">
-                            진귀한 <span class="italic text-primary">금속</span>과 뜨거운 열정이 만나는 곳
-                        </h1>
-<p class="text-on-surface-variant font-light text-lg mb-12 max-w-md leading-relaxed">
-                            독립 주얼리 디자이너들의 정교한 공예와 이야기를 만나보세요.
-                        </p>
-<div class="flex gap-4">
-<button class="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-xs tracking-widest uppercase hover:opacity-90 transition-all shadow-lg shadow-primary/10">
-                                컬렉션 보기
-                            </button>
-<button class="px-8 py-4 rounded-full border border-outline text-on-surface font-label text-xs tracking-widest uppercase hover:bg-surface-container transition-all">
-                                스튜디오 보기
-                            </button>
+<section class="relative w-full h-[560px] md:h-[870px] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0">
+<div class="hero-slide is-active">
+<img alt="Jewelry Workbench" data-alt="Close-up of a high-end jewelry artisan workbench with gold dust, delicate tools, and a half-finished ring under warm soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDGDtQFxiTikcRdf2owT_U5q9YV2ZP1V9cCDgOzeSrqgb7otLw21CcGPo_VxNbrmA3gs-rVec9ru0dlI0X6t40oUZtpUb6GNZaKlMEYTX4CgWIdQRiBgwx1SUUkTPpqjmZJC9QvgOYObFfvOGqfSdlpRnOZdP8YJCBkyCkAqy7wOjUE-Jwmn4Df-1lsCq8_xyNczcSZplpvXciEXcjGVN12jwt_3fG21xVqmfinQCI_-zONT4Z3_KGhtNbuvEemKKhXJ8NF-cJzGM"/>
+</div>
+<div class="hero-slide">
+<img alt="Studio Seongsu" data-alt="Interior of a minimalist sun-drenched jewelry studio in Seongsu with industrial windows, wooden workbenches, and organized silver tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFCt-BvFnPFd9rY7ae0M64S2iW4JTOOQ90aq2JTQi7FjwUENEAnxPZ4LCfqgXywjo15l42hNBgdGL_vt94IXk-M6QJdn0NJoqcHb-_O1eIBcwiF_HeflRfm6ptZ5ZnTw9LN277_PAWMw7iiMlOko5j-hCYIiQgQQSNSIpzvt-OYPDayfvko8SbJWAkyNKkui8IKzQz1pFIURBSDN06luJFsfwxs-qGaIdOk3YZ5d9W2elHg_20sE6vfYK_3VC9dIY5CVBxt5Ho7kU"/>
+</div>
+<div class="hero-slide">
+<img alt="Studio Hannam" data-alt="Elegant jewelry atelier interior with neutral tones, marble tables, and professional task lighting in a high-end neighborhood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2fAofQ2eAG0KwJz-TeNRoFslIR_E6Ta5_U3nmgQ2PiFILoN3e3u9SR9mc9tzOuM_A8QFlLyBAdsXWh8CS9qUkQ0KOVV3B8mUPcjVXbclimz8a3qQ6ogIGb3mW6yocQ77B4pRpErJiH0RxLs6Ph27bbrA7fsbicTpmzGsUlLmDjiR3LUTEguFfVujMUabSuql5PznNlp9n2S-VwkLRVsAShWf3bBKgNch1yP2rDCibAu_oB7zPT9qPKtclGXwU1FlD0XYQjK87z-s"/>
 </div>
 </div>
-<div class="relative h-full order-1 md:order-2">
-<img alt="Jewelry Workbench" class="w-full h-full object-cover" data-alt="Close-up of a high-end jewelry artisan workbench with gold dust, delicate tools, and a half-finished ring under warm soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDGDtQFxiTikcRdf2owT_U5q9YV2ZP1V9cCDgOzeSrqgb7otLw21CcGPo_VxNbrmA3gs-rVec9ru0dlI0X6t40oUZtpUb6GNZaKlMEYTX4CgWIdQRiBgwx1SUUkTPpqjmZJC9QvgOYObFfvOGqfSdlpRnOZdP8YJCBkyCkAqy7wOjUE-Jwmn4Df-1lsCq8_xyNczcSZplpvXciEXcjGVN12jwt_3fG21xVqmfinQCI_-zONT4Z3_KGhtNbuvEemKKhXJ8NF-cJzGM"/>
-<div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent hidden md:block"></div>
-</div>
-</div>
-</div>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/10 via-transparent to-transparent"></div>
 <!-- Hero Pagination Dots -->
-<div class="absolute bottom-12 left-12 md:left-24 flex gap-4">
-<div class="w-12 h-[2px] bg-primary"></div>
-<div class="w-12 h-[2px] bg-outline-variant opacity-30"></div>
-<div class="w-12 h-[2px] bg-outline-variant opacity-30"></div>
+<div class="absolute bottom-10 left-8 md:left-24 flex gap-4 z-10">
+<button class="hero-dot is-active" type="button" aria-label="배너 1"></button>
+<button class="hero-dot" type="button" aria-label="배너 2"></button>
+<button class="hero-dot" type="button" aria-label="배너 3"></button>
 </div>
 </section>
 <!-- Studio Sharing Section -->
@@ -326,4 +340,42 @@
             © 2024 은금슬쩍. The Curated Atelier.
         </div>
 </footer>
+<script>
+        (() => {
+            const slides = Array.from(document.querySelectorAll('.hero-slide'));
+            const dots = Array.from(document.querySelectorAll('.hero-dot'));
+
+            if (!slides.length || !dots.length) return;
+
+            let activeIndex = 0;
+            let intervalId;
+
+            const setActive = (nextIndex) => {
+                activeIndex = nextIndex;
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('is-active', index === activeIndex);
+                });
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('is-active', index === activeIndex);
+                });
+            };
+
+            const startAutoSlide = () => {
+                clearInterval(intervalId);
+                intervalId = setInterval(() => {
+                    setActive((activeIndex + 1) % slides.length);
+                }, 4200);
+            };
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    setActive(index);
+                    startAutoSlide();
+                });
+            });
+
+            setActive(0);
+            startAutoSlide();
+        })();
+    </script>
 </body></html>
