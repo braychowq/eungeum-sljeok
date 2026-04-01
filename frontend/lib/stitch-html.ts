@@ -38,7 +38,7 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
     ['</button>\n</div>\n</div>', '</a>\n</div>\n</div>'],
     [
       `<button class="group flex items-center gap-3 px-6 py-3 rounded-full border border-outline hover:border-primary transition-all duration-300">`,
-      `<a href="/market/new" class="group flex items-center gap-3 px-6 py-3 rounded-full border border-outline hover:border-primary transition-all duration-300">`
+      `<a href="/market" class="group flex items-center gap-3 px-6 py-3 rounded-full border border-outline hover:border-primary transition-all duration-300">`
     ],
     ['</button>\n</div>\n<div class="flex gap-8 overflow-x-auto hide-scrollbar pb-12 snap-x">', '</a>\n</div>\n<div class="flex gap-8 overflow-x-auto hide-scrollbar pb-12 snap-x">']
   ],
