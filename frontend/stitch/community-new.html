@@ -108,27 +108,34 @@
 <!-- Page Header -->
 <div class="mb-16 text-center md:text-left">
 <h1 class="serif-display text-5xl md:text-6xl tracking-tight text-on-surface mb-4">새 커뮤니티 게시물</h1>
-<p class="sans-label text-sm tracking-[0.05em] text-outline">당신의 작가로서의 여정이나 마켓 상품을 공유해보세요.</p>
+<p class="sans-label text-sm tracking-[0.05em] text-outline">가볍게 이야기하거나, 질문을 남기거나, 장터 글을 올려보세요.</p>
 </div>
 <!-- Form Canvas -->
 <div class="bg-surface-container-lowest rounded-xl p-8 md:p-12 shadow-[0_40px_40px_-15px_rgba(26,28,27,0.04)]">
 <form class="space-y-12">
 <!-- Category Selection -->
 <div class="space-y-4">
-<span class="sans-label text-[10px] tracking-[0.2em] uppercase text-outline">컬렉션 선택</span>
-<div class="flex gap-4">
+<span class="sans-label text-[10px] tracking-[0.2em] uppercase text-outline">카테고리 선택</span>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 <label class="relative flex-1 cursor-pointer group">
-<input checked="" class="peer sr-only" name="category" type="radio" value="story"/>
+<input checked="" class="peer sr-only" name="category" type="radio" value="free"/>
 <div class="p-6 rounded-xl border border-outline-variant/30 text-center transition-all peer-checked:border-primary peer-checked:bg-primary/5 group-hover:bg-surface-container-low">
-<span class="material-symbols-outlined block mb-2 text-outline group-hover:text-primary" data-icon="auto_stories">auto_stories</span>
-<span class="sans-label text-xs tracking-widest uppercase">스토리</span>
+<span class="material-symbols-outlined block mb-2 text-outline group-hover:text-primary" data-icon="chat_bubble">chat_bubble</span>
+<span class="sans-label text-xs tracking-widest uppercase">아무말</span>
+</div>
+</label>
+<label class="relative flex-1 cursor-pointer group">
+<input class="peer sr-only" name="category" type="radio" value="qa"/>
+<div class="p-6 rounded-xl border border-outline-variant/30 text-center transition-all peer-checked:border-primary peer-checked:bg-primary/5 group-hover:bg-surface-container-low">
+<span class="material-symbols-outlined block mb-2 text-outline group-hover:text-primary" data-icon="help">help</span>
+<span class="sans-label text-xs tracking-widest uppercase">Q/A</span>
 </div>
 </label>
 <label class="relative flex-1 cursor-pointer group">
 <input class="peer sr-only" name="category" type="radio" value="market"/>
 <div class="p-6 rounded-xl border border-outline-variant/30 text-center transition-all peer-checked:border-primary peer-checked:bg-primary/5 group-hover:bg-surface-container-low">
 <span class="material-symbols-outlined block mb-2 text-outline group-hover:text-primary" data-icon="storefront">storefront</span>
-<span class="sans-label text-xs tracking-widest uppercase">마켓</span>
+<span class="sans-label text-xs tracking-widest uppercase">장터</span>
 </div>
 </label>
 </div>
@@ -142,11 +149,11 @@
 </div>
 <!-- Media Upload Area -->
 <div class="space-y-4">
-<span class="sans-label text-[10px] tracking-[0.2em] uppercase text-outline">비주얼 스토리</span>
+<span class="sans-label text-[10px] tracking-[0.2em] uppercase text-outline">첨부 이미지</span>
 <div class="relative aspect-video rounded-xl bg-surface-container-low flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 hover:border-primary/50 transition-colors group cursor-pointer overflow-hidden">
 <div class="text-center z-10 px-6">
 <span class="material-symbols-outlined text-4xl text-outline mb-3 group-hover:text-primary transition-colors" data-icon="add_photo_alternate">add_photo_alternate</span>
-<p class="serif-display text-lg text-on-surface-variant">작품 이미지를 이곳에 끌어다 놓으세요</p>
+<p class="serif-display text-lg text-on-surface-variant">이미지를 이곳에 끌어다 놓으세요</p>
 <p class="sans-label text-[10px] tracking-widest uppercase text-outline mt-1">고해상도 JPG 또는 PNG</p>
 </div>
 <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
