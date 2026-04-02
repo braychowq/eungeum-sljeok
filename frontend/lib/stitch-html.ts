@@ -11,6 +11,8 @@ type TemplateName =
   | 'community-new'
   | 'login';
 
+type ActiveSection = 'none' | 'community' | 'market';
+
 const templateFiles: Record<TemplateName, string> = {
   home: 'home.html',
   market: 'market.html',
@@ -53,7 +55,7 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
     ['</article>\n</section>', '</a>\n</section>']
   ],
   'market-new': [],
-  'market-detail': [],
+  'market-detail': [['<main class="pt-[68px] pb-32">', '<main class="pt-24 pb-32">']],
   'market-registration-mobile': [],
   community: [
     [
@@ -79,6 +81,159 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
   login: []
 };
 
+const authStyleBlock = `
+<style>
+        [data-auth-member] {
+            display: none;
+        }
+        body.is-logged-in [data-auth-guest] {
+            display: none !important;
+        }
+        body.is-logged-in [data-auth-member] {
+            display: inline-flex !important;
+        }
+    </style>`;
+
+function getActiveSection(template: TemplateName): ActiveSection {
+  if (template === 'community' || template === 'community-new') {
+    return 'community';
+  }
+
+  if (
+    template === 'market' ||
+    template === 'market-new' ||
+    template === 'market-detail' ||
+    template === 'market-registration-mobile'
+  ) {
+    return 'market';
+  }
+
+  return 'none';
+}
+
+function navLinkClasses(active: boolean, mobile = false) {
+  if (active) {
+    return mobile
+      ? 'text-[#735c00] dark:text-[#d4af37] border-b border-[#735c00] dark:border-[#d4af37] pb-1 font-medium text-[11px] tracking-[0.18em] uppercase'
+      : 'font-sans text-xs uppercase tracking-widest text-[#735c00] dark:text-[#d4af37] border-b border-[#d4af37] pb-1';
+  }
+
+  return mobile
+    ? 'text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-[11px] tracking-[0.18em] uppercase'
+    : 'font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity';
+}
+
+function sharedHeader(active: ActiveSection) {
+  const communityActive = active === 'community';
+  const marketActive = active === 'market';
+
+  return `
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7] dark:bg-[#1a1c1b] opacity-80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-10 py-6 max-w-[1440px] mx-auto w-full">
+<a class="font-serif text-2xl tracking-tighter text-[#1a1c1b] dark:text-[#faf9f7]" href="/">은금슬쩍</a>
+<nav class="flex md:hidden items-center gap-5">
+<a class="${navLinkClasses(communityActive, true)}" href="/community">커뮤니티</a>
+<a class="${navLinkClasses(marketActive, true)}" href="/market">공방 공유</a>
+</nav>
+<div class="md:hidden flex items-center">
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="/login">로그인</a>
+<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="#">마이페이지</a>
+</div>
+<nav class="hidden md:flex gap-12">
+<a class="${navLinkClasses(communityActive)}" href="/community">커뮤니티</a>
+<a class="${navLinkClasses(marketActive)}" href="/market">공방 공유</a>
+<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">마이 페이지</a>
+</nav>
+<div class="hidden md:flex items-center gap-6">
+<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="bg-[#f4f3f1] dark:bg-[#2a2c2b] h-[1px] w-full"></div>
+</header>`;
+}
+
+function sharedFooter() {
+  return `
+<footer class="w-full border-t border-[#d0c5af]/20 bg-[#f4f3f1] dark:bg-[#121413]">
+<div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-20 py-16 w-full mt-20 gap-8">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="font-serif text-lg text-[#1a1c1b] dark:text-[#faf9f7]">은금슬쩍</div>
+<p class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">작업실을 나누고 이야기를 잇는 메이커 커뮤니티</p>
+</div>
+<div class="flex gap-10">
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/community">Community</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/market">Workshop</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/login">Login</a>
+</div>
+<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2024 은금슬쩍. For makers.</div>
+</div>
+</footer>`;
+}
+
+function ensureAuthStyles(html: string) {
+  if (html.includes('[data-auth-member]')) {
+    return html;
+  }
+
+  return html.replace('</head>', `${authStyleBlock}\n</head>`);
+}
+
+function replaceFirstElement(
+  html: string,
+  marker: string,
+  closingTag: string,
+  replacement: string
+) {
+  const start = html.indexOf(marker);
+  if (start === -1) {
+    return html;
+  }
+
+  const end = html.indexOf(closingTag, start);
+  if (end === -1) {
+    return html;
+  }
+
+  return `${html.slice(0, start)}${replacement}${html.slice(end + closingTag.length)}`;
+}
+
+function replaceTopBar(html: string, replacement: string) {
+  const headerStart = html.indexOf('<header class="fixed top-0');
+  const navStart = html.indexOf('<nav class="fixed top-0');
+
+  if (headerStart !== -1 && (navStart === -1 || headerStart < navStart)) {
+    return replaceFirstElement(html, '<header class="fixed top-0', '</header>', replacement);
+  }
+
+  if (navStart !== -1) {
+    return replaceFirstElement(html, '<nav class="fixed top-0', '</nav>', replacement);
+  }
+
+  return html;
+}
+
+function replaceFooter(html: string, replacement: string) {
+  const footerStart = html.indexOf('<footer');
+
+  if (footerStart === -1) {
+    return html.replace('</body>', `${replacement}\n</body>`);
+  }
+
+  return replaceFirstElement(html, '<footer', '</footer>', replacement);
+}
+
+function normalizeLayout(html: string, template: TemplateName) {
+  const activeSection = getActiveSection(template);
+  const withAuthStyles = ensureAuthStyles(html);
+  const withSharedHeader = replaceTopBar(withAuthStyles, sharedHeader(activeSection));
+  return replaceFooter(withSharedHeader, sharedFooter());
+}
+
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
@@ -86,7 +241,8 @@ function applyReplacements(html: string, replacements: Array<[string, string]>):
 export function renderStitchHtml(template: TemplateName) {
   const filePath = join(process.cwd(), 'stitch', templateFiles[template]);
   const rawHtml = readFileSync(filePath, 'utf8');
-  const withCommonLinks = applyReplacements(rawHtml, commonReplacements);
+  const normalizedHtml = normalizeLayout(rawHtml, template);
+  const withCommonLinks = applyReplacements(normalizedHtml, commonReplacements);
   return applyReplacements(withCommonLinks, pageReplacements[template]);
 }
 
