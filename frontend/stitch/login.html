@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d0c5af",
+              "surface-tint": "#735c00",
+              "surface-container-lowest": "#ffffff",
+              "primary": "#735c00",
+              "surface-container": "#efeeec",
+              "outline": "#7f7663",
+              "on-surface-variant": "#4d4635",
+              "surface-container-high": "#e9e8e6",
+              "primary-container": "#d4af37",
+              "surface-bright": "#faf9f7",
+              "surface": "#faf9f7",
+              "background": "#faf9f7",
+              "surface-container-low": "#f4f3f1",
+              "on-surface": "#1a1c1b",
+              "on-primary-container": "#554300",
+              "surface-variant": "#e3e2e0",
+              "tertiary": "#5f5e5e",
+              "surface-container-highest": "#e3e2e0",
+              "on-primary": "#ffffff",
+              "secondary": "#5d5e5f",
+              "secondary-container": "#e0dfdf",
+              "on-background": "#1a1c1b"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7]/80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 md:px-10 py-6 max-w-[1440px] mx-auto w-full">
+<a class="font-serif text-2xl tracking-tighter text-[#1a1c1b]" href="/">은금슬쩍</a>
+<nav class="flex items-center gap-5 md:gap-12">
+<a class="text-[#1a1c1b] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] font-medium text-[11px] md:text-xs tracking-[0.18em] uppercase" href="/community">커뮤니티</a>
+<a class="text-[#1a1c1b] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] font-medium text-[11px] md:text-xs tracking-[0.18em] uppercase" href="/market">공방 공유</a>
+<a class="text-[#735c00] border-b border-[#735c00] pb-1 font-medium text-[11px] md:text-xs tracking-[0.18em] uppercase" href="/login">로그인</a>
+</nav>
+</div>
+<div class="bg-[#f4f3f1] h-[1px] w-full"></div>
+</header>
+<main class="min-h-screen px-6 md:px-20 pt-32 md:pt-40 pb-20">
+<section class="max-w-[1120px] mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-stretch">
+<div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#f7f2e6] via-[#f4f3f1] to-[#efe6ce] p-8 md:p-12 min-h-[340px] md:min-h-[520px]">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.26),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(115,92,0,0.14),transparent_38%)]"></div>
+<div class="relative z-10 flex h-full flex-col justify-between">
+<div>
+<span class="text-[10px] tracking-[0.24em] uppercase text-outline">Welcome back</span>
+<h1 class="mt-5 font-headline text-4xl md:text-6xl leading-[1.12] tracking-tight">은금슬쩍에 다시<br/>들어오세요.</h1>
+<p class="mt-6 max-w-md text-sm md:text-base text-on-surface-variant leading-relaxed">공방을 공유하고, 커뮤니티에서 이야기를 나누고, 당신의 작업 흐름을 이어갈 수 있는 로그인 화면입니다.</p>
+</div>
+<div class="flex flex-wrap gap-3 pt-8">
+<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Jewelry Workspace</div>
+<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Community Board</div>
+<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">For Makers</div>
+</div>
+</div>
+</div>
+<div class="rounded-[2rem] bg-surface-container-lowest border border-outline-variant/20 shadow-[0_30px_70px_rgba(26,28,27,0.06)] p-8 md:p-12">
+<div class="max-w-md mx-auto">
+<span class="text-[10px] tracking-[0.22em] uppercase text-outline">Account Access</span>
+<h2 class="mt-4 font-headline text-3xl md:text-4xl tracking-tight">로그인</h2>
+<p class="mt-4 text-sm text-on-surface-variant leading-relaxed">아직 기능 연동 전 단계이므로 화면만 먼저 준비해두었습니다. 이후 실제 인증 기능과 연결할 수 있어요.</p>
+<form class="mt-10 space-y-6">
+<label class="block">
+<span class="block mb-3 text-[10px] tracking-[0.18em] uppercase text-outline">이메일</span>
+<input class="w-full rounded-2xl border border-outline-variant/40 bg-surface px-5 py-4 text-sm focus:border-primary focus:ring-0" placeholder="name@example.com" type="email"/>
+</label>
+<label class="block">
+<span class="block mb-3 text-[10px] tracking-[0.18em] uppercase text-outline">비밀번호</span>
+<input class="w-full rounded-2xl border border-outline-variant/40 bg-surface px-5 py-4 text-sm focus:border-primary focus:ring-0" placeholder="비밀번호를 입력하세요" type="password"/>
+</label>
+<div class="flex items-center justify-between gap-4 text-[11px] text-on-surface-variant">
+<label class="inline-flex items-center gap-2 cursor-pointer">
+<input class="rounded border-outline-variant/50 text-primary focus:ring-primary/30" type="checkbox"/>
+<span>로그인 상태 유지</span>
+</label>
+<a class="hover:text-primary transition-colors" href="#">비밀번호 찾기</a>
+</div>
+<button class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary text-xs font-semibold tracking-[0.2em] uppercase shadow-lg shadow-primary/20 hover:scale-[0.99] transition-transform" type="button">로그인</button>
+</form>
+<div class="mt-8 rounded-2xl bg-surface-container-low px-5 py-4 text-xs text-on-surface-variant leading-relaxed">
+회원가입 및 소셜 로그인은 다음 단계에서 연결 예정입니다. 현재는 진입 경로와 디자인만 먼저 준비된 상태입니다.
+</div>
+<div class="mt-8 text-center text-[11px] text-on-surface-variant">
+계정이 아직 없으신가요?
+<a class="ml-2 text-primary hover:opacity-80 transition-opacity" href="/community">먼저 커뮤니티 둘러보기</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full border-t border-[#d0c5af]/20 bg-[#f4f3f1]">
+<div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-20 py-12 w-full gap-6">
+<div class="font-serif text-lg text-[#1a1c1b]">은금슬쩍</div>
+<div class="flex gap-8">
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] transition-all duration-300" href="/community">Community</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] transition-all duration-300" href="/market">Workshop</a>
+</div>
+<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2024 은금슬쩍. For makers.</div>
+</div>
+</footer>
+</body></html>

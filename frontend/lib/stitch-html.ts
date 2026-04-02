@@ -8,7 +8,8 @@ type TemplateName =
   | 'market-detail'
   | 'market-registration-mobile'
   | 'community'
-  | 'community-new';
+  | 'community-new'
+  | 'login';
 
 const templateFiles: Record<TemplateName, string> = {
   home: 'home.html',
@@ -17,7 +18,8 @@ const templateFiles: Record<TemplateName, string> = {
   'market-detail': 'market-detail.html',
   'market-registration-mobile': 'market-registration-mobile.html',
   community: 'community.html',
-  'community-new': 'community-new.html'
+  'community-new': 'community-new.html',
+  login: 'login.html'
 };
 
 const commonReplacements: Array<[string, string]> = [
@@ -25,7 +27,8 @@ const commonReplacements: Array<[string, string]> = [
   ['href="#">Community</a>', 'href="/community">커뮤니티</a>'],
   ['href="#">공방 공유</a>', 'href="/market">공방 공유</a>'],
   ['href="#">Studio Share</a>', 'href="/market">공방 공유</a>'],
-  ['href="#">은금슬쩍</a>', 'href="/">은금슬쩍</a>']
+  ['href="#">은금슬쩍</a>', 'href="/">은금슬쩍</a>'],
+  ['data-auth-guest="" href="#">로그인</a>', 'data-auth-guest="" href="/login">로그인</a>']
 ];
 
 const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
@@ -72,7 +75,8 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
     ],
     ['</button>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>', '</a>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>']
   ],
-  'community-new': []
+  'community-new': [],
+  login: []
 };
 
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
