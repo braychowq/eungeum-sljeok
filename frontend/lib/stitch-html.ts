@@ -9,6 +9,7 @@ type TemplateName =
   | 'market-registration-mobile'
   | 'community'
   | 'community-new'
+  | 'community-post-detail'
   | 'login';
 
 type ActiveSection = 'none' | 'community' | 'market';
@@ -21,6 +22,7 @@ const templateFiles: Record<TemplateName, string> = {
   'market-registration-mobile': 'market-registration-mobile.html',
   community: 'community.html',
   'community-new': 'community-new.html',
+  'community-post-detail': 'community-post-detail.html',
   login: 'login.html'
 };
 
@@ -78,6 +80,7 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
     ['</button>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>', '</a>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>']
   ],
   'community-new': [],
+  'community-post-detail': [],
   login: []
 };
 
@@ -95,7 +98,11 @@ const authStyleBlock = `
     </style>`;
 
 function getActiveSection(template: TemplateName): ActiveSection {
-  if (template === 'community' || template === 'community-new') {
+  if (
+    template === 'community' ||
+    template === 'community-new' ||
+    template === 'community-post-detail'
+  ) {
     return 'community';
   }
 
@@ -214,7 +221,17 @@ function replaceTopBar(html: string, replacement: string) {
     return replaceFirstElement(html, '<nav class="fixed top-0', '</nav>', replacement);
   }
 
-  return html;
+  const bodyStart = html.indexOf('<body');
+  if (bodyStart === -1) {
+    return html;
+  }
+
+  const bodyTagEnd = html.indexOf('>', bodyStart);
+  if (bodyTagEnd === -1) {
+    return html;
+  }
+
+  return `${html.slice(0, bodyTagEnd + 1)}\n${replacement}${html.slice(bodyTagEnd + 1)}`;
 }
 
 function replaceFooter(html: string, replacement: string) {
@@ -238,12 +255,16 @@ function applyReplacements(html: string, replacements: Array<[string, string]>):
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
 
-export function renderStitchHtml(template: TemplateName) {
-  const filePath = join(process.cwd(), 'stitch', templateFiles[template]);
-  const rawHtml = readFileSync(filePath, 'utf8');
+export function finalizeStitchHtml(template: TemplateName, rawHtml: string) {
   const normalizedHtml = normalizeLayout(rawHtml, template);
   const withCommonLinks = applyReplacements(normalizedHtml, commonReplacements);
   return applyReplacements(withCommonLinks, pageReplacements[template]);
+}
+
+export function renderStitchHtml(template: TemplateName) {
+  const filePath = join(process.cwd(), 'stitch', templateFiles[template]);
+  const rawHtml = readFileSync(filePath, 'utf8');
+  return finalizeStitchHtml(template, rawHtml);
 }
 
 export function stitchHtmlResponse(template: TemplateName) {
