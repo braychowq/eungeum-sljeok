@@ -97,13 +97,11 @@
         .market-layout-toggle {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.55rem 0.9rem;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 9999px;
             border: 1px solid rgba(127, 118, 99, 0.18);
-            font-size: 10px;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
             transition: all 0.2s ease;
             color: #4d4635;
             background: rgba(255, 255, 255, 0.72);
@@ -233,15 +231,12 @@
 </div>
 </div>
 <div class="mt-6 flex md:hidden items-center justify-end gap-2">
-<span class="text-[10px] tracking-[0.16em] uppercase text-outline">모바일 보기</span>
 <div class="inline-flex items-center gap-2">
-<button aria-pressed="true" class="market-layout-toggle is-active" data-market-layout-toggle="2" type="button">
+<button aria-label="2열 보기" aria-pressed="true" class="market-layout-toggle is-active" data-market-layout-toggle="2" type="button">
 <span class="material-symbols-outlined" style="font-size: 16px;">grid_view</span>
-<span>2열</span>
 </button>
-<button aria-pressed="false" class="market-layout-toggle" data-market-layout-toggle="1" type="button">
+<button aria-label="1열 보기" aria-pressed="false" class="market-layout-toggle" data-market-layout-toggle="1" type="button">
 <span class="material-symbols-outlined" style="font-size: 16px;">view_agenda</span>
-<span>1열</span>
 </button>
 </div>
 </div>
