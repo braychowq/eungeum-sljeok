@@ -97,6 +97,265 @@ const authStyleBlock = `
         }
     </style>`;
 
+const studioFormEnhancerBlock = `
+<script>
+(() => {
+  const form = document.querySelector('[data-studio-form]');
+  if (!form) return;
+
+  const message = document.querySelector('[data-studio-form-message]');
+  const submitButton = form.querySelector('[data-studio-submit]');
+  const submitButtonLabel = submitButton ? submitButton.textContent.trim() : '공방 등록하기';
+  const fileInput = document.querySelector('[data-studio-image-input]');
+  const uploadTriggers = Array.from(document.querySelectorAll('[data-studio-upload-trigger]'));
+  const previewTarget = document.querySelector('[data-studio-preview-target]');
+  const clearPreviewButton = document.querySelector('[data-studio-clear-preview]');
+  const imageCountNodes = Array.from(document.querySelectorAll('[data-studio-image-count]'));
+  const categoryInput = form.querySelector('[data-field="category"]');
+  const categoryButtons = Array.from(form.querySelectorAll('[data-category-option]'));
+  const customAmenityButton = form.querySelector('[data-custom-amenity]');
+  const layout = form.getAttribute('data-layout') || 'desktop';
+  let selectedFiles = [];
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      return;
+    }
+
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'rounded-xl px-5 py-4 text-sm bg-[#eef6ed] text-[#295b2d] border border-[#cfe3cb]'
+      : 'rounded-xl px-5 py-4 text-sm bg-[#fdf0ee] text-[#803321] border border-[#f0c8c2]';
+  };
+
+  const restorePreview = () => {
+    if (!previewTarget) return;
+    const fallbackSrc = previewTarget.getAttribute('data-fallback-src');
+    if (fallbackSrc) {
+      previewTarget.setAttribute('src', fallbackSrc);
+    }
+  };
+
+  if (previewTarget && !previewTarget.getAttribute('data-fallback-src')) {
+    previewTarget.setAttribute('data-fallback-src', previewTarget.getAttribute('src') || '');
+  }
+
+  const updateImageCount = () => {
+    const text = selectedFiles.length
+      ? '선택한 사진 ' + selectedFiles.length + '장'
+      : '사진을 아직 선택하지 않았어요.';
+
+    imageCountNodes.forEach((node) => {
+      node.textContent = text;
+    });
+
+    if (clearPreviewButton) {
+      clearPreviewButton.hidden = selectedFiles.length === 0;
+    }
+  };
+
+  const updatePreview = () => {
+    updateImageCount();
+
+    if (!previewTarget) return;
+
+    if (!selectedFiles.length) {
+      restorePreview();
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        previewTarget.setAttribute('src', reader.result);
+      }
+    };
+    reader.readAsDataURL(selectedFiles[0]);
+  };
+
+  if (fileInput) {
+    const openFilePicker = () => fileInput.click();
+
+    uploadTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', openFilePicker);
+      trigger.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openFilePicker();
+        }
+      });
+    });
+
+    fileInput.addEventListener('change', () => {
+      selectedFiles = Array.from(fileInput.files || []).slice(0, 10);
+      updatePreview();
+    });
+  }
+
+  if (clearPreviewButton) {
+    clearPreviewButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      selectedFiles = [];
+      if (fileInput) fileInput.value = '';
+      updatePreview();
+    });
+  }
+
+  const setActiveCategory = (nextCategory) => {
+    if (!nextCategory) return;
+
+    categoryButtons.forEach((button) => {
+      const isActive = (button.dataset.categoryOption || '') === nextCategory;
+      button.classList.toggle('bg-secondary', isActive);
+      button.classList.toggle('text-on-secondary', isActive);
+      button.classList.toggle('bg-surface-container-high', !isActive);
+      button.classList.toggle('text-on-surface-variant', !isActive);
+    });
+
+    if (categoryInput) {
+      categoryInput.value = nextCategory;
+    }
+  };
+
+  if (categoryButtons.length) {
+    const initialCategory = (categoryInput && categoryInput.value) || categoryButtons[0].dataset.categoryOption || '';
+    setActiveCategory(initialCategory);
+
+    categoryButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        setActiveCategory(button.dataset.categoryOption || '');
+      });
+    });
+  }
+
+  if (customAmenityButton) {
+    customAmenityButton.addEventListener('click', () => {
+      const value = window.prompt('추가할 장비나 편의시설 이름을 입력해주세요.');
+      if (!value) return;
+
+      const trimmed = value.trim();
+      if (!trimmed) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className =
+        'flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10';
+      wrapper.innerHTML =
+        '<div class="flex items-center gap-3">' +
+        '<span class="material-symbols-outlined text-secondary">check_circle</span>' +
+        '<span class="text-sm font-medium"></span>' +
+        '</div>' +
+        '<input checked class="rounded border-outline-variant text-secondary focus:ring-secondary/20" name="amenities" type="checkbox" value="" />';
+
+      const textNode = wrapper.querySelector('span.text-sm');
+      const inputNode = wrapper.querySelector('input[name="amenities"]');
+
+      if (textNode) textNode.textContent = trimmed;
+      if (inputNode) inputNode.value = trimmed;
+
+      customAmenityButton.before(wrapper);
+    });
+  }
+
+  const valueOf = (field) => {
+    const input = form.querySelector('[data-field="' + field + '"]');
+    if (!input) return '';
+    return (input.value || '').toString().trim();
+  };
+
+  const collectAmenities = () =>
+    Array.from(form.querySelectorAll('input[name="amenities"]:checked'))
+      .map((input) => input.value)
+      .filter(Boolean);
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const payload = {
+      name: valueOf('name'),
+      location: valueOf('location'),
+      description: valueOf('description'),
+      price: valueOf('price'),
+      contact: valueOf('contact'),
+      category: valueOf('category') || '주얼리 공방',
+      capacity: valueOf('capacity'),
+      amenities: collectAmenities(),
+      imageNames: selectedFiles.map((file) => file.name),
+      imageCount: selectedFiles.length,
+      platform: layout
+    };
+
+    const missing = [];
+    if (!payload.name) missing.push('공방 이름');
+    if (!payload.location) missing.push('위치');
+    if (!payload.description) missing.push('소개');
+    if (!payload.price) missing.push(layout === 'mobile' ? '시간당 가격' : '일일 대여료');
+    if (!payload.contact) missing.push('연락처');
+
+    if (missing.length) {
+      setMessage('error', missing.join(', ') + ' 항목을 입력해주세요.');
+      return;
+    }
+
+    try {
+      setMessage('', '');
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
+        submitButton.textContent = '등록 중...';
+      }
+
+      const response = await fetch('/api/studios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || '등록에 실패했어요. 잠시 후 다시 시도해주세요.');
+      }
+
+      setMessage('success', '"' + (result.name || payload.name) + '" 공방 등록 요청이 접수됐어요.');
+      form.reset();
+      selectedFiles = [];
+
+      if (fileInput) {
+        fileInput.value = '';
+      }
+
+      restorePreview();
+      updateImageCount();
+
+      if (categoryButtons.length) {
+        setActiveCategory(categoryButtons[0].dataset.categoryOption || '');
+      }
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '등록에 실패했어요. 잠시 후 다시 시도해주세요.';
+      setMessage('error', errorMessage);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.removeAttribute('aria-busy');
+        submitButton.textContent = submitButtonLabel;
+      }
+    }
+  });
+
+  updateImageCount();
+})();
+</script>`;
+
 function getActiveSection(template: TemplateName): ActiveSection {
   if (
     template === 'community' ||
@@ -251,6 +510,18 @@ function normalizeLayout(html: string, template: TemplateName) {
   return replaceFooter(withSharedHeader, sharedFooter());
 }
 
+function injectStudioFormEnhancer(html: string, template: TemplateName) {
+  if (template !== 'market-new' && template !== 'market-registration-mobile') {
+    return html;
+  }
+
+  if (html.includes('data-studio-form')) {
+    return html.replace('</body>', `${studioFormEnhancerBlock}\n</body>`);
+  }
+
+  return html;
+}
+
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
@@ -258,7 +529,8 @@ function applyReplacements(html: string, replacements: Array<[string, string]>):
 export function finalizeStitchHtml(template: TemplateName, rawHtml: string) {
   const normalizedHtml = normalizeLayout(rawHtml, template);
   const withCommonLinks = applyReplacements(normalizedHtml, commonReplacements);
-  return applyReplacements(withCommonLinks, pageReplacements[template]);
+  const withPageReplacements = applyReplacements(withCommonLinks, pageReplacements[template]);
+  return injectStudioFormEnhancer(withPageReplacements, template);
 }
 
 export function renderStitchHtml(template: TemplateName) {

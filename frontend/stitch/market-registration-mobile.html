@@ -123,7 +123,9 @@
 <h2 class="font-headline text-3xl leading-tight tracking-tight text-on-surface">당신의 공방을<br/>소개해보세요.</h2>
 <p class="font-body text-sm text-on-surface-variant mt-3 leading-relaxed">공유하고 싶은 가치와 공간의 이야기를 들려주세요. 고요한 창작의 시간을 다른 이들과 나눕니다.</p>
 </section>
-<form class="space-y-12">
+<form class="space-y-12" data-layout="mobile" data-studio-form="" novalidate="">
+<input accept="image/*" class="hidden" data-studio-image-input="" multiple="" type="file"/>
+<input data-field="category" type="hidden" value="도예"/>
 <!-- Photo Upload Section -->
 <section>
 <h3 class="font-headline text-lg mb-4 flex items-center gap-2">
@@ -131,58 +133,62 @@
                     <span class="text-[10px] font-label bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">REQUIRED</span>
 </h3>
 <div class="grid grid-cols-2 gap-3">
-<div class="aspect-square bg-surface-container-low rounded-lg flex flex-col items-center justify-center border border-dashed border-outline-variant/30 group hover:bg-surface-container transition-colors cursor-pointer">
+<div class="aspect-square bg-surface-container-low rounded-lg flex flex-col items-center justify-center border border-dashed border-outline-variant/30 group hover:bg-surface-container transition-colors cursor-pointer" data-studio-upload-trigger="" role="button" tabindex="0">
 <span class="material-symbols-outlined text-outline-variant group-hover:text-primary mb-2" data-icon="add_a_photo">add_a_photo</span>
 <span class="text-[10px] font-label text-outline-variant">사진 추가</span>
 </div>
 <!-- Sample Image Slots -->
 <div class="aspect-square relative rounded-lg overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="Minimalist pottery studio with natural wooden shelves and soft sunlight filtering through a large window" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXpPsFkUZVB8UPeCGiShdeGZPrEUTFc9KGuptcJi4yZROMIchCM6Cat9q-fZqoHAdtBhhuMAMRWfBrH9vgeRctC3BmsA5SeO05Uoza5zS78b2TgR6q3Hqu8AN2LCkJ4sPfo_Nr-FxAStudsWpIu2gnvI45g7uhBnAcOA3q50pu09rJkk1P-47XF-Imsn1snIcqp7Adup41HpxUUN7hqvERQy73N8NNJyYGIJeJvkGTY5Sa8pFCNyCg5Dk1VX1bcJyq6QdVFS-YKWo"/>
-<button class="absolute top-2 right-2 bg-on-surface/20 backdrop-blur-sm p-1 rounded-full text-white">
+<img class="w-full h-full object-cover" data-alt="Minimalist pottery studio with natural wooden shelves and soft sunlight filtering through a large window" data-studio-preview-target="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXpPsFkUZVB8UPeCGiShdeGZPrEUTFc9KGuptcJi4yZROMIchCM6Cat9q-fZqoHAdtBhhuMAMRWfBrH9vgeRctC3BmsA5SeO05Uoza5zS78b2TgR6q3Hqu8AN2LCkJ4sPfo_Nr-FxAStudsWpIu2gnvI45g7uhBnAcOA3q50pu09rJkk1P-47XF-Imsn1snIcqp7Adup41HpxUUN7hqvERQy73N8NNJyYGIJeJvkGTY5Sa8pFCNyCg5Dk1VX1bcJyq6QdVFS-YKWo"/>
+<button class="absolute top-2 right-2 bg-on-surface/20 backdrop-blur-sm p-1 rounded-full text-white" data-studio-clear-preview="" hidden="" type="button">
 <span class="material-symbols-outlined text-xs" data-icon="close">close</span>
 </button>
 </div>
 </div>
-<p class="text-[11px] text-on-surface-variant/60 mt-3 font-body">최대 5장의 고해상도 이미지를 권장합니다. (JPG, PNG)</p>
+<p class="text-[11px] text-on-surface-variant/60 mt-3 font-body" data-studio-image-count="">최대 5장의 고해상도 이미지를 권장합니다. (JPG, PNG)</p>
 </section>
 <!-- Space Basic Info -->
 <section class="space-y-6">
 <div>
 <label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">공방 이름</label>
-<input class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50" placeholder="공방 이름을 입력해주세요" type="text"/>
+<input class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50" data-field="name" name="name" placeholder="공방 이름을 입력해주세요" type="text"/>
 </div>
 <div>
 <label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">카테고리</label>
 <div class="flex flex-wrap gap-2">
-<button class="bg-secondary text-on-secondary px-4 py-2 rounded-full text-xs font-medium transition-colors" type="button">도예</button>
-<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">목공</button>
-<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">가죽</button>
-<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">직조</button>
-<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" type="button">향수</button>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-full text-xs font-medium transition-colors" data-category-option="도예" type="button">도예</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" data-category-option="목공" type="button">목공</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" data-category-option="가죽" type="button">가죽</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" data-category-option="직조" type="button">직조</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-xs font-medium hover:bg-secondary-fixed transition-colors" data-category-option="향수" type="button">향수</button>
 </div>
 </div>
 </section>
 <!-- Description -->
 <section>
 <label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">소개</label>
-<textarea class="w-full bg-surface-container-low border-none rounded-md px-4 py-4 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50 resize-none" placeholder="공간의 철학이나 작업실의 분위기를 설명해주세요." rows="5"></textarea>
+<textarea class="w-full bg-surface-container-low border-none rounded-md px-4 py-4 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50 resize-none" data-field="description" name="description" placeholder="공간의 철학이나 작업실의 분위기를 설명해주세요." rows="5"></textarea>
 </section>
 <!-- Availability & Price -->
 <section class="grid grid-cols-2 gap-6">
 <div>
 <label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">시간당 가격</label>
 <div class="relative">
-<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-10 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="0" type="number"/>
+<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-10 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" data-field="price" min="0" name="price" placeholder="0" type="number"/>
 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-label text-on-surface-variant">KRW</span>
 </div>
 </div>
 <div>
 <label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">수용 인원</label>
 <div class="relative">
-<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-10 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="1" type="number"/>
+<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-10 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" data-field="capacity" min="1" name="capacity" placeholder="1" type="number"/>
 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-label text-on-surface-variant">PERSONS</span>
 </div>
 </div>
+</section>
+<section>
+<label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">연락처</label>
+<input class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant/50" data-field="contact" name="contact" placeholder="010-1234-5678" type="tel"/>
 </section>
 <!-- Tools List -->
 <section>
@@ -193,23 +199,23 @@
 <span class="material-symbols-outlined text-secondary" data-icon="water_drop">water_drop</span>
 <span class="text-sm font-medium">수전 시설</span>
 </div>
-<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" name="amenities" type="checkbox" value="수전 시설"/>
 </div>
 <div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-secondary" data-icon="wifi">wifi</span>
 <span class="text-sm font-medium">고속 와이파이</span>
 </div>
-<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" name="amenities" type="checkbox" value="고속 와이파이"/>
 </div>
 <div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-secondary" data-icon="electric_bolt">electric_bolt</span>
 <span class="text-sm font-medium">전기 가마</span>
 </div>
-<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" name="amenities" type="checkbox" value="전기 가마"/>
 </div>
-<button class="w-full py-3 flex items-center justify-center gap-2 text-[10px] font-label font-bold text-outline-variant hover:text-primary transition-colors" type="button">
+<button class="w-full py-3 flex items-center justify-center gap-2 text-[10px] font-label font-bold text-outline-variant hover:text-primary transition-colors" data-custom-amenity="" type="button">
 <span class="material-symbols-outlined !text-sm" data-icon="add">add</span>
                         직접 추가하기
                     </button>
@@ -219,7 +225,7 @@
 <section>
 <label class="font-label text-[11px] font-bold uppercase tracking-[0.1em] text-on-surface-variant block mb-2">위치</label>
 <div class="relative mb-3">
-<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-12 py-3 text-sm focus:ring-0 cursor-pointer" placeholder="도로명 주소를 입력해주세요" readonly="" type="text"/>
+<input class="w-full bg-surface-container-low border-none rounded-md pl-4 pr-12 py-3 text-sm focus:ring-0 cursor-text" data-field="location" name="location" placeholder="도로명 주소를 입력해주세요" type="text"/>
 <span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
 </div>
 <div class="h-40 bg-surface-container rounded-lg overflow-hidden grayscale opacity-60">
@@ -229,7 +235,8 @@
 </section>
 <!-- Bottom Action -->
 <div class="pt-6">
-<button class="w-full bg-primary text-on-primary py-4 rounded-md font-bold text-sm tracking-widest hover:bg-primary-dim transition-colors duration-300 shadow-xl shadow-primary/10" type="submit">
+<div class="hidden rounded-xl px-4 py-3 text-sm mb-4" data-studio-form-message=""></div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-md font-bold text-sm tracking-widest hover:bg-primary-dim transition-colors duration-300 shadow-xl shadow-primary/10 disabled:opacity-60 disabled:cursor-not-allowed" data-studio-submit="" type="submit">
                     공방 등록하기
                 </button>
 <p class="text-center text-[10px] font-label text-outline-variant mt-6 uppercase tracking-widest">등록 시 은금슬쩍 운영 가이드에 동의한 것으로 간주됩니다</p>
