@@ -177,7 +177,7 @@ function sharedFooter() {
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/market">공방 공유</a>
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/login">로그인</a>
 </div>
-<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2024 은금슬쩍. For makers.</div>
+<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2026 은금슬쩍. For makers.</div>
 </div>
 </footer>`;
 }
