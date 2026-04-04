@@ -10,7 +10,9 @@ type TemplateName =
   | 'community'
   | 'community-new'
   | 'community-post-detail'
-  | 'login';
+  | 'login'
+  | 'onboarding'
+  | 'account';
 
 type ActiveSection = 'none' | 'community' | 'market';
 
@@ -23,7 +25,9 @@ const templateFiles: Record<TemplateName, string> = {
   community: 'community.html',
   'community-new': 'community-new.html',
   'community-post-detail': 'community-post-detail.html',
-  login: 'login.html'
+  login: 'login.html',
+  onboarding: 'onboarding.html',
+  account: 'account.html'
 };
 
 const commonReplacements: Array<[string, string]> = [
@@ -81,7 +85,9 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
   ],
   'community-new': [],
   'community-post-detail': [],
-  login: []
+  login: [],
+  onboarding: [],
+  account: []
 };
 
 const authStyleBlock = `
@@ -96,6 +102,114 @@ const authStyleBlock = `
             display: inline-flex !important;
         }
     </style>`;
+
+const authBootstrapBlock = `
+<script>
+(() => {
+  const body = document.body;
+  if (!body) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const pageNext = params.get('next');
+  const safePath = (value, fallback = '/') => {
+    if (!value || typeof value !== 'string') return fallback;
+    const trimmed = value.trim();
+    if (!trimmed.startsWith('/') || trimmed.startsWith('//') || trimmed.includes('\\\\')) {
+      return fallback;
+    }
+    return trimmed;
+  };
+
+  const currentPath = safePath(
+    window.location.pathname + window.location.search + window.location.hash,
+    '/'
+  );
+  const loginTarget = body.hasAttribute('data-login-page')
+    ? safePath(pageNext, '/')
+    : currentPath;
+  const loginHref = '/login?next=' + encodeURIComponent(loginTarget);
+
+  document.querySelectorAll('[data-auth-guest]').forEach((node) => {
+    if (node instanceof HTMLAnchorElement) {
+      node.href = loginHref;
+    }
+  });
+
+  const applyAuthState = (payload) => {
+    const authenticated = Boolean(payload && payload.authenticated);
+    body.classList.toggle('is-logged-in', authenticated);
+
+    if (authenticated && payload.user) {
+      document.querySelectorAll('[data-auth-member]').forEach((node) => {
+        if (node instanceof HTMLAnchorElement) {
+          node.href = payload.user.accountPath || '/account';
+        }
+      });
+
+      document.querySelectorAll('[data-auth-display-name]').forEach((node) => {
+        node.textContent = payload.user.displayName || '은금슬쩍 회원';
+      });
+    }
+
+    window.dispatchEvent(new CustomEvent('auth:resolved', { detail: payload || { authenticated: false } }));
+  };
+
+  const redirect = (path) => {
+    const nextPath = safePath(path, '/');
+    if (window.location.pathname + window.location.search !== nextPath) {
+      window.location.replace(nextPath);
+    }
+  };
+
+  fetch('/api/auth/me', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json'
+    },
+    credentials: 'same-origin',
+    cache: 'no-store'
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error('auth_check_failed');
+      }
+      return response.json();
+    })
+    .then((payload) => {
+      applyAuthState(payload);
+
+      if (!payload || !payload.authenticated) {
+        if (body.dataset.authRequired === 'true') {
+          redirect('/login?error=auth_required&next=' + encodeURIComponent(currentPath));
+        }
+        return;
+      }
+
+      if (body.hasAttribute('data-login-page')) {
+        const next = safePath(pageNext, '/');
+        redirect(payload.user && payload.user.requiresOnboarding
+          ? '/onboarding?next=' + encodeURIComponent(next)
+          : next);
+        return;
+      }
+
+      if (body.hasAttribute('data-onboarding-page') && payload.user && !payload.user.requiresOnboarding) {
+        redirect('/account');
+        return;
+      }
+
+      if (body.hasAttribute('data-account-page') && payload.user && payload.user.requiresOnboarding) {
+        redirect('/onboarding?next=' + encodeURIComponent('/account'));
+      }
+    })
+    .catch(() => {
+      applyAuthState({ authenticated: false });
+      if (body.dataset.authRequired === 'true') {
+        redirect('/login?error=auth_required&next=' + encodeURIComponent(currentPath));
+      }
+    });
+})();
+</script>`;
 
 const studioFormEnhancerBlock = `
 <script>
@@ -601,6 +715,218 @@ const communityCommentComposerBlock = `
 })();
 </script>`;
 
+const onboardingEnhancerBlock = `
+<script>
+(() => {
+  const form = document.querySelector('[data-onboarding-form]');
+  if (!form) return;
+
+  const submitButton = form.querySelector('[data-onboarding-submit]');
+  const submitLabel = submitButton ? submitButton.textContent.trim() : '정보 저장하기';
+  const message = document.querySelector('[data-onboarding-message]');
+  const displayNameInput = form.querySelector('[name="displayName"]');
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      return;
+    }
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'mt-5 rounded-2xl border border-[#d7e7d8] bg-[#f1f7f2] px-5 py-4 text-sm text-[#2f5a35]'
+      : 'mt-5 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]';
+  };
+
+  const safeNext = (value) => {
+    if (!value || typeof value !== 'string') return '/';
+    const trimmed = value.trim();
+    if (!trimmed.startsWith('/') || trimmed.startsWith('//') || trimmed.includes('\\\\')) {
+      return '/';
+    }
+    return trimmed;
+  };
+
+  window.addEventListener('auth:resolved', (event) => {
+    const detail = event.detail || {};
+    if (detail.authenticated && detail.user && displayNameInput && !displayNameInput.value) {
+      displayNameInput.value = detail.user.displayName || '';
+    }
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const payload = {
+      displayName: String(form.elements.displayName.value || '').trim(),
+      activityField: String(form.elements.activityField.value || '').trim(),
+      region: String(form.elements.region.value || '').trim(),
+      marketingOptIn: Boolean(form.elements.marketingOptIn.checked),
+      agreedTerms: Boolean(form.elements.agreedTerms.checked),
+      agreedPrivacy: Boolean(form.elements.agreedPrivacy.checked)
+    };
+
+    if (!payload.displayName || !payload.activityField || !payload.region) {
+      setMessage('error', '닉네임, 활동 분야, 지역을 모두 입력해주세요.');
+      return;
+    }
+
+    if (!payload.agreedTerms || !payload.agreedPrivacy) {
+      setMessage('error', '필수 약관 동의가 필요합니다.');
+      return;
+    }
+
+    try {
+      setMessage('', '');
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = '저장 중...';
+      }
+
+      const response = await fetch('/api/auth/onboarding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.message || '추가 정보를 저장하지 못했습니다.');
+      }
+
+      setMessage('success', '추가 정보가 저장되었습니다. 잠시 후 이동합니다.');
+      const next = safeNext(new URLSearchParams(window.location.search).get('next'));
+      window.setTimeout(() => {
+        window.location.replace(next || result.redirectTo || '/');
+      }, 250);
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '추가 정보를 저장하지 못했습니다.';
+      setMessage('error', errorMessage);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitLabel;
+      }
+    }
+  });
+})();
+</script>`;
+
+const accountEnhancerBlock = `
+<script>
+(() => {
+  const message = document.querySelector('[data-account-message]');
+  const logoutButton = document.querySelector('[data-account-logout]');
+  const deleteButton = document.querySelector('[data-account-delete]');
+
+  const fields = {
+    name: document.querySelector('[data-account-name]'),
+    status: document.querySelector('[data-account-status]'),
+    role: document.querySelector('[data-account-role]'),
+    onboarding: document.querySelector('[data-account-onboarding]')
+  };
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      return;
+    }
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'mt-5 rounded-2xl border border-[#d7e7d8] bg-[#f1f7f2] px-5 py-4 text-sm text-[#2f5a35]'
+      : 'mt-5 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]';
+  };
+
+  const renderUser = (user) => {
+    if (!user) return;
+    if (fields.name) fields.name.textContent = user.displayName || '은금슬쩍 회원';
+    if (fields.status) fields.status.textContent = user.status || '-';
+    if (fields.role) fields.role.textContent = user.role || '-';
+    if (fields.onboarding) fields.onboarding.textContent = user.onboardingCompleted ? '완료' : '필요';
+  };
+
+  window.addEventListener('auth:resolved', (event) => {
+    const detail = event.detail || {};
+    if (detail.authenticated && detail.user) {
+      renderUser(detail.user);
+    }
+  });
+
+  if (logoutButton) {
+    logoutButton.addEventListener('click', async () => {
+      try {
+        setMessage('', '');
+        logoutButton.disabled = true;
+        const response = await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json'
+          },
+          credentials: 'same-origin'
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.message || '로그아웃하지 못했습니다.');
+        }
+        window.location.replace('/');
+      } catch (error) {
+        const errorMessage =
+          error && typeof error === 'object' && 'message' in error
+            ? error.message
+            : '로그아웃하지 못했습니다.';
+        setMessage('error', errorMessage);
+      } finally {
+        logoutButton.disabled = false;
+      }
+    });
+  }
+
+  if (deleteButton) {
+    deleteButton.addEventListener('click', async () => {
+      const confirmed = window.confirm('정말 탈퇴하시겠어요? 탈퇴 후에는 같은 계정으로 바로 복구되지 않습니다.');
+      if (!confirmed) return;
+
+      try {
+        setMessage('', '');
+        deleteButton.disabled = true;
+        const response = await fetch('/api/auth/account', {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json'
+          },
+          credentials: 'same-origin'
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.message || '탈퇴 처리하지 못했습니다.');
+        }
+        window.location.replace('/login?message=account_deleted');
+      } catch (error) {
+        const errorMessage =
+          error && typeof error === 'object' && 'message' in error
+            ? error.message
+            : '탈퇴 처리하지 못했습니다.';
+        setMessage('error', errorMessage);
+      } finally {
+        deleteButton.disabled = false;
+      }
+    });
+  }
+})();
+</script>`;
+
 function getActiveSection(template: TemplateName): ActiveSection {
   if (
     template === 'community' ||
@@ -653,9 +979,10 @@ function sharedHeader(active: ActiveSection) {
 <nav class="hidden md:flex gap-12">
 <a class="${navLinkClasses(communityActive)}" href="/community">커뮤니티</a>
 <a class="${navLinkClasses(marketActive)}" href="/market">공방 공유</a>
-<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">마이 페이지</a>
 </nav>
-<div class="hidden md:flex items-center gap-6">
+<div class="hidden md:flex items-center gap-4">
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="/login">로그인</a>
+<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="/account">마이페이지</a>
 <button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
 <span class="material-symbols-outlined" data-icon="search">search</span>
 </button>
@@ -679,7 +1006,8 @@ function sharedFooter() {
 <div class="flex gap-10">
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/community">커뮤니티</a>
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/market">공방 공유</a>
-<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/login">로그인</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" data-auth-guest="" href="/login">로그인</a>
+<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" data-auth-member="" href="/account">마이페이지</a>
 </div>
 <div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2026 은금슬쩍. For makers.</div>
 </div>
@@ -692,6 +1020,14 @@ function ensureAuthStyles(html: string) {
   }
 
   return html.replace('</head>', `${authStyleBlock}\n</head>`);
+}
+
+function injectAuthBootstrap(html: string) {
+  if (html.includes('auth:resolved')) {
+    return html;
+  }
+
+  return html.replace('</body>', `${authBootstrapBlock}\n</body>`);
 }
 
 function replaceFirstElement(
@@ -752,7 +1088,8 @@ function normalizeLayout(html: string, template: TemplateName) {
   const activeSection = getActiveSection(template);
   const withAuthStyles = ensureAuthStyles(html);
   const withSharedHeader = replaceTopBar(withAuthStyles, sharedHeader(activeSection));
-  return replaceFooter(withSharedHeader, sharedFooter());
+  const withSharedFooter = replaceFooter(withSharedHeader, sharedFooter());
+  return injectAuthBootstrap(withSharedFooter);
 }
 
 function injectStudioFormEnhancer(html: string, template: TemplateName) {
@@ -791,6 +1128,30 @@ function injectCommunityCommentComposer(html: string, template: TemplateName) {
   return html;
 }
 
+function injectOnboardingEnhancer(html: string, template: TemplateName) {
+  if (template !== 'onboarding') {
+    return html;
+  }
+
+  if (html.includes('data-onboarding-form')) {
+    return html.replace('</body>', `${onboardingEnhancerBlock}\n</body>`);
+  }
+
+  return html;
+}
+
+function injectAccountEnhancer(html: string, template: TemplateName) {
+  if (template !== 'account') {
+    return html;
+  }
+
+  if (html.includes('data-account-name')) {
+    return html.replace('</body>', `${accountEnhancerBlock}\n</body>`);
+  }
+
+  return html;
+}
+
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
@@ -801,7 +1162,9 @@ export function finalizeStitchHtml(template: TemplateName, rawHtml: string) {
   const withPageReplacements = applyReplacements(withCommonLinks, pageReplacements[template]);
   const withStudioEnhancer = injectStudioFormEnhancer(withPageReplacements, template);
   const withCommunityComposer = injectCommunityComposer(withStudioEnhancer, template);
-  return injectCommunityCommentComposer(withCommunityComposer, template);
+  const withCommunityComments = injectCommunityCommentComposer(withCommunityComposer, template);
+  const withOnboarding = injectOnboardingEnhancer(withCommunityComments, template);
+  return injectAccountEnhancer(withOnboarding, template);
 }
 
 export function renderStitchHtml(template: TemplateName) {

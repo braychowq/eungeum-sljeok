@@ -3,7 +3,7 @@
 <html class="light" lang="ko"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -50,104 +50,66 @@
             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
         }
-        [data-auth-member] {
-            display: none;
-        }
-        body.is-logged-in [data-auth-guest] {
-            display: none !important;
-        }
-        body.is-logged-in [data-auth-member] {
-            display: inline-flex !important;
-        }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
-<header class="fixed top-0 w-full z-50 bg-[#faf9f7] dark:bg-[#1a1c1b] opacity-80 backdrop-blur-xl">
-<div class="flex justify-between items-center px-10 py-6 max-w-[1440px] mx-auto w-full">
-<a class="font-serif text-2xl tracking-tighter text-[#1a1c1b] dark:text-[#faf9f7]" href="/">은금슬쩍</a>
-<nav class="flex md:hidden items-center gap-5">
-<a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-[11px] tracking-[0.18em] uppercase" href="/community">커뮤니티</a>
-<a class="text-[#1a1c1b] dark:text-[#faf9f7] opacity-70 hover:opacity-100 transition-opacity hover:text-[#735c00] dark:hover:text-[#d4af37] font-medium text-[11px] tracking-[0.18em] uppercase" href="/market">공방 공유</a>
-</nav>
-<div class="md:hidden flex items-center">
-<a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="/login">로그인</a>
-<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="#">마이페이지</a>
-</div>
-<nav class="hidden md:flex gap-12">
-<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="/community">커뮤니티</a>
-<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="/market">공방 공유</a>
-<a class="font-sans text-xs uppercase tracking-widest text-[#1a1c1b] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity" href="#">마이 페이지</a>
-</nav>
-<div class="hidden md:flex items-center gap-6">
-<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
-<span class="material-symbols-outlined" data-icon="search">search</span>
-</button>
-<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
-<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
-</button>
-</div>
-</div>
-<div class="bg-[#f4f3f1] dark:bg-[#2a2c2b] h-[1px] w-full"></div>
-</header>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container" data-login-page="true">
 <main class="min-h-screen px-6 md:px-20 pt-32 md:pt-40 pb-20">
 <section class="max-w-[1120px] mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-stretch">
 <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#f7f2e6] via-[#f4f3f1] to-[#efe6ce] p-8 md:p-12 min-h-[340px] md:min-h-[520px]">
 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.26),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(115,92,0,0.14),transparent_38%)]"></div>
 <div class="relative z-10 flex h-full flex-col justify-between">
 <div>
-<span class="text-[10px] tracking-[0.24em] uppercase text-outline">Welcome back</span>
-<h1 class="mt-5 font-headline text-4xl md:text-6xl leading-[1.12] tracking-tight">은금슬쩍에 다시<br/>들어오세요.</h1>
-<p class="mt-6 max-w-md text-sm md:text-base text-on-surface-variant leading-relaxed">공방을 공유하고, 커뮤니티에서 이야기를 나누고, 당신의 작업 흐름을 이어갈 수 있는 로그인 화면입니다.</p>
+<span class="text-[10px] tracking-[0.24em] uppercase text-outline">Social sign in only</span>
+<h1 class="mt-5 font-headline text-4xl md:text-6xl leading-[1.12] tracking-tight">네이버와 카카오로<br/>바로 시작하세요.</h1>
+<p class="mt-6 max-w-md text-sm md:text-base text-on-surface-variant leading-relaxed">
+            은금슬쩍은 일반 이메일 회원가입 없이 소셜 로그인만 지원합니다.
+            최초 로그인 시 계정이 자동 생성되고, 필요한 경우 추가 정보만 1회 입력하면 됩니다.
+          </p>
 </div>
 <div class="flex flex-wrap gap-3 pt-8">
-<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Jewelry Workspace</div>
-<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Community Board</div>
-<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">For Makers</div>
+<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Naver OAuth 2.0</div>
+<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Kakao OAuth 2.0</div>
+<div class="px-4 py-2 rounded-full bg-white/80 text-[10px] tracking-[0.18em] uppercase text-[#735c00]">Server Session</div>
 </div>
 </div>
 </div>
 <div class="rounded-[2rem] bg-surface-container-lowest border border-outline-variant/20 shadow-[0_30px_70px_rgba(26,28,27,0.06)] p-8 md:p-12">
 <div class="max-w-md mx-auto">
-<span class="text-[10px] tracking-[0.22em] uppercase text-outline">Account Access</span>
+<span class="text-[10px] tracking-[0.22em] uppercase text-outline">계정 로그인</span>
 <h2 class="mt-4 font-headline text-3xl md:text-4xl tracking-tight">로그인</h2>
-<p class="mt-4 text-sm text-on-surface-variant leading-relaxed">아직 기능 연동 전 단계이므로 화면만 먼저 준비해두었습니다. 이후 실제 인증 기능과 연결할 수 있어요.</p>
-<form class="mt-10 space-y-6">
-<label class="block">
-<span class="block mb-3 text-[10px] tracking-[0.18em] uppercase text-outline">이메일</span>
-<input class="w-full rounded-2xl border border-outline-variant/40 bg-surface px-5 py-4 text-sm focus:border-primary focus:ring-0" placeholder="name@example.com" type="email"/>
-</label>
-<label class="block">
-<span class="block mb-3 text-[10px] tracking-[0.18em] uppercase text-outline">비밀번호</span>
-<input class="w-full rounded-2xl border border-outline-variant/40 bg-surface px-5 py-4 text-sm focus:border-primary focus:ring-0" placeholder="비밀번호를 입력하세요" type="password"/>
-</label>
-<div class="flex items-center justify-between gap-4 text-[11px] text-on-surface-variant">
-<label class="inline-flex items-center gap-2 cursor-pointer">
-<input class="rounded border-outline-variant/50 text-primary focus:ring-primary/30" type="checkbox"/>
-<span>로그인 상태 유지</span>
-</label>
-<a class="hover:text-primary transition-colors" href="#">비밀번호 찾기</a>
+<p class="mt-4 text-sm text-on-surface-variant leading-relaxed">
+          원하는 공급자를 선택하면 안전한 OAuth 로그인으로 이동합니다.
+          로그인 실패 시에는 내부 오류 대신 안전한 안내 메시지만 표시합니다.
+        </p>
+{{LOGIN_FEEDBACK}}
+<div class="mt-10 space-y-4">
+<a class="flex items-center justify-between rounded-[1.5rem] border border-[#03c75a]/20 bg-[#03c75a] px-6 py-5 text-white transition-transform hover:scale-[0.995]" href="{{NAVER_START_URL}}">
+<div>
+<div class="text-[10px] uppercase tracking-[0.18em] text-white/75">NAVER</div>
+<div class="mt-2 text-lg font-semibold">네이버로 시작하기</div>
 </div>
-<button class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary text-xs font-semibold tracking-[0.2em] uppercase shadow-lg shadow-primary/20 hover:scale-[0.99] transition-transform" type="button">로그인</button>
-</form>
+<div class="h-11 w-11 rounded-full bg-white/15 flex items-center justify-center text-lg font-semibold">N</div>
+</a>
+<a class="flex items-center justify-between rounded-[1.5rem] border border-[#fee500]/40 bg-[#fee500] px-6 py-5 text-[#191600] transition-transform hover:scale-[0.995]" href="{{KAKAO_START_URL}}">
+<div>
+<div class="text-[10px] uppercase tracking-[0.18em] text-[#191600]/70">KAKAO</div>
+<div class="mt-2 text-lg font-semibold">카카오로 시작하기</div>
+</div>
+<div class="h-11 w-11 rounded-full bg-black/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">chat</span>
+</div>
+</a>
+</div>
 <div class="mt-8 rounded-2xl bg-surface-container-low px-5 py-4 text-xs text-on-surface-variant leading-relaxed">
-회원가입 및 소셜 로그인은 다음 단계에서 연결 예정입니다. 현재는 진입 경로와 디자인만 먼저 준비된 상태입니다.
-</div>
+        소셜 공급자에서 받은 사용자 식별자는 서버가 직접 검증한 뒤 계정과 연동합니다.
+        브라우저는 최종 사용자 정보를 임의로 신뢰하지 않습니다.
+      </div>
 <div class="mt-8 text-center text-[11px] text-on-surface-variant">
-계정이 아직 없으신가요?
-<a class="ml-2 text-primary hover:opacity-80 transition-opacity" href="/community">먼저 커뮤니티 둘러보기</a>
+        로그인 없이도 일부 화면은 둘러볼 수 있어요.
+        <a class="ml-2 text-primary hover:opacity-80 transition-opacity" href="/community">커뮤니티 둘러보기</a>
 </div>
 </div>
 </div>
 </section>
 </main>
-<footer class="w-full border-t border-[#d0c5af]/20 bg-[#f4f3f1]">
-<div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-20 py-12 w-full gap-6">
-<div class="font-serif text-lg text-[#1a1c1b]">은금슬쩍</div>
-<div class="flex gap-8">
-<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] transition-all duration-300" href="/community">Community</a>
-<a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] transition-all duration-300" href="/market">Workshop</a>
-</div>
-<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2024 은금슬쩍. For makers.</div>
-</div>
-</footer>
 </body></html>

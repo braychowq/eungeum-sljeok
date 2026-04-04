@@ -13,6 +13,7 @@ frontend/.turbo/
 
 # Backend
 backend/target/
+backend/data/
 .m2home/
 .m2repo/
 
@@ -22,3 +23,4 @@ backend/target/
 # Env
 .env
 .env.*
+!.env.example
