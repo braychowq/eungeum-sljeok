@@ -5,6 +5,8 @@ import { communityPosts } from '../../lib/community-posts';
 import { finalizeStitchHtml } from '../../lib/stitch-html';
 
 export const runtime = 'nodejs';
+const PAGE_SIZES = [3, 6, 12] as const;
+type CategoryFilter = 'all' | 'free' | 'qa' | 'market';
 
 function escapeHtml(value: string) {
   return value
@@ -51,11 +53,12 @@ function categoryPreview(category: string) {
   `;
 }
 
-function renderPostRows(query: string) {
+function filterPosts(query: string, category: CategoryFilter) {
   const normalizedQuery = query.trim().toLowerCase();
   const tokens = normalizedQuery ? normalizedQuery.split(/\s+/).filter(Boolean) : [];
 
-  const filteredPosts = communityPosts.filter((post) => {
+  return communityPosts.filter((post) => {
+    if (category !== 'all' && post.category !== category) return false;
     if (!tokens.length) return true;
 
     const haystack = [
@@ -70,8 +73,10 @@ function renderPostRows(query: string) {
 
     return tokens.every((token) => haystack.includes(token));
   });
+}
 
-  return filteredPosts
+function renderPostRows(posts: typeof communityPosts) {
+  return posts
     .map(
       (post) => `
       <article class="community-post" data-post-category="${post.category}">
@@ -106,8 +111,119 @@ function renderPostRows(query: string) {
     .join('');
 }
 
+function categoryFilterHref(query: string, pageSize: number, category: CategoryFilter) {
+  const params = new URLSearchParams();
+  if (query) params.set('q', query);
+  if (category !== 'all') params.set('category', category);
+  params.set('page', '1');
+  params.set('pageSize', String(pageSize));
+  const qs = params.toString();
+  return `/community${qs ? `?${qs}` : ''}`;
+}
+
+function renderCategoryFilters(query: string, pageSize: number, activeCategory: CategoryFilter) {
+  const items: Array<{ value: CategoryFilter; label: string }> = [
+    { value: 'all', label: '전체' },
+    { value: 'free', label: '아무말' },
+    { value: 'qa', label: 'Q/A' },
+    { value: 'market', label: '장터' }
+  ];
+
+  return items
+    .map((item) => {
+      const activeClass = item.value === activeCategory ? ' is-active' : '';
+      return `<a class="community-filter${activeClass}" href="${categoryFilterHref(
+        query,
+        pageSize,
+        item.value
+      )}">${item.label}</a>`;
+    })
+    .join('');
+}
+
+function renderPageSizeOptions(currentPageSize: number) {
+  return PAGE_SIZES.map(
+    (size) => `<option value="${size}"${size === currentPageSize ? ' selected' : ''}>${size}</option>`
+  ).join('');
+}
+
+function renderEmptyState(hasPosts: boolean) {
+  if (hasPosts) return '';
+
+  return `
+    <div class="bg-surface-container-lowest p-6 rounded-xl mt-4 text-center text-outline border border-transparent hover:border-outline-variant/30">
+      <p class="font-headline text-2xl text-on-surface mb-3">일치하는 게시글이 없어요</p>
+      <p class="text-sm">다른 검색어를 입력하거나 카테고리를 바꿔보세요.</p>
+    </div>`;
+}
+
+function renderPaginationBar(
+  query: string,
+  category: CategoryFilter,
+  pageSize: number,
+  currentPage: number,
+  totalPages: number
+) {
+  if (totalPages <= 1) {
+    return '';
+  }
+
+  const buildHref = (page: number) => {
+    const params = new URLSearchParams();
+    if (query) params.set('q', query);
+    if (category !== 'all') params.set('category', category);
+    params.set('page', String(page));
+    params.set('pageSize', String(pageSize));
+    return `/community?${params.toString()}`;
+  };
+
+  const links: string[] = [];
+
+  if (currentPage > 1) {
+    links.push(
+      `<a class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(currentPage - 1)}">이전</a>`
+    );
+  }
+
+  for (let page = 1; page <= totalPages; page += 1) {
+    const active = page === currentPage;
+    links.push(
+      `<a class="inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-label transition-colors ${
+        active
+          ? 'bg-primary text-white'
+          : 'border border-outline-variant/20 text-on-surface-variant hover:border-primary hover:text-primary'
+      }" href="${buildHref(page)}">${page}</a>`
+    );
+  }
+
+  if (currentPage < totalPages) {
+    links.push(
+      `<a class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(currentPage + 1)}">다음</a>`
+    );
+  }
+
+  return links.join('');
+}
+
 export function GET(request: Request) {
-  const query = new URL(request.url).searchParams.get('q') ?? '';
+  const params = new URL(request.url).searchParams;
+  const query = params.get('q') ?? '';
+  const categoryParam = params.get('category');
+  const pageSizeParam = Number(params.get('pageSize') ?? '3');
+  const pageParam = Number(params.get('page') ?? '1');
+  const category: CategoryFilter =
+    categoryParam === 'free' || categoryParam === 'qa' || categoryParam === 'market'
+      ? categoryParam
+      : 'all';
+  const pageSize = PAGE_SIZES.includes(pageSizeParam as (typeof PAGE_SIZES)[number])
+    ? pageSizeParam
+    : 3;
+  const filteredPosts = filterPosts(query, category);
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize));
+  const currentPage =
+    Number.isFinite(pageParam) && pageParam > 0 ? Math.min(pageParam, totalPages) : 1;
+  const startIndex = (currentPage - 1) * pageSize;
+  const pagedPosts = filteredPosts.slice(startIndex, startIndex + pageSize);
   const templatePath = join(process.cwd(), 'stitch', 'community.html');
   const rawTemplate = readFileSync(templatePath, 'utf8');
 
@@ -115,7 +231,16 @@ export function GET(request: Request) {
     'community',
     rawTemplate
       .replace('{{SEARCH_VALUE}}', escapeHtml(query))
-      .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(query))
+      .replace('{{CURRENT_CATEGORY}}', category)
+      .replace('{{CURRENT_PAGE_SIZE}}', String(pageSize))
+      .replace('{{CATEGORY_FILTERS}}', renderCategoryFilters(query, pageSize, category))
+      .replace('{{PAGE_SIZE_OPTIONS}}', renderPageSizeOptions(pageSize))
+      .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(pagedPosts))
+      .replace('{{EMPTY_STATE}}', renderEmptyState(pagedPosts.length > 0))
+      .replace(
+        '{{PAGINATION_BAR}}',
+        renderPaginationBar(query, category, pageSize, currentPage, totalPages)
+      )
   );
 
   return new Response(html, {

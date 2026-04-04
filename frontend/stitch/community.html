@@ -159,12 +159,13 @@
 </div>
 <div class="flex flex-col md:items-end gap-4 w-full md:w-auto">
 <div class="flex flex-wrap gap-3">
-<button class="community-filter is-active" data-category-filter="all" type="button">전체</button>
-<button class="community-filter" data-category-filter="free" type="button">아무말</button>
-<button class="community-filter" data-category-filter="qa" type="button">Q/A</button>
-<button class="community-filter" data-category-filter="market" type="button">장터</button>
+{{CATEGORY_FILTERS}}
 </div>
+<div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
 <form action="/community" class="flex flex-col sm:flex-row gap-4 w-full md:w-auto" method="get">
+<input name="category" type="hidden" value="{{CURRENT_CATEGORY}}"/>
+<input name="page" type="hidden" value="1"/>
+<input name="pageSize" type="hidden" value="{{CURRENT_PAGE_SIZE}}"/>
 <div class="relative group w-full md:w-72">
 <input class="w-full bg-surface-container-low border-none rounded-full px-8 py-3 pr-12 text-sm font-label focus:ring-1 focus:ring-primary-container transition-all" name="q" placeholder="이야기 검색..." type="text" value="{{SEARCH_VALUE}}"/>
 <button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-sm hover:text-primary transition-colors" type="submit">
@@ -173,6 +174,16 @@
 </div>
 <a class="inline-flex items-center justify-center px-8 py-3 rounded-full bg-gradient-to-r from-primary to-primary-container text-white text-sm font-label tracking-widest uppercase shadow-lg shadow-primary/10 hover:opacity-95 transition-all" href="/community/new">글쓰기</a>
 </form>
+<form action="/community" class="flex items-center gap-3" method="get">
+<input name="q" type="hidden" value="{{SEARCH_VALUE}}"/>
+<input name="category" type="hidden" value="{{CURRENT_CATEGORY}}"/>
+<input name="page" type="hidden" value="1"/>
+<label class="text-[10px] uppercase tracking-[0.18em] text-outline whitespace-nowrap">페이지당</label>
+<select class="bg-surface-container-low border-none rounded-full px-5 py-3 text-sm font-label focus:ring-1 focus:ring-primary-container transition-all" name="pageSize" onchange="this.form.submit()">
+{{PAGE_SIZE_OPTIONS}}
+</select>
+</form>
+</div>
 </div>
 </div>
 </section>
@@ -181,14 +192,11 @@
 <div class="space-y-4">
 {{COMMUNITY_POST_ROWS}}
 </div>
-<div class="bg-surface-container-lowest p-6 rounded-xl mt-4 text-center text-outline border border-transparent hover:border-outline-variant/30" data-community-empty="" hidden="">
-<p class="font-headline text-2xl text-on-surface mb-3">일치하는 게시글이 없어요</p>
-<p class="text-sm">다른 검색어를 입력하거나 카테고리를 바꿔보세요.</p>
-</div>
+{{EMPTY_STATE}}
 </section>
-<!-- Load More Section -->
-<div class="mt-24 text-center">
-<button class="w-full py-6 text-on-surface-variant font-label text-[10px] tracking-[0.4em] uppercase hover:text-primary transition-colors">게시글 더 보기</button>
+<!-- Pagination -->
+<div class="mt-16 flex items-center justify-center gap-2 flex-wrap">
+{{PAGINATION_BAR}}
 </div>
 </main>
 <!-- Footer -->
@@ -211,44 +219,4 @@
 <span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>
 </button>
 </div>
-<script>
-        (() => {
-            const filterButtons = Array.from(document.querySelectorAll('[data-category-filter]'));
-            const posts = Array.from(document.querySelectorAll('.community-post'));
-            const emptyState = document.querySelector('[data-community-empty]');
-
-            if (!filterButtons.length) return;
-
-            const setActiveButton = (activeCategory) => {
-                filterButtons.forEach((button) => {
-                    const isActive = button.dataset.categoryFilter === activeCategory;
-                    button.classList.toggle('is-active', isActive);
-                });
-            };
-
-            const applyFilter = (category) => {
-                let visibleCount = 0;
-
-                posts.forEach((post) => {
-                    const isVisible = category === 'all' || post.dataset.postCategory === category;
-                    post.hidden = !isVisible;
-                    if (isVisible) visibleCount += 1;
-                });
-
-                if (emptyState) {
-                    emptyState.hidden = visibleCount !== 0;
-                }
-
-                setActiveButton(category);
-            };
-
-            filterButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    applyFilter(button.dataset.categoryFilter || 'all');
-                });
-            });
-
-            applyFilter('all');
-        })();
-    </script>
 </body></html>
