@@ -84,8 +84,8 @@ function renderPostRows(posts: typeof communityPosts) {
     .map(
       (post) => `
       <article class="community-post" data-post-category="${post.category}">
-        <a class="group bg-surface-container-lowest p-6 rounded-xl flex items-start md:items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30" href="/community/post/${post.id}">
-          <div class="flex items-start md:items-center gap-6 w-full">
+        <a class="group bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30" href="/community/post/${post.id}">
+          <div class="flex items-center gap-6 w-full">
             <div class="flex-shrink-0">${categoryPreview(post.category)}</div>
             <div class="min-w-0 flex-1">
               ${categoryBadge(post.category)}
