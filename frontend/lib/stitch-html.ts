@@ -238,27 +238,29 @@ const studioFormEnhancerBlock = `
 
   if (customAmenityButton) {
     customAmenityButton.addEventListener('click', () => {
-      const value = window.prompt('추가할 장비나 편의시설 이름을 입력해주세요.');
-      if (!value) return;
-
-      const trimmed = value.trim();
-      if (!trimmed) return;
-
       const wrapper = document.createElement('div');
       wrapper.className =
         'flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border border-outline-variant/10';
+      wrapper.setAttribute('data-custom-amenity-row', '');
       wrapper.innerHTML =
         '<div class="flex items-center gap-3">' +
-        '<span class="material-symbols-outlined text-secondary">check_circle</span>' +
-        '<span class="text-sm font-medium"></span>' +
+        '<span class="material-symbols-outlined text-secondary">electric_bolt</span>' +
+        '<input class="min-w-0 flex-1 bg-transparent border-none p-0 text-sm font-medium focus:ring-0 placeholder:text-outline-variant/60" placeholder="장비나 편의시설을 직접 입력해주세요" type="text" />' +
         '</div>' +
         '<input checked class="rounded border-outline-variant text-secondary focus:ring-secondary/20" name="amenities" type="checkbox" value="" />';
 
-      const textNode = wrapper.querySelector('span.text-sm');
+      const textInput = wrapper.querySelector('input[type="text"]');
       const inputNode = wrapper.querySelector('input[name="amenities"]');
 
-      if (textNode) textNode.textContent = trimmed;
-      if (inputNode) inputNode.value = trimmed;
+      if (textInput && inputNode) {
+        const syncAmenityValue = () => {
+          inputNode.value = textInput.value.trim();
+        };
+
+        textInput.addEventListener('input', syncAmenityValue);
+        syncAmenityValue();
+        window.setTimeout(() => textInput.focus(), 0);
+      }
 
       customAmenityButton.before(wrapper);
     });
@@ -373,6 +375,8 @@ const studioFormEnhancerBlock = `
       if (categoryButtons.length) {
         setActiveCategory(categoryButtons[0].dataset.categoryOption || '');
       }
+
+      form.querySelectorAll('[data-custom-amenity-row]').forEach((row) => row.remove());
     } catch (error) {
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
