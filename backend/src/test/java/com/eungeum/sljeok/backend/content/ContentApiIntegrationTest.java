@@ -1,0 +1,117 @@
+package com.eungeum.sljeok.backend.content;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("local")
+@TestPropertySource(
+    properties = {
+      "spring.datasource.url=jdbc:h2:mem:content-api-test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
+      "auth.allowed-origins=http://127.0.0.1:3025,http://localhost:3025"
+    })
+class ContentApiIntegrationTest {
+  @Autowired private MockMvc mockMvc;
+
+  @Test
+  void communityCreateRequiresAuthentication() throws Exception {
+    mockMvc
+        .perform(
+            post("/api/community/posts")
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                .content(
+                    """
+                    {
+                      "category": "free",
+                      "title": "인증 없는 작성",
+                      "body": "로그인 없이 쓰기 요청이 거부되는지 확인합니다."
+                    }
+                    """))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.status").value("error"));
+  }
+
+  @Test
+  void communityCreateRejectsForeignOrigin() throws Exception {
+    Cookie sessionCookie = loginCookie("OriginTestUser");
+
+    mockMvc
+        .perform(
+            post("/api/community/posts")
+                .cookie(sessionCookie)
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "https://evil.example")
+                .content(
+                    """
+                    {
+                      "category": "free",
+                      "title": "외부 Origin 차단",
+                      "body": "외부 Origin 요청을 차단하는지 확인합니다."
+                    }
+                    """))
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.code").value("request_failed"));
+  }
+
+  @Test
+  void communityCreateReturnsValidationErrors() throws Exception {
+    Cookie sessionCookie = loginCookie("ValidationTestUser");
+
+    mockMvc
+        .perform(
+            post("/api/community/posts")
+                .cookie(sessionCookie)
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                .content(
+                    """
+                    {
+                      "category": "free",
+                      "title": "가",
+                      "body": "나"
+                    }
+                    """))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("validation_failed"))
+        .andExpect(jsonPath("$.fieldErrors.title").exists())
+        .andExpect(jsonPath("$.fieldErrors.body").exists());
+  }
+
+  private Cookie loginCookie(String displayName) throws Exception {
+    MvcResult loginResult =
+        mockMvc
+            .perform(
+                post("/api/test-auth/login")
+                    .contentType(APPLICATION_JSON)
+                    .content(
+                        """
+                        {
+                          "displayName": "%s"
+                        }
+                        """
+                            .formatted(displayName)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    Cookie[] cookies = loginResult.getResponse().getCookies();
+    if (cookies == null || cookies.length == 0) {
+      throw new IllegalStateException("테스트 로그인 쿠키가 발급되지 않았습니다.");
+    }
+    return cookies[0];
+  }
+}

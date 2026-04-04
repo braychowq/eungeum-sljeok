@@ -2,6 +2,7 @@ package com.eungeum.sljeok.backend.content.web;
 
 import com.eungeum.sljeok.backend.auth.entity.UserEntity;
 import com.eungeum.sljeok.backend.auth.service.OriginValidationService;
+import com.eungeum.sljeok.backend.auth.service.RateLimitService;
 import com.eungeum.sljeok.backend.common.api.ApiEnvelope;
 import com.eungeum.sljeok.backend.content.domain.CommunityCategory;
 import com.eungeum.sljeok.backend.content.entity.CommunityCommentEntity;
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +25,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,14 +44,17 @@ public class CommunityController {
   private final CommunityService communityService;
   private final OriginValidationService originValidationService;
   private final RequestUserService requestUserService;
+  private final RateLimitService rateLimitService;
 
   public CommunityController(
       CommunityService communityService,
       OriginValidationService originValidationService,
-      RequestUserService requestUserService) {
+      RequestUserService requestUserService,
+      RateLimitService rateLimitService) {
     this.communityService = communityService;
     this.originValidationService = originValidationService;
     this.requestUserService = requestUserService;
+    this.rateLimitService = rateLimitService;
   }
 
   @GetMapping
@@ -86,6 +93,7 @@ public class CommunityController {
       @Valid @RequestBody CreateCommunityPostRequest requestBody, HttpServletRequest request) {
     originValidationService.validateSameOrigin(request);
     UserEntity currentUser = requestUserService.requireActiveUser(request);
+    rateLimitService.check("community:create:" + currentUser.getId(), 20, Duration.ofMinutes(10));
     CommunityPostEntity post =
         communityService.create(
             currentUser,
@@ -97,6 +105,36 @@ public class CommunityController {
         "게시물이 등록되었습니다.");
   }
 
+  @PutMapping("/{slug}")
+  public ApiEnvelope<CommunityPostCreatedPayload> update(
+      @PathVariable String slug,
+      @Valid @RequestBody CreateCommunityPostRequest requestBody,
+      HttpServletRequest request) {
+    originValidationService.validateSameOrigin(request);
+    UserEntity currentUser = requestUserService.requireActiveUser(request);
+    rateLimitService.check("community:update:" + currentUser.getId(), 30, Duration.ofMinutes(10));
+    CommunityPostEntity post =
+        communityService.update(
+            currentUser,
+            slug,
+            parseCategory(requestBody.category()),
+            requestBody.title().trim(),
+            requestBody.body().trim());
+    return ApiEnvelope.ok(
+        new CommunityPostCreatedPayload(post.getId(), post.getSlug(), "/community/post/" + post.getSlug()),
+        "게시물이 수정되었습니다.");
+  }
+
+  @DeleteMapping("/{slug}")
+  public ApiEnvelope<CommunityPostDeletedPayload> delete(
+      @PathVariable String slug, HttpServletRequest request) {
+    originValidationService.validateSameOrigin(request);
+    UserEntity currentUser = requestUserService.requireActiveUser(request);
+    rateLimitService.check("community:delete:" + currentUser.getId(), 30, Duration.ofMinutes(10));
+    communityService.delete(currentUser, slug);
+    return ApiEnvelope.ok(new CommunityPostDeletedPayload(slug), "게시물이 삭제되었습니다.");
+  }
+
   @PostMapping("/{slug}/comments")
   public ApiEnvelope<CommentCreatedPayload> addComment(
       @PathVariable String slug,
@@ -104,6 +142,7 @@ public class CommunityController {
       HttpServletRequest request) {
     originValidationService.validateSameOrigin(request);
     UserEntity currentUser = requestUserService.requireActiveUser(request);
+    rateLimitService.check("community:comment:" + currentUser.getId(), 40, Duration.ofMinutes(10));
     CommunityCommentEntity comment =
         communityService.addComment(currentUser, slug, requestBody.body().trim());
     return ApiEnvelope.ok(
@@ -148,6 +187,7 @@ public class CommunityController {
         post.getTitle(),
         post.getExcerpt(),
         post.getBody(),
+        post.getAuthorUser() == null ? null : post.getAuthorUser().getId(),
         post.getAuthorDisplayName() == null || post.getAuthorDisplayName().isBlank()
             ? "은금슬쩍 회원"
             : post.getAuthorDisplayName(),
@@ -194,6 +234,7 @@ public class CommunityController {
       String title,
       String excerpt,
       String body,
+      String authorUserId,
       String author,
       String date,
       long views,
@@ -204,6 +245,8 @@ public class CommunityController {
   public record CommentItem(String author, String body, String date) {}
 
   public record CommunityPostCreatedPayload(String id, String slug, String detailPath) {}
+
+  public record CommunityPostDeletedPayload(String slug) {}
 
   public record CommentCreatedPayload(String author, String date) {}
 

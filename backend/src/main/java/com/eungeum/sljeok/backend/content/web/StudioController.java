@@ -2,6 +2,7 @@ package com.eungeum.sljeok.backend.content.web;
 
 import com.eungeum.sljeok.backend.auth.entity.UserEntity;
 import com.eungeum.sljeok.backend.auth.service.OriginValidationService;
+import com.eungeum.sljeok.backend.auth.service.RateLimitService;
 import com.eungeum.sljeok.backend.common.api.ApiEnvelope;
 import com.eungeum.sljeok.backend.content.entity.StudioAmenityEntity;
 import com.eungeum.sljeok.backend.content.entity.StudioEntity;
@@ -15,6 +16,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.Duration;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -37,14 +39,17 @@ public class StudioController {
   private final StudioService studioService;
   private final OriginValidationService originValidationService;
   private final RequestUserService requestUserService;
+  private final RateLimitService rateLimitService;
 
   public StudioController(
       StudioService studioService,
       OriginValidationService originValidationService,
-      RequestUserService requestUserService) {
+      RequestUserService requestUserService,
+      RateLimitService rateLimitService) {
     this.studioService = studioService;
     this.originValidationService = originValidationService;
     this.requestUserService = requestUserService;
+    this.rateLimitService = rateLimitService;
   }
 
   @GetMapping
@@ -68,6 +73,7 @@ public class StudioController {
       @Valid @RequestBody CreateStudioRequest requestBody, HttpServletRequest request) {
     originValidationService.validateSameOrigin(request);
     UserEntity currentUser = requestUserService.requireActiveUser(request);
+    rateLimitService.check("studio:create:" + currentUser.getId(), 12, Duration.ofHours(1));
     StudioEntity studio =
         studioService.create(
             currentUser,

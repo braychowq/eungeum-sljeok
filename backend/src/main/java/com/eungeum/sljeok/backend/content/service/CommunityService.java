@@ -1,6 +1,7 @@
 package com.eungeum.sljeok.backend.content.service;
 
 import com.eungeum.sljeok.backend.auth.entity.UserEntity;
+import com.eungeum.sljeok.backend.auth.domain.UserRole;
 import com.eungeum.sljeok.backend.content.domain.CommunityCategory;
 import com.eungeum.sljeok.backend.content.entity.CommunityCommentEntity;
 import com.eungeum.sljeok.backend.content.entity.CommunityPostEntity;
@@ -73,6 +74,17 @@ public class CommunityService {
   }
 
   @Transactional
+  public CommunityPostEntity update(
+      UserEntity actor, String slug, CommunityCategory category, String title, String body) {
+    CommunityPostEntity post = findOwnedOrAdminPost(actor, slug);
+    post.setCategory(category);
+    post.setTitle(title);
+    post.setExcerpt(excerpt(body));
+    post.setBody(body);
+    return communityPostRepository.save(post);
+  }
+
+  @Transactional
   public CommunityCommentEntity addComment(UserEntity author, String slug, String body) {
     CommunityPostEntity post =
         communityPostRepository
@@ -88,6 +100,29 @@ public class CommunityService {
     post.setCommentCount(post.getCommentCount() + 1);
     communityPostRepository.saveAndFlush(post);
     return comment;
+  }
+
+  @Transactional
+  public void delete(UserEntity actor, String slug) {
+    CommunityPostEntity post = findOwnedOrAdminPost(actor, slug);
+    communityPostRepository.delete(post);
+  }
+
+  private CommunityPostEntity findOwnedOrAdminPost(UserEntity actor, String slug) {
+    CommunityPostEntity post =
+        communityPostRepository
+            .findBySlug(slug)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
+
+    String authorUserId = post.getAuthorUser() == null ? null : post.getAuthorUser().getId();
+    boolean isAdmin = actor.getRole() == UserRole.ADMIN;
+    boolean isOwner = authorUserId != null && authorUserId.equals(actor.getId());
+    if (!isAdmin && !isOwner) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "작성자만 수정하거나 삭제할 수 있습니다.");
+    }
+
+    post.getComments().size();
+    return post;
   }
 
   private String excerpt(String body) {

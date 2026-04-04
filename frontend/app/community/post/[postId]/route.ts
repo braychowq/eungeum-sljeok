@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import {
+  type AuthState,
   escapeHtml,
+  fetchAuthState,
   fetchCommunityPostDetail,
   type CommunityPostSummary
 } from '../../../../lib/backend-api';
@@ -35,6 +37,37 @@ function renderRelatedPosts(items: CommunityPostSummary[]) {
     .join('');
 }
 
+function renderOwnerActions(slug: string, canManage: boolean) {
+  if (!canManage) {
+    return '';
+  }
+
+  return `
+    <div class="mt-5 flex flex-wrap items-center gap-3" data-owner-controls>
+      <a class="inline-flex items-center justify-center rounded-full border border-outline-variant/30 px-4 py-2 text-[10px] font-label uppercase tracking-[0.18em] text-on-surface hover:border-primary hover:text-primary transition-colors" href="/community/post/${slug}/edit" data-post-edit>
+        게시글 수정
+      </a>
+      <button class="inline-flex items-center justify-center rounded-full border border-[#e5c9c2] bg-[#fff4f1] px-4 py-2 text-[10px] font-label uppercase tracking-[0.18em] text-[#8a3827] hover:bg-[#fde9e4] transition-colors" data-post-delete data-post-id="${slug}" type="button">
+        게시글 삭제
+      </button>
+    </div>
+    <p class="hidden mt-3 rounded-xl border px-4 py-3 text-sm" data-post-action-message></p>
+  `;
+}
+
+function notFoundHtml() {
+  return `<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>게시글을 찾을 수 없어요</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="min-h-screen bg-[#faf9f7] text-[#1a1c1b] flex items-center justify-center px-6">
+  <main class="max-w-xl text-center rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(26,28,27,0.05)] px-8 py-12">
+    <p class="text-[10px] uppercase tracking-[0.2em] text-[#7f7663] mb-4">Community</p>
+    <h1 class="text-3xl md:text-4xl font-serif mb-4">게시글을 찾을 수 없어요</h1>
+    <p class="text-sm leading-7 text-[#4d4635]">삭제되었거나 잘못된 주소예요. 커뮤니티 목록으로 돌아가서 다른 글을 확인해보세요.</p>
+    <a href="/community" class="inline-flex items-center justify-center mt-8 rounded-full bg-[#735c00] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white">커뮤니티로 이동</a>
+  </main>
+</body></html>`;
+}
+
 export async function GET(request: Request) {
   const rawPostId = new URL(request.url).pathname.split('/').pop() ?? '';
   const postId = decodeURIComponent(rawPostId);
@@ -42,7 +75,16 @@ export async function GET(request: Request) {
   const rawTemplate = readFileSync(templatePath, 'utf8');
 
   try {
-    const post = await fetchCommunityPostDetail(postId);
+    const cookieHeader = request.headers.get('cookie') ?? undefined;
+    const [post, authState]: [Awaited<ReturnType<typeof fetchCommunityPostDetail>>, AuthState] = await Promise.all([
+      fetchCommunityPostDetail(postId),
+      fetchAuthState(cookieHeader).catch(() => ({ authenticated: false }) as AuthState)
+    ]);
+    const canManage = Boolean(
+      authState.authenticated &&
+        authState.user &&
+        (authState.user.role === 'ADMIN' || authState.user.id === post.authorUserId)
+    );
 
     const html = finalizeStitchHtml(
       'community-post-detail',
@@ -54,6 +96,7 @@ export async function GET(request: Request) {
         .replace('{{DATE}}', escapeHtml(post.date))
         .replace('{{VIEWS}}', String(post.views))
         .replace('{{COMMENTS}}', String(post.comments))
+        .replace('{{OWNER_ACTIONS}}', renderOwnerActions(post.slug, canManage))
         .replace('{{POST_ID}}', post.slug)
         .replace(
           '{{BODY_HTML}}',
@@ -95,6 +138,12 @@ export async function GET(request: Request) {
       }
     });
   } catch {
-    return new Response('Not Found', { status: 404 });
+    return new Response(notFoundHtml(), {
+      status: 404,
+      headers: {
+        'content-type': 'text/html; charset=utf-8',
+        'cache-control': 'no-store'
+      }
+    });
   }
 }

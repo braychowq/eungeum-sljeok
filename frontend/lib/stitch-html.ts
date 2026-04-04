@@ -543,6 +543,10 @@ const communityPostComposerBlock = `
   const imageCount = form.querySelector('[data-image-count]');
   const titleInput = form.querySelector('[data-field="title"]');
   const bodyInput = form.querySelector('[data-field="body"]');
+  const submitUrl = form.getAttribute('data-submit-url') || '/api/community/posts';
+  const submitMethod = (form.getAttribute('data-submit-method') || 'POST').toUpperCase();
+  const successPath = form.getAttribute('data-success-path') || '/community';
+  const successMessage = form.getAttribute('data-success-message') || '게시물을 등록했어요. 상세 페이지로 이동합니다.';
   let selectedFiles = [];
 
   const setMessage = (type, text) => {
@@ -607,8 +611,8 @@ const communityPostComposerBlock = `
         submitButton.textContent = '등록 중...';
       }
 
-      const response = await fetch('/api/community/posts', {
-        method: 'POST',
+      const response = await fetch(submitUrl, {
+        method: submitMethod,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -627,20 +631,25 @@ const communityPostComposerBlock = `
           window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
           return;
         }
-        throw new Error(result.message || '게시물 등록에 실패했습니다.');
+        const fieldErrors = result && typeof result === 'object' ? result.fieldErrors : null;
+        const firstFieldError =
+          fieldErrors && typeof fieldErrors === 'object'
+            ? Object.values(fieldErrors).find((value) => typeof value === 'string' && value.trim())
+            : '';
+        throw new Error(firstFieldError || result.message || '게시물 저장에 실패했습니다.');
       }
 
-      setMessage('success', '게시물을 등록했어요. 상세 페이지로 이동합니다.');
+      setMessage('success', successMessage);
       window.setTimeout(() => {
         window.location.href = result && result.data && result.data.detailPath
           ? result.data.detailPath
-          : '/community';
+          : successPath;
       }, 300);
     } catch (error) {
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? error.message
-          : '게시물 등록에 실패했습니다.';
+          : '게시물 저장에 실패했습니다.';
       setMessage('error', errorMessage);
     } finally {
       if (submitButton) {
@@ -731,7 +740,12 @@ const communityCommentComposerBlock = `
           window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
           return;
         }
-        throw new Error(result.message || '댓글 등록에 실패했습니다.');
+        const fieldErrors = result && typeof result === 'object' ? result.fieldErrors : null;
+        const firstFieldError =
+          fieldErrors && typeof fieldErrors === 'object'
+            ? Object.values(fieldErrors).find((value) => typeof value === 'string' && value.trim())
+            : '';
+        throw new Error(firstFieldError || result.message || '댓글 등록에 실패했습니다.');
       }
 
       setMessage('success', '댓글을 등록했어요. 새로고침합니다.');
@@ -747,6 +761,81 @@ const communityCommentComposerBlock = `
         submitButton.disabled = false;
         submitButton.textContent = submitLabel;
       }
+    }
+  });
+})();
+</script>`;
+
+const communityPostOwnerActionsBlock = `
+<script>
+(() => {
+  const deleteButton = document.querySelector('[data-post-delete]');
+  if (!deleteButton) return;
+
+  const message = document.querySelector('[data-post-action-message]');
+  const postId = deleteButton.getAttribute('data-post-id');
+  const defaultLabel = deleteButton.textContent ? deleteButton.textContent.trim() : '게시글 삭제';
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      message.className = 'hidden mt-3 rounded-xl border px-4 py-3 text-sm';
+      return;
+    }
+
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'mt-3 rounded-xl border px-4 py-3 text-sm bg-[#eef6ed] text-[#295b2d] border-[#cfe3cb]'
+      : 'mt-3 rounded-xl border px-4 py-3 text-sm bg-[#fdf0ee] text-[#803321] border-[#f0c8c2]';
+  };
+
+  deleteButton.addEventListener('click', async () => {
+    if (!postId) {
+      setMessage('error', '삭제할 게시글을 확인할 수 없습니다.');
+      return;
+    }
+
+    const confirmed = window.confirm('게시글을 삭제하시겠어요? 삭제 후에는 되돌릴 수 없습니다.');
+    if (!confirmed) return;
+
+    try {
+      setMessage('', '');
+      deleteButton.disabled = true;
+      deleteButton.textContent = '삭제 중...';
+
+      const response = await fetch('/api/community/posts/' + encodeURIComponent(postId), {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json'
+        },
+        credentials: 'same-origin'
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        throw new Error(result.message || '게시글 삭제에 실패했습니다.');
+      }
+
+      setMessage('success', '게시글을 삭제했어요. 목록으로 이동합니다.');
+      window.setTimeout(() => {
+        window.location.href = '/community';
+      }, 250);
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '게시글 삭제에 실패했습니다.';
+      setMessage('error', errorMessage);
+    } finally {
+      deleteButton.disabled = false;
+      deleteButton.textContent = defaultLabel;
     }
   });
 })();
@@ -1159,7 +1248,10 @@ function injectCommunityCommentComposer(html: string, template: TemplateName) {
   }
 
   if (html.includes('data-comment-form')) {
-    return html.replace('</body>', `${communityCommentComposerBlock}\n</body>`);
+    return html.replace(
+      '</body>',
+      `${communityCommentComposerBlock}\n${communityPostOwnerActionsBlock}\n</body>`
+    );
   }
 
   return html;

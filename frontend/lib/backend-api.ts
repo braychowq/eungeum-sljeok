@@ -4,6 +4,19 @@ type ApiEnvelope<T> = {
   message?: string | null;
 };
 
+export type AuthState = {
+  authenticated: boolean;
+  user?: {
+    id: string;
+    displayName: string;
+    role: 'USER' | 'ADMIN';
+    status: string;
+    onboardingCompleted: boolean;
+    accountPath: string;
+    requiresOnboarding: boolean;
+  };
+};
+
 export type StudioSummary = {
   id: string;
   slug: string;
@@ -62,6 +75,7 @@ export type CommunityPostDetail = {
   title: string;
   excerpt: string;
   body: string;
+  authorUserId?: string | null;
   author: string;
   date: string;
   views: number;
@@ -103,6 +117,26 @@ async function backendJson<T>(path: string): Promise<T> {
   }
 
   return payload.data;
+}
+
+export async function fetchAuthState(cookieHeader?: string): Promise<AuthState> {
+  const response = await fetch(`${backendBaseUrl}/api/auth/me`, {
+    headers: {
+      Accept: 'application/json',
+      ...(cookieHeader ? { Cookie: cookieHeader } : {})
+    },
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    return { authenticated: false };
+  }
+
+  const payload = (await response.json().catch(() => null)) as AuthState | null;
+  if (!payload || typeof payload !== 'object') {
+    return { authenticated: false };
+  }
+  return payload;
 }
 
 export async function fetchStudios(limit?: number) {
