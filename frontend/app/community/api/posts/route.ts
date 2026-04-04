@@ -6,6 +6,28 @@ function isCategory(value: string): value is CommunityCategory {
   return value === 'free' || value === 'qa' || value === 'market';
 }
 
+function normalizeCategory(value: unknown): CommunityCategory | null {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  const normalized = value.trim().toLowerCase();
+
+  if (normalized === 'free' || normalized === '아무말') {
+    return 'free';
+  }
+
+  if (normalized === 'qa' || normalized === 'q/a') {
+    return 'qa';
+  }
+
+  if (normalized === 'market' || normalized === '장터') {
+    return 'market';
+  }
+
+  return null;
+}
+
 export async function GET() {
   return Response.json(communityPosts);
 }
@@ -21,14 +43,14 @@ export async function POST(request: Request) {
   const body = typeof payload.body === 'string' ? payload.body.trim() : '';
   const author =
     typeof payload.author === 'string' && payload.author.trim() ? payload.author.trim() : '익명 메이커';
-  const category = typeof payload.category === 'string' ? payload.category : 'free';
+  const category = normalizeCategory(payload.category);
   const imageNames = Array.isArray(payload.imageNames)
     ? payload.imageNames.filter(
         (item: unknown): item is string => typeof item === 'string' && item.trim().length > 0
       )
     : [];
 
-  if (!title || !body || !isCategory(category)) {
+  if (!title || !body || !category || !isCategory(category)) {
     return Response.json(
       { message: '카테고리, 제목, 내용을 모두 입력해주세요.' },
       { status: 400 }
