@@ -185,6 +185,11 @@ const authBootstrapBlock = `
         return;
       }
 
+      if (body.dataset.authRequired === 'true' && payload.user && payload.user.requiresOnboarding) {
+        redirect('/onboarding?next=' + encodeURIComponent(currentPath));
+        return;
+      }
+
       if (body.hasAttribute('data-login-page')) {
         const next = safePath(pageNext, '/');
         redirect(payload.user && payload.user.requiresOnboarding
@@ -466,16 +471,27 @@ const studioFormEnhancerBlock = `
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       });
 
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        if (response.status === 403) {
+          window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
         throw new Error(result.message || '등록에 실패했어요. 잠시 후 다시 시도해주세요.');
       }
 
-      setMessage('success', '"' + (result.name || payload.name) + '" 공방 등록 요청이 접수됐어요.');
+      const createdName = result && result.data && result.data.name ? result.data.name : payload.name;
+      const detailPath = result && result.data && result.data.detailPath ? result.data.detailPath : '/market';
+      setMessage('success', '"' + createdName + '" 공방이 등록되었어요. 상세 페이지로 이동합니다.');
       form.reset();
       selectedFiles = [];
 
@@ -491,6 +507,9 @@ const studioFormEnhancerBlock = `
       }
 
       form.querySelectorAll('[data-custom-amenity-row]').forEach((row) => row.remove());
+      window.setTimeout(() => {
+        window.location.href = detailPath;
+      }, 300);
     } catch (error) {
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
@@ -523,7 +542,6 @@ const communityPostComposerBlock = `
   const uploadTrigger = form.querySelector('[data-upload-trigger]');
   const imageCount = form.querySelector('[data-image-count]');
   const titleInput = form.querySelector('[data-field="title"]');
-  const authorInput = form.querySelector('[data-field="author"]');
   const bodyInput = form.querySelector('[data-field="body"]');
   let selectedFiles = [];
 
@@ -570,7 +588,6 @@ const communityPostComposerBlock = `
 
     const categoryInput = form.querySelector('input[name="category"]:checked');
     const payload = {
-      author: authorInput && authorInput.value.trim() ? authorInput.value.trim() : '은금슬쩍 회원',
       body: bodyInput ? bodyInput.value.trim() : '',
       category: categoryInput ? categoryInput.value : '',
       imageNames: selectedFiles.map((file) => file.name),
@@ -590,23 +607,34 @@ const communityPostComposerBlock = `
         submitButton.textContent = '등록 중...';
       }
 
-      const response = await fetch('/community/api/posts', {
+      const response = await fetch('/api/community/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       });
 
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        if (response.status === 403) {
+          window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
         throw new Error(result.message || '게시물 등록에 실패했습니다.');
       }
 
       setMessage('success', '게시물을 등록했어요. 상세 페이지로 이동합니다.');
       window.setTimeout(() => {
-        window.location.href = '/community/post/' + result.id;
+        window.location.href = result && result.data && result.data.detailPath
+          ? result.data.detailPath
+          : '/community';
       }, 300);
     } catch (error) {
       const errorMessage =
@@ -683,17 +711,26 @@ const communityCommentComposerBlock = `
         submitButton.textContent = '등록 중...';
       }
 
-      const response = await fetch('/community/api/posts/' + encodeURIComponent(postId) + '/comments', {
+      const response = await fetch('/api/community/posts/' + encodeURIComponent(postId) + '/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       });
 
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        if (response.status === 403) {
+          window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
         throw new Error(result.message || '댓글 등록에 실패했습니다.');
       }
 

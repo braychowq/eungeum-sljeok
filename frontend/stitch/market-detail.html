@@ -114,14 +114,14 @@
 <section class="px-6 mb-12">
 <div class="flex flex-col gap-4">
 <div class="w-full aspect-[4/5] overflow-hidden rounded-xl">
-<img alt="Ceramic studio detail" class="w-full h-full object-cover" data-alt="Close-up of a potter's hands shaping raw clay on a wooden wheel in a sunlit minimalist studio with warm textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJPp2ZmlzB4lenjnYuK8e6btqEhjwR6GLR-rFhoQ02k2RGxOMGhZrvPVYZRTKDKjnS18wb0fyaNeLAoGq8g38-NtU_YS6_Ti_6RxBMntE2ORfqQxVqxT96qbJBC1pLhOmkBHp7fWLTOwh_jRVwjsSy0Oq2-QV9u4x-rG-u-IPF2k1Hyvh9JYWxvXc3wjsqXRdnI7UFHOsNsdEcKqCj3G-YFVuTVMaU42JBRn-DRtB3DKbcNR3s6sXsWhYEt8FflySi23FAuchXVzE"/>
+<img alt="{{STUDIO_TITLE}}" class="w-full h-full object-cover" data-alt="{{STUDIO_TITLE}}" src="{{HERO_IMAGE_URL}}"/>
 </div>
 <div class="flex gap-4 overflow-x-auto no-scrollbar">
 <div class="min-w-[70%] aspect-square overflow-hidden rounded-xl bg-surface-container">
-<img alt="Workshop space" class="w-full h-full object-cover" data-alt="Interior of a quiet Seongsu-dong ceramic studio with large windows, wooden tables, and rows of unfinished pottery on shelves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE4Q6a293ZJNF1xGTdcaVqTmX2AbYegyqITfMIlHqs_iUF9ESZplKw2Eg_eWj67zhpeRwfUX07J4OWHkIZrQYH60GatkWTnjWHd_TbQcHK-7yxk5rFvCW4lwwZNcwHSHewflrPo_vhrwumueIJEM3_MnWZP7o9WbKVbfxFoLKCRMRTWXviIFrA8VggWPXyTulohr9pKpBhOE2rr9nZ85zHGXGTlysnT6-QJBPrV8AM0NbNGxI4nL1l8l35S3RESpmKOCh-UfzCeT0"/>
+<img alt="{{STUDIO_TITLE}} 서브 이미지 1" class="w-full h-full object-cover" data-alt="{{STUDIO_TITLE}} 서브 이미지 1" src="{{GALLERY_IMAGE_URL_1}}"/>
 </div>
 <div class="min-w-[70%] aspect-square overflow-hidden rounded-xl bg-surface-container">
-<img alt="Pottery details" class="w-full h-full object-cover" data-alt="Meticulously arranged ceramic tools and bowls on a textured stone countertop with soft shadows and neutral tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-nhEpKxrMBXiWVczhKhtV7mC6LBButmKnWuD4zhjx-uHwOYVc0DoTgPxMZUNzqwOcYzyNeaGHKBxbfT_qk9Cppa_CxmetKAUq7kS4J9Irh046fwKlSLlR9iGdcDSDr6U4l6-QrV0ELDXNKm1SSJzBF73Q92y8h4yqz9tQfMAQD4bZGFpWoUS8eVwmzT3o_pfgdNPVwpVgqa8f8iO-P4pdGMgYfgKRiR9OZaBcY0qfx5nTTqcTQJrny3FHlo_7YFheRI2AVfgaeTg"/>
+<img alt="{{STUDIO_TITLE}} 서브 이미지 2" class="w-full h-full object-cover" data-alt="{{STUDIO_TITLE}} 서브 이미지 2" src="{{GALLERY_IMAGE_URL_2}}"/>
 </div>
 </div>
 </div>
@@ -129,30 +129,28 @@
 <!-- Header Content -->
 <section class="px-6 mb-12">
 <div class="flex flex-col gap-2">
-<span class="font-label text-[10px] tracking-[0.2em] uppercase text-secondary font-bold">서울 성수동</span>
-<h2 class="font-headline text-3xl leading-tight tracking-tight text-on-surface">고요한 흙의 시간:<br/>핸드빌딩 &amp; 물레 공방</h2>
+<span class="font-label text-[10px] tracking-[0.2em] uppercase text-secondary font-bold">{{STUDIO_LOCATION}}</span>
+<h2 class="font-headline text-3xl leading-tight tracking-tight text-on-surface">{{STUDIO_TITLE}}</h2>
 </div>
 </section>
 <!-- Space Overview -->
 <section class="px-6 mb-16">
 <div class="bg-surface-container-low p-8 rounded-xl flex flex-col gap-6">
 <h3 class="font-headline text-xl text-on-surface">공방 소개</h3>
-<p class="font-body text-body-md leading-relaxed text-on-surface-variant">
-                    성수 한복판에 자리한 이 공방은 흙의 질감과 손의 감각에 집중하고 싶은 분들을 위한 조용한 작업실입니다. 자연광과 우드 톤 가구, 정갈한 동선 속에서 핸드빌딩과 물레 작업에 몰입할 수 있도록 구성했습니다.
-                </p>
+<p class="font-body text-body-md leading-relaxed text-on-surface-variant">{{STUDIO_DESCRIPTION}}</p>
 <div class="grid grid-cols-2 gap-y-6 gap-x-4 pt-4">
 <div class="flex items-start gap-3">
 <span class="material-symbols-outlined text-secondary" data-icon="groups">groups</span>
 <div>
 <p class="text-[11px] uppercase tracking-widest font-bold text-outline">정원</p>
-<p class="text-sm font-medium">최대 4명</p>
+<p class="text-sm font-medium">최대 {{STUDIO_CAPACITY}}명</p>
 </div>
 </div>
 <div class="flex items-start gap-3">
 <span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
 <div>
 <p class="text-[11px] uppercase tracking-widest font-bold text-outline">이용 시간</p>
-<p class="text-sm font-medium">120분</p>
+<p class="text-sm font-medium">{{STUDIO_PRICE_UNIT}}</p>
 </div>
 </div>
 </div>
@@ -161,44 +159,7 @@
 <!-- Amenities -->
 <section class="px-6 mb-16">
 <h3 class="font-headline text-xl mb-8 text-on-surface">제공 장비</h3>
-<div class="grid grid-cols-1 gap-8">
-<div class="flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="cyclone">cyclone</span>
-</div>
-<span class="font-body text-sm font-medium">전동 물레</span>
-</div>
-<span class="text-[10px] uppercase tracking-widest text-outline">전문 장비</span>
-</div>
-<div class="flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="table_rows">table_rows</span>
-</div>
-<span class="font-body text-sm font-medium">오크 작업 테이블</span>
-</div>
-<span class="text-[10px] uppercase tracking-widest text-outline">넉넉한 작업면</span>
-</div>
-<div class="flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="checkroom">checkroom</span>
-</div>
-<span class="font-body text-sm font-medium">린넨 앞치마</span>
-</div>
-<span class="text-[10px] uppercase tracking-widest text-outline">제공 포함</span>
-</div>
-<div class="flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="landscape">landscape</span>
-</div>
-<span class="font-body text-sm font-medium">백자용 카올린 점토</span>
-</div>
-<span class="text-[10px] uppercase tracking-widest text-outline">재료 포함</span>
-</div>
-</div>
+<div class="grid grid-cols-1 gap-8">{{STUDIO_AMENITIES}}</div>
 </section>
 <!-- Host Profile -->
 <section class="px-6 mb-16">
@@ -208,16 +169,14 @@
 <img alt="Host Profile" class="w-full h-full object-cover" data-alt="Portrait of a Korean ceramic artist in a linen shirt, smiling gently in her sunlit studio workshop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRbRZ06yai0_wNmqzWe95VSwFgbpORGY98T9ksQCS390grbLDOegCqjqzM6HOp99uo1v19Dh56AFfgN93ecEIAUegp8ka_Yvu2Hn0NRkz6JFyEtFhYxua0CbLYCNZElzMxIZzVAk5nMh7gXP7HR0yZNr74qub231j8EQDJIo2lB2qTy4JxCUh7QtTiF8rsFpEMCAPrjuiQ9W37PaqbCShQGfVyuaAS6RKXK3IUokekP_UnRLEh3leNCC-ydI3yTWOMjyIek7enTIM"/>
 </div>
 <div>
-<h4 class="font-headline text-lg text-on-surface">Jiwoo Kim</h4>
+<h4 class="font-headline text-lg text-on-surface">{{STUDIO_OWNER_NAME}}</h4>
 <div class="flex items-center gap-1 text-secondary">
 <span class="material-symbols-outlined !text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
 <span class="text-[10px] uppercase tracking-widest font-bold">공방 호스트</span>
 </div>
 </div>
 </div>
-<p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-6">
-                    "작업의 결과물에는 만드는 사람의 리듬과 온도가 남는다고 믿어요. 이 공간에서는 흙을 통해 자기만의 속도와 손맛을 찾을 수 있도록 안내합니다."
-                </p>
+<p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-6">{{STUDIO_OWNER_BIO}}</p>
 <div class="flex items-center gap-6 pt-6 border-t border-outline-variant/10">
 <div>
 <p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">후기</p>
@@ -234,11 +193,11 @@
 <div class="fixed bottom-0 left-0 w-full bg-[#faf9f6]/90 backdrop-blur-xl z-50 px-6 py-4 flex items-center justify-between border-t border-outline-variant/5">
 <div class="flex flex-col">
 <span class="font-label text-[10px] tracking-widest text-outline uppercase">1인 기준</span>
-<span class="font-headline text-xl text-on-surface">₩85,000</span>
+<span class="font-headline text-xl text-on-surface">₩{{STUDIO_PRICE}}</span>
 </div>
-<button class="bg-primary hover:bg-primary-dim text-on-primary px-10 py-4 rounded-lg font-body font-bold text-sm transition-all duration-300 active:scale-95 shadow-lg shadow-primary/10">
-                예약 문의하기
-            </button>
+<a class="bg-primary hover:bg-primary-dim text-on-primary px-10 py-4 rounded-lg font-body font-bold text-sm transition-all duration-300 active:scale-95 shadow-lg shadow-primary/10" href="tel:{{STUDIO_CONTACT_TEL}}">
+                {{STUDIO_CONTACT_LABEL}}
+            </a>
 </div>
 </main>
 <!-- Navigation suppressed per logic for sub-page -->

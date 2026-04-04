@@ -1,21 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { communityPosts } from '../../lib/community-posts';
+import {
+  escapeHtml,
+  fetchCommunityPosts,
+  type CommunityPostSummary
+} from '../../lib/backend-api';
 import { finalizeStitchHtml } from '../../lib/stitch-html';
 
 export const runtime = 'nodejs';
 const PAGE_SIZES = [10, 20, 30] as const;
 type CategoryFilter = 'all' | 'free' | 'qa' | 'market';
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}
 
 function categoryBadge(category: string) {
   if (category === 'free') {
@@ -57,43 +52,21 @@ function likeCount(views: number) {
   return Math.max(3, Math.round(views * 0.18));
 }
 
-function filterPosts(query: string, category: CategoryFilter) {
-  const normalizedQuery = query.trim().toLowerCase();
-  const tokens = normalizedQuery ? normalizedQuery.split(/\s+/).filter(Boolean) : [];
-
-  return communityPosts.filter((post) => {
-    if (category !== 'all' && post.category !== category) return false;
-    if (!tokens.length) return true;
-
-    const haystack = [
-      post.title,
-      post.excerpt,
-      post.author,
-      ...post.content,
-      ...post.commentList.map((comment) => comment.body)
-    ]
-      .join(' ')
-      .toLowerCase();
-
-    return tokens.every((token) => haystack.includes(token));
-  });
-}
-
-function renderPostRows(posts: typeof communityPosts) {
+function renderPostRows(posts: CommunityPostSummary[]) {
   return posts
     .map(
       (post) => `
       <article class="community-post" data-post-category="${post.category}">
-        <a class="group bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30" href="/community/post/${post.id}">
+        <a class="group bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30" href="/community/post/${post.slug}">
           <div class="flex items-center gap-6 w-full">
             <div class="flex-shrink-0">${categoryPreview(post.category)}</div>
             <div class="min-w-0 flex-1">
               ${categoryBadge(post.category)}
-              <h2 class="font-medium text-on-surface text-lg"><span class="group-hover:text-primary transition-colors">${post.title}</span></h2>
-              <p class="text-sm text-on-surface-variant font-light mt-1">${post.excerpt}</p>
+              <h2 class="font-medium text-on-surface text-lg"><span class="group-hover:text-primary transition-colors">${escapeHtml(post.title)}</span></h2>
+              <p class="text-sm text-on-surface-variant font-light mt-1">${escapeHtml(post.excerpt)}</p>
               <div class="flex flex-wrap gap-3 mt-3 text-[10px] font-label uppercase tracking-widest text-outline">
-                <span>${post.author}</span>
-                <span>${post.date}</span>
+                <span>${escapeHtml(post.author)}</span>
+                <span>${escapeHtml(post.date)}</span>
               </div>
             </div>
             <div class="flex gap-4 items-center">
@@ -199,7 +172,9 @@ function renderPaginationBar(
 
   if (windowStart > 1) {
     links.push(
-      `<a aria-label="이전 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(Math.max(1, windowStart - 10))}">‹</a>`
+      `<a aria-label="이전 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(
+        Math.max(1, windowStart - 10)
+      )}">‹</a>`
     );
   }
 
@@ -216,14 +191,16 @@ function renderPaginationBar(
 
   if (windowEnd < totalPages) {
     links.push(
-      `<a aria-label="다음 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(windowEnd + 1)}">›</a>`
+      `<a aria-label="다음 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(
+        windowEnd + 1
+      )}">›</a>`
     );
   }
 
   return links.join('');
 }
 
-export function GET(request: Request) {
+export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const query = params.get('q') ?? '';
   const categoryParam = params.get('category');
@@ -236,14 +213,26 @@ export function GET(request: Request) {
   const pageSize = PAGE_SIZES.includes(pageSizeParam as (typeof PAGE_SIZES)[number])
     ? pageSizeParam
     : 10;
-  const filteredPosts = filterPosts(query, category);
-  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize));
-  const currentPage =
-    Number.isFinite(pageParam) && pageParam > 0 ? Math.min(pageParam, totalPages) : 1;
-  const startIndex = (currentPage - 1) * pageSize;
-  const pagedPosts = filteredPosts.slice(startIndex, startIndex + pageSize);
+  const currentPage = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
   const templatePath = join(process.cwd(), 'stitch', 'community.html');
   const rawTemplate = readFileSync(templatePath, 'utf8');
+
+  let items: CommunityPostSummary[] = [];
+  let totalPages = 1;
+
+  try {
+    const payload = await fetchCommunityPosts({
+      q: query,
+      category: category === 'all' ? undefined : category,
+      page: currentPage,
+      pageSize
+    });
+    items = payload.items;
+    totalPages = Math.max(1, payload.totalPages);
+  } catch {
+    items = [];
+    totalPages = 1;
+  }
 
   const html = finalizeStitchHtml(
     'community',
@@ -253,11 +242,11 @@ export function GET(request: Request) {
       .replace('{{CURRENT_PAGE_SIZE}}', String(pageSize))
       .replace('{{CATEGORY_FILTERS}}', renderCategoryFilters(query, pageSize, category))
       .replace('{{PAGE_SIZE_BUTTONS}}', renderPageSizeButtons(query, category, pageSize))
-      .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(pagedPosts))
-      .replace('{{EMPTY_STATE}}', renderEmptyState(pagedPosts.length > 0))
+      .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(items))
+      .replace('{{EMPTY_STATE}}', renderEmptyState(items.length > 0))
       .replace(
         '{{PAGINATION_BAR}}',
-        renderPaginationBar(query, category, pageSize, currentPage, totalPages)
+        renderPaginationBar(query, category, pageSize, Math.min(currentPage, totalPages), totalPages)
       )
   );
 
