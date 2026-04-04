@@ -64,28 +64,18 @@
 
 <section class="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-10 items-start">
 <article class="bg-surface-container-lowest rounded-[2rem] shadow-[0_30px_70px_rgba(26,28,27,0.05)] p-8 md:p-12">
+<div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+<div class="min-w-0">
 <div class="flex flex-wrap items-center gap-3 mb-6">
 {{CATEGORY_BADGE}}
 </div>
 <h1 class="font-headline text-4xl md:text-6xl leading-[1.15] tracking-tight text-on-surface">{{TITLE}}</h1>
-<p class="mt-6 text-lg text-on-surface-variant leading-relaxed max-w-3xl">{{EXCERPT}}</p>
-
-<div class="mt-8 flex flex-wrap gap-3 md:gap-4">
-<div class="min-w-[120px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
-<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">작성자</span>
-<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{AUTHOR}}</strong>
 </div>
-<div class="min-w-[120px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
-<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">작성일</span>
-<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{DATE}}</strong>
-</div>
-<div class="min-w-[110px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
-<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">조회수</span>
-<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{VIEWS}}</strong>
-</div>
-<div class="min-w-[96px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
-<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">댓글</span>
-<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{COMMENTS}}</strong>
+<div class="shrink-0 flex flex-wrap items-center gap-x-4 gap-y-2 md:max-w-[260px] md:justify-end text-[11px] uppercase tracking-[0.16em] text-outline">
+<span>작성자 <strong class="ml-1 text-on-surface font-semibold not-italic">{{AUTHOR}}</strong></span>
+<span>작성일 <strong class="ml-1 text-on-surface font-semibold not-italic">{{DATE}}</strong></span>
+<span>조회수 <strong class="ml-1 text-on-surface font-semibold not-italic">{{VIEWS}}</strong></span>
+<span>댓글 <strong class="ml-1 text-on-surface font-semibold not-italic">{{COMMENTS}}</strong></span>
 </div>
 </div>
 
