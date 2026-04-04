@@ -164,6 +164,9 @@
 ## 8. 운영 체크리스트
 
 - 프로덕션은 HTTPS 필수
+- Spring 프로파일
+  - `local`: H2 기반 로컬 실행
+  - `production`: PostgreSQL 기반 운영 실행
 - `AUTH_PUBLIC_BASE_URL`은 실제 서비스 도메인으로 설정
 - 네이버/카카오 콘솔 Redirect URI에 아래 등록
   - `https://your-domain.example/api/auth/oauth/naver/callback`
