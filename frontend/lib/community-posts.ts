@@ -295,6 +295,43 @@ export const communityPosts: CommunityPost[] = [
   }
 ];
 
+const generatedCategories: CommunityCategory[] = ['free', 'qa', 'market'];
+
+const generatedCommunityPosts: CommunityPost[] = Array.from({ length: 100 }, (_, index) => {
+  const sequence = index + 1;
+  const category = generatedCategories[index % generatedCategories.length];
+  const label =
+    category === 'free' ? '메이커 노트' : category === 'qa' ? '작업 Q&A' : '장터 소식';
+  const padded = String(sequence).padStart(2, '0');
+
+  return {
+    id: `community-seed-${padded}`,
+    category,
+    title: `${label} ${padded}`,
+    excerpt: `은금슬쩍 커뮤니티 샘플 게시글 ${padded}번입니다. 목록 페이징과 검색 동작을 확인할 수 있도록 준비한 예시 글이에요.`,
+    author: `메이커 ${padded}`,
+    date: `02.${String((sequence % 28) + 1).padStart(2, '0')}`,
+    views: 20 + sequence,
+    comments: sequence % 4,
+    content: [
+      `샘플 게시글 ${padded}번 본문입니다. 커뮤니티 목록과 상세 화면, 검색, 페이징 동작을 검증하기 위한 예시 콘텐츠예요.`,
+      '실서비스에서는 실제 사용자 글로 대체되며, 현재는 화면 검증을 위한 기본 데이터로 사용됩니다.'
+    ],
+    commentList:
+      sequence % 4 === 0
+        ? []
+        : [
+            {
+              author: `댓글러 ${padded}`,
+              date: `02.${String(((sequence + 3) % 28) + 1).padStart(2, '0')}`,
+              body: `샘플 게시글 ${padded}번에 남긴 예시 댓글입니다.`
+            }
+          ]
+  };
+});
+
+communityPosts.push(...generatedCommunityPosts);
+
 export function getCommunityPost(postId: string) {
   return communityPosts.find((post) => post.id === postId);
 }

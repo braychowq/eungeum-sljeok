@@ -182,10 +182,6 @@ function renderPaginationBar(
   currentPage: number,
   totalPages: number
 ) {
-  if (totalPages <= 1) {
-    return '';
-  }
-
   const buildHref = (page: number) => {
     const params = new URLSearchParams();
     if (query) params.set('q', query);
@@ -196,14 +192,16 @@ function renderPaginationBar(
   };
 
   const links: string[] = [];
+  const windowStart = Math.floor((currentPage - 1) / 10) * 10 + 1;
+  const windowEnd = Math.min(totalPages, windowStart + 9);
 
-  if (currentPage > 1) {
+  if (windowStart > 1) {
     links.push(
-      `<a class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(currentPage - 1)}">이전</a>`
+      `<a aria-label="이전 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(Math.max(1, windowStart - 10))}">‹</a>`
     );
   }
 
-  for (let page = 1; page <= totalPages; page += 1) {
+  for (let page = windowStart; page <= windowEnd; page += 1) {
     const active = page === currentPage;
     links.push(
       `<a class="inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-label transition-colors ${
@@ -214,9 +212,9 @@ function renderPaginationBar(
     );
   }
 
-  if (currentPage < totalPages) {
+  if (windowEnd < totalPages) {
     links.push(
-      `<a class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(currentPage + 1)}">다음</a>`
+      `<a aria-label="다음 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(windowEnd + 1)}">›</a>`
     );
   }
 
