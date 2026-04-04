@@ -52,6 +52,7 @@ export function GET(request: Request) {
       .replace('{{DATE}}', post.date)
       .replace('{{VIEWS}}', String(post.views))
       .replace('{{COMMENTS}}', String(post.comments))
+      .replace('{{POST_ID}}', post.id)
       .replace(
         '{{BODY_HTML}}',
         post.content
@@ -63,18 +64,20 @@ export function GET(request: Request) {
       )
       .replace(
         '{{COMMENT_ITEMS}}',
-        post.commentList
-          .map(
-            (comment) => `
-            <div class="py-5 first:pt-0 last:pb-0">
-              <div class="flex items-center justify-between gap-4 mb-2">
-                <strong class="font-label text-[11px] uppercase tracking-[0.18em] text-on-surface">${comment.author}</strong>
-                <span class="text-[11px] uppercase tracking-[0.18em] text-outline">${comment.date}</span>
-              </div>
-              <p class="text-sm text-on-surface-variant leading-7">${comment.body}</p>
-            </div>`
-          )
-          .join('')
+        post.commentList.length
+          ? post.commentList
+              .map(
+                (comment) => `
+                <div class="py-5 first:pt-0 last:pb-0">
+                  <div class="flex items-center justify-between gap-4 mb-2">
+                    <strong class="font-label text-[11px] uppercase tracking-[0.18em] text-on-surface">${comment.author}</strong>
+                    <span class="text-[11px] uppercase tracking-[0.18em] text-outline">${comment.date}</span>
+                  </div>
+                  <p class="text-sm text-on-surface-variant leading-7">${comment.body}</p>
+                </div>`
+              )
+              .join('')
+          : `<div class="py-5 text-sm leading-7 text-on-surface-variant">아직 댓글이 없어요. 첫 댓글을 남겨보세요.</div>`
       )
       .replace('{{RELATED_POSTS}}', relatedHtml)
   );

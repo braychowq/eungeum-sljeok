@@ -512,6 +512,95 @@ const communityPostComposerBlock = `
 })();
 </script>`;
 
+const communityCommentComposerBlock = `
+<script>
+(() => {
+  const form = document.querySelector('[data-comment-form]');
+
+  if (!form) {
+    return;
+  }
+
+  const bodyInput = form.querySelector('[data-comment-body]');
+  const submitButton = form.querySelector('[data-comment-submit]');
+  const message = form.querySelector('[data-comment-message]');
+  const postId = form.getAttribute('data-post-id');
+  const submitLabel = submitButton ? submitButton.textContent : '댓글 남기기';
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      message.className = 'hidden rounded-xl border px-4 py-3 text-sm';
+      return;
+    }
+
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'rounded-xl border px-4 py-3 text-sm bg-[#eef6ed] text-[#295b2d] border-[#cfe3cb]'
+      : 'rounded-xl border px-4 py-3 text-sm bg-[#fdf0ee] text-[#803321] border-[#f0c8c2]';
+  };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const payload = {
+      body: bodyInput ? bodyInput.value.trim() : ''
+    };
+
+    if (!payload.body) {
+      setMessage('error', '댓글 내용을 입력해주세요.');
+      return;
+    }
+
+    if (!postId) {
+      setMessage('error', '댓글을 등록할 수 없습니다.');
+      return;
+    }
+
+    try {
+      setMessage('', '');
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = '등록 중...';
+      }
+
+      const response = await fetch('/community/api/posts/' + encodeURIComponent(postId) + '/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || '댓글 등록에 실패했습니다.');
+      }
+
+      setMessage('success', '댓글을 등록했어요. 새로고침합니다.');
+      window.setTimeout(() => window.location.reload(), 250);
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '댓글 등록에 실패했습니다.';
+      setMessage('error', errorMessage);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitLabel;
+      }
+    }
+  });
+})();
+</script>`;
+
 function getActiveSection(template: TemplateName): ActiveSection {
   if (
     template === 'community' ||
@@ -690,6 +779,18 @@ function injectCommunityComposer(html: string, template: TemplateName) {
   return html;
 }
 
+function injectCommunityCommentComposer(html: string, template: TemplateName) {
+  if (template !== 'community-post-detail') {
+    return html;
+  }
+
+  if (html.includes('data-comment-form')) {
+    return html.replace('</body>', `${communityCommentComposerBlock}\n</body>`);
+  }
+
+  return html;
+}
+
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
@@ -699,7 +800,8 @@ export function finalizeStitchHtml(template: TemplateName, rawHtml: string) {
   const withCommonLinks = applyReplacements(normalizedHtml, commonReplacements);
   const withPageReplacements = applyReplacements(withCommonLinks, pageReplacements[template]);
   const withStudioEnhancer = injectStudioFormEnhancer(withPageReplacements, template);
-  return injectCommunityComposer(withStudioEnhancer, template);
+  const withCommunityComposer = injectCommunityComposer(withStudioEnhancer, template);
+  return injectCommunityCommentComposer(withCommunityComposer, template);
 }
 
 export function renderStitchHtml(template: TemplateName) {

@@ -27,6 +27,11 @@ export type CreateCommunityPostInput = {
   imageNames?: string[];
 };
 
+export type CreateCommunityCommentInput = {
+  author?: string;
+  body: string;
+};
+
 export const communityPosts: CommunityPost[] = [
   {
     id: 'sunny-seongsu-workspace',
@@ -260,4 +265,29 @@ export function createCommunityPost(input: CreateCommunityPostInput) {
 
   communityPosts.unshift(post);
   return post;
+}
+
+export function addCommunityComment(postId: string, input: CreateCommunityCommentInput) {
+  const post = getCommunityPost(postId);
+
+  if (!post) {
+    return null;
+  }
+
+  const cleanBody = input.body.trim();
+
+  if (!cleanBody) {
+    return null;
+  }
+
+  const comment: CommunityComment = {
+    author: input.author?.trim() || '은금슬쩍 회원',
+    body: cleanBody,
+    date: formatCommunityDate()
+  };
+
+  post.commentList.push(comment);
+  post.comments += 1;
+
+  return comment;
 }

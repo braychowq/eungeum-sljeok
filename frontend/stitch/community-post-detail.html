@@ -88,9 +88,19 @@
 <div class="rounded-[1.5rem] bg-surface-container-lowest border border-outline-variant/20 p-6">
 <div class="flex items-center justify-between gap-4 mb-4">
 <h2 class="font-headline text-2xl text-on-surface">댓글</h2>
-<span class="text-[10px] uppercase tracking-[0.2em] text-outline">{{COMMENTS}}</span>
 </div>
-<div class="divide-y divide-outline-variant/10">
+<form class="space-y-3 mb-6" data-comment-form="" data-post-id="{{POST_ID}}">
+<label class="block">
+<span class="sr-only">댓글 내용</span>
+<textarea class="w-full min-h-[120px] rounded-[1.25rem] border border-outline-variant/30 bg-surface-container-low px-4 py-4 text-sm leading-7 text-on-surface placeholder:text-outline focus:border-primary focus:ring-0 resize-y" data-comment-body="" placeholder="댓글을 남겨보세요"></textarea>
+</label>
+<div class="flex items-center justify-between gap-3">
+<p class="text-[11px] leading-5 text-outline">로그인 회원으로 댓글이 등록됩니다.</p>
+<button class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-[10px] font-label uppercase tracking-[0.2em] text-on-primary disabled:opacity-60" data-comment-submit="" type="submit">댓글 남기기</button>
+</div>
+<p class="hidden rounded-xl border px-4 py-3 text-sm" data-comment-message=""></p>
+</form>
+<div class="divide-y divide-outline-variant/10" data-comment-list="">
 {{COMMENT_ITEMS}}
 </div>
 </div>
