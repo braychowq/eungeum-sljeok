@@ -114,8 +114,12 @@ const studioFormEnhancerBlock = `
   const categoryInput = form.querySelector('[data-field="category"]');
   const categoryButtons = Array.from(form.querySelectorAll('[data-category-option]'));
   const customAmenityButton = form.querySelector('[data-custom-amenity]');
+  const locationInput = form.querySelector('[data-field="location"]');
+  const mapFrame = document.querySelector('[data-studio-map-frame]');
+  const mapLabel = document.querySelector('[data-studio-map-label]');
   const layout = form.getAttribute('data-layout') || 'desktop';
   let selectedFiles = [];
+  let mapTimer = null;
 
   const setMessage = (type, text) => {
     if (!message) return;
@@ -270,6 +274,38 @@ const studioFormEnhancerBlock = `
     Array.from(form.querySelectorAll('input[name="amenities"]:checked'))
       .map((input) => input.value)
       .filter(Boolean);
+
+  const updateMapPreview = (query) => {
+    if (!mapFrame) return;
+
+    const trimmed = (query || '').trim();
+    const fallbackQuery = mapFrame.getAttribute('data-default-query') || '서울';
+    const activeQuery = trimmed || fallbackQuery;
+
+    mapFrame.setAttribute(
+      'src',
+      'https://www.google.com/maps?q=' + encodeURIComponent(activeQuery) + '&z=15&output=embed'
+    );
+
+    if (mapLabel) {
+      mapLabel.textContent = trimmed
+        ? trimmed + ' 위치 미리보기'
+        : fallbackQuery + '을 기준으로 위치 미리보기를 표시합니다.';
+    }
+  };
+
+  if (locationInput) {
+    updateMapPreview(locationInput.value || '');
+    locationInput.addEventListener('input', () => {
+      if (mapTimer) {
+        window.clearTimeout(mapTimer);
+      }
+
+      mapTimer = window.setTimeout(() => {
+        updateMapPreview(locationInput.value || '');
+      }, 250);
+    });
+  }
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
