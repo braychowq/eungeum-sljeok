@@ -396,6 +396,122 @@ const studioFormEnhancerBlock = `
 })();
 </script>`;
 
+const communityPostComposerBlock = `
+<script>
+(() => {
+  const form = document.querySelector('[data-community-form]');
+  if (!form) return;
+
+  const message = form.querySelector('[data-form-message]');
+  const submitButton = form.querySelector('[data-submit]');
+  const submitLabel = submitButton ? submitButton.textContent.trim() : '게시물 발행';
+  const fileInput = form.querySelector('[data-image-input]');
+  const uploadTrigger = form.querySelector('[data-upload-trigger]');
+  const imageCount = form.querySelector('[data-image-count]');
+  const titleInput = form.querySelector('[data-field="title"]');
+  const authorInput = form.querySelector('[data-field="author"]');
+  const bodyInput = form.querySelector('[data-field="body"]');
+  let selectedFiles = [];
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      return;
+    }
+
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'w-full rounded-xl px-5 py-4 text-sm bg-[#eef6ed] text-[#295b2d] border border-[#cfe3cb]'
+      : 'w-full rounded-xl px-5 py-4 text-sm bg-[#fdf0ee] text-[#803321] border border-[#f0c8c2]';
+  };
+
+  const updateImageCount = () => {
+    if (!imageCount) return;
+    imageCount.textContent = selectedFiles.length
+      ? '선택한 이미지 ' + selectedFiles.length + '장'
+      : '고해상도 JPG 또는 PNG';
+  };
+
+  if (fileInput && uploadTrigger) {
+    const openFilePicker = () => fileInput.click();
+    uploadTrigger.addEventListener('click', openFilePicker);
+    uploadTrigger.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openFilePicker();
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      selectedFiles = Array.from(fileInput.files || []).slice(0, 10);
+      updateImageCount();
+    });
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const categoryInput = form.querySelector('input[name="category"]:checked');
+    const payload = {
+      author: authorInput && authorInput.value.trim() ? authorInput.value.trim() : '익명 메이커',
+      body: bodyInput ? bodyInput.value.trim() : '',
+      category: categoryInput ? categoryInput.value : '',
+      imageNames: selectedFiles.map((file) => file.name),
+      title: titleInput ? titleInput.value.trim() : ''
+    };
+
+    if (!payload.category || !payload.title || !payload.body) {
+      setMessage('error', '카테고리, 제목, 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      setMessage('', '');
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = '등록 중...';
+      }
+
+      const response = await fetch('/community/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || '게시물 등록에 실패했습니다.');
+      }
+
+      setMessage('success', '게시물을 등록했어요. 상세 페이지로 이동합니다.');
+      window.setTimeout(() => {
+        window.location.href = '/community/post/' + result.id;
+      }, 300);
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '게시물 등록에 실패했습니다.';
+      setMessage('error', errorMessage);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitLabel;
+      }
+    }
+  });
+
+  updateImageCount();
+})();
+</script>`;
+
 function getActiveSection(template: TemplateName): ActiveSection {
   if (
     template === 'community' ||
@@ -562,6 +678,18 @@ function injectStudioFormEnhancer(html: string, template: TemplateName) {
   return html;
 }
 
+function injectCommunityComposer(html: string, template: TemplateName) {
+  if (template !== 'community-new') {
+    return html;
+  }
+
+  if (html.includes('data-community-form')) {
+    return html.replace('</body>', `${communityPostComposerBlock}\n</body>`);
+  }
+
+  return html;
+}
+
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
@@ -570,7 +698,8 @@ export function finalizeStitchHtml(template: TemplateName, rawHtml: string) {
   const normalizedHtml = normalizeLayout(rawHtml, template);
   const withCommonLinks = applyReplacements(normalizedHtml, commonReplacements);
   const withPageReplacements = applyReplacements(withCommonLinks, pageReplacements[template]);
-  return injectStudioFormEnhancer(withPageReplacements, template);
+  const withStudioEnhancer = injectStudioFormEnhancer(withPageReplacements, template);
+  return injectCommunityComposer(withStudioEnhancer, template);
 }
 
 export function renderStitchHtml(template: TemplateName) {

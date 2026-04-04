@@ -19,6 +19,14 @@ export type CommunityPost = {
   commentList: CommunityComment[];
 };
 
+export type CreateCommunityPostInput = {
+  author: string;
+  body: string;
+  category: CommunityCategory;
+  title: string;
+  imageNames?: string[];
+};
+
 export const communityPosts: CommunityPost[] = [
   {
     id: 'sunny-seongsu-workspace',
@@ -192,4 +200,64 @@ export const communityPosts: CommunityPost[] = [
 
 export function getCommunityPost(postId: string) {
   return communityPosts.find((post) => post.id === postId);
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+function formatCommunityDate() {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Seoul',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  const parts = formatter.formatToParts(now);
+  const month = parts.find((part) => part.type === 'month')?.value ?? '01';
+  const day = parts.find((part) => part.type === 'day')?.value ?? '01';
+  return `${month}.${day}`;
+}
+
+function toParagraphs(body: string) {
+  return body
+    .split(/\n{2,}|\r\n\r\n|\r\n|\n/g)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+}
+
+function createExcerpt(body: string) {
+  const normalized = body.replace(/\s+/g, ' ').trim();
+  if (normalized.length <= 72) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 72).trim()}…`;
+}
+
+export function createCommunityPost(input: CreateCommunityPostInput) {
+  const cleanTitle = input.title.trim();
+  const cleanAuthor = input.author.trim() || '익명 메이커';
+  const cleanBody = input.body.trim();
+  const paragraphs = toParagraphs(cleanBody);
+  const post: CommunityPost = {
+    id: `${slugify(cleanTitle) || 'community-post'}-${Date.now()}`,
+    category: input.category,
+    title: cleanTitle,
+    excerpt: createExcerpt(cleanBody),
+    author: cleanAuthor,
+    date: formatCommunityDate(),
+    views: 0,
+    comments: 0,
+    content: paragraphs.length ? paragraphs : [cleanBody],
+    commentList: []
+  };
+
+  communityPosts.unshift(post);
+  return post;
 }

@@ -19,7 +19,8 @@ function categoryBadge(category: string) {
 }
 
 export function GET(request: Request) {
-  const postId = new URL(request.url).pathname.split('/').pop() ?? '';
+  const rawPostId = new URL(request.url).pathname.split('/').pop() ?? '';
+  const postId = decodeURIComponent(rawPostId);
   const post = getCommunityPost(postId);
 
   if (!post) {
