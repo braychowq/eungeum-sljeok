@@ -66,29 +66,26 @@
 <article class="bg-surface-container-lowest rounded-[2rem] shadow-[0_30px_70px_rgba(26,28,27,0.05)] p-8 md:p-12">
 <div class="flex flex-wrap items-center gap-3 mb-6">
 {{CATEGORY_BADGE}}
-<span class="text-[10px] uppercase tracking-[0.2em] text-outline">{{DATE}}</span>
-<span class="text-[10px] uppercase tracking-[0.2em] text-outline">조회 {{VIEWS}}</span>
-<span class="text-[10px] uppercase tracking-[0.2em] text-outline">댓글 {{COMMENTS}}</span>
 </div>
 <h1 class="font-headline text-4xl md:text-6xl leading-[1.15] tracking-tight text-on-surface">{{TITLE}}</h1>
 <p class="mt-6 text-lg text-on-surface-variant leading-relaxed max-w-3xl">{{EXCERPT}}</p>
 
-<div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 rounded-[1.5rem] bg-surface-container-low p-5">
-<div>
-<span class="block text-[10px] uppercase tracking-[0.18em] text-outline mb-2">작성자</span>
-<strong class="text-base font-medium text-on-surface">{{AUTHOR}}</strong>
+<div class="mt-8 flex flex-wrap gap-3 md:gap-4">
+<div class="min-w-[120px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
+<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">작성자</span>
+<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{AUTHOR}}</strong>
 </div>
-<div>
-<span class="block text-[10px] uppercase tracking-[0.18em] text-outline mb-2">작성일</span>
-<strong class="text-base font-medium text-on-surface">{{DATE}}</strong>
+<div class="min-w-[120px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
+<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">작성일</span>
+<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{DATE}}</strong>
 </div>
-<div>
-<span class="block text-[10px] uppercase tracking-[0.18em] text-outline mb-2">조회수</span>
-<strong class="text-base font-medium text-on-surface">{{VIEWS}}</strong>
+<div class="min-w-[110px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
+<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">조회수</span>
+<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{VIEWS}}</strong>
 </div>
-<div>
-<span class="block text-[10px] uppercase tracking-[0.18em] text-outline mb-2">댓글</span>
-<strong class="text-base font-medium text-on-surface">{{COMMENTS}}</strong>
+<div class="min-w-[96px] rounded-[1.25rem] bg-surface-container-low px-4 py-3">
+<span class="block text-[9px] uppercase tracking-[0.18em] text-outline">댓글</span>
+<strong class="mt-1 block text-sm md:text-[15px] font-semibold text-on-surface">{{COMMENTS}}</strong>
 </div>
 </div>
 
