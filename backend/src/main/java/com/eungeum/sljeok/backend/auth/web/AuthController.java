@@ -75,7 +75,7 @@ public class AuthController {
       HttpServletRequest request) {
     try {
       if (code == null || state == null) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인을 완료하지 못했습니다.");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "다시 시도해 주세요.");
       }
 
       LoginResult result = authFlowService.finish(SocialProvider.from(provider), code, state, error, request);
@@ -122,7 +122,7 @@ public class AuthController {
     authSessionService.revokeCurrent(request);
     HttpHeaders headers = new HttpHeaders();
     authCookieService.clearSessionCookie(headers);
-    return new ResponseEntity<>(Map.of("message", "로그아웃되었습니다."), headers, HttpStatus.OK);
+    return new ResponseEntity<>(Map.of("message", "다녀오세요."), headers, HttpStatus.OK);
   }
 
   @PostMapping("/onboarding")
@@ -132,7 +132,7 @@ public class AuthController {
     AuthenticatedUser user = requireAuthenticated(request);
     requestBody.validate();
     authFlowService.completeOnboarding(user, requestBody);
-    return Map.of("status", "ok", "message", "추가 정보가 저장되었습니다.", "redirectTo", "/");
+    return Map.of("status", "ok", "message", "저장했어요.", "redirectTo", "/");
   }
 
   @DeleteMapping("/account")
@@ -143,13 +143,13 @@ public class AuthController {
     authSessionService.revokeAllForUser(user.userId());
     HttpHeaders headers = new HttpHeaders();
     authCookieService.clearSessionCookie(headers);
-    return new ResponseEntity<>(Map.of("message", "탈퇴 처리되었습니다."), headers, HttpStatus.OK);
+    return new ResponseEntity<>(Map.of("message", "정리됐어요."), headers, HttpStatus.OK);
   }
 
   private AuthenticatedUser requireAuthenticated(HttpServletRequest request) {
     return authSessionService
         .resolve(request)
         .filter(user -> user.status() != UserStatus.DELETED)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요해요."));
   }
 }

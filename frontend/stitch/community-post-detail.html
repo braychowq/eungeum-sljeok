@@ -58,7 +58,7 @@
 <section class="mb-8">
 <a class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-outline hover:text-primary transition-colors" href="/community">
 <span class="material-symbols-outlined text-base">arrow_back</span>
-커뮤니티로 돌아가기
+목록
 </a>
 </section>
 
@@ -72,11 +72,11 @@
 <h1 class="font-headline text-4xl md:text-6xl leading-[1.15] tracking-tight text-on-surface">{{TITLE}}</h1>
 {{OWNER_ACTIONS}}
 </div>
-<div class="shrink-0 flex flex-wrap items-center gap-x-4 gap-y-2 md:max-w-[260px] md:justify-end text-[11px] uppercase tracking-[0.16em] text-outline">
-<span>작성자 <strong class="ml-1 text-on-surface font-semibold not-italic">{{AUTHOR}}</strong></span>
-<span>작성일 <strong class="ml-1 text-on-surface font-semibold not-italic">{{DATE}}</strong></span>
-<span>조회수 <strong class="ml-1 text-on-surface font-semibold not-italic">{{VIEWS}}</strong></span>
-<span>댓글 <strong class="ml-1 text-on-surface font-semibold not-italic">{{COMMENTS}}</strong></span>
+<div class="shrink-0 flex flex-wrap items-center gap-x-3 gap-y-2 md:max-w-[260px] md:justify-end text-[11px] uppercase tracking-[0.16em] text-outline">
+<span>{{AUTHOR}}</span>
+<span>{{DATE}}</span>
+<span>조회 {{VIEWS}}</span>
+<span>댓글 {{COMMENTS}}</span>
 </div>
 </div>
 
@@ -95,9 +95,8 @@
 <span class="sr-only">댓글 내용</span>
 <textarea class="w-full min-h-[120px] rounded-[1.25rem] border border-outline-variant/30 bg-surface-container-low px-4 py-4 text-sm leading-7 text-on-surface placeholder:text-outline focus:border-primary focus:ring-0 resize-y" data-comment-body="" placeholder="댓글을 남겨보세요"></textarea>
 </label>
-<div class="flex items-center justify-between gap-3">
-<p class="text-[11px] leading-5 text-outline">로그인 회원으로 댓글이 등록됩니다.</p>
-<button class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-[10px] font-label uppercase tracking-[0.2em] text-on-primary disabled:opacity-60" data-comment-submit="" type="submit">댓글 남기기</button>
+<div class="flex items-center justify-end gap-3">
+<button class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-[10px] font-label uppercase tracking-[0.2em] text-on-primary disabled:opacity-60" data-comment-submit="" type="submit">남기기</button>
 </div>
 <p class="hidden rounded-xl border px-4 py-3 text-sm" data-comment-message=""></p>
 </form>
@@ -111,11 +110,11 @@
 <section class="mt-16 rounded-[2rem] bg-surface-container-low p-8 md:p-12">
 <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
 <div>
-<span class="block text-[10px] uppercase tracking-[0.2em] text-outline mb-3">More from community</span>
-<h2 class="font-headline text-3xl md:text-4xl tracking-tight text-on-surface">다른 게시글도 둘러보세요</h2>
+<span class="block text-[10px] uppercase tracking-[0.2em] text-outline mb-3">이어 읽기</span>
+<h2 class="font-headline text-3xl md:text-4xl tracking-tight text-on-surface">다른 글</h2>
 </div>
 <a class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors" href="/community">
-목록으로 이동
+전체 글
 <span class="material-symbols-outlined text-base">arrow_forward</span>
 </a>
 </div>

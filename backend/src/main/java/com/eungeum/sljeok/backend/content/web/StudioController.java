@@ -89,7 +89,7 @@ public class StudioController {
     return ApiEnvelope.ok(
         new StudioCreatedPayload(
             studio.getId(), studio.getSlug(), studio.getName(), "/market/studio/" + studio.getSlug()),
-        "공방이 등록되었습니다.");
+        "공방을 올렸어요.");
   }
 
   private StudioSummaryItem toSummary(StudioEntity studio) {
@@ -159,26 +159,26 @@ public class StudioController {
   public record StudioCreatedPayload(String id, String slug, String name, String detailPath) {}
 
   public record CreateStudioRequest(
-      @NotBlank(message = "공방 이름을 입력해주세요.")
-      @Size(max = 120, message = "공방 이름이 너무 깁니다.")
+      @NotBlank(message = "공방 이름을 적어주세요.")
+      @Size(max = 120, message = "공방 이름이 조금 길어요.")
       String name,
-      @NotBlank(message = "주소를 입력해주세요.")
-      @Size(max = 160, message = "주소가 너무 깁니다.")
+      @NotBlank(message = "주소를 적어주세요.")
+      @Size(max = 160, message = "주소가 조금 길어요.")
       String location,
-      @NotBlank(message = "공방 소개를 입력해주세요.")
-      @Size(min = 10, max = 4000, message = "공방 소개는 10자 이상 4000자 이하로 입력해주세요.")
+      @NotBlank(message = "공간을 소개해 주세요.")
+      @Size(min = 10, max = 4000, message = "소개를 조금 더 적어주세요.")
       String description,
-      @NotNull(message = "가격을 입력해주세요.")
-      @Min(value = 1, message = "가격은 0보다 커야 합니다.")
+      @NotNull(message = "대여료를 적어주세요.")
+      @Min(value = 1, message = "대여료를 다시 확인해 주세요.")
       int price,
-      @NotBlank(message = "연락처를 입력해주세요.")
-      @Size(max = 120, message = "연락처가 너무 깁니다.")
+      @NotBlank(message = "연락처를 남겨주세요.")
+      @Size(max = 120, message = "연락처가 조금 길어요.")
       String contact,
-      @NotBlank(message = "카테고리를 선택해주세요.")
-      @Size(max = 80, message = "카테고리가 너무 깁니다.")
+      @NotBlank(message = "분야를 골라주세요.")
+      @Size(max = 80, message = "분야를 다시 확인해 주세요.")
       String category,
-      @Min(value = 1, message = "수용 인원은 1명 이상이어야 합니다.")
-      @Max(value = 100, message = "수용 인원이 너무 큽니다.")
+      @Min(value = 1, message = "인원은 1명부터 적을 수 있어요.")
+      @Max(value = 100, message = "인원을 다시 확인해 주세요.")
       Integer capacity,
-      List<@Size(max = 80, message = "장비/편의시설 항목이 너무 깁니다.") String> amenities) {}
+      List<@Size(max = 80, message = "항목이 조금 길어요.") String> amenities) {}
 }

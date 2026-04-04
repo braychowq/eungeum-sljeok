@@ -11,7 +11,7 @@ function normalizeTel(value: string) {
 }
 
 function renderAmenities(items: string[]) {
-  return (items.length ? items : ['장비 정보 준비 중'])
+  return (items.length ? items : ['기본 시설'])
     .map(
       (amenity) => `
       <div class="flex items-center justify-between group">
@@ -53,16 +53,16 @@ export async function GET(request: Request) {
         .replace('{{STUDIO_CAPACITY}}', String(studio.capacity))
         .replace('{{STUDIO_PRICE_UNIT}}', escapeHtml(studio.priceUnit))
         .replace('{{STUDIO_AMENITIES}}', renderAmenities(studio.amenities))
-        .replace('{{STUDIO_OWNER_NAME}}', escapeHtml(studio.ownerDisplayName || '은금슬쩍 회원'))
+        .replace('{{STUDIO_OWNER_NAME}}', escapeHtml(studio.ownerDisplayName || '메이커'))
         .replace(
           '{{STUDIO_OWNER_BIO}}',
           escapeHtml(
-            `${studio.ownerDisplayName || '호스트'} 님이 운영하는 공간입니다. ${studio.description}`
+            `${studio.ownerDisplayName || '호스트'} 님의 공간이에요. ${studio.description}`
           )
         )
         .replace('{{STUDIO_PRICE}}', formatPrice(studio.priceAmount))
         .replace('{{STUDIO_CONTACT_TEL}}', escapeHtml(normalizeTel(studio.contact)))
-        .replace('{{STUDIO_CONTACT_LABEL}}', '문의하기')
+        .replace('{{STUDIO_CONTACT_LABEL}}', '연락하기')
     );
 
     return new Response(html, {
@@ -72,6 +72,24 @@ export async function GET(request: Request) {
       }
     });
   } catch {
-    return new Response('Not Found', { status: 404 });
+    return new Response(
+      `<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>공방을 찾을 수 없어요</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="min-h-screen bg-[#faf9f6] text-[#2f3430] flex items-center justify-center px-6">
+  <main class="max-w-xl text-center rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(26,28,27,0.05)] px-8 py-12">
+    <p class="text-[10px] uppercase tracking-[0.2em] text-[#7f7663] mb-4">공방</p>
+    <h1 class="text-3xl md:text-4xl font-serif mb-4">공방을 찾을 수 없어요</h1>
+    <p class="text-sm leading-7 text-[#4d4635]">지금은 보이지 않는 공간이에요.</p>
+    <a href="/market" class="inline-flex items-center justify-center mt-8 rounded-full bg-[#735c00] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white">전체 공방 보기</a>
+  </main>
+</body></html>`,
+      {
+        status: 404,
+        headers: {
+          'content-type': 'text/html; charset=utf-8',
+          'cache-control': 'no-store'
+        }
+      }
+    );
   }
 }

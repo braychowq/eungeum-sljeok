@@ -118,7 +118,7 @@ public class CommunityService {
     boolean isAdmin = actor.getRole() == UserRole.ADMIN;
     boolean isOwner = authorUserId != null && authorUserId.equals(actor.getId());
     if (!isAdmin && !isOwner) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "작성자만 수정하거나 삭제할 수 있습니다.");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "작성한 사람만 바꿀 수 있어요.");
     }
 
     post.getComments().size();

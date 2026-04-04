@@ -145,8 +145,8 @@ function renderEmptyState(hasPosts: boolean) {
 
   return `
     <div class="bg-surface-container-lowest p-6 rounded-xl mt-4 text-center text-outline border border-transparent hover:border-outline-variant/30">
-      <p class="font-headline text-2xl text-on-surface mb-3">일치하는 게시글이 없어요</p>
-      <p class="text-sm">다른 검색어를 입력하거나 카테고리를 바꿔보세요.</p>
+      <p class="font-headline text-2xl text-on-surface mb-3">아직 찾는 글이 없어요</p>
+      <p class="text-sm">다른 말로 다시 찾아보세요.</p>
     </div>`;
 }
 

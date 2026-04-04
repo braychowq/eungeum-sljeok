@@ -16,7 +16,7 @@ function renderStudioCards(studios: StudioSummary[]) {
     .map((studio, index) => {
       const imageUrl = studio.imageUrls[0] || '';
       const locationBadge = escapeHtml(studio.location.split(' ')[0] || studio.location);
-      const amenityChips = (studio.amenities.length ? studio.amenities : ['공방 공간'])
+      const amenityChips = (studio.amenities.length ? studio.amenities : ['기본 시설'])
         .slice(0, 3)
         .map(
           (amenity) =>
@@ -47,7 +47,7 @@ function renderStudioCards(studios: StudioSummary[]) {
           <p class="market-card-summary text-sm text-on-surface-variant font-light mb-4 line-clamp-2">${escapeHtml(studio.description)}</p>
           <div class="market-card-tags flex flex-wrap gap-2 mb-6">${amenityChips}</div>
           <a class="market-card-button block w-full py-3 border border-outline text-outline hover:bg-on-surface hover:text-surface hover:border-on-surface rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 text-center" href="/market/studio/${studio.slug}">
-            작가에게 문의하기
+            둘러보기
           </a>
         </div>
       </article>`;
@@ -59,9 +59,9 @@ function renderStudioCards(studios: StudioSummary[]) {
       <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
         <span class="material-symbols-outlined text-primary text-3xl">add</span>
       </div>
-      <h3 class="font-headline text-xl text-center mb-2">공방 공유하기</h3>
-      <p class="text-sm text-center text-on-surface-variant font-light max-w-[200px]">당신의 창의적인 공방을 등록하고 동료 디자이너들을 만나보세요.</p>
-      <div class="mt-6 font-sans text-[10px] tracking-[0.2em] uppercase text-primary border-b border-primary pb-1">공방 등록하기</div>
+      <h3 class="font-headline text-xl text-center mb-2">내 공방 올리기</h3>
+      <p class="text-sm text-center text-on-surface-variant font-light max-w-[200px]">함께 쓰고 싶은 공간을 소개해보세요.</p>
+      <div class="mt-6 font-sans text-[10px] tracking-[0.2em] uppercase text-primary border-b border-primary pb-1">등록하기</div>
     </a>`;
 
   return items + cta;
@@ -73,7 +73,7 @@ export async function GET() {
 
   let cardsHtml = `
     <div class="col-span-full rounded-xl border border-outline-variant/20 bg-surface-container-lowest px-6 py-8 text-center text-sm text-on-surface-variant">
-      공방 목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+      지금은 공방을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
     </div>`;
 
   try {

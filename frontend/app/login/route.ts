@@ -6,9 +6,9 @@ import { finalizeStitchHtml } from '../../lib/stitch-html';
 export const runtime = 'nodejs';
 
 const SAFE_MESSAGES: Record<string, string> = {
-  social_login_failed: '로그인을 완료하지 못했습니다. 잠시 후 다시 시도해주세요.',
-  auth_required: '로그인 후 이용할 수 있는 페이지입니다.',
-  account_deleted: '탈퇴가 처리되었습니다.'
+  social_login_failed: '다시 시도해 주세요.',
+  auth_required: '로그인이 필요해요.',
+  account_deleted: '탈퇴가 완료됐어요.'
 };
 
 function sanitizeNext(value: string | null) {

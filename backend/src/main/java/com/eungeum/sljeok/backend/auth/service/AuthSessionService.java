@@ -88,7 +88,7 @@ public class AuthSessionService {
     return new AuthenticatedUser(
         user.getId(),
         user.getDisplayName() == null || user.getDisplayName().isBlank()
-            ? "은금슬쩍 회원"
+            ? "메이커"
             : user.getDisplayName(),
         user.getRole(),
         user.getStatus(),

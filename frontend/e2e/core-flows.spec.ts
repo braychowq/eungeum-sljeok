@@ -86,7 +86,7 @@ test.describe('핵심 사용자 시나리오', () => {
     await page.locator('[data-submit]').click();
 
     await expect(page.locator('[data-form-message]')).toContainText(
-      '내용은 2자 이상 10000자 이하로 입력해주세요.'
+      '내용을 조금 더 적어주세요.'
     );
     await expect(page).toHaveURL(/\/community\/new$/);
   });
@@ -104,7 +104,7 @@ test.describe('핵심 사용자 시나리오', () => {
 
     const { context: otherContext, page: otherPage } = await createSecondUserContext(browser, '다른회원E2E');
     await otherPage.goto(`/community/post/${slug}/edit`);
-    await expect(otherPage.getByRole('heading', { name: '수정 권한이 없어요' })).toBeVisible();
+    await expect(otherPage.getByRole('heading', { name: '이 글은 수정할 수 없어요' })).toBeVisible();
     await otherContext.close();
 
     await page.goto(`/community/post/${slug}`);
@@ -126,17 +126,17 @@ test.describe('핵심 사용자 시나리오', () => {
     await expect(page).toHaveURL(/\/community$/);
 
     await page.goto(`/community?q=${encodeURIComponent(updatedTitle)}`);
-    await expect(page.locator('body')).toContainText('일치하는 게시글이 없어요');
+    await expect(page.locator('body')).toContainText('아직 찾는 글이 없어요');
   });
 
   test('커뮤니티 검색 empty state와 상세 404 에러 화면을 안전하게 노출한다', async ({ page }) => {
     await page.goto(`/community?q=${encodeURIComponent(uniqueLabel('없는검색어'))}`);
-    await expect(page.locator('body')).toContainText('일치하는 게시글이 없어요');
+    await expect(page.locator('body')).toContainText('아직 찾는 글이 없어요');
 
     const missingSlug = uniqueLabel('missing-post');
     const response = await page.goto(`/community/post/${missingSlug}`);
     expect(response?.status()).toBe(404);
-    await expect(page.getByRole('heading', { name: '게시글을 찾을 수 없어요' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '글을 찾을 수 없어요' })).toBeVisible();
   });
 
   test('로그인 후 공방 등록이 실제 저장되고 상세로 이동한다', async ({ page }) => {

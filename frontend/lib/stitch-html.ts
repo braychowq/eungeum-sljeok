@@ -71,17 +71,17 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
     ['</button>\n</article>', '</a>\n</article>'],
     [
       `<button class="w-full mt-8 py-4 border border-outline/20 rounded-full font-label text-[10px] uppercase tracking-widest hover:bg-white transition-all">전체 상품 보기</button>`,
-      `<a href="/market" class="inline-flex w-full items-center justify-center mt-8 py-4 border border-outline/20 rounded-full font-label text-[10px] uppercase tracking-widest hover:bg-white transition-all">전체 상품 보기</a>`
+      `<a href="/market" class="inline-flex w-full items-center justify-center mt-8 py-4 border border-outline/20 rounded-full font-label text-[10px] uppercase tracking-widest hover:bg-white transition-all">전체 공방 보기</a>`
     ],
     [
-      `<button class="px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-label text-[10px] uppercase tracking-widest hover:shadow-lg transition-all">마켓 구매하기</button>`,
-      `<a href="/market" class="inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-label text-[10px] uppercase tracking-widest hover:shadow-lg transition-all">마켓 구매하기</a>`
+      `<button class="px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-label text-[10px] uppercase tracking-widest hover:shadow-lg transition-all">공방 둘러보기</button>`,
+      `<a href="/market" class="inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-label text-[10px] uppercase tracking-widest hover:shadow-lg transition-all">공방 둘러보기</a>`
     ],
     [
       `<button class="w-16 h-16 rounded-full bg-primary shadow-xl flex items-center justify-center text-white hover:scale-110 transition-transform active:scale-95 group">`,
       `<a href="/community/new" class="w-16 h-16 rounded-full bg-primary shadow-xl flex items-center justify-center text-white hover:scale-110 transition-transform active:scale-95 group">`
     ],
-    ['</button>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>', '</a>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>']
+    ['</button>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">이야기 공유하기</span>', '</a>\n<span class="absolute right-full mr-4 px-4 py-2 bg-on-surface text-surface text-[10px] font-label uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">글쓰기</span>']
   ],
   'community-new': [],
   'community-post-detail': [],
@@ -147,7 +147,7 @@ const authBootstrapBlock = `
       });
 
       document.querySelectorAll('[data-auth-display-name]').forEach((node) => {
-        node.textContent = payload.user.displayName || '은금슬쩍 회원';
+        node.textContent = payload.user.displayName || '메이커';
       });
     }
 
@@ -224,7 +224,7 @@ const studioFormEnhancerBlock = `
 
   const message = document.querySelector('[data-studio-form-message]');
   const submitButton = form.querySelector('[data-studio-submit]');
-  const submitButtonLabel = submitButton ? submitButton.textContent.trim() : '공방 등록하기';
+  const submitButtonLabel = submitButton ? submitButton.textContent.trim() : '올리기';
   const fileInput = document.querySelector('[data-studio-image-input]');
   const uploadTriggers = Array.from(document.querySelectorAll('[data-studio-upload-trigger]'));
   const previewTarget = document.querySelector('[data-studio-preview-target]');
@@ -269,8 +269,8 @@ const studioFormEnhancerBlock = `
 
   const updateImageCount = () => {
     const text = selectedFiles.length
-      ? '선택한 사진 ' + selectedFiles.length + '장'
-      : '사진을 아직 선택하지 않았어요.';
+      ? '사진 ' + selectedFiles.length + '장'
+      : '사진 없음';
 
     imageCountNodes.forEach((node) => {
       node.textContent = text;
@@ -364,7 +364,7 @@ const studioFormEnhancerBlock = `
       wrapper.innerHTML =
         '<div class="flex items-center gap-3">' +
         '<span class="material-symbols-outlined text-secondary">electric_bolt</span>' +
-        '<input class="min-w-0 flex-1 bg-transparent border-none p-0 text-sm font-medium focus:ring-0 placeholder:text-outline-variant/60" placeholder="장비나 편의시설을 직접 입력해주세요" type="text" />' +
+        '<input class="min-w-0 flex-1 bg-transparent border-none p-0 text-sm font-medium focus:ring-0 placeholder:text-outline-variant/60" placeholder="직접 입력" type="text" />' +
         '</div>' +
         '<input checked class="rounded border-outline-variant text-secondary focus:ring-secondary/20" name="amenities" type="checkbox" value="" />';
 
@@ -410,8 +410,8 @@ const studioFormEnhancerBlock = `
 
     if (mapLabel) {
       mapLabel.textContent = trimmed
-        ? trimmed + ' 위치 미리보기'
-        : fallbackQuery + '을 기준으로 위치 미리보기를 표시합니다.';
+        ? trimmed
+        : fallbackQuery;
     }
   };
 
@@ -453,7 +453,7 @@ const studioFormEnhancerBlock = `
     if (!payload.contact) missing.push('연락처');
 
     if (missing.length) {
-      setMessage('error', missing.join(', ') + ' 항목을 입력해주세요.');
+      setMessage('error', '빈칸을 채워주세요.');
       return;
     }
 
@@ -463,7 +463,7 @@ const studioFormEnhancerBlock = `
       if (submitButton) {
         submitButton.disabled = true;
         submitButton.setAttribute('aria-busy', 'true');
-        submitButton.textContent = '등록 중...';
+        submitButton.textContent = '올리는 중...';
       }
 
       const response = await fetch('/api/studios', {
@@ -486,12 +486,12 @@ const studioFormEnhancerBlock = `
           window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
           return;
         }
-        throw new Error(result.message || '등록에 실패했어요. 잠시 후 다시 시도해주세요.');
+        throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
       }
 
       const createdName = result && result.data && result.data.name ? result.data.name : payload.name;
       const detailPath = result && result.data && result.data.detailPath ? result.data.detailPath : '/market';
-      setMessage('success', '"' + createdName + '" 공방이 등록되었어요. 상세 페이지로 이동합니다.');
+      setMessage('success', createdName + ' 공방을 올렸어요.');
       form.reset();
       selectedFiles = [];
 
@@ -514,7 +514,7 @@ const studioFormEnhancerBlock = `
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? error.message
-          : '등록에 실패했어요. 잠시 후 다시 시도해주세요.';
+          : '잠시 후 다시 시도해 주세요.';
       setMessage('error', errorMessage);
     } finally {
       if (submitButton) {
@@ -537,7 +537,7 @@ const communityPostComposerBlock = `
 
   const message = form.querySelector('[data-form-message]');
   const submitButton = form.querySelector('[data-submit]');
-  const submitLabel = submitButton ? submitButton.textContent.trim() : '게시물 발행';
+  const submitLabel = submitButton ? submitButton.textContent.trim() : '올리기';
   const fileInput = form.querySelector('[data-image-input]');
   const uploadTrigger = form.querySelector('[data-upload-trigger]');
   const imageCount = form.querySelector('[data-image-count]');
@@ -546,7 +546,7 @@ const communityPostComposerBlock = `
   const submitUrl = form.getAttribute('data-submit-url') || '/api/community/posts';
   const submitMethod = (form.getAttribute('data-submit-method') || 'POST').toUpperCase();
   const successPath = form.getAttribute('data-success-path') || '/community';
-  const successMessage = form.getAttribute('data-success-message') || '게시물을 등록했어요. 상세 페이지로 이동합니다.';
+  const successMessage = form.getAttribute('data-success-message') || '글을 남겼어요.';
   let selectedFiles = [];
 
   const setMessage = (type, text) => {
@@ -567,8 +567,8 @@ const communityPostComposerBlock = `
   const updateImageCount = () => {
     if (!imageCount) return;
     imageCount.textContent = selectedFiles.length
-      ? '선택한 이미지 ' + selectedFiles.length + '장'
-      : '고해상도 JPG 또는 PNG';
+      ? '이미지 ' + selectedFiles.length + '장'
+      : '이미지 없음';
   };
 
   if (fileInput && uploadTrigger) {
@@ -599,7 +599,7 @@ const communityPostComposerBlock = `
     };
 
     if (!payload.category || !payload.title || !payload.body) {
-      setMessage('error', '카테고리, 제목, 내용을 모두 입력해주세요.');
+      setMessage('error', '빈칸을 채워주세요.');
       return;
     }
 
@@ -608,7 +608,7 @@ const communityPostComposerBlock = `
 
       if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = '등록 중...';
+        submitButton.textContent = '저장 중...';
       }
 
       const response = await fetch(submitUrl, {
@@ -636,7 +636,7 @@ const communityPostComposerBlock = `
           fieldErrors && typeof fieldErrors === 'object'
             ? Object.values(fieldErrors).find((value) => typeof value === 'string' && value.trim())
             : '';
-        throw new Error(firstFieldError || result.message || '게시물 저장에 실패했습니다.');
+        throw new Error(firstFieldError || result.message || '잠시 후 다시 시도해 주세요.');
       }
 
       setMessage('success', successMessage);
@@ -649,7 +649,7 @@ const communityPostComposerBlock = `
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? error.message
-          : '게시물 저장에 실패했습니다.';
+          : '잠시 후 다시 시도해 주세요.';
       setMessage('error', errorMessage);
     } finally {
       if (submitButton) {
@@ -676,7 +676,7 @@ const communityCommentComposerBlock = `
   const submitButton = form.querySelector('[data-comment-submit]');
   const message = form.querySelector('[data-comment-message]');
   const postId = form.getAttribute('data-post-id');
-  const submitLabel = submitButton ? submitButton.textContent : '댓글 남기기';
+  const submitLabel = submitButton ? submitButton.textContent : '남기기';
 
   const setMessage = (type, text) => {
     if (!message) return;
@@ -703,12 +703,12 @@ const communityCommentComposerBlock = `
     };
 
     if (!payload.body) {
-      setMessage('error', '댓글 내용을 입력해주세요.');
+      setMessage('error', '댓글을 적어주세요.');
       return;
     }
 
     if (!postId) {
-      setMessage('error', '댓글을 등록할 수 없습니다.');
+      setMessage('error', '다시 시도해 주세요.');
       return;
     }
 
@@ -717,7 +717,7 @@ const communityCommentComposerBlock = `
 
       if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = '등록 중...';
+        submitButton.textContent = '남기는 중...';
       }
 
       const response = await fetch('/api/community/posts/' + encodeURIComponent(postId) + '/comments', {
@@ -745,16 +745,16 @@ const communityCommentComposerBlock = `
           fieldErrors && typeof fieldErrors === 'object'
             ? Object.values(fieldErrors).find((value) => typeof value === 'string' && value.trim())
             : '';
-        throw new Error(firstFieldError || result.message || '댓글 등록에 실패했습니다.');
+        throw new Error(firstFieldError || result.message || '잠시 후 다시 시도해 주세요.');
       }
 
-      setMessage('success', '댓글을 등록했어요. 새로고침합니다.');
+      setMessage('success', '댓글을 남겼어요.');
       window.setTimeout(() => window.location.reload(), 250);
     } catch (error) {
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? error.message
-          : '댓글 등록에 실패했습니다.';
+          : '잠시 후 다시 시도해 주세요.';
       setMessage('error', errorMessage);
     } finally {
       if (submitButton) {
@@ -774,7 +774,7 @@ const communityPostOwnerActionsBlock = `
 
   const message = document.querySelector('[data-post-action-message]');
   const postId = deleteButton.getAttribute('data-post-id');
-  const defaultLabel = deleteButton.textContent ? deleteButton.textContent.trim() : '게시글 삭제';
+  const defaultLabel = deleteButton.textContent ? deleteButton.textContent.trim() : '삭제';
 
   const setMessage = (type, text) => {
     if (!message) return;
@@ -794,17 +794,17 @@ const communityPostOwnerActionsBlock = `
 
   deleteButton.addEventListener('click', async () => {
     if (!postId) {
-      setMessage('error', '삭제할 게시글을 확인할 수 없습니다.');
+      setMessage('error', '다시 시도해 주세요.');
       return;
     }
 
-    const confirmed = window.confirm('게시글을 삭제하시겠어요? 삭제 후에는 되돌릴 수 없습니다.');
+    const confirmed = window.confirm('이 글을 지울까요?');
     if (!confirmed) return;
 
     try {
       setMessage('', '');
       deleteButton.disabled = true;
-      deleteButton.textContent = '삭제 중...';
+      deleteButton.textContent = '지우는 중...';
 
       const response = await fetch('/api/community/posts/' + encodeURIComponent(postId), {
         method: 'DELETE',
@@ -820,10 +820,10 @@ const communityPostOwnerActionsBlock = `
           window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
           return;
         }
-        throw new Error(result.message || '게시글 삭제에 실패했습니다.');
+        throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
       }
 
-      setMessage('success', '게시글을 삭제했어요. 목록으로 이동합니다.');
+      setMessage('success', '글을 지웠어요.');
       window.setTimeout(() => {
         window.location.href = '/community';
       }, 250);
@@ -831,7 +831,7 @@ const communityPostOwnerActionsBlock = `
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? error.message
-          : '게시글 삭제에 실패했습니다.';
+          : '잠시 후 다시 시도해 주세요.';
       setMessage('error', errorMessage);
     } finally {
       deleteButton.disabled = false;
@@ -848,7 +848,7 @@ const onboardingEnhancerBlock = `
   if (!form) return;
 
   const submitButton = form.querySelector('[data-onboarding-submit]');
-  const submitLabel = submitButton ? submitButton.textContent.trim() : '정보 저장하기';
+  const submitLabel = submitButton ? submitButton.textContent.trim() : '저장하기';
   const message = document.querySelector('[data-onboarding-message]');
   const displayNameInput = form.querySelector('[name="displayName"]');
 
@@ -895,12 +895,12 @@ const onboardingEnhancerBlock = `
     };
 
     if (!payload.displayName || !payload.activityField || !payload.region) {
-      setMessage('error', '닉네임, 활동 분야, 지역을 모두 입력해주세요.');
+      setMessage('error', '빈칸을 채워주세요.');
       return;
     }
 
     if (!payload.agreedTerms || !payload.agreedPrivacy) {
-      setMessage('error', '필수 약관 동의가 필요합니다.');
+      setMessage('error', '필수 동의가 필요해요.');
       return;
     }
 
@@ -923,10 +923,10 @@ const onboardingEnhancerBlock = `
 
       const result = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(result.message || '추가 정보를 저장하지 못했습니다.');
+        throw new Error(result.message || '저장하지 못했어요.');
       }
 
-      setMessage('success', '추가 정보가 저장되었습니다. 잠시 후 이동합니다.');
+      setMessage('success', '저장했어요.');
       const next = safeNext(new URLSearchParams(window.location.search).get('next'));
       window.setTimeout(() => {
         window.location.replace(next || result.redirectTo || '/');
@@ -935,7 +935,7 @@ const onboardingEnhancerBlock = `
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? error.message
-          : '추가 정보를 저장하지 못했습니다.';
+          : '저장하지 못했어요.';
       setMessage('error', errorMessage);
     } finally {
       if (submitButton) {
@@ -977,10 +977,19 @@ const accountEnhancerBlock = `
 
   const renderUser = (user) => {
     if (!user) return;
-    if (fields.name) fields.name.textContent = user.displayName || '은금슬쩍 회원';
-    if (fields.status) fields.status.textContent = user.status || '-';
-    if (fields.role) fields.role.textContent = user.role || '-';
-    if (fields.onboarding) fields.onboarding.textContent = user.onboardingCompleted ? '완료' : '필요';
+    const statusLabel = {
+      ACTIVE: '이용 중',
+      DELETED: '탈퇴',
+      PENDING_PROFILE: '작성 전'
+    }[user.status] || '-';
+    const roleLabel = {
+      ADMIN: '관리자',
+      USER: '메이커'
+    }[user.role] || '-';
+    if (fields.name) fields.name.textContent = user.displayName || '메이커';
+    if (fields.status) fields.status.textContent = statusLabel;
+    if (fields.role) fields.role.textContent = roleLabel;
+    if (fields.onboarding) fields.onboarding.textContent = user.onboardingCompleted ? '완료' : '미완료';
   };
 
   window.addEventListener('auth:resolved', (event) => {
@@ -1004,14 +1013,14 @@ const accountEnhancerBlock = `
         });
         const result = await response.json().catch(() => ({}));
         if (!response.ok) {
-          throw new Error(result.message || '로그아웃하지 못했습니다.');
+          throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
         }
         window.location.replace('/');
       } catch (error) {
         const errorMessage =
           error && typeof error === 'object' && 'message' in error
             ? error.message
-            : '로그아웃하지 못했습니다.';
+            : '잠시 후 다시 시도해 주세요.';
         setMessage('error', errorMessage);
       } finally {
         logoutButton.disabled = false;
@@ -1021,7 +1030,7 @@ const accountEnhancerBlock = `
 
   if (deleteButton) {
     deleteButton.addEventListener('click', async () => {
-      const confirmed = window.confirm('정말 탈퇴하시겠어요? 탈퇴 후에는 같은 계정으로 바로 복구되지 않습니다.');
+      const confirmed = window.confirm('계정을 정리할까요?');
       if (!confirmed) return;
 
       try {
@@ -1036,14 +1045,14 @@ const accountEnhancerBlock = `
         });
         const result = await response.json().catch(() => ({}));
         if (!response.ok) {
-          throw new Error(result.message || '탈퇴 처리하지 못했습니다.');
+          throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
         }
         window.location.replace('/login?message=account_deleted');
       } catch (error) {
         const errorMessage =
           error && typeof error === 'object' && 'message' in error
             ? error.message
-            : '탈퇴 처리하지 못했습니다.';
+            : '잠시 후 다시 시도해 주세요.';
         setMessage('error', errorMessage);
       } finally {
         deleteButton.disabled = false;
@@ -1127,7 +1136,6 @@ function sharedFooter() {
 <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-20 py-16 w-full mt-20 gap-8">
 <div class="flex flex-col items-center md:items-start gap-4">
 <div class="font-serif text-lg text-[#1a1c1b] dark:text-[#faf9f7]">은금슬쩍</div>
-<p class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">작업실을 나누고 이야기를 잇는 메이커 커뮤니티</p>
 </div>
 <div class="flex gap-10">
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" href="/community">커뮤니티</a>
@@ -1135,7 +1143,7 @@ function sharedFooter() {
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" data-auth-guest="" href="/login">로그인</a>
 <a class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663] hover:text-[#1a1c1b] dark:hover:text-white underline decoration-[#d4af37] underline-offset-4 transition-all duration-500" data-auth-member="" href="/account">마이페이지</a>
 </div>
-<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2026 은금슬쩍. For makers.</div>
+<div class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#7f7663]">© 2026 은금슬쩍.</div>
 </div>
 </footer>`;
 }

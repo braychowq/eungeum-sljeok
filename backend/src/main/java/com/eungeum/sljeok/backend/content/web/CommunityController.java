@@ -102,7 +102,7 @@ public class CommunityController {
             requestBody.body().trim());
     return ApiEnvelope.ok(
         new CommunityPostCreatedPayload(post.getId(), post.getSlug(), "/community/post/" + post.getSlug()),
-        "게시물이 등록되었습니다.");
+        "글을 남겼어요.");
   }
 
   @PutMapping("/{slug}")
@@ -122,7 +122,7 @@ public class CommunityController {
             requestBody.body().trim());
     return ApiEnvelope.ok(
         new CommunityPostCreatedPayload(post.getId(), post.getSlug(), "/community/post/" + post.getSlug()),
-        "게시물이 수정되었습니다.");
+        "수정했어요.");
   }
 
   @DeleteMapping("/{slug}")
@@ -132,7 +132,7 @@ public class CommunityController {
     UserEntity currentUser = requestUserService.requireActiveUser(request);
     rateLimitService.check("community:delete:" + currentUser.getId(), 30, Duration.ofMinutes(10));
     communityService.delete(currentUser, slug);
-    return ApiEnvelope.ok(new CommunityPostDeletedPayload(slug), "게시물이 삭제되었습니다.");
+    return ApiEnvelope.ok(new CommunityPostDeletedPayload(slug), "글을 지웠어요.");
   }
 
   @PostMapping("/{slug}/comments")
@@ -150,14 +150,14 @@ public class CommunityController {
             comment.getAuthorDisplayName(),
             DATE_FORMATTER.format(
                 comment.getCreatedAt() == null ? Instant.now() : comment.getCreatedAt())),
-        "댓글이 등록되었습니다.");
+        "댓글을 남겼어요.");
   }
 
   private CommunityCategory parseCategory(String value) {
     try {
       return CommunityCategory.from(value);
     } catch (IllegalArgumentException exception) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리를 다시 선택해주세요.");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "분류를 다시 골라주세요.");
     }
   }
 
@@ -170,7 +170,7 @@ public class CommunityController {
         post.getTitle(),
         post.getExcerpt(),
         post.getAuthorDisplayName() == null || post.getAuthorDisplayName().isBlank()
-            ? "은금슬쩍 회원"
+            ? "메이커"
             : post.getAuthorDisplayName(),
         DATE_FORMATTER.format(post.getCreatedAt()),
         post.getViewCount(),
@@ -189,7 +189,7 @@ public class CommunityController {
         post.getBody(),
         post.getAuthorUser() == null ? null : post.getAuthorUser().getId(),
         post.getAuthorDisplayName() == null || post.getAuthorDisplayName().isBlank()
-            ? "은금슬쩍 회원"
+            ? "메이커"
             : post.getAuthorDisplayName(),
         DATE_FORMATTER.format(post.getCreatedAt()),
         post.getViewCount(),
@@ -199,7 +199,7 @@ public class CommunityController {
                 comment ->
                     new CommentItem(
                         comment.getAuthorDisplayName() == null || comment.getAuthorDisplayName().isBlank()
-                            ? "은금슬쩍 회원"
+                            ? "메이커"
                             : comment.getAuthorDisplayName(),
                         comment.getBody(),
                         DATE_FORMATTER.format(comment.getCreatedAt())))
@@ -251,16 +251,16 @@ public class CommunityController {
   public record CommentCreatedPayload(String author, String date) {}
 
   public record CreateCommunityPostRequest(
-      @NotBlank(message = "카테고리를 선택해주세요.") String category,
-      @NotBlank(message = "제목을 입력해주세요.")
-      @Size(min = 2, max = 160, message = "제목은 2자 이상 160자 이하로 입력해주세요.")
+      @NotBlank(message = "분류를 골라주세요.") String category,
+      @NotBlank(message = "제목을 적어주세요.")
+      @Size(min = 2, max = 160, message = "제목을 조금 더 적어주세요.")
       String title,
-      @NotBlank(message = "내용을 입력해주세요.")
-      @Size(min = 2, max = 10000, message = "내용은 2자 이상 10000자 이하로 입력해주세요.")
+      @NotBlank(message = "내용을 적어주세요.")
+      @Size(min = 2, max = 10000, message = "내용을 조금 더 적어주세요.")
       String body) {}
 
   public record CreateCommentRequest(
-      @NotBlank(message = "댓글 내용을 입력해주세요.")
-      @Size(min = 1, max = 2000, message = "댓글은 2000자 이하로 입력해주세요.")
+      @NotBlank(message = "댓글을 적어주세요.")
+      @Size(min = 1, max = 2000, message = "댓글이 조금 길어요.")
       String body) {}
 }

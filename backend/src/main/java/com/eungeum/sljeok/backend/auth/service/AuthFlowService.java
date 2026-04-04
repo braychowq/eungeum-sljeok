@@ -98,7 +98,7 @@ public class AuthFlowService {
         Duration.ofMinutes(1));
 
     if (error != null && !error.isBlank()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인을 완료하지 못했습니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "다시 시도해 주세요.");
     }
 
     OAuthLoginStateEntity loginState =
@@ -119,13 +119,13 @@ public class AuthFlowService {
 
     ProviderUserProfile profile = oAuthProviderClient.fetchProfile(provider, code, state);
     if (profile.providerUserId() == null || profile.providerUserId().isBlank()) {
-      throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "로그인을 완료하지 못했습니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "다시 시도해 주세요.");
     }
 
     UserEntity user = upsertUser(provider, profile);
     if (user.getStatus() == UserStatus.DELETED || user.getStatus() == UserStatus.SUSPENDED) {
       log.warn("Blocked login for status={} provider={}", user.getStatus(), provider.value());
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "로그인을 완료하지 못했습니다.");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다시 시도해 주세요.");
     }
 
     user.setLastLoginAt(Instant.now());
@@ -252,7 +252,7 @@ public class AuthFlowService {
       boolean agreedPrivacy) {
     public void validate() {
       if (!agreedTerms || !agreedPrivacy) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "필수 약관 동의가 필요합니다.");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "필수 동의가 필요해요.");
       }
     }
   }

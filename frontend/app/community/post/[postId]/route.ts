@@ -45,10 +45,10 @@ function renderOwnerActions(slug: string, canManage: boolean) {
   return `
     <div class="mt-5 flex flex-wrap items-center gap-3" data-owner-controls>
       <a class="inline-flex items-center justify-center rounded-full border border-outline-variant/30 px-4 py-2 text-[10px] font-label uppercase tracking-[0.18em] text-on-surface hover:border-primary hover:text-primary transition-colors" href="/community/post/${slug}/edit" data-post-edit>
-        게시글 수정
+        수정하기
       </a>
       <button class="inline-flex items-center justify-center rounded-full border border-[#e5c9c2] bg-[#fff4f1] px-4 py-2 text-[10px] font-label uppercase tracking-[0.18em] text-[#8a3827] hover:bg-[#fde9e4] transition-colors" data-post-delete data-post-id="${slug}" type="button">
-        게시글 삭제
+        삭제
       </button>
     </div>
     <p class="hidden mt-3 rounded-xl border px-4 py-3 text-sm" data-post-action-message></p>
@@ -60,10 +60,10 @@ function notFoundHtml() {
 <html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>게시글을 찾을 수 없어요</title><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="min-h-screen bg-[#faf9f7] text-[#1a1c1b] flex items-center justify-center px-6">
   <main class="max-w-xl text-center rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(26,28,27,0.05)] px-8 py-12">
-    <p class="text-[10px] uppercase tracking-[0.2em] text-[#7f7663] mb-4">Community</p>
-    <h1 class="text-3xl md:text-4xl font-serif mb-4">게시글을 찾을 수 없어요</h1>
-    <p class="text-sm leading-7 text-[#4d4635]">삭제되었거나 잘못된 주소예요. 커뮤니티 목록으로 돌아가서 다른 글을 확인해보세요.</p>
-    <a href="/community" class="inline-flex items-center justify-center mt-8 rounded-full bg-[#735c00] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white">커뮤니티로 이동</a>
+    <p class="text-[10px] uppercase tracking-[0.2em] text-[#7f7663] mb-4">커뮤니티</p>
+    <h1 class="text-3xl md:text-4xl font-serif mb-4">글을 찾을 수 없어요</h1>
+    <p class="text-sm leading-7 text-[#4d4635]">지금은 보이지 않는 글이에요.</p>
+    <a href="/community" class="inline-flex items-center justify-center mt-8 rounded-full bg-[#735c00] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white">전체 글 보기</a>
   </main>
 </body></html>`;
 }
@@ -115,8 +115,8 @@ export async function GET(request: Request) {
           '{{COMMENT_ITEMS}}',
           post.commentList.length
             ? post.commentList
-                .map(
-                  (comment) => `
+            .map(
+              (comment) => `
                   <div class="py-5 first:pt-0 last:pb-0">
                     <div class="flex items-center justify-between gap-4 mb-2">
                       <strong class="font-label text-[11px] uppercase tracking-[0.18em] text-on-surface">${escapeHtml(comment.author)}</strong>
@@ -126,7 +126,7 @@ export async function GET(request: Request) {
                   </div>`
                 )
                 .join('')
-            : `<div class="py-5 text-sm leading-7 text-on-surface-variant">아직 댓글이 없어요. 첫 댓글을 남겨보세요.</div>`
+            : `<div class="py-5 text-sm leading-7 text-on-surface-variant">아직 댓글이 없어요.</div>`
         )
         .replace('{{RELATED_POSTS}}', renderRelatedPosts(post.relatedPosts))
     );

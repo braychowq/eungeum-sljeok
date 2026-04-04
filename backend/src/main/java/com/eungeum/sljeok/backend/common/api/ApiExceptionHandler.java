@@ -27,28 +27,28 @@ public class ApiExceptionHandler {
     }
 
     return ResponseEntity.badRequest()
-        .body(ApiErrorEnvelope.of("validation_failed", "입력값을 다시 확인해주세요.", fieldErrors));
+        .body(ApiErrorEnvelope.of("validation_failed", "입력을 다시 확인해 주세요.", fieldErrors));
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ApiErrorEnvelope> handleConstraintViolation(
       ConstraintViolationException exception) {
     return ResponseEntity.badRequest()
-        .body(ApiErrorEnvelope.of("validation_failed", "입력값을 다시 확인해주세요."));
+        .body(ApiErrorEnvelope.of("validation_failed", "입력을 다시 확인해 주세요."));
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ApiErrorEnvelope> handleNotReadable(
       HttpMessageNotReadableException exception) {
     return ResponseEntity.badRequest()
-        .body(ApiErrorEnvelope.of("invalid_request", "잘못된 요청 형식입니다."));
+        .body(ApiErrorEnvelope.of("invalid_request", "요청을 다시 확인해 주세요."));
   }
 
   @ExceptionHandler(ResponseStatusException.class)
   public ResponseEntity<ApiErrorEnvelope> handleStatus(ResponseStatusException exception) {
     String reason =
         exception.getReason() == null || exception.getReason().isBlank()
-            ? "요청을 처리할 수 없습니다."
+            ? "지금은 처리할 수 없어요."
             : exception.getReason();
 
     String code = exception.getStatusCode().value() >= 500 ? "server_error" : "request_failed";
@@ -64,6 +64,6 @@ public class ApiExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(
             ApiErrorEnvelope.of(
-                "server_error", "요청을 처리하지 못했습니다. 잠시 후 다시 시도해주세요."));
+                "server_error", "잠시 후 다시 시도해 주세요."));
   }
 }

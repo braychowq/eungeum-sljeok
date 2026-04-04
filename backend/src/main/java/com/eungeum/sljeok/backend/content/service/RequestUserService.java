@@ -24,18 +24,18 @@ public class RequestUserService {
     AuthenticatedUser principal =
         authSessionService
             .resolve(request)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요해요."));
 
     if (principal.status() == UserStatus.DELETED || principal.status() == UserStatus.SUSPENDED) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "사용할 수 없는 계정입니다.");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "지금은 사용할 수 없는 계정이에요.");
     }
 
     if (!principal.onboardingCompleted() || principal.status() != UserStatus.ACTIVE) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "추가 정보 입력을 완료해주세요.");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "먼저 정보를 마저 적어주세요.");
     }
 
     return userRepository
         .findById(principal.userId())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요해요."));
   }
 }

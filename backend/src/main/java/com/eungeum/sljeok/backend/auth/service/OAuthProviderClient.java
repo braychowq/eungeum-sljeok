@@ -64,7 +64,7 @@ public class OAuthProviderClient {
         restClient.post().uri(config.getTokenUri()).body(form).retrieve().body(JsonNode.class);
     String accessToken = response.path("access_token").asText();
     if (accessToken == null || accessToken.isBlank()) {
-      throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "공급자 토큰 교환에 실패했습니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "다시 시도해 주세요.");
     }
     return accessToken;
   }

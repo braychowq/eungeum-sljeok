@@ -108,7 +108,7 @@ function renderHomeStudioItems(studios: StudioSummary[]) {
 function renderErrorFallback() {
   return `
     <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/20 text-sm text-on-surface-variant">
-      데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+      지금은 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
     </div>`;
 }
 
