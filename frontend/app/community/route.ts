@@ -53,6 +53,10 @@ function categoryPreview(category: string) {
   `;
 }
 
+function likeCount(views: number) {
+  return Math.max(3, Math.round(views * 0.18));
+}
+
 function filterPosts(query: string, category: CategoryFilter) {
   const normalizedQuery = query.trim().toLowerCase();
   const tokens = normalizedQuery ? normalizedQuery.split(/\s+/).filter(Boolean) : [];
@@ -87,17 +91,15 @@ function renderPostRows(posts: typeof communityPosts) {
               ${categoryBadge(post.category)}
               <h2 class="font-medium text-on-surface text-lg"><span class="group-hover:text-primary transition-colors">${post.title}</span></h2>
               <p class="text-sm text-on-surface-variant font-light mt-1">${post.excerpt}</p>
-              <div class="md:hidden flex flex-wrap gap-3 mt-3 text-[10px] font-label uppercase tracking-widest text-outline">
+              <div class="flex flex-wrap gap-3 mt-3 text-[10px] font-label uppercase tracking-widest text-outline">
                 <span>${post.author}</span>
                 <span>${post.date}</span>
-                <span>조회 ${post.views}</span>
-                <span>댓글 ${post.comments}</span>
               </div>
             </div>
-            <div class="hidden md:flex gap-4 items-center">
+            <div class="flex gap-4 items-center">
               <div class="flex flex-col items-center">
-                <span class="material-symbols-outlined text-outline">visibility</span>
-                <span class="text-[10px] mt-1 font-label">${post.views}</span>
+                <span class="material-symbols-outlined text-outline">favorite</span>
+                <span class="text-[10px] mt-1 font-label">${likeCount(post.views)}</span>
               </div>
               <div class="flex flex-col items-center">
                 <span class="material-symbols-outlined text-outline">chat_bubble</span>
