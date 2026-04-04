@@ -5,7 +5,7 @@ import { communityPosts } from '../../lib/community-posts';
 import { finalizeStitchHtml } from '../../lib/stitch-html';
 
 export const runtime = 'nodejs';
-const PAGE_SIZES = [3, 6, 12] as const;
+const PAGE_SIZES = [10, 20, 30] as const;
 type CategoryFilter = 'all' | 'free' | 'qa' | 'market';
 
 function escapeHtml(value: string) {
@@ -141,10 +141,28 @@ function renderCategoryFilters(query: string, pageSize: number, activeCategory: 
     .join('');
 }
 
-function renderPageSizeOptions(currentPageSize: number) {
-  return PAGE_SIZES.map(
-    (size) => `<option value="${size}"${size === currentPageSize ? ' selected' : ''}>${size}</option>`
-  ).join('');
+function pageSizeHref(query: string, category: CategoryFilter, pageSize: number) {
+  const params = new URLSearchParams();
+  if (query) params.set('q', query);
+  if (category !== 'all') params.set('category', category);
+  params.set('page', '1');
+  params.set('pageSize', String(pageSize));
+  return `/community?${params.toString()}`;
+}
+
+function renderPageSizeButtons(
+  query: string,
+  category: CategoryFilter,
+  currentPageSize: number
+) {
+  return PAGE_SIZES.map((size) => {
+    const activeClass = size === currentPageSize ? ' is-active' : '';
+    return `<a class="community-page-size-button${activeClass}" href="${pageSizeHref(
+      query,
+      category,
+      size
+    )}">${size}</a>`;
+  }).join('');
 }
 
 function renderEmptyState(hasPosts: boolean) {
@@ -209,7 +227,7 @@ export function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const query = params.get('q') ?? '';
   const categoryParam = params.get('category');
-  const pageSizeParam = Number(params.get('pageSize') ?? '3');
+  const pageSizeParam = Number(params.get('pageSize') ?? '10');
   const pageParam = Number(params.get('page') ?? '1');
   const category: CategoryFilter =
     categoryParam === 'free' || categoryParam === 'qa' || categoryParam === 'market'
@@ -217,7 +235,7 @@ export function GET(request: Request) {
       : 'all';
   const pageSize = PAGE_SIZES.includes(pageSizeParam as (typeof PAGE_SIZES)[number])
     ? pageSizeParam
-    : 3;
+    : 10;
   const filteredPosts = filterPosts(query, category);
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize));
   const currentPage =
@@ -234,7 +252,7 @@ export function GET(request: Request) {
       .replace('{{CURRENT_CATEGORY}}', category)
       .replace('{{CURRENT_PAGE_SIZE}}', String(pageSize))
       .replace('{{CATEGORY_FILTERS}}', renderCategoryFilters(query, pageSize, category))
-      .replace('{{PAGE_SIZE_OPTIONS}}', renderPageSizeOptions(pageSize))
+      .replace('{{PAGE_SIZE_BUTTONS}}', renderPageSizeButtons(query, category, pageSize))
       .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(pagedPosts))
       .replace('{{EMPTY_STATE}}', renderEmptyState(pagedPosts.length > 0))
       .replace(
