@@ -456,7 +456,7 @@ const communityPostComposerBlock = `
 
     const categoryInput = form.querySelector('input[name="category"]:checked');
     const payload = {
-      author: authorInput && authorInput.value.trim() ? authorInput.value.trim() : '익명 메이커',
+      author: authorInput && authorInput.value.trim() ? authorInput.value.trim() : '은금슬쩍 회원',
       body: bodyInput ? bodyInput.value.trim() : '',
       category: categoryInput ? categoryInput.value : '',
       imageNames: selectedFiles.map((file) => file.name),

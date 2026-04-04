@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   const title = typeof payload.title === 'string' ? payload.title.trim() : '';
   const body = typeof payload.body === 'string' ? payload.body.trim() : '';
   const author =
-    typeof payload.author === 'string' && payload.author.trim() ? payload.author.trim() : '익명 메이커';
+    typeof payload.author === 'string' && payload.author.trim() ? payload.author.trim() : '은금슬쩍 회원';
   const category = normalizeCategory(payload.category);
   const imageNames = Array.isArray(payload.imageNames)
     ? payload.imageNames.filter(
