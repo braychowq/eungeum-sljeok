@@ -53,25 +53,28 @@
     </style>
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container" data-login-page="true">
-<main class="min-h-screen px-6 md:px-20 pt-28 md:pt-36 pb-20">
+<main class="min-h-screen px-6 md:px-20 pt-24 md:pt-32 pb-20">
 <section class="max-w-[460px] mx-auto">
-<div class="rounded-[2rem] bg-surface-container-lowest border border-outline-variant/20 shadow-[0_30px_70px_rgba(26,28,27,0.06)] p-8 md:p-12">
-<div class="max-w-md mx-auto space-y-4">
+<div class="rounded-[1.75rem] bg-surface-container-lowest border border-outline-variant/15 shadow-[0_18px_40px_rgba(26,28,27,0.05)] p-7 md:p-10">
+<div class="max-w-md mx-auto space-y-5">
 {{LOGIN_FEEDBACK}}
+<div class="space-y-1 text-center">
+<p class="text-sm text-on-surface-variant">네이버나 카카오로 이어서 들어오세요.</p>
+</div>
 <div class="space-y-4">
-<a class="flex items-center justify-between rounded-[1.5rem] border border-[#03c75a]/20 bg-[#03c75a] px-6 py-5 text-white transition-transform hover:scale-[0.995]" href="{{NAVER_START_URL}}">
+<a class="flex items-center justify-between rounded-[1.35rem] border border-[#03c75a]/20 bg-[#03c75a] px-5 py-4 text-white transition-transform hover:scale-[0.995]" href="{{NAVER_START_URL}}">
 <div>
 <div class="text-[10px] uppercase tracking-[0.18em] text-white/75">NAVER</div>
-<div class="mt-2 text-lg font-semibold">네이버로 계속하기</div>
+<div class="mt-1.5 text-base font-semibold">네이버로 계속하기</div>
 </div>
-<div class="h-11 w-11 rounded-full bg-white/15 flex items-center justify-center text-lg font-semibold">N</div>
+<div class="h-10 w-10 rounded-full bg-white/15 flex items-center justify-center text-base font-semibold">N</div>
 </a>
-<a class="flex items-center justify-between rounded-[1.5rem] border border-[#fee500]/40 bg-[#fee500] px-6 py-5 text-[#191600] transition-transform hover:scale-[0.995]" href="{{KAKAO_START_URL}}">
+<a class="flex items-center justify-between rounded-[1.35rem] border border-[#fee500]/40 bg-[#fee500] px-5 py-4 text-[#191600] transition-transform hover:scale-[0.995]" href="{{KAKAO_START_URL}}">
 <div>
 <div class="text-[10px] uppercase tracking-[0.18em] text-[#191600]/70">KAKAO</div>
-<div class="mt-2 text-lg font-semibold">카카오로 계속하기</div>
+<div class="mt-1.5 text-base font-semibold">카카오로 계속하기</div>
 </div>
-<div class="h-11 w-11 rounded-full bg-black/5 flex items-center justify-center">
+<div class="h-10 w-10 rounded-full bg-black/5 flex items-center justify-center">
 <span class="material-symbols-outlined text-[22px]">chat</span>
 </div>
 </a>
