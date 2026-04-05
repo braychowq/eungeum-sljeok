@@ -41,17 +41,24 @@ public class TestAuthController {
   @PostMapping("/login")
   public ResponseEntity<ApiEnvelope<Map<String, String>>> login(
       @Valid @RequestBody TestLoginRequest requestBody, HttpServletRequest request) {
-    UserEntity user = new UserEntity();
-    user.setRole(UserRole.USER);
-    user.setStatus(UserStatus.ACTIVE);
-    user.setDisplayName(
-        requestBody.displayName() == null || requestBody.displayName().isBlank()
-            ? "테스트 회원"
-            : requestBody.displayName().trim());
-    user.setActivityField("주얼리 디자이너");
-    user.setRegion("서울");
-    user.setOnboardingCompleted(true);
-    userRepository.save(user);
+    UserEntity user =
+        requestBody.userId() == null || requestBody.userId().isBlank()
+            ? null
+            : userRepository.findById(requestBody.userId().trim()).orElse(null);
+
+    if (user == null) {
+      user = new UserEntity();
+      user.setRole(UserRole.USER);
+      user.setStatus(UserStatus.ACTIVE);
+      user.setDisplayName(
+          requestBody.displayName() == null || requestBody.displayName().isBlank()
+              ? "테스트 회원"
+              : requestBody.displayName().trim());
+      user.setActivityField("주얼리 디자이너");
+      user.setRegion("서울");
+      user.setOnboardingCompleted(true);
+      userRepository.save(user);
+    }
 
     String rawToken = authSessionService.create(user, request);
     HttpHeaders headers = new HttpHeaders();
@@ -61,5 +68,5 @@ public class TestAuthController {
         ApiEnvelope.ok(Map.of("displayName", user.getDisplayName())), headers, HttpStatus.OK);
   }
 
-  public record TestLoginRequest(@Size(max = 80) String displayName) {}
+  public record TestLoginRequest(@Size(max = 80) String displayName, @Size(max = 36) String userId) {}
 }

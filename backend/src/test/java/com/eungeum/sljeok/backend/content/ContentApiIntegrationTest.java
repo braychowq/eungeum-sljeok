@@ -1,11 +1,14 @@
 package com.eungeum.sljeok.backend.content;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.servlet.http.Cookie;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,6 +28,9 @@ import org.springframework.test.web.servlet.MvcResult;
       "auth.allowed-origins=http://127.0.0.1:3025,http://localhost:3025"
     })
 class ContentApiIntegrationTest {
+  private static final Pattern CONVERSATION_ID_PATTERN =
+      Pattern.compile("\"detailPath\"\\s*:\\s*\"/messages/([^\"]+)\"");
+
   @Autowired private MockMvc mockMvc;
 
   @Test
@@ -92,6 +98,109 @@ class ContentApiIntegrationTest {
         .andExpect(jsonPath("$.fieldErrors.body").exists());
   }
 
+  @Test
+  void conversationCreateRequiresAuthentication() throws Exception {
+    mockMvc
+        .perform(
+            post("/api/conversations")
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                .content(
+                    """
+                    {
+                      "workshopSlug": "silent-earth"
+                    }
+                    """))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.status").value("error"));
+  }
+
+  @Test
+  void authenticatedUserCanCreateConversationAndSendMessage() throws Exception {
+    Cookie sessionCookie = loginCookie("문의회원");
+
+    MvcResult conversationResult =
+        mockMvc
+            .perform(
+                post("/api/conversations")
+                    .cookie(sessionCookie)
+                    .contentType(APPLICATION_JSON)
+                    .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                    .content(
+                        """
+                        {
+                          "workshopSlug": "silent-earth"
+                        }
+                        """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.detailPath").exists())
+            .andReturn();
+
+    String conversationId = extractConversationId(conversationResult.getResponse().getContentAsString());
+
+    mockMvc
+        .perform(
+            post("/api/messages")
+                .cookie(sessionCookie)
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                .content(
+                    """
+                    {
+                      "conversationId": "%s",
+                      "content": "안녕하세요, 작업 동선이 궁금해요."
+                    }
+                    """
+                        .formatted(conversationId)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data.content").value("안녕하세요, 작업 동선이 궁금해요."));
+
+    mockMvc
+        .perform(get("/api/conversations/" + conversationId + "/messages").cookie(sessionCookie))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data.messages[0].content").value("안녕하세요, 작업 동선이 궁금해요."));
+  }
+
+  @Test
+  void messageCreateReturnsValidationErrors() throws Exception {
+    Cookie sessionCookie = loginCookie("메시지검증회원");
+
+    MvcResult conversationResult =
+        mockMvc
+            .perform(
+                post("/api/conversations")
+                    .cookie(sessionCookie)
+                    .contentType(APPLICATION_JSON)
+                    .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                    .content(
+                        """
+                        {
+                          "workshopSlug": "maison-de-lartiste"
+                        }
+                        """))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String conversationId = extractConversationId(conversationResult.getResponse().getContentAsString());
+
+    mockMvc
+        .perform(
+            post("/api/messages")
+                .cookie(sessionCookie)
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                .content(
+                    """
+                    {
+                      "conversationId": "%s",
+                      "content": ""
+                    }
+                    """
+                        .formatted(conversationId)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.fieldErrors.content").exists());
+  }
+
   private Cookie loginCookie(String displayName) throws Exception {
     MvcResult loginResult =
         mockMvc
@@ -113,5 +222,13 @@ class ContentApiIntegrationTest {
       throw new IllegalStateException("테스트 로그인 쿠키가 발급되지 않았습니다.");
     }
     return cookies[0];
+  }
+
+  private String extractConversationId(String responseBody) {
+    Matcher matcher = CONVERSATION_ID_PATTERN.matcher(responseBody);
+    if (!matcher.find()) {
+      throw new IllegalStateException("대화방 ID를 찾을 수 없습니다.");
+    }
+    return matcher.group(1);
   }
 }

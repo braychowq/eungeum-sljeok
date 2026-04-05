@@ -41,7 +41,6 @@ export type StudioDetail = {
   priceAmount: number;
   priceUnit: string;
   ownerDisplayName: string;
-  contact: string;
   capacity: number;
   imageUrls: string[];
   amenities: string[];
@@ -84,6 +83,31 @@ export type CommunityPostDetail = {
   relatedPosts: CommunityPostSummary[];
 };
 
+export type ConversationSummary = {
+  id: string;
+  workshopName: string;
+  workshopSlug: string;
+  lastMessagePreview: string;
+  timestamp: string;
+  imageUrl: string;
+  detailPath: string;
+};
+
+export type ConversationMessage = {
+  id: string;
+  senderId: string;
+  content: string;
+  timestamp: string;
+};
+
+export type ConversationDetail = {
+  id: string;
+  workshopName: string;
+  workshopSlug: string;
+  imageUrl: string;
+  messages: ConversationMessage[];
+};
+
 const backendBaseUrl = process.env.BACKEND_INTERNAL_URL || 'http://127.0.0.1:8081';
 
 export function escapeHtml(value: string) {
@@ -99,10 +123,11 @@ export function formatPrice(value: number) {
   return new Intl.NumberFormat('ko-KR').format(value);
 }
 
-async function backendJson<T>(path: string): Promise<T> {
+async function backendJson<T>(path: string, cookieHeader?: string): Promise<T> {
   const response = await fetch(`${backendBaseUrl}${path}`, {
     headers: {
-      Accept: 'application/json'
+      Accept: 'application/json',
+      ...(cookieHeader ? { Cookie: cookieHeader } : {})
     },
     cache: 'no-store'
   });
@@ -171,4 +196,15 @@ export async function fetchCommunityPosts(params: {
 
 export async function fetchCommunityPostDetail(slug: string) {
   return backendJson<CommunityPostDetail>(`/api/community/posts/${encodeURIComponent(slug)}`);
+}
+
+export async function fetchConversations(cookieHeader?: string) {
+  return backendJson<{ items: ConversationSummary[] }>('/api/conversations', cookieHeader);
+}
+
+export async function fetchConversationDetail(conversationId: string, cookieHeader?: string) {
+  return backendJson<ConversationDetail>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/messages`,
+    cookieHeader
+  );
 }

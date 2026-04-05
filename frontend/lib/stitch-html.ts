@@ -7,6 +7,8 @@ type TemplateName =
   | 'market-new'
   | 'market-detail'
   | 'market-registration-mobile'
+  | 'messages'
+  | 'messages-room'
   | 'community'
   | 'community-new'
   | 'community-post-detail'
@@ -22,6 +24,8 @@ const templateFiles: Record<TemplateName, string> = {
   'market-new': 'market-new.html',
   'market-detail': 'market-detail.html',
   'market-registration-mobile': 'market-registration-mobile.html',
+  messages: 'messages.html',
+  'messages-room': 'messages-room.html',
   community: 'community.html',
   'community-new': 'community-new.html',
   'community-post-detail': 'community-post-detail.html',
@@ -63,6 +67,8 @@ const pageReplacements: Record<TemplateName, Array<[string, string]>> = {
   'market-new': [],
   'market-detail': [['<main class="pt-[68px] pb-32">', '<main class="pt-24 pb-32">']],
   'market-registration-mobile': [],
+  messages: [],
+  'messages-room': [],
   community: [
     [
       `<button class="mt-6 flex items-center gap-2 text-primary font-label text-xs uppercase tracking-widest border-b border-primary/20 hover:border-primary transition-all pb-1">`,
@@ -841,6 +847,243 @@ const communityPostOwnerActionsBlock = `
 })();
 </script>`;
 
+const messagesInboxEnhancerBlock = `
+<script>
+(() => {
+  const page = document.querySelector('[data-messages-page]');
+  if (!page) return;
+
+  const message = document.querySelector('[data-inbox-message]');
+  const params = new URLSearchParams(window.location.search);
+  const startWorkshop = params.get('start');
+  let starting = false;
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      message.className = 'hidden mb-4 rounded-2xl border px-5 py-4 text-sm';
+      return;
+    }
+
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'mb-4 rounded-2xl border border-[#d7e7d8] bg-[#f1f7f2] px-5 py-4 text-sm text-[#2f5a35]'
+      : 'mb-4 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]';
+  };
+
+  const openConversation = async (workshopSlug) => {
+    if (!workshopSlug || starting) return;
+    starting = true;
+
+    try {
+      setMessage('', '');
+
+      const response = await fetch('/api/conversations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ workshopSlug })
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname + window.location.search);
+          return;
+        }
+        if (response.status === 403) {
+          window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname + window.location.search);
+          return;
+        }
+        throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
+      }
+
+      window.location.replace(result && result.data && result.data.detailPath ? result.data.detailPath : '/messages');
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '잠시 후 다시 시도해 주세요.';
+      setMessage('error', errorMessage);
+      starting = false;
+    }
+  };
+
+  window.addEventListener('auth:resolved', (event) => {
+    const detail = event.detail || {};
+    if (!detail.authenticated || !startWorkshop) return;
+    openConversation(startWorkshop);
+  });
+})();
+</script>`;
+
+const messageRoomEnhancerBlock = `
+<script>
+(() => {
+  const form = document.querySelector('[data-chat-form]');
+  if (!form) return;
+
+  const thread = document.querySelector('[data-chat-thread]');
+  const input = form.querySelector('[data-chat-input]');
+  const submitButton = form.querySelector('[data-chat-submit]');
+  const message = form.querySelector('[data-chat-message]');
+  const conversationId = form.getAttribute('data-conversation-id');
+  const currentUserId = form.getAttribute('data-current-user-id') || '';
+  const submitLabel = submitButton ? submitButton.textContent.trim() : '보내기';
+
+  const formatNow = () =>
+    new Intl.DateTimeFormat('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(new Date());
+
+  const setMessage = (type, text) => {
+    if (!message) return;
+    if (!text) {
+      message.hidden = true;
+      message.textContent = '';
+      message.className = 'hidden mb-3 rounded-2xl border px-4 py-3 text-sm';
+      return;
+    }
+
+    message.hidden = false;
+    message.textContent = text;
+    message.className = type === 'success'
+      ? 'mb-3 rounded-2xl border border-[#d7e7d8] bg-[#f1f7f2] px-4 py-3 text-sm text-[#2f5a35]'
+      : 'mb-3 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-4 py-3 text-sm text-[#8a3827]';
+  };
+
+  const scrollToBottom = () => {
+    if (!thread) return;
+    thread.scrollTop = thread.scrollHeight;
+  };
+
+  const buildBubble = (senderId, content, timestamp) => {
+    const isMine = senderId === currentUserId;
+    const wrapper = document.createElement('div');
+    wrapper.className = isMine ? 'flex justify-end' : 'flex justify-start';
+    wrapper.setAttribute('data-chat-item', '');
+    wrapper.setAttribute('data-sender-id', senderId);
+
+    const container = document.createElement('div');
+    const bubble = document.createElement('div');
+    bubble.className = isMine
+      ? 'max-w-[78%] whitespace-pre-wrap rounded-[1.5rem] rounded-br-md bg-primary px-4 py-3 text-sm leading-6 text-white shadow-[0_12px_30px_rgba(115,92,0,0.16)]'
+      : 'max-w-[78%] whitespace-pre-wrap rounded-[1.5rem] rounded-bl-md bg-white px-4 py-3 text-sm leading-6 text-on-surface shadow-[0_10px_24px_rgba(26,28,27,0.06)]';
+    bubble.textContent = content;
+
+    const meta = document.createElement('div');
+    meta.className = isMine
+      ? 'mt-1 text-right text-[11px] text-white/75'
+      : 'mt-1 text-left text-[11px] text-outline';
+    meta.textContent = timestamp;
+
+    container.appendChild(bubble);
+    container.appendChild(meta);
+    wrapper.appendChild(container);
+    return wrapper;
+  };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (!input || !conversationId) {
+      setMessage('error', '잠시 후 다시 시도해 주세요.');
+      return;
+    }
+
+    const content = input.value.trim();
+    if (!content) {
+      setMessage('error', '메시지를 적어주세요.');
+      return;
+    }
+
+    const optimisticBubble = buildBubble(currentUserId, content, formatNow());
+    thread.querySelectorAll('[data-empty-chat]').forEach((node) => node.remove());
+    thread.appendChild(optimisticBubble);
+    input.value = '';
+    scrollToBottom();
+
+    try {
+      setMessage('', '');
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = '보내는 중...';
+      }
+
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          conversationId,
+          content
+        })
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        if (response.status === 403) {
+          window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        const fieldErrors = result && typeof result === 'object' ? result.fieldErrors : null;
+        const firstFieldError =
+          fieldErrors && typeof fieldErrors === 'object'
+            ? Object.values(fieldErrors).find((value) => typeof value === 'string' && value.trim())
+            : '';
+        throw new Error(firstFieldError || result.message || '잠시 후 다시 시도해 주세요.');
+      }
+
+      const timestampNode = optimisticBubble.querySelector('div:last-child');
+      if (timestampNode && result && result.data && result.data.timestamp) {
+        timestampNode.textContent = result.data.timestamp;
+      }
+
+      scrollToBottom();
+    } catch (error) {
+      optimisticBubble.remove();
+      input.value = content;
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '잠시 후 다시 시도해 주세요.';
+      setMessage('error', errorMessage);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitLabel;
+      }
+    }
+  });
+
+  if (input) {
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+  }
+
+  scrollToBottom();
+})();
+</script>`;
+
 const onboardingEnhancerBlock = `
 <script>
 (() => {
@@ -1121,9 +1364,9 @@ function sharedHeader(active: ActiveSection) {
 <button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
 <span class="material-symbols-outlined" data-icon="search">search</span>
 </button>
-<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
-<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
-</button>
+<a class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out" href="/messages">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+</a>
 </div>
 </div>
 <div class="bg-[#f4f3f1] dark:bg-[#2a2c2b] h-[1px] w-full"></div>
@@ -1289,6 +1532,18 @@ function injectAccountEnhancer(html: string, template: TemplateName) {
   return html;
 }
 
+function injectMessagesEnhancers(html: string, template: TemplateName) {
+  if (template === 'messages') {
+    return html.replace('</body>', `${messagesInboxEnhancerBlock}\n</body>`);
+  }
+
+  if (template === 'messages-room') {
+    return html.replace('</body>', `${messageRoomEnhancerBlock}\n</body>`);
+  }
+
+  return html;
+}
+
 function applyReplacements(html: string, replacements: Array<[string, string]>): string {
   return replacements.reduce((result, [from, to]) => result.split(from).join(to), html);
 }
@@ -1301,7 +1556,8 @@ export function finalizeStitchHtml(template: TemplateName, rawHtml: string) {
   const withCommunityComposer = injectCommunityComposer(withStudioEnhancer, template);
   const withCommunityComments = injectCommunityCommentComposer(withCommunityComposer, template);
   const withOnboarding = injectOnboardingEnhancer(withCommunityComments, template);
-  return injectAccountEnhancer(withOnboarding, template);
+  const withAccount = injectAccountEnhancer(withOnboarding, template);
+  return injectMessagesEnhancers(withAccount, template);
 }
 
 export function renderStitchHtml(template: TemplateName) {

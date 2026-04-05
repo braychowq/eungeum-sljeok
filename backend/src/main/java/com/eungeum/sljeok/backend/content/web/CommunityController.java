@@ -62,7 +62,7 @@ public class CommunityController {
       @RequestParam(name = "q", required = false) String query,
       @RequestParam(name = "category", required = false) String category,
       @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
-      @RequestParam(name = "pageSize", defaultValue = "10") @Min(1) @Max(30) int pageSize) {
+      @RequestParam(name = "pageSize", defaultValue = "10") @Min(1) @Max(10) int pageSize) {
     CommunityCategory resolvedCategory = null;
     if (category != null && !category.isBlank() && !"all".equalsIgnoreCase(category)) {
       resolvedCategory = parseCategory(category);

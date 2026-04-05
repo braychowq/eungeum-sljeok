@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>은금슬쩍 | 대화</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#faf9f7",
+              "surface": "#faf9f7",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f4f3f1",
+              "surface-container": "#efeeec",
+              "surface-container-high": "#e9e8e6",
+              "outline": "#7f7663",
+              "outline-variant": "#d0c5af",
+              "primary": "#735c00",
+              "primary-container": "#d4af37",
+              "on-primary": "#ffffff",
+              "on-surface": "#1a1c1b",
+              "on-surface-variant": "#4d4635",
+              "secondary": "#5d5e5f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen" data-auth-required="true" data-message-room-page="true">
+<main class="pt-32 pb-28 px-6 md:px-10">
+<section class="max-w-3xl mx-auto">
+<div class="mb-6 flex items-center gap-4">
+<a class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-lowest text-on-surface-variant" href="/messages">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<div class="min-w-0">
+<p class="text-[11px] uppercase tracking-[0.18em] text-outline">공방</p>
+<h1 class="font-headline text-2xl md:text-3xl truncate">{{WORKSHOP_NAME}}</h1>
+</div>
+</div>
+<div class="rounded-[2rem] border border-outline-variant/15 bg-surface-container-lowest shadow-[0_20px_50px_rgba(26,28,27,0.05)] overflow-hidden">
+<div class="px-5 md:px-8 py-5 border-b border-outline-variant/10 bg-surface-container-low/60">
+<p class="text-sm text-on-surface-variant">{{WORKSHOP_NAME}}에게 메시지를 보낼 수 있어요.</p>
+</div>
+<div class="px-4 md:px-6 py-6 space-y-3 min-h-[52vh] max-h-[60vh] overflow-y-auto bg-[#f8f7f4]" data-chat-thread="">
+{{MESSAGE_BUBBLES}}
+</div>
+<form class="border-t border-outline-variant/10 bg-surface-container-lowest p-4 md:p-5" data-chat-form="" data-conversation-id="{{CONVERSATION_ID}}" data-current-user-id="{{CURRENT_USER_ID}}">
+<div class="hidden mb-3 rounded-2xl border px-4 py-3 text-sm" data-chat-message=""></div>
+<div class="flex items-end gap-3">
+<textarea class="min-h-[52px] max-h-40 flex-1 resize-none rounded-[1.4rem] border border-outline-variant/20 bg-surface px-4 py-3 text-sm leading-6 text-on-surface placeholder:text-outline focus:border-primary focus:ring-0" data-chat-input="" placeholder="메시지를 적어보세요"></textarea>
+<button class="inline-flex h-[52px] shrink-0 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-white transition-opacity hover:opacity-95 disabled:opacity-60" data-chat-submit="" type="submit">보내기</button>
+</div>
+</form>
+</div>
+</section>
+</main>
+</body></html>

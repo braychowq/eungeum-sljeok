@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>은금슬쩍 | 메시지</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#faf9f7",
+              "surface": "#faf9f7",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f4f3f1",
+              "surface-container": "#efeeec",
+              "surface-container-high": "#e9e8e6",
+              "outline": "#7f7663",
+              "outline-variant": "#d0c5af",
+              "primary": "#735c00",
+              "primary-container": "#d4af37",
+              "on-primary": "#ffffff",
+              "on-surface": "#1a1c1b",
+              "on-surface-variant": "#4d4635",
+              "secondary": "#5d5e5f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen" data-auth-required="true" data-messages-page="true">
+<main class="pt-32 pb-20 px-6 md:px-10">
+<section class="max-w-4xl mx-auto">
+<div class="flex items-end justify-between gap-4 mb-8">
+<div>
+<h1 class="font-headline text-4xl md:text-5xl tracking-tight">메시지</h1>
+</div>
+</div>
+<div class="hidden mb-4 rounded-2xl border px-5 py-4 text-sm" data-inbox-message=""></div>
+<div class="space-y-3">
+{{CONVERSATION_ITEMS}}
+</div>
+{{MESSAGES_EMPTY_STATE}}
+</section>
+</main>
+</body></html>

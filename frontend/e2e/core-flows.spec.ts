@@ -1,8 +1,8 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 
-async function loginAsTestUser(page: Page, displayName = 'E2E회원') {
+async function loginAsTestUser(page: Page, displayName = 'E2E회원', userId?: string) {
   const response = await page.request.post('/api/test-auth/login', {
-    data: { displayName }
+    data: { displayName, userId }
   });
 
   expect(response.ok()).toBeTruthy();
@@ -159,5 +159,42 @@ test.describe('핵심 사용자 시나리오', () => {
 
     await page.reload();
     await expect(page.locator('body')).toContainText(studioName);
+  });
+
+  test('공방 문의는 전화 대신 메시지로 이어지고 대화가 양쪽에 저장된다', async ({ page, browser }) => {
+    await loginAsTestUser(page, '문의회원E2E');
+
+    await page.goto('/market/studio/silent-earth');
+    await expect(page.locator('a[href^="/messages?start=silent-earth"]')).toBeVisible();
+    await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
+
+    await page.locator('a[href^="/messages?start=silent-earth"]').click();
+    await expect(page).toHaveURL(/\/messages\/.+/);
+    await expect(page.getByRole('heading', { name: 'Silent Earth Studio' })).toBeVisible();
+
+    const guestMessage = uniqueLabel('문의메시지');
+    await page.locator('[data-chat-input]').fill(guestMessage);
+    await page.locator('[data-chat-submit]').click();
+    await expect(page.locator('[data-chat-thread]')).toContainText(guestMessage);
+
+    const conversationPath = new URL(page.url()).pathname;
+    await page.goto('/messages');
+    await expect(page.locator(`a[href="${conversationPath}"]`)).toContainText(guestMessage);
+
+    const ownerContext = await browser.newContext({ baseURL: 'http://127.0.0.1:3025' });
+    const ownerPage = await ownerContext.newPage();
+    await loginAsTestUser(ownerPage, '호스트', 'user-seed-curation-host');
+    await ownerPage.goto('/messages');
+    await expect(ownerPage.locator(`a[href="${conversationPath}"]`)).toContainText(guestMessage);
+    await ownerPage.locator(`a[href="${conversationPath}"]`).click();
+    const ownerReply = uniqueLabel('호스트답장');
+    await ownerPage.locator('[data-chat-input]').fill(ownerReply);
+    await ownerPage.locator('[data-chat-submit]').click();
+    await expect(ownerPage.locator('[data-chat-thread]')).toContainText(ownerReply);
+    await ownerContext.close();
+
+    await page.goto(conversationPath);
+    await expect(page.locator('[data-chat-thread]')).toContainText(guestMessage);
+    await expect(page.locator('[data-chat-thread]')).toContainText(ownerReply);
   });
 });

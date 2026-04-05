@@ -6,10 +6,6 @@ import { finalizeStitchHtml } from '../../../../lib/stitch-html';
 
 export const runtime = 'nodejs';
 
-function normalizeTel(value: string) {
-  return value.replaceAll(/[^0-9+]/g, '');
-}
-
 function renderAmenities(items: string[]) {
   return (items.length ? items : ['기본 시설'])
     .map(
@@ -61,8 +57,8 @@ export async function GET(request: Request) {
           )
         )
         .replace('{{STUDIO_PRICE}}', formatPrice(studio.priceAmount))
-        .replace('{{STUDIO_CONTACT_TEL}}', escapeHtml(normalizeTel(studio.contact)))
-        .replace('{{STUDIO_CONTACT_LABEL}}', '연락하기')
+        .replace('{{STUDIO_SLUG}}', escapeHtml(studio.slug))
+        .replace('{{STUDIO_CONTACT_LABEL}}', '문의하기')
     );
 
     return new Response(html, {

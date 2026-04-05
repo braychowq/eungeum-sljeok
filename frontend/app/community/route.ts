@@ -9,7 +9,6 @@ import {
 import { finalizeStitchHtml } from '../../lib/stitch-html';
 
 export const runtime = 'nodejs';
-const PAGE_SIZES = [10, 20, 30] as const;
 type CategoryFilter = 'all' | 'free' | 'qa' | 'market';
 
 function categoryBadge(category: string) {
@@ -57,25 +56,25 @@ function renderPostRows(posts: CommunityPostSummary[]) {
     .map(
       (post) => `
       <article class="community-post" data-post-category="${post.category}">
-        <a class="group bg-surface-container-lowest p-6 rounded-xl flex items-center gap-6 hover:translate-x-2 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30" href="/community/post/${post.slug}">
-          <div class="flex items-center gap-6 w-full">
-            <div class="flex-shrink-0">${categoryPreview(post.category)}</div>
+        <a class="group bg-surface-container-lowest px-4 py-4 md:px-5 md:py-4 rounded-[1.1rem] flex items-center gap-4 hover:translate-x-1 transition-transform duration-300 cursor-pointer border border-transparent hover:border-outline-variant/30" href="/community/post/${post.slug}">
+          <div class="flex items-center gap-4 w-full">
+            <div class="flex-shrink-0">${categoryPreview(post.category).replaceAll('w-16 h-16', 'w-12 h-12').replaceAll('text-4xl', 'text-2xl')}</div>
             <div class="min-w-0 flex-1">
               ${categoryBadge(post.category)}
-              <h2 class="font-medium text-on-surface text-lg"><span class="group-hover:text-primary transition-colors">${escapeHtml(post.title)}</span></h2>
-              <p class="text-sm text-on-surface-variant font-light mt-1">${escapeHtml(post.excerpt)}</p>
-              <div class="flex flex-wrap gap-3 mt-3 text-[10px] font-label uppercase tracking-widest text-outline">
+              <h2 class="font-medium text-on-surface text-base leading-6"><span class="group-hover:text-primary transition-colors">${escapeHtml(post.title)}</span></h2>
+              <p class="mt-1 text-sm text-on-surface-variant font-light line-clamp-2">${escapeHtml(post.excerpt)}</p>
+              <div class="flex flex-wrap gap-3 mt-2 text-[10px] font-label uppercase tracking-widest text-outline">
                 <span>${escapeHtml(post.author)}</span>
                 <span>${escapeHtml(post.date)}</span>
               </div>
             </div>
-            <div class="flex gap-4 items-center">
+            <div class="flex gap-3 items-center self-center">
               <div class="flex flex-col items-center">
-                <span class="material-symbols-outlined text-outline">favorite</span>
+                <span class="material-symbols-outlined text-outline text-[18px]">favorite</span>
                 <span class="text-[10px] mt-1 font-label">${likeCount(post.views)}</span>
               </div>
               <div class="flex flex-col items-center">
-                <span class="material-symbols-outlined text-outline">chat_bubble</span>
+                <span class="material-symbols-outlined text-outline text-[18px]">chat_bubble</span>
                 <span class="text-[10px] mt-1 font-label">${post.comments}</span>
               </div>
             </div>
@@ -86,17 +85,15 @@ function renderPostRows(posts: CommunityPostSummary[]) {
     .join('');
 }
 
-function categoryFilterHref(query: string, pageSize: number, category: CategoryFilter) {
+function categoryFilterHref(query: string, category: CategoryFilter) {
   const params = new URLSearchParams();
   if (query) params.set('q', query);
   if (category !== 'all') params.set('category', category);
-  params.set('page', '1');
-  params.set('pageSize', String(pageSize));
   const qs = params.toString();
   return `/community${qs ? `?${qs}` : ''}`;
 }
 
-function renderCategoryFilters(query: string, pageSize: number, activeCategory: CategoryFilter) {
+function renderCategoryFilters(query: string, activeCategory: CategoryFilter) {
   const items: Array<{ value: CategoryFilter; label: string }> = [
     { value: 'all', label: '전체' },
     { value: 'free', label: '아무말' },
@@ -107,37 +104,9 @@ function renderCategoryFilters(query: string, pageSize: number, activeCategory: 
   return items
     .map((item) => {
       const activeClass = item.value === activeCategory ? ' is-active' : '';
-      return `<a class="community-filter${activeClass}" href="${categoryFilterHref(
-        query,
-        pageSize,
-        item.value
-      )}">${item.label}</a>`;
+      return `<a class="community-filter${activeClass}" href="${categoryFilterHref(query, item.value)}">${item.label}</a>`;
     })
     .join('');
-}
-
-function pageSizeHref(query: string, category: CategoryFilter, pageSize: number) {
-  const params = new URLSearchParams();
-  if (query) params.set('q', query);
-  if (category !== 'all') params.set('category', category);
-  params.set('page', '1');
-  params.set('pageSize', String(pageSize));
-  return `/community?${params.toString()}`;
-}
-
-function renderPageSizeButtons(
-  query: string,
-  category: CategoryFilter,
-  currentPageSize: number
-) {
-  return PAGE_SIZES.map((size) => {
-    const activeClass = size === currentPageSize ? ' is-active' : '';
-    return `<a class="community-page-size-button${activeClass}" href="${pageSizeHref(
-      query,
-      category,
-      size
-    )}">${size}</a>`;
-  }).join('');
 }
 
 function renderEmptyState(hasPosts: boolean) {
@@ -150,88 +119,29 @@ function renderEmptyState(hasPosts: boolean) {
     </div>`;
 }
 
-function renderPaginationBar(
-  query: string,
-  category: CategoryFilter,
-  pageSize: number,
-  currentPage: number,
-  totalPages: number
-) {
-  const buildHref = (page: number) => {
-    const params = new URLSearchParams();
-    if (query) params.set('q', query);
-    if (category !== 'all') params.set('category', category);
-    params.set('page', String(page));
-    params.set('pageSize', String(pageSize));
-    return `/community?${params.toString()}`;
-  };
-
-  const links: string[] = [];
-  const windowStart = Math.floor((currentPage - 1) / 10) * 10 + 1;
-  const windowEnd = Math.min(totalPages, windowStart + 9);
-
-  if (windowStart > 1) {
-    links.push(
-      `<a aria-label="이전 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(
-        Math.max(1, windowStart - 10)
-      )}">‹</a>`
-    );
-  }
-
-  for (let page = windowStart; page <= windowEnd; page += 1) {
-    const active = page === currentPage;
-    links.push(
-      `<a class="inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-label transition-colors ${
-        active
-          ? 'bg-primary text-white'
-          : 'border border-outline-variant/20 text-on-surface-variant hover:border-primary hover:text-primary'
-      }" href="${buildHref(page)}">${page}</a>`
-    );
-  }
-
-  if (windowEnd < totalPages) {
-    links.push(
-      `<a aria-label="다음 페이지 구간" class="inline-flex items-center justify-center min-w-10 h-10 rounded-full border border-outline-variant/20 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors px-3" href="${buildHref(
-        windowEnd + 1
-      )}">›</a>`
-    );
-  }
-
-  return links.join('');
-}
-
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const query = params.get('q') ?? '';
   const categoryParam = params.get('category');
-  const pageSizeParam = Number(params.get('pageSize') ?? '10');
-  const pageParam = Number(params.get('page') ?? '1');
   const category: CategoryFilter =
     categoryParam === 'free' || categoryParam === 'qa' || categoryParam === 'market'
       ? categoryParam
       : 'all';
-  const pageSize = PAGE_SIZES.includes(pageSizeParam as (typeof PAGE_SIZES)[number])
-    ? pageSizeParam
-    : 10;
-  const currentPage = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
   const templatePath = join(process.cwd(), 'stitch', 'community.html');
   const rawTemplate = readFileSync(templatePath, 'utf8');
 
   let items: CommunityPostSummary[] = [];
-  let totalPages = 1;
 
   try {
     const payload = await fetchCommunityPosts({
       q: query,
       category: category === 'all' ? undefined : category,
-      page: currentPage,
-      pageSize
+      page: 1,
+      pageSize: 10
     });
     items = payload.items;
-    totalPages = Math.max(1, payload.totalPages);
   } catch {
     items = [];
-    totalPages = 1;
   }
 
   const html = finalizeStitchHtml(
@@ -239,15 +149,9 @@ export async function GET(request: Request) {
     rawTemplate
       .replace('{{SEARCH_VALUE}}', escapeHtml(query))
       .replace('{{CURRENT_CATEGORY}}', category)
-      .replace('{{CURRENT_PAGE_SIZE}}', String(pageSize))
-      .replace('{{CATEGORY_FILTERS}}', renderCategoryFilters(query, pageSize, category))
-      .replace('{{PAGE_SIZE_BUTTONS}}', renderPageSizeButtons(query, category, pageSize))
+      .replace('{{CATEGORY_FILTERS}}', renderCategoryFilters(query, category))
       .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(items))
       .replace('{{EMPTY_STATE}}', renderEmptyState(items.length > 0))
-      .replace(
-        '{{PAGINATION_BAR}}',
-        renderPaginationBar(query, category, pageSize, Math.min(currentPage, totalPages), totalPages)
-      )
   );
 
   return new Response(html, {
