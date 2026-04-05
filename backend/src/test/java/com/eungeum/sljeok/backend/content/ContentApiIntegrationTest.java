@@ -162,6 +162,62 @@ class ContentApiIntegrationTest {
   }
 
   @Test
+  void conversationUnreadCountChangesAfterOwnerReadsMessages() throws Exception {
+    Cookie guestCookie = loginCookie("읽음체크회원");
+    Cookie ownerCookie = loginCookie("은금슬쩍 큐레이션", "user-seed-curation-host");
+
+    MvcResult conversationResult =
+        mockMvc
+            .perform(
+                post("/api/conversations")
+                    .cookie(guestCookie)
+                    .contentType(APPLICATION_JSON)
+                    .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                    .content(
+                        """
+                        {
+                          "workshopSlug": "silent-earth"
+                        }
+                        """))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String conversationId = extractConversationId(conversationResult.getResponse().getContentAsString());
+
+    mockMvc
+        .perform(
+            post("/api/messages")
+                .cookie(guestCookie)
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.ORIGIN, "http://127.0.0.1:3025")
+                .content(
+                    """
+                    {
+                      "conversationId": "%s",
+                      "content": "호스트가 읽기 전 unread 수를 확인합니다."
+                    }
+                    """
+                        .formatted(conversationId)))
+        .andExpect(status().isOk());
+
+    mockMvc
+        .perform(get("/api/conversations").cookie(ownerCookie))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data.totalUnreadCount").value(1))
+        .andExpect(jsonPath("$.data.items[0].unreadCount").value(1));
+
+    mockMvc
+        .perform(get("/api/conversations/" + conversationId + "/messages").cookie(ownerCookie))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data.messages[0].content").value("호스트가 읽기 전 unread 수를 확인합니다."));
+
+    mockMvc
+        .perform(get("/api/conversations/unread-count").cookie(ownerCookie))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data.count").value(0));
+  }
+
+  @Test
   void messageCreateReturnsValidationErrors() throws Exception {
     Cookie sessionCookie = loginCookie("메시지검증회원");
 
@@ -202,6 +258,10 @@ class ContentApiIntegrationTest {
   }
 
   private Cookie loginCookie(String displayName) throws Exception {
+    return loginCookie(displayName, null);
+  }
+
+  private Cookie loginCookie(String displayName, String userId) throws Exception {
     MvcResult loginResult =
         mockMvc
             .perform(
@@ -210,10 +270,13 @@ class ContentApiIntegrationTest {
                     .content(
                         """
                         {
-                          "displayName": "%s"
+                          "displayName": "%s",
+                          "userId": %s
                         }
                         """
-                            .formatted(displayName)))
+                            .formatted(
+                                displayName,
+                                userId == null ? "null" : "\"" + userId + "\"")))
             .andExpect(status().isOk())
             .andReturn();
 

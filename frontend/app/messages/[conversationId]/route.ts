@@ -22,7 +22,7 @@ function renderBubble(message: ConversationMessage, currentUserId?: string | nul
     : 'mt-1 text-left text-[11px] text-outline';
 
   return `
-    <div class="${wrapperClass}" data-chat-item="" data-sender-id="${escapeHtml(message.senderId)}">
+    <div class="${wrapperClass}" data-chat-item="" data-message-id="${escapeHtml(message.id)}" data-sender-id="${escapeHtml(message.senderId)}">
       <div>
         <div class="${bubbleClass}">${escapeHtml(message.content).replaceAll('\n', '<br/>')}</div>
         <div class="${metaClass}">${escapeHtml(message.timestamp)}</div>
@@ -74,7 +74,7 @@ export async function GET(request: Request) {
     const authState = await fetchAuthState(cookieHeader);
     const currentUserId = authState.authenticated ? authState.user?.id ?? '' : '';
 
-    if (!authState.authenticated) {
+    if (!authState.authenticated || authState.user?.requiresOnboarding) {
       const html = finalizeStitchHtml(
         'messages-room',
         rawTemplate

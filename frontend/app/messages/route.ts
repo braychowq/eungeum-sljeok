@@ -10,8 +10,12 @@ function renderConversationItems(items: ConversationSummary[]) {
   return items
     .map((conversation) => {
       const imageUrl = conversation.imageUrl || '';
+      const unreadBadge =
+        conversation.unreadCount > 0
+          ? `<span class="inline-flex min-w-6 items-center justify-center rounded-full bg-primary px-2 py-1 text-[11px] font-semibold leading-none text-white">${conversation.unreadCount}</span>`
+          : '';
       return `
-      <a class="group flex items-center gap-4 rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-4 py-4 transition-all hover:border-primary/20 hover:shadow-[0_16px_40px_rgba(26,28,27,0.05)]" href="${conversation.detailPath}">
+      <a class="group flex items-center gap-4 rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-4 py-4 transition-all hover:border-primary/20 hover:shadow-[0_16px_40px_rgba(26,28,27,0.05)]" data-conversation-item="" data-workshop-slug="${escapeHtml(conversation.workshopSlug)}" href="${conversation.detailPath}">
         <div class="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-surface-container-low">
           ${
             imageUrl
@@ -21,24 +25,17 @@ function renderConversationItems(items: ConversationSummary[]) {
         </div>
         <div class="min-w-0 flex-1">
           <div class="flex items-center justify-between gap-3">
-            <h2 class="truncate text-base font-medium text-on-surface">${escapeHtml(conversation.workshopName)}</h2>
+            <div class="min-w-0 flex items-center gap-2">
+              <h2 class="truncate text-base font-medium text-on-surface">${escapeHtml(conversation.workshopName)}</h2>
+              ${unreadBadge}
+            </div>
             <span class="shrink-0 text-xs text-outline">${escapeHtml(conversation.timestamp)}</span>
           </div>
-          <p class="mt-1 truncate text-sm text-on-surface-variant">${escapeHtml(conversation.lastMessagePreview)}</p>
+          <p class="mt-1 truncate text-sm ${conversation.unreadCount > 0 ? 'text-on-surface font-medium' : 'text-on-surface-variant'}">${escapeHtml(conversation.lastMessagePreview)}</p>
         </div>
       </a>`;
     })
     .join('');
-}
-
-function renderEmptyState(hasItems: boolean) {
-  if (hasItems) return '';
-
-  return `
-    <div class="rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-10 text-center text-on-surface-variant">
-      <p class="font-headline text-2xl text-on-surface">아직 대화가 없어요</p>
-      <p class="mt-2 text-sm">공방에서 가볍게 먼저 말을 걸어보세요.</p>
-    </div>`;
 }
 
 export async function GET(request: Request) {
@@ -59,7 +56,12 @@ export async function GET(request: Request) {
     'messages',
     rawTemplate
       .replace('{{CONVERSATION_ITEMS}}', renderConversationItems(items))
-      .replace('{{MESSAGES_EMPTY_STATE}}', renderEmptyState(items.length > 0))
+      .replace(
+        '{{MESSAGES_EMPTY_CLASS}}',
+        items.length > 0
+          ? 'hidden rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-10 text-center text-on-surface-variant'
+          : 'rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-10 text-center text-on-surface-variant'
+      )
   );
 
   return new Response(html, {

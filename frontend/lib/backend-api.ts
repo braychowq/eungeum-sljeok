@@ -45,6 +45,7 @@ export type StudioDetail = {
   imageUrls: string[];
   amenities: string[];
   createdAt: string;
+  viewerOwnsWorkshop: boolean;
 };
 
 export type CommunityPostSummary = {
@@ -90,6 +91,7 @@ export type ConversationSummary = {
   lastMessagePreview: string;
   timestamp: string;
   imageUrl: string;
+  unreadCount: number;
   detailPath: string;
 };
 
@@ -173,6 +175,10 @@ export async function fetchStudioDetail(slug: string) {
   return backendJson<StudioDetail>(`/api/studios/${encodeURIComponent(slug)}`);
 }
 
+export async function fetchStudioDetailForViewer(slug: string, cookieHeader?: string) {
+  return backendJson<StudioDetail>(`/api/studios/${encodeURIComponent(slug)}`, cookieHeader);
+}
+
 export async function fetchCommunityPosts(params: {
   q?: string;
   category?: string;
@@ -199,7 +205,10 @@ export async function fetchCommunityPostDetail(slug: string) {
 }
 
 export async function fetchConversations(cookieHeader?: string) {
-  return backendJson<{ items: ConversationSummary[] }>('/api/conversations', cookieHeader);
+  return backendJson<{ items: ConversationSummary[]; totalUnreadCount: number }>(
+    '/api/conversations',
+    cookieHeader
+  );
 }
 
 export async function fetchConversationDetail(conversationId: string, cookieHeader?: string) {
@@ -207,4 +216,8 @@ export async function fetchConversationDetail(conversationId: string, cookieHead
     `/api/conversations/${encodeURIComponent(conversationId)}/messages`,
     cookieHeader
   );
+}
+
+export async function fetchConversationUnreadCount(cookieHeader?: string) {
+  return backendJson<{ count: number }>('/api/conversations/unread-count', cookieHeader);
 }

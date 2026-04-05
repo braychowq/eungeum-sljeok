@@ -184,17 +184,24 @@ test.describe('핵심 사용자 시나리오', () => {
     const ownerContext = await browser.newContext({ baseURL: 'http://127.0.0.1:3025' });
     const ownerPage = await ownerContext.newPage();
     await loginAsTestUser(ownerPage, '호스트', 'user-seed-curation-host');
-    await ownerPage.goto('/messages');
-    await expect(ownerPage.locator(`a[href="${conversationPath}"]`)).toContainText(guestMessage);
-    await ownerPage.locator(`a[href="${conversationPath}"]`).click();
+    await ownerPage.goto('/market/studio/silent-earth');
+    await expect(ownerPage.locator('a[href="/messages?workshop=silent-earth"]')).toHaveText('대화 보기');
+    await ownerPage.locator('a[href="/messages?workshop=silent-earth"]').click();
+    await expect(ownerPage).toHaveURL(new RegExp(`${conversationPath}$`));
     const ownerReply = uniqueLabel('호스트답장');
     await ownerPage.locator('[data-chat-input]').fill(ownerReply);
     await ownerPage.locator('[data-chat-submit]').click();
     await expect(ownerPage.locator('[data-chat-thread]')).toContainText(ownerReply);
     await ownerContext.close();
 
+    await page.goto('/messages');
+    await expect(page.locator(`a[href="${conversationPath}"]`)).toContainText(ownerReply);
+    await expect(page.locator(`a[href="${conversationPath}"] span.bg-primary`)).toContainText('1');
+
     await page.goto(conversationPath);
     await expect(page.locator('[data-chat-thread]')).toContainText(guestMessage);
     await expect(page.locator('[data-chat-thread]')).toContainText(ownerReply);
+    await page.goto('/messages');
+    await expect(page.locator(`a[href="${conversationPath}"] span.bg-primary`)).toHaveCount(0);
   });
 });

@@ -71,16 +71,26 @@ public class ConversationController {
   @GetMapping("/conversations")
   public ApiEnvelope<ConversationListPayload> listConversations(HttpServletRequest request) {
     UserEntity currentUser = requestUserService.requireActiveUser(request);
+    List<ConversationEntity> conversations = conversationService.list(currentUser);
     List<ConversationSummaryItem> items =
-        conversationService.list(currentUser).stream().map(this::toSummary).toList();
-    return ApiEnvelope.ok(new ConversationListPayload(items));
+        conversations.stream().map(conversation -> toSummary(currentUser, conversation)).toList();
+    long totalUnreadCount =
+        conversations.stream().mapToLong(conversation -> conversation.unreadCountFor(currentUser)).sum();
+    return ApiEnvelope.ok(new ConversationListPayload(items, totalUnreadCount));
+  }
+
+  @GetMapping("/conversations/unread-count")
+  public ApiEnvelope<UnreadCountPayload> unreadCount(HttpServletRequest request) {
+    UserEntity currentUser = requestUserService.requireActiveUser(request);
+    return ApiEnvelope.ok(new UnreadCountPayload(conversationService.unreadCount(currentUser)));
   }
 
   @GetMapping("/conversations/{id}/messages")
   public ApiEnvelope<ConversationDetailPayload> getMessages(
       @PathVariable("id") String conversationId, HttpServletRequest request) {
     UserEntity currentUser = requestUserService.requireActiveUser(request);
-    ConversationEntity conversation = conversationService.getAccessible(currentUser, conversationId);
+    ConversationEntity conversation =
+        conversationService.getAccessibleAndMarkRead(currentUser, conversationId);
     return ApiEnvelope.ok(toDetail(conversation));
   }
 
@@ -106,7 +116,7 @@ public class ConversationController {
         "메시지를 남겼어요.");
   }
 
-  private ConversationSummaryItem toSummary(ConversationEntity conversation) {
+  private ConversationSummaryItem toSummary(UserEntity actor, ConversationEntity conversation) {
     List<ConversationMessageEntity> messages = conversation.getMessages();
     ConversationMessageEntity latest = messages.isEmpty() ? null : messages.get(messages.size() - 1);
     String preview =
@@ -131,6 +141,7 @@ public class ConversationController {
         preview,
         LIST_TIME_FORMATTER.format(latestTime),
         imageUrl,
+        (int) conversation.unreadCountFor(actor),
         "/messages/" + conversation.getId());
   }
 
@@ -180,7 +191,7 @@ public class ConversationController {
 
   public record ConversationCreatedPayload(String id, String workshopName, String detailPath) {}
 
-  public record ConversationListPayload(List<ConversationSummaryItem> items) {}
+  public record ConversationListPayload(List<ConversationSummaryItem> items, long totalUnreadCount) {}
 
   public record ConversationSummaryItem(
       String id,
@@ -189,7 +200,10 @@ public class ConversationController {
       String lastMessagePreview,
       String timestamp,
       String imageUrl,
+      int unreadCount,
       String detailPath) {}
+
+  public record UnreadCountPayload(long count) {}
 
   public record ConversationDetailPayload(
       String id,

@@ -30,6 +30,11 @@ public class ConversationService {
     return conversations;
   }
 
+  @Transactional(readOnly = true)
+  public long unreadCount(UserEntity actor) {
+    return list(actor).stream().mapToLong(conversation -> conversation.unreadCountFor(actor)).sum();
+  }
+
   @Transactional
   public ConversationEntity createOrGet(UserEntity actor, String workshopSlug) {
     StudioEntity workshop = studioService.getBySlug(workshopSlug);
@@ -67,14 +72,15 @@ public class ConversationService {
             });
   }
 
-  @Transactional(readOnly = true)
-  public ConversationEntity getAccessible(UserEntity actor, String conversationId) {
+  @Transactional
+  public ConversationEntity getAccessibleAndMarkRead(UserEntity actor, String conversationId) {
     ConversationEntity conversation =
         conversationRepository
             .findById(conversationId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "대화를 찾을 수 없어요."));
 
     ensureAccessible(actor, conversation);
+    conversation.markReadFor(actor);
     initialize(conversation);
     return conversation;
   }
@@ -82,12 +88,13 @@ public class ConversationService {
   @Transactional
   public ConversationMessageEntity sendMessage(
       UserEntity actor, String conversationId, String content) {
-    ConversationEntity conversation = getAccessible(actor, conversationId);
+    ConversationEntity conversation = getAccessibleAndMarkRead(actor, conversationId);
 
     ConversationMessageEntity message = new ConversationMessageEntity();
     message.setSender(actor);
     message.setContent(content);
     conversation.addMessage(message);
+    conversation.markReadFor(actor);
     conversationRepository.saveAndFlush(conversation);
     return message;
   }

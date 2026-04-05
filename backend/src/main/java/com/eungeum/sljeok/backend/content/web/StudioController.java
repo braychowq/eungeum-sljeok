@@ -1,6 +1,7 @@
 package com.eungeum.sljeok.backend.content.web;
 
 import com.eungeum.sljeok.backend.auth.entity.UserEntity;
+import com.eungeum.sljeok.backend.auth.service.AuthSessionService;
 import com.eungeum.sljeok.backend.auth.service.OriginValidationService;
 import com.eungeum.sljeok.backend.auth.service.RateLimitService;
 import com.eungeum.sljeok.backend.common.api.ApiEnvelope;
@@ -40,16 +41,19 @@ public class StudioController {
   private final OriginValidationService originValidationService;
   private final RequestUserService requestUserService;
   private final RateLimitService rateLimitService;
+  private final AuthSessionService authSessionService;
 
   public StudioController(
       StudioService studioService,
       OriginValidationService originValidationService,
       RequestUserService requestUserService,
-      RateLimitService rateLimitService) {
+      RateLimitService rateLimitService,
+      AuthSessionService authSessionService) {
     this.studioService = studioService;
     this.originValidationService = originValidationService;
     this.requestUserService = requestUserService;
     this.rateLimitService = rateLimitService;
+    this.authSessionService = authSessionService;
   }
 
   @GetMapping
@@ -64,8 +68,10 @@ public class StudioController {
   }
 
   @GetMapping("/{slug}")
-  public ApiEnvelope<StudioDetailItem> detail(@PathVariable String slug) {
-    return ApiEnvelope.ok(toDetail(studioService.getBySlug(slug)));
+  public ApiEnvelope<StudioDetailItem> detail(@PathVariable String slug, HttpServletRequest request) {
+    String viewerUserId =
+        authSessionService.resolve(request).map(authenticatedUser -> authenticatedUser.userId()).orElse(null);
+    return ApiEnvelope.ok(toDetail(studioService.getBySlug(slug), viewerUserId));
   }
 
   @PostMapping
@@ -107,7 +113,8 @@ public class StudioController {
         DATE_FORMATTER.format(studio.getCreatedAt()));
   }
 
-  private StudioDetailItem toDetail(StudioEntity studio) {
+  private StudioDetailItem toDetail(StudioEntity studio, String viewerUserId) {
+    String ownerUserId = studio.getOwnerUser() == null ? null : studio.getOwnerUser().getId();
     return new StudioDetailItem(
         studio.getId(),
         studio.getSlug(),
@@ -121,7 +128,8 @@ public class StudioController {
         studio.getCapacity() == null ? 1 : studio.getCapacity(),
         studio.getImages().stream().map(StudioImageEntity::getImageUrl).toList(),
         studio.getAmenities().stream().map(StudioAmenityEntity::getAmenityName).toList(),
-        DATE_FORMATTER.format(studio.getCreatedAt()));
+        DATE_FORMATTER.format(studio.getCreatedAt()),
+        ownerUserId != null && ownerUserId.equals(viewerUserId));
   }
 
   public record StudioListPayload(List<StudioSummaryItem> items) {}
@@ -152,7 +160,8 @@ public class StudioController {
       int capacity,
       List<String> imageUrls,
       List<String> amenities,
-      String createdAt) {}
+      String createdAt,
+      boolean viewerOwnsWorkshop) {}
 
   public record StudioCreatedPayload(String id, String slug, String name, String detailPath) {}
 

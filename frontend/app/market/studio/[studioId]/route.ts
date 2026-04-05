@@ -1,7 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { escapeHtml, fetchStudioDetail, formatPrice } from '../../../../lib/backend-api';
+import {
+  escapeHtml,
+  fetchStudioDetailForViewer,
+  formatPrice
+} from '../../../../lib/backend-api';
 import { finalizeStitchHtml } from '../../../../lib/stitch-html';
 
 export const runtime = 'nodejs';
@@ -28,14 +32,19 @@ export async function GET(request: Request) {
   const studioId = decodeURIComponent(rawStudioId);
   const templatePath = join(process.cwd(), 'stitch', 'market-detail.html');
   const rawTemplate = readFileSync(templatePath, 'utf8');
+  const cookieHeader = request.headers.get('cookie') ?? undefined;
 
   try {
-    const studio = await fetchStudioDetail(studioId);
+    const studio = await fetchStudioDetailForViewer(studioId, cookieHeader);
     const [hero, galleryOne, galleryTwo] = [
       studio.imageUrls[0] || '',
       studio.imageUrls[1] || studio.imageUrls[0] || '',
       studio.imageUrls[2] || studio.imageUrls[1] || studio.imageUrls[0] || ''
     ];
+    const contactHref = studio.viewerOwnsWorkshop
+      ? `/messages?workshop=${encodeURIComponent(studio.slug)}`
+      : `/messages?start=${encodeURIComponent(studio.slug)}`;
+    const contactLabel = studio.viewerOwnsWorkshop ? '대화 보기' : '문의하기';
 
     const html = finalizeStitchHtml(
       'market-detail',
@@ -58,7 +67,8 @@ export async function GET(request: Request) {
         )
         .replace('{{STUDIO_PRICE}}', formatPrice(studio.priceAmount))
         .replace('{{STUDIO_SLUG}}', escapeHtml(studio.slug))
-        .replace('{{STUDIO_CONTACT_LABEL}}', '문의하기')
+        .replace('{{STUDIO_CONTACT_HREF}}', escapeHtml(contactHref))
+        .replace('{{STUDIO_CONTACT_LABEL}}', contactLabel)
     );
 
     return new Response(html, {

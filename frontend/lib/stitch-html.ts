@@ -535,6 +535,78 @@ const studioFormEnhancerBlock = `
 })();
 </script>`;
 
+const messageBadgeEnhancerBlock = `
+<script>
+(() => {
+  const badges = Array.from(document.querySelectorAll('[data-message-unread-badge]'));
+  if (!badges.length) return;
+
+  let pollTimer = null;
+  let authenticated = false;
+
+  const setBadgeCount = (count) => {
+    badges.forEach((badge) => {
+      if (!(badge instanceof HTMLElement)) return;
+      if (!count || count < 1) {
+        badge.hidden = true;
+        badge.textContent = '';
+        badge.classList.add('hidden');
+        return;
+      }
+
+      badge.hidden = false;
+      badge.textContent = count > 99 ? '99+' : String(count);
+      badge.classList.remove('hidden');
+      badge.classList.add('inline-flex');
+    });
+  };
+
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await fetch('/api/conversations/unread-count', {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        setBadgeCount(0);
+        return;
+      }
+
+      const result = await response.json().catch(() => ({}));
+      const count = result && result.data && typeof result.data.count === 'number' ? result.data.count : 0;
+      setBadgeCount(count);
+    } catch {
+      setBadgeCount(0);
+    }
+  };
+
+  window.addEventListener('auth:resolved', (event) => {
+    const detail = event.detail || {};
+    authenticated = Boolean(detail.authenticated);
+    if (pollTimer) {
+      window.clearInterval(pollTimer);
+      pollTimer = null;
+    }
+
+    if (!authenticated) {
+      setBadgeCount(0);
+      return;
+    }
+
+    fetchUnreadCount();
+    pollTimer = window.setInterval(fetchUnreadCount, 20000);
+  });
+
+  window.addEventListener('messages:updated', () => {
+    if (!authenticated) return;
+    fetchUnreadCount();
+  });
+})();
+</script>`;
+
 const communityPostComposerBlock = `
 <script>
 (() => {
@@ -853,10 +925,15 @@ const messagesInboxEnhancerBlock = `
   const page = document.querySelector('[data-messages-page]');
   if (!page) return;
 
+  const list = page.querySelector('[data-inbox-list]');
+  const emptyState = page.querySelector('[data-inbox-empty]');
   const message = document.querySelector('[data-inbox-message]');
   const params = new URLSearchParams(window.location.search);
   const startWorkshop = params.get('start');
+  const focusWorkshop = params.get('workshop');
   let starting = false;
+  let pollingTimer = null;
+  let focusHandled = false;
 
   const setMessage = (type, text) => {
     if (!message) return;
@@ -872,6 +949,91 @@ const messagesInboxEnhancerBlock = `
     message.className = type === 'success'
       ? 'mb-4 rounded-2xl border border-[#d7e7d8] bg-[#f1f7f2] px-5 py-4 text-sm text-[#2f5a35]'
       : 'mb-4 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]';
+  };
+
+  const escapeHtml = (value) =>
+    String(value || '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+
+  const renderItem = (item) => {
+    const unreadBadge = item.unreadCount > 0
+      ? '<span class="inline-flex min-w-6 items-center justify-center rounded-full bg-primary px-2 py-1 text-[11px] font-semibold leading-none text-white">' + (item.unreadCount > 99 ? '99+' : String(item.unreadCount)) + '</span>'
+      : '';
+    const previewClass = item.unreadCount > 0 ? 'text-on-surface font-medium' : 'text-on-surface-variant';
+    const image = item.imageUrl
+      ? '<img alt="' + escapeHtml(item.workshopName) + '" class="h-full w-full object-cover" src="' + escapeHtml(item.imageUrl) + '"/>'
+      : '<div class="flex h-full w-full items-center justify-center text-outline"><span class="material-symbols-outlined">forum</span></div>';
+
+    return (
+      '<a class="group flex items-center gap-4 rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-4 py-4 transition-all hover:border-primary/20 hover:shadow-[0_16px_40px_rgba(26,28,27,0.05)]" data-conversation-item="" data-workshop-slug="' +
+      escapeHtml(item.workshopSlug) +
+      '" href="' +
+      escapeHtml(item.detailPath) +
+      '">' +
+      '<div class="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-surface-container-low">' +
+      image +
+      '</div>' +
+      '<div class="min-w-0 flex-1">' +
+      '<div class="flex items-center justify-between gap-3">' +
+      '<div class="min-w-0 flex items-center gap-2">' +
+      '<h2 class="truncate text-base font-medium text-on-surface">' +
+      escapeHtml(item.workshopName) +
+      '</h2>' +
+      unreadBadge +
+      '</div>' +
+      '<span class="shrink-0 text-xs text-outline">' +
+      escapeHtml(item.timestamp) +
+      '</span>' +
+      '</div>' +
+      '<p class="mt-1 truncate text-sm ' +
+      previewClass +
+      '">' +
+      escapeHtml(item.lastMessagePreview) +
+      '</p>' +
+      '</div>' +
+      '</a>'
+    );
+  };
+
+  const syncList = (items) => {
+    if (list) {
+      list.innerHTML = items.map(renderItem).join('');
+    }
+
+    if (emptyState instanceof HTMLElement) {
+      emptyState.hidden = items.length > 0;
+      emptyState.classList.toggle('hidden', items.length > 0);
+    }
+
+    window.dispatchEvent(new CustomEvent('messages:updated'));
+  };
+
+  const fetchConversations = async () => {
+    const response = await fetch('/api/conversations', {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      if (response.status === 401) {
+        window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname + window.location.search);
+        return [];
+      }
+      if (response.status === 403) {
+        window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname + window.location.search);
+        return [];
+      }
+      throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
+    }
+
+    return result && result.data && Array.isArray(result.data.items) ? result.data.items : [];
   };
 
   const openConversation = async (workshopSlug) => {
@@ -915,10 +1077,70 @@ const messagesInboxEnhancerBlock = `
     }
   };
 
+  const openLatestWorkshopConversation = async (workshopSlug) => {
+    if (!workshopSlug || focusHandled) return;
+    focusHandled = true;
+
+    try {
+      const items = await fetchConversations();
+      syncList(items);
+      const match = items.find((item) => item.workshopSlug === workshopSlug);
+      if (match && match.detailPath) {
+        window.location.replace(match.detailPath);
+        return;
+      }
+      setMessage('error', '아직 이 공방의 대화가 없어요.');
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '잠시 후 다시 시도해 주세요.';
+      setMessage('error', errorMessage);
+    }
+  };
+
+  const beginPolling = () => {
+    if (pollingTimer) {
+      window.clearInterval(pollingTimer);
+      pollingTimer = null;
+    }
+
+    const run = async () => {
+      try {
+        const items = await fetchConversations();
+        syncList(items);
+      } catch (error) {
+        const errorMessage =
+          error && typeof error === 'object' && 'message' in error
+            ? error.message
+            : '잠시 후 다시 시도해 주세요.';
+        setMessage('error', errorMessage);
+      }
+    };
+
+    run();
+    pollingTimer = window.setInterval(run, 12000);
+  };
+
   window.addEventListener('auth:resolved', (event) => {
     const detail = event.detail || {};
-    if (!detail.authenticated || !startWorkshop) return;
-    openConversation(startWorkshop);
+    if (pollingTimer) {
+      window.clearInterval(pollingTimer);
+      pollingTimer = null;
+    }
+
+    if (!detail.authenticated) return;
+
+    if (startWorkshop) {
+      openConversation(startWorkshop);
+      return;
+    }
+
+    if (focusWorkshop) {
+      openLatestWorkshopConversation(focusWorkshop);
+    }
+
+    beginPolling();
   });
 })();
 </script>`;
@@ -936,6 +1158,13 @@ const messageRoomEnhancerBlock = `
   const conversationId = form.getAttribute('data-conversation-id');
   const currentUserId = form.getAttribute('data-current-user-id') || '';
   const submitLabel = submitButton ? submitButton.textContent.trim() : '보내기';
+  let isSending = false;
+  let pollTimer = null;
+  const knownMessageIds = new Set(
+    Array.from(thread.querySelectorAll('[data-message-id]'))
+      .map((node) => node.getAttribute('data-message-id'))
+      .filter(Boolean)
+  );
 
   const formatNow = () =>
     new Intl.DateTimeFormat('ko-KR', {
@@ -965,11 +1194,19 @@ const messageRoomEnhancerBlock = `
     thread.scrollTop = thread.scrollHeight;
   };
 
-  const buildBubble = (senderId, content, timestamp) => {
+  const isNearBottom = () => {
+    if (!thread) return true;
+    return thread.scrollHeight - thread.scrollTop - thread.clientHeight < 120;
+  };
+
+  const buildBubble = (messageId, senderId, content, timestamp) => {
     const isMine = senderId === currentUserId;
     const wrapper = document.createElement('div');
     wrapper.className = isMine ? 'flex justify-end' : 'flex justify-start';
     wrapper.setAttribute('data-chat-item', '');
+    if (messageId) {
+      wrapper.setAttribute('data-message-id', messageId);
+    }
     wrapper.setAttribute('data-sender-id', senderId);
 
     const container = document.createElement('div');
@@ -991,6 +1228,85 @@ const messageRoomEnhancerBlock = `
     return wrapper;
   };
 
+  const appendMessage = (messageItem, forceScroll = false) => {
+    if (!thread || !messageItem || !messageItem.id || knownMessageIds.has(messageItem.id)) {
+      return false;
+    }
+
+    const shouldStick = forceScroll || isNearBottom();
+    thread.querySelectorAll('[data-empty-chat]').forEach((node) => node.remove());
+    thread.appendChild(
+      buildBubble(
+        messageItem.id,
+        messageItem.senderId || '',
+        messageItem.content || '',
+        messageItem.timestamp || formatNow()
+      )
+    );
+    knownMessageIds.add(messageItem.id);
+    if (shouldStick) {
+      scrollToBottom();
+    }
+    return true;
+  };
+
+  const syncMessages = async () => {
+    if (!conversationId || isSending) return;
+
+    try {
+      const response = await fetch('/api/conversations/' + encodeURIComponent(conversationId) + '/messages', {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login?error=auth_required&next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        if (response.status === 403) {
+          window.location.href = '/onboarding?next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        if (response.status === 404) {
+          window.location.href = '/messages';
+          return;
+        }
+        throw new Error(result.message || '잠시 후 다시 시도해 주세요.');
+      }
+
+      const items = result && result.data && Array.isArray(result.data.messages) ? result.data.messages : [];
+      let appended = false;
+      items.forEach((item) => {
+        if (appendMessage(item)) {
+          appended = true;
+        }
+      });
+
+      if (appended) {
+        window.dispatchEvent(new CustomEvent('messages:updated'));
+      }
+    } catch (error) {
+      const errorMessage =
+        error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '';
+      if (errorMessage) {
+        setMessage('error', errorMessage);
+      }
+    }
+  };
+
+  const startPolling = () => {
+    if (pollTimer) {
+      window.clearInterval(pollTimer);
+    }
+    pollTimer = window.setInterval(syncMessages, 5000);
+  };
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -1005,13 +1321,19 @@ const messageRoomEnhancerBlock = `
       return;
     }
 
-    const optimisticBubble = buildBubble(currentUserId, content, formatNow());
+    const optimisticBubble = buildBubble(
+      'optimistic-' + Date.now(),
+      currentUserId,
+      content,
+      formatNow()
+    );
     thread.querySelectorAll('[data-empty-chat]').forEach((node) => node.remove());
     thread.appendChild(optimisticBubble);
     input.value = '';
     scrollToBottom();
 
     try {
+      isSending = true;
       setMessage('', '');
       if (submitButton) {
         submitButton.disabled = true;
@@ -1049,11 +1371,16 @@ const messageRoomEnhancerBlock = `
         throw new Error(firstFieldError || result.message || '잠시 후 다시 시도해 주세요.');
       }
 
-      const timestampNode = optimisticBubble.querySelector('div:last-child');
-      if (timestampNode && result && result.data && result.data.timestamp) {
-        timestampNode.textContent = result.data.timestamp;
+      if (result && result.data) {
+        optimisticBubble.setAttribute('data-message-id', result.data.id || '');
+        knownMessageIds.add(result.data.id);
+        const timestampNode = optimisticBubble.querySelector('div:last-child');
+        if (timestampNode && result.data.timestamp) {
+          timestampNode.textContent = result.data.timestamp;
+        }
       }
 
+      window.dispatchEvent(new CustomEvent('messages:updated'));
       scrollToBottom();
     } catch (error) {
       optimisticBubble.remove();
@@ -1064,6 +1391,7 @@ const messageRoomEnhancerBlock = `
           : '잠시 후 다시 시도해 주세요.';
       setMessage('error', errorMessage);
     } finally {
+      isSending = false;
       if (submitButton) {
         submitButton.disabled = false;
         submitButton.textContent = submitLabel;
@@ -1081,6 +1409,8 @@ const messageRoomEnhancerBlock = `
   }
 
   scrollToBottom();
+  window.dispatchEvent(new CustomEvent('messages:updated'));
+  startPolling();
 })();
 </script>`;
 
@@ -1350,7 +1680,11 @@ function sharedHeader(active: ActiveSection) {
 <a class="${navLinkClasses(communityActive, true)}" href="/community">커뮤니티</a>
 <a class="${navLinkClasses(marketActive, true)}" href="/market">공방 공유</a>
 </nav>
-<div class="md:hidden flex items-center">
+<div class="md:hidden flex items-center gap-3">
+<a class="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline/30 text-[#1a1c1b] dark:text-[#faf9f7]" data-message-nav-link="" href="/messages">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="absolute -right-1 -top-1 hidden min-w-5 items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white" data-message-unread-badge=""></span>
+</a>
 <a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="/login">로그인</a>
 <a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="#">마이페이지</a>
 </div>
@@ -1364,8 +1698,9 @@ function sharedHeader(active: ActiveSection) {
 <button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
 <span class="material-symbols-outlined" data-icon="search">search</span>
 </button>
-<a class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out" href="/messages">
+<a class="relative text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out" data-message-nav-link="" href="/messages">
 <span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="absolute -right-2 -top-2 hidden min-w-5 items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white" data-message-unread-badge=""></span>
 </a>
 </div>
 </div>
@@ -1405,6 +1740,18 @@ function injectAuthBootstrap(html: string) {
   }
 
   return html.replace('</body>', `${authBootstrapBlock}\n</body>`);
+}
+
+function injectMessageBadgeEnhancer(html: string) {
+  if (!html.includes('data-message-unread-badge')) {
+    return html;
+  }
+
+  if (html.includes('/api/conversations/unread-count')) {
+    return html;
+  }
+
+  return html.replace('</body>', `${messageBadgeEnhancerBlock}\n</body>`);
 }
 
 function replaceFirstElement(
@@ -1466,7 +1813,7 @@ function normalizeLayout(html: string, template: TemplateName) {
   const withAuthStyles = ensureAuthStyles(html);
   const withSharedHeader = replaceTopBar(withAuthStyles, sharedHeader(activeSection));
   const withSharedFooter = replaceFooter(withSharedHeader, sharedFooter());
-  return injectAuthBootstrap(withSharedFooter);
+  return injectMessageBadgeEnhancer(injectAuthBootstrap(withSharedFooter));
 }
 
 function injectStudioFormEnhancer(html: string, template: TemplateName) {
