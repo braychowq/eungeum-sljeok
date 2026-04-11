@@ -20,7 +20,7 @@ public class CommunityPostImageEntity {
   @JoinColumn(name = "post_id", nullable = false)
   private CommunityPostEntity post;
 
-  @Column(nullable = false, length = 512)
+  @Column(nullable = false, columnDefinition = "text")
   private String imageUrl;
 
   @Column(nullable = false)
@@ -39,5 +39,17 @@ public class CommunityPostImageEntity {
 
   public void setPost(CommunityPostEntity post) {
     this.post = post;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public void setSortOrder(int sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

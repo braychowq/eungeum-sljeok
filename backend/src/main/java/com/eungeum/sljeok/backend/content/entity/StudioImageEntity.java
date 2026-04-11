@@ -20,7 +20,7 @@ public class StudioImageEntity {
   @JoinColumn(name = "studio_id", nullable = false)
   private StudioEntity studio;
 
-  @Column(nullable = false, length = 512)
+  @Column(nullable = false, columnDefinition = "text")
   private String imageUrl;
 
   @Column(nullable = false)

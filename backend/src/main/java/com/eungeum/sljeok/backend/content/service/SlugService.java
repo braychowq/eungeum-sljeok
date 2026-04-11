@@ -25,7 +25,7 @@ public class SlugService {
 
   public String slugify(String value) {
     String normalized =
-        Normalizer.normalize(value == null ? "" : value, Normalizer.Form.NFKD)
+        Normalizer.normalize(value == null ? "" : value, Normalizer.Form.NFKC)
             .replaceAll("[^\\p{IsAlphabetic}\\p{IsDigit}]+", "-")
             .replaceAll("(^-|-$)", "")
             .toLowerCase(Locale.ROOT);

@@ -91,7 +91,8 @@ public class StudioController {
             "월",
             requestBody.contact().trim(),
             requestBody.capacity(),
-            requestBody.amenities());
+            requestBody.amenities(),
+            requestBody.imageDataUrls());
     return ApiEnvelope.ok(
         new StudioCreatedPayload(
             studio.getId(), studio.getSlug(), studio.getName(), "/market/studio/" + studio.getSlug()),
@@ -187,5 +188,6 @@ public class StudioController {
       @Min(value = 1, message = "인원은 1명부터 적을 수 있어요.")
       @Max(value = 100, message = "인원을 다시 확인해 주세요.")
       Integer capacity,
-      List<@Size(max = 80, message = "항목이 조금 길어요.") String> amenities) {}
+      List<@Size(max = 80, message = "항목이 조금 길어요.") String> amenities,
+      List<String> imageDataUrls) {}
 }

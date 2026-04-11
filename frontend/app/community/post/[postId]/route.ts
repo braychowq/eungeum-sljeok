@@ -6,8 +6,10 @@ import {
   escapeHtml,
   fetchAuthState,
   fetchCommunityPostDetail,
+  isBackendApiError,
   type CommunityPostSummary
 } from '../../../../lib/backend-api';
+import { renderStatusPage } from '../../../../lib/page-guards';
 import { finalizeStitchHtml } from '../../../../lib/stitch-html';
 
 export const runtime = 'nodejs';
@@ -55,17 +57,28 @@ function renderOwnerActions(slug: string, canManage: boolean) {
   `;
 }
 
-function notFoundHtml() {
-  return `<!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>게시글을 찾을 수 없어요</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="min-h-screen bg-[#faf9f7] text-[#1a1c1b] flex items-center justify-center px-6">
-  <main class="max-w-xl text-center rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(26,28,27,0.05)] px-8 py-12">
-    <p class="text-[10px] uppercase tracking-[0.2em] text-[#7f7663] mb-4">커뮤니티</p>
-    <h1 class="text-3xl md:text-4xl font-serif mb-4">글을 찾을 수 없어요</h1>
-    <p class="text-sm leading-7 text-[#4d4635]">지금은 보이지 않는 글이에요.</p>
-    <a href="/community" class="inline-flex items-center justify-center mt-8 rounded-full bg-[#735c00] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white">전체 글 보기</a>
-  </main>
-</body></html>`;
+function renderImageGallery(imageUrls: string[]) {
+  if (!imageUrls.length) {
+    return '';
+  }
+
+  return `
+    <section class="mt-10 grid gap-4 md:grid-cols-[1.6fr_1fr]">
+      <div class="overflow-hidden rounded-[1.6rem] bg-surface-container-low">
+        <img alt="게시글 대표 이미지" class="h-full w-full object-cover" src="${escapeHtml(imageUrls[0])}"/>
+      </div>
+      <div class="grid gap-4">
+        ${imageUrls
+          .slice(1, 3)
+          .map(
+            (imageUrl, index) => `
+            <div class="overflow-hidden rounded-[1.3rem] bg-surface-container-low">
+              <img alt="게시글 이미지 ${index + 2}" class="h-full w-full object-cover" src="${escapeHtml(imageUrl)}"/>
+            </div>`
+          )
+          .join('')}
+      </div>
+    </section>`;
 }
 
 export async function GET(request: Request) {
@@ -98,6 +111,7 @@ export async function GET(request: Request) {
         .replace('{{COMMENTS}}', String(post.comments))
         .replace('{{OWNER_ACTIONS}}', renderOwnerActions(post.slug, canManage))
         .replace('{{POST_ID}}', post.slug)
+        .replace('{{IMAGE_GALLERY}}', renderImageGallery(post.imageUrls))
         .replace(
           '{{BODY_HTML}}',
           post.body
@@ -137,13 +151,31 @@ export async function GET(request: Request) {
         'cache-control': 'no-store'
       }
     });
-  } catch {
-    return new Response(notFoundHtml(), {
-      status: 404,
-      headers: {
-        'content-type': 'text/html; charset=utf-8',
-        'cache-control': 'no-store'
-      }
-    });
+  } catch (error) {
+    if (isBackendApiError(error) && error.status === 404) {
+      return renderStatusPage({
+        title: '은금슬쩍 | 글을 찾을 수 없어요',
+        eyebrow: '커뮤니티',
+        heading: '글을 찾을 수 없어요',
+        body: '지금은 보이지 않는 글이에요.',
+        actionHref: '/community',
+        actionLabel: '전체 글 보기',
+        status: 404
+      });
+    }
+
+    if (isBackendApiError(error)) {
+      return renderStatusPage({
+        title: '은금슬쩍 | 글을 불러오지 못했어요',
+        eyebrow: '커뮤니티',
+        heading: '지금은 글을 불러오지 못해요',
+        body: error.message,
+        actionHref: '/community',
+        actionLabel: '전체 글 보기',
+        status: error.status >= 500 ? error.status : 503
+      });
+    }
+
+    throw error;
   }
 }

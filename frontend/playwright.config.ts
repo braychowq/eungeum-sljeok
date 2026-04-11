@@ -1,7 +1,10 @@
+import path from 'node:path';
+
 import { defineConfig } from '@playwright/test';
 
-const backendWorkdir = '/Users/guk/Documents/workspace/eungeun-sljeok/backend';
-const mavenUserHome = '/Users/guk/Documents/workspace/eungeun-sljeok/.m2home';
+const repoRoot = path.resolve(__dirname, '..');
+const backendWorkdir = path.join(repoRoot, 'backend');
+const mavenUserHome = path.join(repoRoot, '.m2home');
 
 export default defineConfig({
   testDir: './e2e',

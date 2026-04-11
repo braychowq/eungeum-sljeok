@@ -89,6 +89,11 @@ public class CommunityPostEntity {
     comments.add(comment);
   }
 
+  public void addImage(CommunityPostImageEntity image) {
+    image.setPost(this);
+    images.add(image);
+  }
+
   public String getId() {
     return id;
   }
@@ -171,5 +176,9 @@ public class CommunityPostEntity {
 
   public List<CommunityCommentEntity> getComments() {
     return comments;
+  }
+
+  public List<CommunityPostImageEntity> getImages() {
+    return images;
   }
 }

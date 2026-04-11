@@ -13,6 +13,38 @@ else
   FRONTEND_MODE="dev"
 fi
 
+require_env() {
+  local name="$1"
+  if [ -z "${!name:-}" ]; then
+    echo "Missing required environment variable: ${name}" >&2
+    exit 1
+  fi
+}
+
+if [ "$FRONTEND_MODE" = "standalone" ]; then
+  export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE:-production}"
+
+  if [ "$SPRING_PROFILES_ACTIVE" = "production" ]; then
+    require_env DB_URL
+    require_env DB_USERNAME
+    require_env DB_PASSWORD
+    require_env AUTH_PUBLIC_BASE_URL
+    require_env AUTH_ALLOWED_ORIGINS
+
+    if [[ "${AUTH_PUBLIC_BASE_URL}" == http://localhost* ]] || [[ "${AUTH_PUBLIC_BASE_URL}" == http://127.0.0.1* ]]; then
+      echo "AUTH_PUBLIC_BASE_URL must point to the public production domain." >&2
+      exit 1
+    fi
+
+    if [ -z "${NAVER_CLIENT_ID:-}" ] && [ -z "${KAKAO_CLIENT_ID:-}" ]; then
+      echo "At least one social login provider must be configured for production." >&2
+      exit 1
+    fi
+  fi
+else
+  export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE:-local}"
+fi
+
 java -Dserver.port="${BACKEND_PORT:-8081}" -jar "$BACKEND_JAR" &
 backend_pid=$!
 

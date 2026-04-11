@@ -47,10 +47,6 @@ function categoryPreview(category: string) {
   `;
 }
 
-function likeCount(views: number) {
-  return Math.max(3, Math.round(views * 0.18));
-}
-
 function renderPostRows(posts: CommunityPostSummary[]) {
   return posts
     .map(
@@ -70,8 +66,8 @@ function renderPostRows(posts: CommunityPostSummary[]) {
             </div>
             <div class="flex gap-3 items-center self-center">
               <div class="flex flex-col items-center">
-                <span class="material-symbols-outlined text-outline text-[18px]">favorite</span>
-                <span class="text-[10px] mt-1 font-label">${likeCount(post.views)}</span>
+                <span class="material-symbols-outlined text-outline text-[18px]">visibility</span>
+                <span class="text-[10px] mt-1 font-label">${post.views}</span>
               </div>
               <div class="flex flex-col items-center">
                 <span class="material-symbols-outlined text-outline text-[18px]">chat_bubble</span>
@@ -131,6 +127,7 @@ export async function GET(request: Request) {
   const rawTemplate = readFileSync(templatePath, 'utf8');
 
   let items: CommunityPostSummary[] = [];
+  let loadFailed = false;
 
   try {
     const payload = await fetchCommunityPosts({
@@ -142,16 +139,18 @@ export async function GET(request: Request) {
     items = payload.items;
   } catch {
     items = [];
+    loadFailed = true;
   }
 
   const html = finalizeStitchHtml(
     'community',
     rawTemplate
+      .replace('{{FETCH_ERROR}}', loadFailed ? `<div class="bg-[#fff4f1] border border-[#f0d4cd] px-5 py-4 rounded-xl text-sm text-[#8a3827] mb-6">지금은 글을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</div>` : '')
       .replace('{{SEARCH_VALUE}}', escapeHtml(query))
       .replace('{{CURRENT_CATEGORY}}', category)
       .replace('{{CATEGORY_FILTERS}}', renderCategoryFilters(query, category))
       .replace('{{COMMUNITY_POST_ROWS}}', renderPostRows(items))
-      .replace('{{EMPTY_STATE}}', renderEmptyState(items.length > 0))
+      .replace('{{EMPTY_STATE}}', renderEmptyState(items.length > 0 || loadFailed))
   );
 
   return new Response(html, {

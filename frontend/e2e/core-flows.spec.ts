@@ -1,5 +1,10 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 
+const TINY_PNG = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9sN0eJQAAAAASUVORK5CYII=',
+  'base64'
+);
+
 async function loginAsTestUser(page: Page, displayName = 'E2E회원', userId?: string) {
   const response = await page.request.post('/api/test-auth/login', {
     data: { displayName, userId }
@@ -44,11 +49,11 @@ test.describe('핵심 사용자 시나리오', () => {
   });
 
   test('인증이 필요한 페이지와 쓰기 API는 비로그인 사용자를 차단한다', async ({ page }) => {
-    await page.goto('/community/new');
-    await expect(page).toHaveURL(/\/login\?error=auth_required/);
-
-    await page.goto('/market/new');
-    await expect(page).toHaveURL(/\/login\?error=auth_required/);
+    for (const path of ['/community/new', '/market/new', '/messages', '/account', '/onboarding']) {
+      const response = await page.request.get(path, { maxRedirects: 0 });
+      expect(response.status()).toBe(302);
+      expect(response.headers().location || '').toContain('/login?error=auth_required');
+    }
 
     const writeResponse = await page.request.post('/api/community/posts', {
       data: {
@@ -66,7 +71,20 @@ test.describe('핵심 사용자 시나리오', () => {
 
     const title = uniqueLabel('플레이라이트-게시글');
     const body = uniqueLabel('브라우저-E2E-게시글-본문');
-    await createCommunityPost(page, title, body);
+    await page.goto('/community/new');
+    await page.locator('[data-field="title"]').fill(title);
+    await page.locator('[data-field="body"]').fill(body);
+    await page
+      .locator('[data-image-input]')
+      .setInputFiles({
+        name: 'community-proof.png',
+        mimeType: 'image/png',
+        buffer: TINY_PNG
+      });
+    await page.locator('[data-submit]').click();
+    await expect(page).toHaveURL(/\/community\/post\//);
+    await expect(page.locator('h1', { hasText: title })).toBeVisible();
+    await expect(page.locator('img[src^="data:image/png;base64,"]')).toHaveCount(1);
 
     await page.locator('[data-comment-body]').fill('플레이라이트 댓글 등록 테스트');
     await page.locator('[data-comment-submit]').click();
@@ -74,6 +92,7 @@ test.describe('핵심 사용자 시나리오', () => {
 
     await page.reload();
     await expect(page.locator('body')).toContainText(title);
+    await expect(page.locator('img[src^="data:image/png;base64,"]')).toHaveCount(1);
     await expect(page.locator('[data-comment-list]')).toContainText('플레이라이트 댓글 등록 테스트');
   });
 
@@ -144,6 +163,13 @@ test.describe('핵심 사용자 시나리오', () => {
 
     const studioName = uniqueLabel('플레이라이트-테스트-공방');
     await page.goto('/market/new');
+    await page
+      .locator('[data-studio-image-input]')
+      .setInputFiles({
+        name: 'studio-proof.png',
+        mimeType: 'image/png',
+        buffer: TINY_PNG
+      });
     await page.locator('[data-field="name"]').fill(studioName);
     await page.locator('[data-field="location"]').fill('서울 종로구 율곡로 10');
     await page
@@ -155,10 +181,12 @@ test.describe('핵심 사용자 시나리오', () => {
 
     await expect(page).toHaveURL(/\/market\/studio\//);
     await expect(page.getByRole('heading', { name: studioName })).toBeVisible();
+    await expect(page.locator('img[src^="data:image/png;base64,"]').first()).toBeVisible();
     await expect(page.locator('body')).toContainText('서울 종로구 율곡로 10');
 
     await page.reload();
     await expect(page.locator('body')).toContainText(studioName);
+    await expect(page.locator('img[src^="data:image/png;base64,"]').first()).toBeVisible();
   });
 
   test('공방 문의는 전화 대신 메시지로 이어지고 대화가 양쪽에 저장된다', async ({ page, browser }) => {

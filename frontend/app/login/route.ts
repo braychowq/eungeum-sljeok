@@ -43,19 +43,47 @@ export function GET(request: Request) {
   const feedbackHtml = errorMessage
     ? `<div class="mt-6 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]">${escapeHtml(errorMessage)}</div>`
     : '';
+  const providers: string[] = [];
+
+  if (process.env.NAVER_CLIENT_ID) {
+    providers.push(
+      `<a class="flex items-center justify-between rounded-[1.35rem] border border-[#03c75a]/20 bg-[#03c75a] px-5 py-4 text-white transition-transform hover:scale-[0.995]" href="/api/auth/oauth/naver/start?next=${encodeURIComponent(
+        next
+      )}">
+        <div>
+          <div class="text-[10px] uppercase tracking-[0.18em] text-white/75">NAVER</div>
+          <div class="mt-1.5 text-base font-semibold">네이버로 계속하기</div>
+        </div>
+        <div class="h-10 w-10 rounded-full bg-white/15 flex items-center justify-center text-base font-semibold">N</div>
+      </a>`
+    );
+  }
+
+  if (process.env.KAKAO_CLIENT_ID) {
+    providers.push(
+      `<a class="flex items-center justify-between rounded-[1.35rem] border border-[#fee500]/40 bg-[#fee500] px-5 py-4 text-[#191600] transition-transform hover:scale-[0.995]" href="/api/auth/oauth/kakao/start?next=${encodeURIComponent(
+        next
+      )}">
+        <div>
+          <div class="text-[10px] uppercase tracking-[0.18em] text-[#191600]/70">KAKAO</div>
+          <div class="mt-1.5 text-base font-semibold">카카오로 계속하기</div>
+        </div>
+        <div class="h-10 w-10 rounded-full bg-black/5 flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">chat</span>
+        </div>
+      </a>`
+    );
+  }
+
+  const providerHtml = providers.length
+    ? `<div class="space-y-4">${providers.join('')}</div>`
+    : `<div class="rounded-[1.35rem] border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]">지금은 로그인 연동 설정을 확인하고 있어요. 잠시 후 다시 시도해 주세요.</div>`;
 
   const html = finalizeStitchHtml(
     'login',
     rawTemplate
       .replace('{{LOGIN_FEEDBACK}}', feedbackHtml)
-      .replace(
-        '{{NAVER_START_URL}}',
-        `/api/auth/oauth/naver/start?next=${encodeURIComponent(next)}`
-      )
-      .replace(
-        '{{KAKAO_START_URL}}',
-        `/api/auth/oauth/kakao/start?next=${encodeURIComponent(next)}`
-      )
+      .replace('{{LOGIN_PROVIDER_BUTTONS}}', providerHtml)
   );
 
   return new Response(html, {

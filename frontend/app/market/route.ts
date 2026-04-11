@@ -5,6 +5,7 @@ import {
   escapeHtml,
   fetchStudios,
   formatPrice,
+  studioPlaceholderImage,
   type StudioSummary
 } from '../../lib/backend-api';
 import { finalizeStitchHtml } from '../../lib/stitch-html';
@@ -14,7 +15,7 @@ export const runtime = 'nodejs';
 function renderStudioCards(studios: StudioSummary[]) {
   const items = studios
     .map((studio, index) => {
-      const imageUrl = studio.imageUrls[0] || '';
+      const imageUrl = studio.imageUrls[0] || studioPlaceholderImage(studio.name, studio.location);
       const locationBadge = escapeHtml(studio.location.split(' ')[0] || studio.location);
       const amenityChips = (studio.amenities.length ? studio.amenities : ['기본 시설'])
         .slice(0, 3)

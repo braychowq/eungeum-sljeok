@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "e2e": "npx playwright test --config=playwright.config.ts"
+    "e2e": "npx playwright test --config=playwright.config.ts",
+    "e2e:prod": "npx playwright test --config=playwright.prod.config.ts"
   },
   "dependencies": {
     "next": "^16.2.1",

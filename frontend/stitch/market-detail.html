@@ -166,7 +166,7 @@
 <div class="bg-surface-container-lowest p-8 border border-outline-variant/10 rounded-xl">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-14 h-14 rounded-full overflow-hidden bg-surface-container">
-<img alt="Host Profile" class="w-full h-full object-cover" data-alt="Portrait of a Korean ceramic artist in a linen shirt, smiling gently in her sunlit studio workshop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRbRZ06yai0_wNmqzWe95VSwFgbpORGY98T9ksQCS390grbLDOegCqjqzM6HOp99uo1v19Dh56AFfgN93ecEIAUegp8ka_Yvu2Hn0NRkz6JFyEtFhYxua0CbLYCNZElzMxIZzVAk5nMh7gXP7HR0yZNr74qub231j8EQDJIo2lB2qTy4JxCUh7QtTiF8rsFpEMCAPrjuiQ9W37PaqbCShQGfVyuaAS6RKXK3IUokekP_UnRLEh3leNCC-ydI3yTWOMjyIek7enTIM"/>
+<img alt="{{STUDIO_OWNER_NAME}} 프로필" class="w-full h-full object-cover" data-alt="{{STUDIO_OWNER_NAME}} 프로필" src="{{HOST_AVATAR_URL}}"/>
 </div>
 <div>
 <h4 class="font-headline text-lg text-on-surface">{{STUDIO_OWNER_NAME}}</h4>
@@ -179,12 +179,12 @@
 <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-6">{{STUDIO_OWNER_BIO}}</p>
 <div class="flex items-center gap-6 pt-6 border-t border-outline-variant/10">
 <div>
-<p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">후기</p>
-<p class="text-sm font-bold">128개</p>
+<p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">{{HOST_META_PRIMARY_LABEL}}</p>
+<p class="text-sm font-bold">{{HOST_META_PRIMARY_VALUE}}</p>
 </div>
 <div>
-<p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">평점</p>
-<p class="text-sm font-bold flex items-center gap-1">4.98 <span class="material-symbols-outlined !text-xs text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span></p>
+<p class="text-[10px] uppercase tracking-widest font-bold text-outline mb-1">{{HOST_META_SECONDARY_LABEL}}</p>
+<p class="text-sm font-bold">{{HOST_META_SECONDARY_VALUE}}</p>
 </div>
 </div>
 </div>

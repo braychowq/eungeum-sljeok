@@ -6,6 +6,7 @@ import {
   fetchCommunityPosts,
   fetchStudios,
   formatPrice,
+  studioPlaceholderImage,
   type CommunityPostSummary,
   type StudioSummary
 } from '../lib/backend-api';
@@ -49,10 +50,6 @@ function homeCategoryPreview(category: string) {
   `;
 }
 
-function likeCount(views: number) {
-  return Math.max(3, Math.round(views * 0.18));
-}
-
 function renderHomeCommunityItems(posts: CommunityPostSummary[]) {
   return posts
     .map(
@@ -66,8 +63,8 @@ function renderHomeCommunityItems(posts: CommunityPostSummary[]) {
         </div>
         <div class="flex gap-4 items-center">
           <div class="flex flex-col items-center">
-            <span class="material-symbols-outlined text-outline">favorite</span>
-            <span class="text-[10px] mt-1 font-label">${likeCount(post.views)}</span>
+            <span class="material-symbols-outlined text-outline">visibility</span>
+            <span class="text-[10px] mt-1 font-label">${post.views}</span>
           </div>
           <div class="flex flex-col items-center">
             <span class="material-symbols-outlined text-outline">chat_bubble</span>
@@ -82,7 +79,7 @@ function renderHomeCommunityItems(posts: CommunityPostSummary[]) {
 function renderHomeStudioItems(studios: StudioSummary[]) {
   return studios
     .map((studio) => {
-      const imageUrl = studio.imageUrls[0] || '';
+      const imageUrl = studio.imageUrls[0] || studioPlaceholderImage(studio.name, studio.location);
       const district = escapeHtml(studio.location.split(' ')[0] || studio.location);
       return `
       <div class="min-w-[400px] snap-start">

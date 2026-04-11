@@ -86,7 +86,7 @@ export async function GET(request: Request) {
           '남기고 싶은 이야기를 적어보세요.',
           '다듬고 싶은 부분만 고쳐주세요.'
         )
-        .replace('data-community-form=""', `data-community-form="" data-submit-method="PUT" data-submit-url="/api/community/posts/${post.slug}" data-success-path="/community/post/${post.slug}" data-success-message="수정했어요."`)
+        .replace('data-community-form=""', `data-community-form="" data-submit-method="PUT" data-submit-url="/api/community/posts/${post.slug}" data-success-path="/community/post/${post.slug}" data-success-message="수정했어요." data-existing-image-urls='${escapeHtml(JSON.stringify(post.imageUrls || []))}'`)
         .replace('value="free"/>', `value="free" ${checked(post.category, 'free')}/>`)
         .replace('value="qa"/>', `value="qa" ${checked(post.category, 'qa')}/>`)
         .replace('value="market"/>', `value="market" ${checked(post.category, 'market')}/>`)

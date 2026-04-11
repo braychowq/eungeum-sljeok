@@ -243,6 +243,9 @@ const studioFormEnhancerBlock = `
   const mapFrame = document.querySelector('[data-studio-map-frame]');
   const mapLabel = document.querySelector('[data-studio-map-label]');
   const layout = form.getAttribute('data-layout') || 'desktop';
+  const MAX_UPLOAD_COUNT = 3;
+  const MAX_UPLOAD_BYTES = 750 * 1024;
+  const ALLOWED_UPLOAD_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
   let selectedFiles = [];
   let mapTimer = null;
 
@@ -272,6 +275,37 @@ const studioFormEnhancerBlock = `
   if (previewTarget && !previewTarget.getAttribute('data-fallback-src')) {
     previewTarget.setAttribute('data-fallback-src', previewTarget.getAttribute('src') || '');
   }
+
+  const readFileAsDataUrl = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+          return;
+        }
+        reject(new Error('이미지를 읽지 못했어요.'));
+      };
+      reader.onerror = () => reject(new Error('이미지를 읽지 못했어요.'));
+      reader.readAsDataURL(file);
+    });
+
+  const normalizeSelectedFiles = (files) => {
+    if (files.length > MAX_UPLOAD_COUNT) {
+      throw new Error('사진은 최대 3장까지 올릴 수 있어요.');
+    }
+
+    files.forEach((file) => {
+      if (!ALLOWED_UPLOAD_TYPES.includes(file.type)) {
+        throw new Error('PNG, JPG, WEBP 이미지만 올릴 수 있어요.');
+      }
+      if (file.size > MAX_UPLOAD_BYTES) {
+        throw new Error('이미지는 750KB 이하로 올려주세요.');
+      }
+    });
+
+    return files;
+  };
 
   const updateImageCount = () => {
     const text = selectedFiles.length
@@ -320,8 +354,18 @@ const studioFormEnhancerBlock = `
     });
 
     fileInput.addEventListener('change', () => {
-      selectedFiles = Array.from(fileInput.files || []).slice(0, 10);
-      updatePreview();
+      try {
+        setMessage('', '');
+        selectedFiles = normalizeSelectedFiles(Array.from(fileInput.files || []));
+        updatePreview();
+      } catch (error) {
+        selectedFiles = [];
+        fileInput.value = '';
+        updatePreview();
+        setMessage('error', error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '이미지를 다시 확인해 주세요.');
+      }
     });
   }
 
@@ -446,8 +490,6 @@ const studioFormEnhancerBlock = `
       category: valueOf('category') || '주얼리 공방',
       capacity: valueOf('capacity'),
       amenities: collectAmenities(),
-      imageNames: selectedFiles.map((file) => file.name),
-      imageCount: selectedFiles.length,
       platform: layout
     };
 
@@ -472,13 +514,18 @@ const studioFormEnhancerBlock = `
         submitButton.textContent = '올리는 중...';
       }
 
+      const imageDataUrls = await Promise.all(selectedFiles.map((file) => readFileAsDataUrl(file)));
+
       const response = await fetch('/api/studios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         credentials: 'same-origin',
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          ...payload,
+          imageDataUrls
+        })
       });
 
       const result = await response.json().catch(() => ({}));
@@ -625,6 +672,19 @@ const communityPostComposerBlock = `
   const submitMethod = (form.getAttribute('data-submit-method') || 'POST').toUpperCase();
   const successPath = form.getAttribute('data-success-path') || '/community';
   const successMessage = form.getAttribute('data-success-message') || '글을 남겼어요.';
+  const existingImageUrls = (() => {
+    const rawValue = form.getAttribute('data-existing-image-urls');
+    if (!rawValue) return [];
+    try {
+      const parsed = JSON.parse(rawValue);
+      return Array.isArray(parsed) ? parsed.filter((value) => typeof value === 'string') : [];
+    } catch {
+      return [];
+    }
+  })();
+  const MAX_UPLOAD_COUNT = 3;
+  const MAX_UPLOAD_BYTES = 750 * 1024;
+  const ALLOWED_UPLOAD_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
   let selectedFiles = [];
 
   const setMessage = (type, text) => {
@@ -644,9 +704,41 @@ const communityPostComposerBlock = `
 
   const updateImageCount = () => {
     if (!imageCount) return;
-    imageCount.textContent = selectedFiles.length
-      ? '이미지 ' + selectedFiles.length + '장'
+    const count = selectedFiles.length || existingImageUrls.length;
+    imageCount.textContent = count
+      ? '이미지 ' + count + '장'
       : '이미지 없음';
+  };
+
+  const readFileAsDataUrl = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+          return;
+        }
+        reject(new Error('이미지를 읽지 못했어요.'));
+      };
+      reader.onerror = () => reject(new Error('이미지를 읽지 못했어요.'));
+      reader.readAsDataURL(file);
+    });
+
+  const normalizeSelectedFiles = (files) => {
+    if (files.length > MAX_UPLOAD_COUNT) {
+      throw new Error('이미지는 최대 3장까지 올릴 수 있어요.');
+    }
+
+    files.forEach((file) => {
+      if (!ALLOWED_UPLOAD_TYPES.includes(file.type)) {
+        throw new Error('PNG, JPG, WEBP 이미지만 올릴 수 있어요.');
+      }
+      if (file.size > MAX_UPLOAD_BYTES) {
+        throw new Error('이미지는 750KB 이하로 올려주세요.');
+      }
+    });
+
+    return files;
   };
 
   if (fileInput && uploadTrigger) {
@@ -660,8 +752,18 @@ const communityPostComposerBlock = `
     });
 
     fileInput.addEventListener('change', () => {
-      selectedFiles = Array.from(fileInput.files || []).slice(0, 10);
-      updateImageCount();
+      try {
+        setMessage('', '');
+        selectedFiles = normalizeSelectedFiles(Array.from(fileInput.files || []));
+        updateImageCount();
+      } catch (error) {
+        selectedFiles = [];
+        fileInput.value = '';
+        updateImageCount();
+        setMessage('error', error && typeof error === 'object' && 'message' in error
+          ? error.message
+          : '이미지를 다시 확인해 주세요.');
+      }
     });
   }
 
@@ -672,7 +774,6 @@ const communityPostComposerBlock = `
     const payload = {
       body: bodyInput ? bodyInput.value.trim() : '',
       category: categoryInput ? categoryInput.value : '',
-      imageNames: selectedFiles.map((file) => file.name),
       title: titleInput ? titleInput.value.trim() : ''
     };
 
@@ -689,13 +790,20 @@ const communityPostComposerBlock = `
         submitButton.textContent = '저장 중...';
       }
 
+      const imageDataUrls = selectedFiles.length
+        ? await Promise.all(selectedFiles.map((file) => readFileAsDataUrl(file)))
+        : existingImageUrls;
+
       const response = await fetch(submitUrl, {
         method: submitMethod,
         headers: {
           'Content-Type': 'application/json'
         },
         credentials: 'same-origin',
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          ...payload,
+          imageDataUrls
+        })
       });
 
       const result = await response.json().catch(() => ({}));
@@ -1686,7 +1794,7 @@ function sharedHeader(active: ActiveSection) {
 <span class="absolute -right-1 -top-1 hidden min-w-5 items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white" data-message-unread-badge=""></span>
 </a>
 <a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="/login">로그인</a>
-<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="#">마이페이지</a>
+<a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="/account">마이페이지</a>
 </div>
 <nav class="hidden md:flex gap-12">
 <a class="${navLinkClasses(communityActive)}" href="/community">커뮤니티</a>
@@ -1695,9 +1803,9 @@ function sharedHeader(active: ActiveSection) {
 <div class="hidden md:flex items-center gap-4">
 <a class="inline-flex items-center justify-center px-4 py-2 rounded-full border border-outline text-[10px] font-label tracking-[0.18em] uppercase text-on-surface whitespace-nowrap" data-auth-guest="" href="/login">로그인</a>
 <a class="items-center justify-center px-4 py-2 rounded-full border border-primary bg-primary text-[10px] font-label tracking-[0.18em] uppercase text-white whitespace-nowrap" data-auth-member="" href="/account">마이페이지</a>
-<button class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out">
+<a class="text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out" href="/community" aria-label="커뮤니티 검색으로 이동">
 <span class="material-symbols-outlined" data-icon="search">search</span>
-</button>
+</a>
 <a class="relative text-[#1a1c1b] dark:text-[#faf9f7] hover:scale-95 duration-200 ease-in-out" data-message-nav-link="" href="/messages">
 <span class="material-symbols-outlined" data-icon="forum">forum</span>
 <span class="absolute -right-2 -top-2 hidden min-w-5 items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white" data-message-unread-badge=""></span>

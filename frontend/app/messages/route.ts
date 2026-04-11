@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { escapeHtml, fetchConversations, type ConversationSummary } from '../../lib/backend-api';
+import { requireAuthenticatedPage } from '../../lib/page-guards';
 import { finalizeStitchHtml } from '../../lib/stitch-html';
 
 export const runtime = 'nodejs';
@@ -39,26 +40,40 @@ function renderConversationItems(items: ConversationSummary[]) {
 }
 
 export async function GET(request: Request) {
+  const guard = await requireAuthenticatedPage(request);
+  if ('response' in guard) {
+    return guard.response;
+  }
+
   const templatePath = join(process.cwd(), 'stitch', 'messages.html');
   const rawTemplate = readFileSync(templatePath, 'utf8');
   const cookieHeader = request.headers.get('cookie') ?? undefined;
 
   let items: ConversationSummary[] = [];
+  let fetchMessage = '';
 
   try {
     const payload = await fetchConversations(cookieHeader);
     items = payload.items;
   } catch {
     items = [];
+    fetchMessage =
+      'mb-4 rounded-2xl border border-[#f0d4cd] bg-[#fff4f1] px-5 py-4 text-sm text-[#8a3827]';
   }
 
   const html = finalizeStitchHtml(
     'messages',
     rawTemplate
+      .replace(
+        'class="hidden mb-4 rounded-2xl border px-5 py-4 text-sm" data-inbox-message=""></div>',
+        fetchMessage
+          ? `<div class="${fetchMessage}" data-inbox-message="">지금은 대화를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</div>`
+          : '<div class="hidden mb-4 rounded-2xl border px-5 py-4 text-sm" data-inbox-message=""></div>'
+      )
       .replace('{{CONVERSATION_ITEMS}}', renderConversationItems(items))
       .replace(
         '{{MESSAGES_EMPTY_CLASS}}',
-        items.length > 0
+        items.length > 0 || Boolean(fetchMessage)
           ? 'hidden rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-10 text-center text-on-surface-variant'
           : 'rounded-[1.6rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-10 text-center text-on-surface-variant'
       )

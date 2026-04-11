@@ -7,6 +7,7 @@ import com.eungeum.sljeok.backend.common.api.ApiEnvelope;
 import com.eungeum.sljeok.backend.content.domain.CommunityCategory;
 import com.eungeum.sljeok.backend.content.entity.CommunityCommentEntity;
 import com.eungeum.sljeok.backend.content.entity.CommunityPostEntity;
+import com.eungeum.sljeok.backend.content.entity.CommunityPostImageEntity;
 import com.eungeum.sljeok.backend.content.service.CommunityService;
 import com.eungeum.sljeok.backend.content.service.RequestUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -99,7 +100,8 @@ public class CommunityController {
             currentUser,
             parseCategory(requestBody.category()),
             requestBody.title().trim(),
-            requestBody.body().trim());
+            requestBody.body().trim(),
+            requestBody.imageDataUrls());
     return ApiEnvelope.ok(
         new CommunityPostCreatedPayload(post.getId(), post.getSlug(), "/community/post/" + post.getSlug()),
         "글을 남겼어요.");
@@ -119,7 +121,8 @@ public class CommunityController {
             slug,
             parseCategory(requestBody.category()),
             requestBody.title().trim(),
-            requestBody.body().trim());
+            requestBody.body().trim(),
+            requestBody.imageDataUrls());
     return ApiEnvelope.ok(
         new CommunityPostCreatedPayload(post.getId(), post.getSlug(), "/community/post/" + post.getSlug()),
         "수정했어요.");
@@ -187,6 +190,7 @@ public class CommunityController {
         post.getTitle(),
         post.getExcerpt(),
         post.getBody(),
+        post.getImages().stream().map(CommunityPostImageEntity::getImageUrl).toList(),
         post.getAuthorUser() == null ? null : post.getAuthorUser().getId(),
         post.getAuthorDisplayName() == null || post.getAuthorDisplayName().isBlank()
             ? "메이커"
@@ -234,6 +238,7 @@ public class CommunityController {
       String title,
       String excerpt,
       String body,
+      List<String> imageUrls,
       String authorUserId,
       String author,
       String date,
@@ -257,7 +262,8 @@ public class CommunityController {
       String title,
       @NotBlank(message = "내용을 적어주세요.")
       @Size(min = 2, max = 10000, message = "내용을 조금 더 적어주세요.")
-      String body) {}
+      String body,
+      List<String> imageDataUrls) {}
 
   public record CreateCommentRequest(
       @NotBlank(message = "댓글을 적어주세요.")

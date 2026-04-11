@@ -14,18 +14,17 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class StudioService {
-  private static final List<String> FALLBACK_STUDIO_IMAGES =
-      List.of(
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuC3rg3F2p-W5Vfxw7-FTEux-_7G6FtrAgMUcjrQ15Qa7BQ6cUxwBKakk89QWwobbTWSKlRnFs1BBIbE__CZCp9pYf3kHjZLQiIOFleCZoV3HDXbvxpjxHg_e-moBufkgRZAgneaH1vxRWjcW-glX4crTiTV3Dclx30yG50IKlimWl7fndpDvMtTDRvyd4SmCATywwUXxpyeAIdwm_05U3nNYIFjISpnoFvwCZxG7QUWjCZxh4jzwwF1p_7rEbEnLpBgct00kz6Gm1Y",
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuCoS1F5DlOtIZaawuruVX2_fQqugectv32be0hyYWf77M7N1sfPcWdejYVDtzd4-HypdmAGLO7CCTLQ8PFyFcf0hD8ZS6vzoILMTaZksEHCNo3P47MTn6Em6qoYhgC0LsM_15MLHgg_m1IgHi3qVFo8Pit11-jKQK5oYNH-3JI3qfDLLdIDKaNVsRBMpMObcoivXrBu7EryGi9rSM7WOnNttBimV12GHWSAFnC9uUXit8DTOfbeHiJ7q0ILlu6yOtgN1ob6jymnWRQ",
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuBn_ThTR4-Dogo3ToH5j6gjVhWcvyomGk5dXkPanGGa4zG8vqQUvteIeYqh9os8avXy7AXt79gIN02CtphjYpCi9LXYni67eK6QcxV-xws7SxnuftldpGeeIzwjNaoJYzuiwOpVgNmHQXQqDFzmfgsTm6csC312zEUaKotrFs5FYz1y7yZ7x8558AZNVJIVrDqjR6zr4hqxHAHd4HwYdnafvOE7k_a_8tO9hMZIs3Z6_FpygCXOP251qnZMp-Jspt9E4308Pajk_b0");
-
   private final StudioRepository studioRepository;
   private final SlugService slugService;
+  private final InlineImageService inlineImageService;
 
-  public StudioService(StudioRepository studioRepository, SlugService slugService) {
+  public StudioService(
+      StudioRepository studioRepository,
+      SlugService slugService,
+      InlineImageService inlineImageService) {
     this.studioRepository = studioRepository;
     this.slugService = slugService;
+    this.inlineImageService = inlineImageService;
   }
 
   @Transactional(readOnly = true)
@@ -63,7 +62,8 @@ public class StudioService {
       String priceUnit,
       String contact,
       Integer capacity,
-      List<String> amenities) {
+      List<String> amenities,
+      List<String> imageDataUrls) {
     StudioEntity studio = new StudioEntity();
     studio.setSlug(slugService.uniqueSlug(name, studioRepository::existsBySlug));
     studio.setOwnerUser(owner);
@@ -89,14 +89,7 @@ public class StudioService {
       entity.setSortOrder(amenityIndex++);
       studio.addAmenity(entity);
     }
-
-    String heroImage = fallbackImageFor(category, 0);
-    String galleryImage = fallbackImageFor(category, 1);
-    String detailImage = fallbackImageFor(category, 2);
-
-    studio.addImage(newStudioImage(heroImage, 0));
-    studio.addImage(newStudioImage(galleryImage, 1));
-    studio.addImage(newStudioImage(detailImage, 2));
+    attachImages(studio, imageDataUrls);
 
     return studioRepository.save(studio);
   }
@@ -113,14 +106,10 @@ public class StudioService {
     return entity;
   }
 
-  private String fallbackImageFor(String category, int offset) {
-    int baseIndex =
-        switch ((category == null ? "" : category).toLowerCase()) {
-          case "도예", "ceramics" -> 2;
-          case "목공", "wood", "woodwork" -> 1;
-          default -> 0;
-        };
-
-    return FALLBACK_STUDIO_IMAGES.get((baseIndex + offset) % FALLBACK_STUDIO_IMAGES.size());
+  private void attachImages(StudioEntity studio, List<String> imageDataUrls) {
+    List<String> normalizedImages = inlineImageService.normalize(imageDataUrls, 3);
+    for (int index = 0; index < normalizedImages.size(); index += 1) {
+      studio.addImage(newStudioImage(normalizedImages.get(index), index));
+    }
   }
 }

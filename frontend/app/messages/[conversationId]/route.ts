@@ -3,10 +3,11 @@ import { join } from 'node:path';
 
 import {
   escapeHtml,
-  fetchAuthState,
   fetchConversationDetail,
+  isBackendApiError,
   type ConversationMessage
 } from '../../../lib/backend-api';
+import { renderStatusPage, requireAuthenticatedPage } from '../../../lib/page-guards';
 import { finalizeStitchHtml } from '../../../lib/stitch-html';
 
 export const runtime = 'nodejs';
@@ -41,57 +42,20 @@ function renderBubbles(messages: ConversationMessage[], currentUserId?: string |
   return messages.map((message) => renderBubble(message, currentUserId)).join('');
 }
 
-function notFoundResponse() {
-  return new Response(
-    `<!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>대화를 찾을 수 없어요</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="min-h-screen bg-[#faf9f6] text-[#2f3430] flex items-center justify-center px-6">
-  <main class="max-w-xl text-center rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(26,28,27,0.05)] px-8 py-12">
-    <p class="text-[10px] uppercase tracking-[0.2em] text-[#7f7663] mb-4">메시지</p>
-    <h1 class="text-3xl md:text-4xl font-serif mb-4">대화를 찾을 수 없어요</h1>
-    <p class="text-sm leading-7 text-[#4d4635]">지금은 열 수 없는 대화예요.</p>
-    <a href="/messages" class="inline-flex items-center justify-center mt-8 rounded-full bg-[#735c00] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white">목록으로 가기</a>
-  </main>
-</body></html>`,
-    {
-      status: 404,
-      headers: {
-        'content-type': 'text/html; charset=utf-8',
-        'cache-control': 'no-store'
-      }
-    }
-  );
-}
-
 export async function GET(request: Request) {
   const rawConversationId = new URL(request.url).pathname.split('/').pop() ?? '';
   const conversationId = decodeURIComponent(rawConversationId);
+  const guard = await requireAuthenticatedPage(request);
+  if ('response' in guard) {
+    return guard.response;
+  }
+
   const cookieHeader = request.headers.get('cookie') ?? undefined;
   const templatePath = join(process.cwd(), 'stitch', 'messages-room.html');
   const rawTemplate = readFileSync(templatePath, 'utf8');
 
   try {
-    const authState = await fetchAuthState(cookieHeader);
-    const currentUserId = authState.authenticated ? authState.user?.id ?? '' : '';
-
-    if (!authState.authenticated || authState.user?.requiresOnboarding) {
-      const html = finalizeStitchHtml(
-        'messages-room',
-        rawTemplate
-          .replaceAll('{{WORKSHOP_NAME}}', '대화')
-          .replace('{{CONVERSATION_ID}}', escapeHtml(conversationId))
-          .replace('{{CURRENT_USER_ID}}', '')
-          .replace('{{MESSAGE_BUBBLES}}', '')
-      );
-
-      return new Response(html, {
-        headers: {
-          'content-type': 'text/html; charset=utf-8',
-          'cache-control': 'no-store'
-        }
-      });
-    }
-
+    const currentUserId = guard.authState.user?.id ?? '';
     const conversation = await fetchConversationDetail(conversationId, cookieHeader);
     const html = finalizeStitchHtml(
       'messages-room',
@@ -108,7 +72,31 @@ export async function GET(request: Request) {
         'cache-control': 'no-store'
       }
     });
-  } catch {
-    return notFoundResponse();
+  } catch (error) {
+    if (isBackendApiError(error) && error.status === 404) {
+      return renderStatusPage({
+        title: '은금슬쩍 | 대화를 찾을 수 없어요',
+        eyebrow: '메시지',
+        heading: '대화를 찾을 수 없어요',
+        body: '지금은 열 수 없는 대화예요.',
+        actionHref: '/messages',
+        actionLabel: '목록으로 가기',
+        status: 404
+      });
+    }
+
+    if (isBackendApiError(error)) {
+      return renderStatusPage({
+        title: '은금슬쩍 | 대화를 불러오지 못했어요',
+        eyebrow: '메시지',
+        heading: '지금은 대화를 불러오지 못해요',
+        body: error.message,
+        actionHref: '/messages',
+        actionLabel: '목록으로 가기',
+        status: error.status >= 500 ? error.status : 503
+      });
+    }
+
+    throw error;
   }
 }

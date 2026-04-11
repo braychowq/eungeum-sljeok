@@ -4,6 +4,7 @@ import com.eungeum.sljeok.backend.auth.entity.UserEntity;
 import com.eungeum.sljeok.backend.auth.domain.UserRole;
 import com.eungeum.sljeok.backend.content.domain.CommunityCategory;
 import com.eungeum.sljeok.backend.content.entity.CommunityCommentEntity;
+import com.eungeum.sljeok.backend.content.entity.CommunityPostImageEntity;
 import com.eungeum.sljeok.backend.content.entity.CommunityPostEntity;
 import com.eungeum.sljeok.backend.content.repository.CommunityPostRepository;
 import java.util.List;
@@ -20,11 +21,15 @@ import org.springframework.web.server.ResponseStatusException;
 public class CommunityService {
   private final CommunityPostRepository communityPostRepository;
   private final SlugService slugService;
+  private final InlineImageService inlineImageService;
 
   public CommunityService(
-      CommunityPostRepository communityPostRepository, SlugService slugService) {
+      CommunityPostRepository communityPostRepository,
+      SlugService slugService,
+      InlineImageService inlineImageService) {
     this.communityPostRepository = communityPostRepository;
     this.slugService = slugService;
+    this.inlineImageService = inlineImageService;
   }
 
   @Transactional(readOnly = true)
@@ -47,7 +52,7 @@ public class CommunityService {
             .findBySlug(slug)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
 
-    post.getComments().size();
+    initializeCollections(post);
     post.setViewCount(post.getViewCount() + 1);
     return communityPostRepository.saveAndFlush(post);
   }
@@ -59,7 +64,11 @@ public class CommunityService {
 
   @Transactional
   public CommunityPostEntity create(
-      UserEntity author, CommunityCategory category, String title, String body) {
+      UserEntity author,
+      CommunityCategory category,
+      String title,
+      String body,
+      List<String> imageDataUrls) {
     CommunityPostEntity post = new CommunityPostEntity();
     post.setSlug(slugService.uniqueSlug(title, communityPostRepository::existsBySlug));
     post.setAuthorUser(author);
@@ -70,17 +79,25 @@ public class CommunityService {
     post.setBody(body);
     post.setViewCount(0);
     post.setCommentCount(0);
+    attachImages(post, imageDataUrls);
     return communityPostRepository.save(post);
   }
 
   @Transactional
   public CommunityPostEntity update(
-      UserEntity actor, String slug, CommunityCategory category, String title, String body) {
+      UserEntity actor,
+      String slug,
+      CommunityCategory category,
+      String title,
+      String body,
+      List<String> imageDataUrls) {
     CommunityPostEntity post = findOwnedOrAdminPost(actor, slug);
     post.setCategory(category);
     post.setTitle(title);
     post.setExcerpt(excerpt(body));
     post.setBody(body);
+    post.getImages().clear();
+    attachImages(post, imageDataUrls);
     return communityPostRepository.save(post);
   }
 
@@ -121,8 +138,13 @@ public class CommunityService {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "작성한 사람만 바꿀 수 있어요.");
     }
 
-    post.getComments().size();
+    initializeCollections(post);
     return post;
+  }
+
+  private void initializeCollections(CommunityPostEntity post) {
+    post.getComments().size();
+    post.getImages().size();
   }
 
   private String excerpt(String body) {
@@ -131,5 +153,15 @@ public class CommunityService {
       return compact;
     }
     return compact.substring(0, 96) + "…";
+  }
+
+  private void attachImages(CommunityPostEntity post, List<String> imageDataUrls) {
+    List<String> normalizedImages = inlineImageService.normalize(imageDataUrls, 3);
+    for (int index = 0; index < normalizedImages.size(); index += 1) {
+      CommunityPostImageEntity image = new CommunityPostImageEntity();
+      image.setImageUrl(normalizedImages.get(index));
+      image.setSortOrder(index);
+      post.addImage(image);
+    }
   }
 }

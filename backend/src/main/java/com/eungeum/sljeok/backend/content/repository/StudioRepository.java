@@ -16,6 +16,5 @@ public interface StudioRepository extends JpaRepository<StudioEntity, String> {
   @EntityGraph(attributePaths = {"images"})
   Optional<StudioEntity> findBySlugAndStatus(String slug, StudioStatus status);
 
-  @EntityGraph(attributePaths = {"images"})
   List<StudioEntity> findTop3ByStatusOrderByCreatedAtDesc(StudioStatus status);
 }
